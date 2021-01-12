@@ -25,6 +25,7 @@
   <modules>
     <module>common-ccnl</module>
     <module>excel-ccnl</module>
+    <module>annual-ccnl</module>
   </modules>
 
   <build>
