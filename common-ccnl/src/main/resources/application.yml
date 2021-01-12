@@ -1,0 +1,48 @@
+spring:
+  application:
+    ui:
+      title: Ledenadministratie CCNL
+  datasource:
+    url: jdbc:h2:../data/db
+    driver-class-name: org.h2.Driver
+    username: sa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate.ddl-auto: none
+    open-in-view: true
+#    show-sql: true
+#    properties:
+#      javax.persistence.schema-generation.scripts.action: drop-and-create
+#      javax.persistence.schema-generation.scripts.create-target: c:/temp/create.sql
+#      javax.persistence.schema-generation.scripts.drop-target: c:/temp/drop.sql
+#      javax.persistence.schema-generation.scripts.create-source: metadata
+#      hibernate:
+#        format_sql: true
+  h2:
+    console:
+      enabled: true
+#   mail:
+#     from: ledenadministratie@citroenclubnederland.nl
+#     subject: "Opzegging lidmaatschap Citroën Club Nederland"
+#     host: server60.hosting2go.nl
+#     port: 587
+#     username: ledenadministratie@citroenclubnederland.nl
+#     password: (CCNL2804hx
+#     properties:
+#       mail:
+#         smtp:
+#           auth:
+#           starttls.enable: true
+  main:
+    lazy-initialization: true
+ccnl:    
+  members: 5000
+server:
+  port: 8088
+#logging:
+#  level:
+#    root: DEBUG
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    org.apache.fop: INFO
+#    nl.ealse: DEBUG
