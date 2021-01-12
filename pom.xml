@@ -17,13 +17,28 @@
   </scm>
 
   <properties>
+    <javafx.version>15.0.1</javafx.version>
+    <poi.version>4.1.2</poi.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <modules>
     <module>common-ccnl</module>
+    <module>excel-ccnl</module>
   </modules>
 
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <release>14</release>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -50,6 +65,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-    
   </dependencies>
+
+
 </project>
