@@ -21,18 +21,6 @@ spring:
   h2:
     console:
       enabled: true
-#   mail:
-#     from: ledenadministratie@citroenclubnederland.nl
-#     subject: "Opzegging lidmaatschap Citroën Club Nederland"
-#     host: server60.hosting2go.nl
-#     port: 587
-#     username: ledenadministratie@citroenclubnederland.nl
-#     password: (CCNL2804hx
-#     properties:
-#       mail:
-#         smtp:
-#           auth:
-#           starttls.enable: true
   main:
     lazy-initialization: true
 ccnl:    
