@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.document.AddDocumentController">
+  <children>
+    <Label fx:id="memberNumber" styleClass="header" />
+    <HBox spacing="20" prefHeight="50.0" prefWidth="200.0">
+      <children>
+        <Label text="Volledige naam:" styleClass="subHeader" />
+        <Label fx:id="memberName" styleClass="subHeader" />
+      </children>
+    </HBox>
+    <Separator prefWidth="Infinity" />
+    <GridPane>
+      <columnConstraints>
+        <ColumnConstraints minWidth="130" />
+        <ColumnConstraints percentWidth="80.0" />
+      </columnConstraints>
+      <children>
+        <HBox spacing="20" GridPane.rowIndex="0" GridPane.columnIndex="1">
+          <children>
+            <SearchButton mnemonicParsing="false" onAction="#searchDocument"
+              text="Document selecteren" />
+            <Label fx:id="fileName" styleClass="subHeader" />
+          </children>
+        </HBox>
+        <Label text="Type document" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <ChoiceBox fx:id="documentType" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <Label text="Kenmerk" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <TextField fx:id="documentDescription" maxWidth="250" GridPane.rowIndex="2"
+          GridPane.columnIndex="1" />
+        <SaveButton fx:id="saveButton" disable="true" mnemonicParsing="false"
+          text="Document toevoegen" onAction="#addDocument" GridPane.rowIndex="3"
+          GridPane.columnIndex="1" />
+      </children>
+    </GridPane>
+  </children>
+</VBox>

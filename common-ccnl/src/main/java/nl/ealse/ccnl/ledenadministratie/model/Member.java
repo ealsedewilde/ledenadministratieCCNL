@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,6 +19,9 @@ public class Member extends MemberBase {
 
   @Id
   private Integer memberNumber;
+  
+  @Transient
+  private String ibanOwnerName;
 
   // CascadeType.REMOVE is inefficient, but there at most a just documents in the list
   @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
@@ -29,6 +33,22 @@ public class Member extends MemberBase {
 
   public boolean hasFirstName() {
     return getInitials() != null && getInitials().indexOf('.') == -1;
+  }
+
+  public String getIbanOwnerName() {
+    if (getIbanOwner() == null) {
+      ibanOwnerName = getFullName();
+    } else {
+      ibanOwnerName = getIbanOwner();
+    }
+    return ibanOwnerName;
+  }
+  
+  public void setIbanOwnerName(String ibanOwnerName) {
+    this.ibanOwnerName = ibanOwnerName;
+    if (!getFullName().equals(ibanOwnerName)) {
+      setIbanOwner(ibanOwnerName);
+    }
   }
 
   public String getFullName() {

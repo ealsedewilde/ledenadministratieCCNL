@@ -8,6 +8,11 @@ import javax.persistence.EntityManager;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 import org.springframework.stereotype.Component;
 
+/**
+ * Properties needed for generation a DirectDebit file.
+ * @author ealse
+ *
+ */
 @Component
 public class IncassoProperties {
 
@@ -23,9 +28,11 @@ public class IncassoProperties {
   }
 
   @PostConstruct
-  public void postConstruct() {
+  public void load() {
     config = em.find(DirectDebitConfig.class, 1);
     if (config == null) {
+      // delegate database update for transactional update
+      // (a @PostConstruct method itself cannot be transactional.)
       config = initializer.initializeConfig();
     }
   }
@@ -70,6 +77,11 @@ public class IncassoProperties {
     return new File(config.getDirectDebitDir().getValue());
   }
 
+  /**
+   * 'Test' produces a file with a maximum of 10 transactions.
+   * Such a file can be used in a test run at the bank.
+   * @return <code>true</code> in geval van testrun
+   */
   public boolean isTest() {
     return config.getTestRun().isValue();
   }

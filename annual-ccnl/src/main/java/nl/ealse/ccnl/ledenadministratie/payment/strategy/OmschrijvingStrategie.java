@@ -2,33 +2,16 @@ package nl.ealse.ccnl.ledenadministratie.payment.strategy;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 
 @Slf4j
 public class OmschrijvingStrategie implements LidnummerStrategie {
-  private List<Integer> nummers;
-  String jaar = new SimpleDateFormat("yyyy").format(new Date());
-
-  public OmschrijvingStrategie(List<Integer> nummers) {
-    this.nummers = nummers;
-  }
+   String jaar = new SimpleDateFormat("yyyy").format(new Date());
 
   @Override
   public void bepaalLidnummer(IngBooking booking) {
-    if (booking.getLidnummer() > 0) {
-      return;
-    }
-    String omschrijving = booking.getOmschrijving();
-    for (Integer nr : nummers) {
-      if (omschrijving.indexOf(nr.toString()) > -1) {
-        booking.setLidnummer(nr);
-        log.debug(String.format("lid %s bij naam %s", nr, booking.getNaam()));
-        return;
-      }
-    }
-    omschrijving = omschrijving.toLowerCase();
+    String omschrijving = booking.getOmschrijving().toLowerCase();
     int ix = omschrijving.indexOf("lid");
     if (ix > -1) {
       log.debug("lid indicatie gevonden");

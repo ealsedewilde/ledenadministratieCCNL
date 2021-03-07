@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+<?import nl.ealse.ccnl.control.button.SaveButton?>
+<?import nl.ealse.ccnl.control.button.NextPageButton?>
+<?import nl.ealse.ccnl.control.button.SearchButton?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.annual.AnnualRolloverController">
+  <children>
+    <Label text="Jaarovergang uitvoeren" styleClass="header"/>
+    <Label text="Stap 1: Backup aanmaken" styleClass="subHeader"/>
+    <SaveButton fx:id="backupButton" text="Backup aanmaken" minWidth="200" onAction="#backupDatabase"/>
+    
+    <Label text="Stap 2: Jaarovergang uitvoeren" styleClass="subHeader"/>
+    <SaveButton fx:id="rolloverButton" text="Jaarovergang uitvoeren" minWidth="200" onAction="#annualRollover"/>
+    
+    <Label text="Stap 3: Excel exportbestanden aanmaken" styleClass="subHeader"/>
+    <SaveButton fx:id="exportButton" text="Excel exportbestanden aanmaken" minWidth="200" onAction="#exportToExcel"/>
+    
+    <Label text="Stap 4: Controleer handmatig de Excel exportbestanden" styleClass="subHeader"/>
+  </children>
+</VBox>

@@ -1,28 +1,42 @@
 package nl.ealse.ccnl.ledenadministratie.payment;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
+import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.MemberContext;
+import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.Transaction;
 import nl.ealse.ccnl.ledenadministratie.payment.filter.FilterChain;
+import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class PaymentHandler {
 
-  private final MemberRepository dao;
+  private static final BigDecimal DD_PROFIT = BigDecimal.valueOf(2.5);
 
-  public PaymentHandler(MemberRepository dao) {
+  private final MemberRepository dao;
+  private final IncassoProperties incassoProperties;
+
+  public PaymentHandler(MemberRepository dao, IncassoProperties incassoProperties) {
     this.dao = dao;
+    this.incassoProperties = incassoProperties;
   }
 
-  public void handlePayment(List<PaymentFile> paymentFiles, LocalDate referenceDate) {
+  public List<String> handlePayments(List<PaymentFile> paymentFiles, LocalDate referenceDate,
+      boolean includeDD) {
     List<Member> members = dao.findMemberByMemberStatus(MembershipStatus.ACTIVE);
+    ReconciliationContext rc =
+        ReconciliationContext.newInstance(members, incassoProperties, includeDD);
     FilterChain filterChain = new FilterChain(members, referenceDate);
 
     final List<IngBooking> bookingList = new ArrayList<>();
@@ -32,27 +46,59 @@ public class PaymentHandler {
     paymentFileIterables.forEach(pf -> pf.forEach(booking -> {
       if (filterChain.filter(booking)) {
         bookingList.add(booking);
+      } else {
+        String msg = "Geen lidnummer te bepalen voor " + booking.getNaam();
+        log.warn(msg);
+        rc.getMessages().add(msg);
       }
     }));
-    processPaymentInfo(bookingList);
+    processPaymentInfo(bookingList, rc);
+    return rc.getMessages();
   }
 
-  private void processPaymentInfo(List<IngBooking> bookingList) {
+  /**
+   * Apply bookings result to the members state.
+   * 
+   * @param bookingList - all contribution bookings.
+   * @param rc - context for this run
+   */
+  private void processPaymentInfo(List<IngBooking> bookingList, ReconciliationContext rc) {
     bookingList.forEach(booking -> {
-      Optional<Member> member = dao.findById(booking.getLidnummer());
+      MemberContext mc = rc.getMemberContext(booking.getLidnummer());
+      BigDecimal amount = BigDecimal.valueOf(booking.getBedrag());
+      Transaction t = new Transaction(amount, booking.getBoekdatum(), getPaymentInfo(booking));
+      mc.getTransactions().add(t);
+    });
+
+    BigDecimal refAmount = incassoProperties.getIncassoBedrag().add(DD_PROFIT);
+    rc.getContexts().values().forEach(mc -> {
+      Optional<Member> member = dao.findById(mc.getNumber());
       if (member.isPresent()) {
         Member m = member.get();
-        m.setPaymentDate(booking.getBoekdatum());
-        if (booking.isStornering()) {
-          m.setPaymentInfo(booking.getStornoReden().getReden());
+        m.setPaymentInfo(mc.toString());
+        m.setPaymentDate(mc.getPaymentDate());
+        if (mc.getTotalAmount().equals(BigDecimal.ZERO)) {
           m.setCurrentYearPaid(false);
-        } else if (booking.isContributie()) {
-          m.setPaymentInfo(booking.getOmschrijving());
+        } else {
           m.setCurrentYearPaid(true);
+          if (mc.getTotalAmount().compareTo(refAmount) > 0) {
+            String amountString = AmountFormatter.format(mc.getTotalAmount());
+            String msg =
+                String.format("Lid %d heeft totaal %s betaald", m.getMemberNumber(), amountString);
+             rc.getMessages().add(msg);
+          }
         }
         dao.save(m);
       }
+
     });
+  }
+
+  private String getPaymentInfo(IngBooking booking) {
+    if (booking.isStornering()) {
+      return booking.getStornoReden().getReden();
+    }
+    return booking.getOmschrijving();
   }
 
 }

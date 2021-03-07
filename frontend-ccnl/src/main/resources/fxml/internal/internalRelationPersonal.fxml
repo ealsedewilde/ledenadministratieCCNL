@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.internal.InternalRelationController">
+  <children>
+    <VBox minWidth="145.0" styleClass="subMenu">
+      <children>
+        <Label text="Menu" styleClass="subHeader" GridPane.rowIndex="0" />
+        <Label text="Functiegegevens" />
+        <Hyperlink text="Adresgegevens" onMouseClicked="#secondPage" />
+      </children>
+    </VBox>
+    <GridPane prefWidth="Infinity">
+      <columnConstraints>
+        <ColumnConstraints minWidth="150" />
+        <ColumnConstraints percentWidth="80.0" />
+      </columnConstraints>
+      <children>
+        <Label fx:id="headerText" styleClass="header" GridPane.rowIndex="0"
+          GridPane.columnIndex="0" GridPane.columnSpan="2" />
+        <Label text="Persoonsgegevens" underline="true" styleClass="subHeader"
+          GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" />
+
+        <Label text="Functie" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
+          <ChoiceBox fx:id="title" minWidth="200"/>
+          <Label fx:id="titleE" text="Alle functies zijn al toegewezen" styleClass="required" visible="false" />
+        </HBox>
+
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="5">
+          <children>
+            <Label text="Naam functionaris" />
+            <Label styleClass="required" text=" *" />
+          </children>
+        </HBox>
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
+          <TextField fx:id="contactName" minWidth="450" />
+          <Label fx:id="contactNameE" styleClass="required" visible="false" />
+        </HBox>
+
+        <Label text="Telefoonnummer" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <TextField fx:id="telephoneNumber" maxWidth="120" GridPane.columnIndex="1"
+          GridPane.rowIndex="6" />
+        
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="7" spacing="20">
+          <children>
+            <NextPageButton onAction="#nextPage"/>
+            <SaveButton fx:id="saveButton" disable="true" onAction="#save"/>
+            <UndoButton onAction="#reset"/>
+          </children>
+        </HBox>
+      </children>
+    </GridPane>
+  </children>
+</HBox>
+

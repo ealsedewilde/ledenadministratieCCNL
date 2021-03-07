@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<MenuBar prefHeight="25.0" prefWidth="Infinity" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.menu.MenuController">
+  <menus>
+    <Menu mnemonicParsing="false" text="Leden">
+      <items>
+        <MenuItem onAction="#newMember" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#amendMember" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#cancelMembership" mnemonicParsing="false" text="Opzeggen" />
+        <SeparatorMenuItem mnemonicParsing="false" />
+        <MenuItem onAction="#paymentAuthorization" mnemonicParsing="false"
+          text="SEPA machtiging toevoegen" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Adverteerders">
+      <items>
+        <MenuItem onAction="#newPartner" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#amendPartner" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#deletePartner" mnemonicParsing="false" text="Verwijderen" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Clubs">
+      <items>
+        <MenuItem onAction="#newExternalClub" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#amendExternalClub" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#deleteExternalClub" mnemonicParsing="false" text="Verwijderen" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Externe relaties">
+      <items>
+        <MenuItem onAction="#newExternalRelation" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#amendExternalRelation" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#deleteExternalRelation" mnemonicParsing="false"
+          text="Verwijderen" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Functies">
+      <items>
+        <MenuItem onAction="#newInternalRelation" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#amendInternalRelation" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#deleteInternalRelation" mnemonicParsing="false"
+          text="Verwijderen" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Clubbad">
+      <items>
+        <MenuItem onAction="#magazineAddressList" mnemonicParsing="false"
+          text="Adressenbestand aanmaken" />
+        <MenuItem onAction="#cardAddressList" mnemonicParsing="false"
+          text="Adressen lidmaatschapskaart" />
+        <MenuItem onAction="#magazineInvalidAddress" mnemonicParsing="false"
+          text="Retouren registreren" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Correspondentie">
+      <items>
+        <MenuItem onAction="#addDocument" mnemonicParsing="false" text="Toevoegen" />
+        <MenuItem onAction="#viewDocument" mnemonicParsing="false" text="Inzien" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Overzichten">
+      <items>
+        <MenuItem onAction="#excelAll" mnemonicParsing="false" text="Export naar Excel" />
+        <SeparatorMenuItem mnemonicParsing="false" />
+        <MenuItem onAction="#excelNew" mnemonicParsing="false" text="Nieuwe leden" />
+        <MenuItem onAction="#excelCancelation" mnemonicParsing="false" text="Opzeggers" />
+        <MenuItem onAction="#excelOverdue" mnemonicParsing="false" text="Niet betalers" />
+        <MenuItem onAction="#excelArchive" mnemonicParsing="false" text="Archief" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Jaarwerk">
+      <items>
+        <MenuItem onAction="#resetPayments" mnemonicParsing="false"
+          text="Betaalgegevens wissen" />
+        <MenuItem onAction="#directDebits" mnemonicParsing="false"
+          text="Incassobestand aanmaken" />
+        <MenuItem onAction="#reconcilePayments" mnemonicParsing="false"
+          text="Betalingen afletteren" />
+        <Menu mnemonicParsing="false" text="Herinneringsbrieven aanmaken">
+          <items>
+            <MenuItem onAction="#makeReminderLettersDD" mnemonicParsing="false"
+              text="Leden met Automatische Incasso" />
+            <MenuItem onAction="#makeReminderLettersBT" mnemonicParsing="false"
+              text="Leden met Overboeking" />
+          </items>
+        </Menu>
+        <MenuItem onAction="#yearly" mnemonicParsing="false" text="Jaarovergang" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Beheer">
+      <items>
+        <MenuItem onAction="#manageSepaAuthorizationForm" mnemonicParsing="false"
+          text="SEPA-machtiging formulier" />
+        <MenuItem onAction="#manageDocumentTemplates" mnemonicParsing="false"
+          text="Beheer document templates" />
+        <MenuItem onAction="#backupDatabase" mnemonicParsing="false" text="Backup Database" />
+        <MenuItem onAction="#restoreDatabase" mnemonicParsing="false"
+          text="Restore Database" />
+        <SeparatorMenuItem mnemonicParsing="false" />
+        <MenuItem onAction="#importFromExcel" mnemonicParsing="false"
+          text="Import uit Excel" />
+        <MenuItem onAction="#manageArchive" mnemonicParsing="false"
+          text="Archief opschonen" />
+        <MenuItem onAction="#settings" mnemonicParsing="false" text="Instellingen" />
+      </items>
+    </Menu>
+  </menus>
+</MenuBar>

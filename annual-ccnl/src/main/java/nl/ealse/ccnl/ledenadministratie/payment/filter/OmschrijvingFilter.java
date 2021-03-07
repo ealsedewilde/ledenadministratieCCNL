@@ -6,7 +6,7 @@ import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 @Slf4j
 public class OmschrijvingFilter implements Filter {
 
-  private static final String[] KEYS = {"restitutie", "contributie", "lidnummer", "lidnr", "lid "};
+  private static final String[] KEYS = {"restitutie", "contributie", "lidnummer", "lidnr", "lid ", "lidmaat"};
 
   @Override
   public boolean doFilter(IngBooking booking) {
@@ -18,9 +18,14 @@ public class OmschrijvingFilter implements Filter {
           return true;
         }
       }
-      log.info(omschrijving);
-      booking.setContributie(false);
-      return false;
+      try {
+        Integer.parseInt(omschrijving.trim());
+        return true;
+      } catch (NumberFormatException nfe) {
+        log.info(omschrijving);
+        booking.setContributie(false);
+        return false;
+      }
     }
     // booking is 'storno'
     return true;

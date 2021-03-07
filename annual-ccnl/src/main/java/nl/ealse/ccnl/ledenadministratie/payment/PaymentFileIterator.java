@@ -17,8 +17,9 @@ import org.xml.sax.InputSource;
 @Slf4j
 public class PaymentFileIterator implements Iterator<IngBooking> {
 
+  // This XPATH gives a false positive. Sonar sees it as a URL.
   private static final String XPATH_EXPRESSION =
-      "/ing:Document/ing:BkToCstmrStmt/ing:Stmt/ing:Ntry[ing:Amt='27.50' or ing:Amt='30.00']";
+      "/ing:Document/ing:BkToCstmrStmt/ing:Stmt/ing:Ntry[ing:Amt='27.50' or ing:Amt='30.00']"; // NOSONAR
 
   private int pointer = 0;
 

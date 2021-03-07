@@ -21,7 +21,7 @@ public class XmlValidator {
       factory.setProperty("http://javax.xml.XMLConstants/property/accessExternalSchema", ""); // Compliant
       factory.setProperty("http://javax.xml.XMLConstants/property/accessExternalDTD", ""); // Compliant
 
-      Schema schema = factory.newSchema(xsd.getFile());
+      Schema schema = factory.newSchema(new StreamSource(xsd.getInputStream()));
       Validator validator = schema.newValidator();
       validator.validate(new StreamSource(new StringReader(xml)));
     } catch (SAXException | IOException e) {

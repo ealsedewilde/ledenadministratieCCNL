@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<GridPane minHeight="650.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.member.CancelationMailController">
+  <columnConstraints>
+    <ColumnConstraints percentWidth="60.0" />
+    <ColumnConstraints />
+  </columnConstraints>
+  <children>
+    <VBox spacing="10" GridPane.columnSpan="2">
+      <children>
+        <Label styleClass="header" text="Bevestigingsmail opzegging komend jaar" />
+        <Label styleClass="subHeader" text="Beschikbare teksten" />
+        <ChoiceBox fx:id="textSelection" prefWidth="150.0" onAction="#selectText" />
+      </children>
+    </VBox>
+
+    <HBox GridPane.rowIndex="1">
+      <children>
+        <Label styleClass="subHeader" text="Mail tekst" />
+        <Region HBox.hgrow="ALWAYS" />
+        <InfoButton onAction="#textHelp" mnemonicParsing="false" text="Invul hulp" />
+      </children>
+    </HBox>
+    <Label translateX="20" styleClass="subHeader" text="Mail tekst opslaan"
+      GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+
+    <VBox spacing="20" GridPane.rowIndex="2">
+      <children>
+        <TextArea fx:id="letterText" minHeight="390.0" minWidth="350.0" />
+      </children>
+    </VBox>
+
+    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <children>
+        <HBox GridPane.rowIndex="1">
+          <children>
+            <Label text="Naam voor de mail-tekst" />
+            <Label styleClass="required" text=" *" />
+          </children>
+        </HBox>
+        <TextField fx:id="textId" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label fx:id="textIdE" text="Invullen a.u.b." styleClass="required" visible="false"
+          GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <SaveButton onAction="#saveText" mnemonicParsing="false"
+          text="Mail-tekst Opslaan" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      </children>
+    </GridPane>
+
+    <VBox spacing="20" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <children>
+        <HBox spacing="10">
+          <children>
+            <HBox>
+              <children>
+                <Label text="Mailadres" />
+                <Label style="-fx-text-fill: red;" text=" *" />
+              </children>
+            </HBox>
+            <TextField fx:id="toMailAddress" minWidth="405" />
+            <CheckBox fx:id="saveMailAddress" text="mail opslaan" />
+            <Label fx:id="toMailAddressE" text="Invullen a.u.b." styleClass="required"
+              visible="false" />
+          </children>
+        </HBox>
+        <Separator prefWidth="Infinity" />
+        <HBox spacing="10">
+          <children>
+            <MailButton fx:id="sendButton" onAction="#sendMail" mnemonicParsing="false"
+              disable="true" />
+            <CancelButton text="Geen mail verzenden" onAction="#noMail" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+
+  </children>
+</GridPane>

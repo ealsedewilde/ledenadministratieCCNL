@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<VBox stylesheets="@../../css/main.css" spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.annual.SepaDirectDebitsController">
+  <children>
+    <Label text="Incasso instellingen" styleClass="header" />
+    <TableView fx:id="tableView" editable="true">
+      <columns>
+        <TableColumn prefWidth="150.0" text="Instelling">
+          <cellValueFactory>
+            <PropertyValueFactory property="key" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn fx:id="valueColumn" prefWidth="250.0" text="Waarde(*)">
+          <cellValueFactory>
+            <PropertyValueFactory property="value" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn fx:id="descriptionColumn" prefWidth="600.0" text="Omschrijving(*)">
+          <cellValueFactory>
+            <PropertyValueFactory property="description" />
+          </cellValueFactory>
+        </TableColumn>
+      </columns>
+    </TableView>
+    <Label fx:id="errorMessageLabel" styleClass="required" visible="false"/>
+    <Label text="(*) klik op een veld om te wijzigen" />
+    <CancelButton text="Sluiten" onAction="#closeSettings" />
+  </children>
+  <padding>
+    <Insets left="15.0" right="15.0"/>
+  </padding>
+</VBox>

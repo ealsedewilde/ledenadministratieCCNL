@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.internal.InternalRelationDeleteController">
+  <children>
+    <GridPane prefWidth="Infinity">
+      <columnConstraints>
+        <ColumnConstraints minWidth="150" />
+        <ColumnConstraints percentWidth="80.0" />
+      </columnConstraints>
+      <children>
+        <Label text="Functie verwijderen" styleClass="header" GridPane.rowIndex="0"
+          GridPane.columnIndex="0" GridPane.columnSpan="2" />
+        <Label text="Persoonsgegevens" underline="true" styleClass="subHeader"
+          GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" />
+
+        <Label text="Functie" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <TextField fx:id="title" disable="true" minWidth="200" GridPane.columnIndex="1"
+          GridPane.rowIndex="4" />
+
+        <Label text="Naam functionaris" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <TextField fx:id="contactName" disable="true" minWidth="450"
+          GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+        <Label text="Telefoonnummer" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <TextField fx:id="telephoneNumber" disable="true" maxWidth="120"
+          GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+        <SaveButton text="Verwijderen" onAction="#delete" GridPane.columnIndex="1"
+          GridPane.rowIndex="7" />
+      </children>
+    </GridPane>
+  </children>
+</HBox>
+

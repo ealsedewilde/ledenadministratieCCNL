@@ -1,6 +1,9 @@
 package nl.ealse.ccnl.ledenadministratie.excel.base;
 
 import java.io.EOFException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +24,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 @Slf4j
 @Getter
 public abstract class CCNLRow {
+
+  private final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
   private final Row row;
   private final CCNLColumnProperties properties;
@@ -70,8 +75,37 @@ public abstract class CCNLRow {
     }
     if (CellType.NUMERIC == cell.getCellType() && DateUtil.isCellDateFormatted(cell)) {
       return cell.getDateCellValue();
+    } else if (CellType.STRING == cell.getCellType()) {
+      return toDate(cell.getStringCellValue().trim());
     }
     return null;
+  }
+
+  /*
+   * The dates in original LedenadministratieExcel are inconsistent. 
+   * We try to convert as much as possible.
+   */
+  private Date toDate(String s) {
+    if (s.length() == 0) {
+      return null;
+    }
+    try {
+      if (s.length() == 2) {
+        // just a year; no day or month
+        int yy = Integer.parseInt(s);
+        if (yy > 50) {
+          return df.parse("01-01-19" + s);
+        } else {
+          return df.parse("01-01-20" + s);
+        }
+      } else {
+        return df.parse(s);
+      }
+    } catch (NumberFormatException | ParseException e) {
+      log.warn("Invalid date: "+s);
+      return null;
+    }
+
   }
 
   public abstract int getRelatienummer();

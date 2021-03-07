@@ -28,7 +28,9 @@ public class Adresbestand extends CCNLBestand {
   public void addHeading() {
     addRow();
     List<ColumnDefinition> list = new ArrayList<>();
-    list.addAll(Arrays.asList(LidColumnDefinition.values()));
+    for (int ix = 0 ; ix < 4 ; ix++) {
+      list.add(LidColumnDefinition.values()[ix]);
+    }
     list.addAll(Arrays.asList(AdresColumnDefinition.values()));
     list.forEach(c -> addCell(c.heading(), getProperties().getKolomnummer(c)));
   }

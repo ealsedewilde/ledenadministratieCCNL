@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.address.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.other.ExternalOtherController">
+  <children>
+    <VBox minWidth="145.0"  styleClass="subMenu">
+      <children>
+        <Label text="Menu" styleClass="subHeader" GridPane.rowIndex="0" />
+        <Hyperlink text="Externe relatie" onMouseClicked="#firstPage" />
+        <Label text="Adresgegevens" />
+      </children>
+    </VBox>
+    <VBox  minWidth="655.0" >
+      <children>
+        <fx:include fx:id="address" source="/fxml_includes/address.fxml"/>
+        <HBox translateX="180" translateY="20" spacing="20">
+          <children>
+            <PreviousPageButton onAction="#previousPage"/>
+            <SaveButton fx:id="saveButton" disable="true" onAction="#save"/>
+            <UndoButton onAction="#reset"/>
+         </children>
+        </HBox>
+      </children>
+    </VBox>
+  </children>
+</HBox>
+      

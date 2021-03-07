@@ -16,7 +16,7 @@ class DocumentBuilderTest {
     EntityManager em = Mockito.mock(EntityManager.class);
     IncassoPropertiesInitializer initializer = new IncassoPropertiesInitializer(em);
     IncassoProperties props = new IncassoProperties(em, initializer);
-    props.postConstruct();
+    props.load();
 
     DocumentBuilder sut = new DocumentBuilder(props);
     LocalDateTime dtm = LocalDateTime.of(2020, 12, 5, 10, 0);
@@ -25,7 +25,7 @@ class DocumentBuilderTest {
     sut.metControlSum(BigDecimal.valueOf(55.0));
     sut.metMessageId("someId");
     PaymentInstructionInformation4 paymentInstruction = new PaymentInstructionInformation4();
-    sut.metPaymentInstructionInformationBuilder(paymentInstruction);
+    sut.metPaymentInstructionInformation(paymentInstruction);
     Document d = sut.build();
     String id = d.getCstmrDrctDbtInitn().getGrpHdr().getMsgId();
     Assertions.assertEquals("someId", id);

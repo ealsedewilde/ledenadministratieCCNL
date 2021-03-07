@@ -6,6 +6,13 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 import nl.ealse.ccnl.ledenadministratie.payment.strategy.LidnummerBepaling;
 
+/**
+ * Het laatste toe te passen filter.
+ * Hierbij wordt geprobeerd het lidnummer te koppelen aan een boeking.
+ * Dit gebeurt op basis van een aantal benaderingen.
+ * @author ealse
+ *
+ */
 @Slf4j
 public class LidnummerFilter implements Filter {
 
@@ -19,7 +26,6 @@ public class LidnummerFilter implements Filter {
   public boolean doFilter(IngBooking booking) {
     lidnummerBepaling.bepaalLidnummer(booking);
     if (booking.getLidnummer() == 0) {
-      log.warn("Geen lidnummer te bepalen voor " + booking.getNaam());
       return false;
     }
     log.debug("Lidnummer: " + booking.getLidnummer());

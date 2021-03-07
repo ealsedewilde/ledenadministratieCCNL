@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class ClubNumberFactory extends NumberFactory {
 
   public ClubNumberFactory(ExternalRelationClubRepository dao) {
-    super(100, 8200);
+    super(99, 8200);
     initialize(dao);
   }
 

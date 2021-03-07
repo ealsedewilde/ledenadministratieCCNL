@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.member.MemberController">
+  <children>
+    <VBox minWidth="145.0" styleClass="subMenu">
+      <children>
+        <Label text="Menu" styleClass="subHeader" GridPane.rowIndex="0" />
+        <Label text="Persoonsgegevens" />
+        <Hyperlink text="Adresgegevens" onMouseClicked="#secondPage" />
+        <Hyperlink text="Betaalgegevens" onMouseClicked="#thirdPage" />
+        <Hyperlink text="Extra informatie" onMouseClicked="#fourthPage" />
+      </children>
+    </VBox>
+    <GridPane prefWidth="Infinity">
+      <columnConstraints>
+        <ColumnConstraints minWidth="150" />
+        <ColumnConstraints percentWidth="80.0" />
+      </columnConstraints>
+      <children>
+        <Label fx:id="headerText" styleClass="header" GridPane.rowIndex="0"
+          GridPane.columnIndex="0" GridPane.columnSpan="2" />
+        <Label text="Persoonsgegevens" underline="true" styleClass="subHeader"
+          GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" />
+
+        <Label text="Lidnummer" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label fx:id="memberNumber" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="3" spacing="2">
+          <RadioButton id="voorletters" mnemonicParsing="false" selected="true">
+            <graphic>
+              <HBox>
+                <Label text="Voorletters" />
+                <Label style="-fx-text-fill: red;" text=" *" />
+              </HBox>
+            </graphic>
+            <toggleGroup>
+              <ToggleGroup fx:id="rbGroup" />
+            </toggleGroup>
+          </RadioButton>
+          <RadioButton id="voornaam" mnemonicParsing="false" toggleGroup="$rbGroup">
+            <graphic>
+              <HBox>
+                <Label text="Voornaam" />
+                <Label style="-fx-text-fill: red;" text=" *" />
+              </HBox>
+            </graphic>
+          </RadioButton>
+        </VBox>
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+          <TextField fx:id="initials" maxWidth="80" />
+          <Label fx:id="initialsE" styleClass="required" visible="false" />
+        </HBox>
+
+        <Label text="Voorvoegsels" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <TextField fx:id="lastNamePrefix" maxWidth="80" GridPane.columnIndex="1"
+          GridPane.rowIndex="4" />
+
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="5" maxHeight="20">
+          <children>
+            <Label text="Achternaam" />
+            <Label styleClass="required" text=" *" />
+          </children>
+        </HBox>
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5" maxHeight="20">
+          <TextField fx:id="lastName" minWidth="450" />
+          <Label fx:id="lastNameE" styleClass="required" visible="false" />
+        </HBox>
+
+        <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="6" maxHeight="20">
+          <TextField fx:id="email" minWidth="450" />
+          <Label fx:id="emailE" styleClass="required" visible="false" />
+        </HBox>
+
+        <Label text="Telefoon" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <TextField fx:id="telephoneNumber" maxWidth="120" GridPane.columnIndex="1"
+          GridPane.rowIndex="7" />
+
+        <Label text="Lidmaatschap status" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <ChoiceBox fx:id="memberStatus" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+        <Label text="Lid sinds datum" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+        <DatePicker fx:id="memberSince" maxWidth="120" GridPane.columnIndex="1"
+          GridPane.rowIndex="9" />
+
+        <Label text="Wil geen clubblad" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+        <CheckBox fx:id="noMagazine" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="11" spacing="20">
+          <children>
+            <NextPageButton onAction="#nextPage" />
+            <SaveButton fx:id="saveButton" disable="true" onAction="#save" />
+            <UndoButton onAction="#reset" />
+          </children>
+        </HBox>
+      </children>
+    </GridPane>
+  </children>
+</HBox>
+

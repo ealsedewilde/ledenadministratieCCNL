@@ -34,7 +34,7 @@ public class DirectDebitTransactionInformationBuilder {
   private final IncassoProperties properties;
 
   /**
-   * Het op te bouwen object
+   * Het op te bouwen object.
    */
   private DirectDebitTransactionInformation9 transactie = new DirectDebitTransactionInformation9();
 
@@ -46,8 +46,8 @@ public class DirectDebitTransactionInformationBuilder {
   /**
    * Naam van de debiteur toevoegen.
    * 
-   * @param naam
-   * @return
+   * @param naam - debiteurnaam
+   * @return builder
    */
   public DirectDebitTransactionInformationBuilder metDibiteurNaam(String naam) {
     PartyIdentification32 debiteur = new PartyIdentification32();
@@ -59,8 +59,8 @@ public class DirectDebitTransactionInformationBuilder {
   /**
    * IBAN-nummer van de debiteur toevoegen. DE BIC-code wordt erbij gezocht en toegevoegd.
    * 
-   * @param iban
-   * @return
+   * @param iban - toe te voegen IBAN-nummer
+   * @return builder
    * @throws InvalidIbanException
    */
   public DirectDebitTransactionInformationBuilder metDibiteurIBAN(String iban)
@@ -85,8 +85,8 @@ public class DirectDebitTransactionInformationBuilder {
   /**
    * Incasso omschrijving toevoegen.
    * 
-   * @param LIDNUMMER
-   * @return
+   * @param lidnummer - toe te voegen nummer CCNL-lid
+   * @return builder
    */
   public DirectDebitTransactionInformationBuilder metLidnummer(Integer lidnummer) {
     PaymentIdentification1 reden = new PaymentIdentification1();
@@ -103,8 +103,8 @@ public class DirectDebitTransactionInformationBuilder {
   /**
    * Mandaat gegevens invoegen voor IBAN-mandaat
    * 
-   * @param LIDNUMMER
-   * @return
+   * @param lidnummer - nummer waarvoor mandaat wordt toegevoegd
+   * @return builder
    */
   private DirectDebitTransaction6 getMandaat(Integer lidnummer) {
     DirectDebitTransaction6 ddtx = new DirectDebitTransaction6();
@@ -116,6 +116,10 @@ public class DirectDebitTransactionInformationBuilder {
 
   }
 
+  /**
+   * Object object opvragen.
+   * @return gebouwde object
+   */
   public DirectDebitTransactionInformation9 build() {
     return transactie;
   }

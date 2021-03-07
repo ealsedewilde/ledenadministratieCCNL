@@ -8,12 +8,14 @@ import org.springframework.core.env.Environment;
 
 @Configuration
 @PropertySource("classpath:excel.properties")
-public class CCNLColumnProperties extends CCNLFileProperties {
+public class CCNLColumnProperties {
 
   public static final String LEEG = "<leeg>";
 
+  private final Environment environment;
+
   public CCNLColumnProperties(Environment environment) {
-    super(environment);
+    this.environment = environment;
   }
 
   public int getKolomnummer(ColumnDefinition kolom) {
@@ -57,6 +59,10 @@ public class CCNLColumnProperties extends CCNLFileProperties {
     String waarde = getProperty(LidColumnDefinition.Property.PAS_VERSTUURD_JA.name().toLowerCase());
     return getFirstValue(waarde);
   }
+  
+  public String getProperty(String key) {
+    return environment.getProperty(key);
+  }
 
   private String getFirstValue(String waarde) {
     String s = waarde.split("[;]")[0];
@@ -65,5 +71,6 @@ public class CCNLColumnProperties extends CCNLFileProperties {
     }
     return s;
   }
+
 
 }

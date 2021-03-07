@@ -30,12 +30,6 @@ public class CCNLWorkbook implements AutoCloseable {
 
   protected Workbook workbook;
 
-  public CCNLWorkbook(String bestand, CCNLColumnProperties properties) {
-    this.bestand = new File(bestand);
-    this.properties = properties;
-    init();
-  }
-
   public CCNLWorkbook(File bestand, CCNLColumnProperties properties) {
     this.bestand = bestand;
     this.properties = properties;

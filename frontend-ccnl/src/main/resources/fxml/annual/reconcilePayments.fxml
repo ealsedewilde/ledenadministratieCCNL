@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.annual.ReconciliationController">
+  <children>
+    <Label text="Betalingen verwerken" styleClass="header" />
+    <Label text="Te verwerken bestanden" styleClass="subHeader" />
+    <TableView fx:id="tableView" maxWidth="522">
+      <placeholder>
+        <Label text="Geen bestanden geladen" />
+      </placeholder>
+      <columns>
+        <TableColumn minWidth="400" text="Bestandsnaam">
+          <cellValueFactory>
+            <PropertyValueFactory property="fileName" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn fx:id="buttonColumn" minWidth="120" />
+      </columns>
+    </TableView>
+    <SearchButton text="Betaalbestand toevoegen" onAction="#selectFile" minWidth="200" />
+    <Separator prefWidth="Infinity" />
+    <HBox spacing="20">
+      <children>
+        <HBox>
+          <Label text="Verwerk boekingen met datum na peildatum" />
+          <Label style="-fx-text-fill: red;" text=" *" />
+        </HBox>
+        <DatePicker fx:id="referenceDate" maxWidth="146" />
+        <Label fx:id="referenceDateE" text="Kies een peildatum" visible="false" />
+      </children>
+    </HBox>
+    <HBox spacing="20">
+        <Label text="Incasso uitgevoerd"/>
+     <CheckBox fx:id="includeDD" selected="true"/>
+    </HBox>
+    
+    <SaveButton text="Bestanden verwerken" minWidth="200" onAction="#reconcilePayments" />
+  </children>
+  <padding>
+    <Insets left="15.0" right="15.0" />
+  </padding>
+</VBox>

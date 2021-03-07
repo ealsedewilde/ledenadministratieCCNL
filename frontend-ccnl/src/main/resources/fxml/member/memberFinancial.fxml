@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.member.MemberController">
+  <children>
+    <VBox minWidth="145.0" styleClass="subMenu">
+      <children>
+        <Label text="Menu" styleClass="subHeader" GridPane.rowIndex="0" />
+        <Hyperlink text="Persoonsgegevens" onMouseClicked="#firstPage" />
+        <Hyperlink text="Adresgegevens" onMouseClicked="#secondPage" />
+        <Label text="Betaalgegevens" />
+        <Hyperlink text="Extra informatie" onMouseClicked="#fourthPage" />
+      </children>
+    </VBox>
+    <GridPane prefWidth="Infinity">
+      <columnConstraints>
+        <ColumnConstraints minWidth="150.0" />
+        <ColumnConstraints percentWidth="80.0" />
+      </columnConstraints>
+      <children>
+        <Label fx:id="headerText" styleClass="header" GridPane.rowIndex="0"
+          GridPane.columnIndex="0" GridPane.columnSpan="2" />
+        <Label text="Betaalgegevens" underline="true" styleClass="subHeader"
+          GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" />
+
+        <Label text="IBAN nummer" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+          <TextField fx:id="ibanNumber" maxWidth="146" />
+          <Label fx:id="ibanNumberE" styleClass="required" 
+            visible="false" />
+        </HBox>
+
+        <Label fx:id="ibanOwnerNameL" text="IBAN t.n.v." GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <TextField fx:id="ibanOwnerName" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <Label text="Betaalwijze" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <ChoiceBox fx:id="paymentMethod" GridPane.columnIndex="1" GridPane.rowIndex="5" onAction="#checkPaymentMethod"/>
+
+        <Label text="Heeft betaald" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <CheckBox fx:id="currentYearPaid" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+        <Label text="Betaaldatum" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <DatePicker fx:id="paymentDate" maxWidth="146" GridPane.columnIndex="1"
+          GridPane.rowIndex="7" />
+
+        <Label text="Pas ontvangen" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <CheckBox fx:id="membercardIssued" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+        <Label text="Betaal info" GridPane.valignment="TOP" GridPane.columnIndex="0"
+          GridPane.rowIndex="9" />
+        <TextArea fx:id="paymentInfo" prefHeight="100.0" prefWidth="400.0"
+          GridPane.columnIndex="1" GridPane.rowIndex="9" />
+
+        <Label fx:id="sepaLabel" text="Sepa Machtiging" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+        <SearchButton fx:id="sepaButton" text="Machtiging tonen" onAction="#showSepaAuthorization" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="11" spacing="20">
+          <children>
+            <NextPageButton onAction="#nextPage" />
+            <PreviousPageButton onAction="#previousPage" />
+            <SaveButton fx:id="saveButton" disable="true" onAction="#save" />
+            <UndoButton onAction="#reset" />
+          </children>
+        </HBox>
+
+      </children>
+    </GridPane>
+  </children>
+</HBox>
+          

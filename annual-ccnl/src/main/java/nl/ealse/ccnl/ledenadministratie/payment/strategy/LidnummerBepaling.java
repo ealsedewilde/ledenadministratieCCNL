@@ -9,18 +9,18 @@ public class LidnummerBepaling {
 
   private final List<LidnummerStrategie> filters = new ArrayList<>();
 
-  private static List<Integer> nummers = new ArrayList<>();
-
   public LidnummerBepaling(List<Member> members) {
     filters.add(new StorneringStrategie());
-    filters.add(new NaamStrategie(nummers, members));
-    filters.add(new OmschrijvingStrategie(nummers));
+    
+    // Onderstaande filters worden toegepast als het geen stornering betreft
+    filters.add(new OmschrijvingStrategie());
+    filters.add(new NaamStrategie(members));
     filters.add(new AdresStrategie(members));
     filters.add(new IbanStrategie(members));
+    filters.add(new NummerStrategie());
   }
 
   public void bepaalLidnummer(IngBooking booking) {
-    nummers.clear();
     for (LidnummerStrategie strategie : filters) {
       if (booking.getLidnummer() > 0) {
         break;

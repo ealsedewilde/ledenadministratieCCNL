@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.settings.ManageTemplateController">
+  <children>
+    <Label styleClass="header" fx:id="headerText" />
+    <HBox spacing="30">
+      <children>
+        <Label text="Template tekst" styleClass="subHeader" />
+        <InfoButton onAction="#textHelp" mnemonicParsing="false" text="Invul hulp" />
+      </children>
+    </HBox>
+    <TextArea fx:id="templateText" minHeight="330.0">
+      <VBox.margin>
+        <Insets right="30.0" />
+      </VBox.margin>
+   </TextArea>
+    <HBox fx:id="showSepa" spacing="20">
+      <children>
+        <Label text="Brief bij SEPA-machtiging" />
+        <CheckBox fx:id="addSepa" mnemonicParsing="false" />
+      </children>
+    </HBox>
+    <HBox spacing="30">
+      <children>
+        <HBox>
+          <children>
+            <Label text="Naam voor de template" />
+            <Label styleClass="required" text=" *" />
+          </children>
+        </HBox>
+        <TextField fx:id="templateId" prefWidth="170" />
+        <Label fx:id="templateIdE" styleClass="required" />
+      </children>
+    </HBox>
+    <HBox spacing="10">
+      <children>
+        <SaveButton onAction="#save" defaultButton="true"/>
+        <DeleteButton fx:id="deleteButton" onAction="#delete" />
+        <CancelButton text="Annuleren" onAction="#close" />
+      </children>
+    </HBox>
+  </children>
+</VBox>

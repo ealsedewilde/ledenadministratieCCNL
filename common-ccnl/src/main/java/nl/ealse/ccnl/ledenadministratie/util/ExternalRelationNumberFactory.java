@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class ExternalRelationNumberFactory extends NumberFactory {
 
   public ExternalRelationNumberFactory(ExternalRelationOtherRepository dao) {
-    super(100, 8400);
+    super(99, 8400);
     initialize(dao);
   }
 

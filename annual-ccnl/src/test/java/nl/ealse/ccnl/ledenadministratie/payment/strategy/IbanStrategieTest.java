@@ -19,7 +19,7 @@ class IbanStrategieTest extends FilterTestBase {
     m.setLastName("Test2");
     m.getAddress().setPostalCode("1234 AA");
     m.getAddress().setAddress("Straat");
-    m.setIbanNumber("NL06TRIO0786845694");
+    m.setIbanNumber("GB33BUKB20201555555555");
     members.add(m);
     IbanStrategie sut = new IbanStrategie(members);
     Iterator<IngBooking> itr = init();

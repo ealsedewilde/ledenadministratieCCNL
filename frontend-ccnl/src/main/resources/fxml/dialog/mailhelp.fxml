@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"  stylesheets="@../../css/main.css" >
+  <children>
+    <Label styleClass="subHeader" text="Variabelen"/>
+    <Label text="(Worden door de mailgenerator ingevuld.)" GridPane.columnIndex="2"/>
+
+    <Label text="&lt;&lt;naam&gt;&gt;" GridPane.rowIndex="1"/>
+    <Label text="=" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    <Label text="Voornaam (indien bekend), anders initialen + achternaam" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+
+    <Label text="&lt;&lt;nummer&gt;&gt;" GridPane.rowIndex="2"/>
+    <Label text="=" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Label text="lidnummer" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+  </children>
+</GridPane>

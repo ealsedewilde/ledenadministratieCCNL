@@ -24,8 +24,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
   @Query("SELECT M FROM Member M WHERE M.memberStatus IN ?1 ORDER BY M.memberNumber")
   List<Member> findMembersByStatuses(EnumSet<MembershipStatus> statuses);
 
-  List<Member> findMemberByPaymentMethodAndMemberStatus(PaymentMethod paymentMethod,
-      MembershipStatus status);
+  List<Member> findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(
+      PaymentMethod paymentMethod, MembershipStatus status, boolean currentYearPaid);
 
   @Query("SELECT M FROM Member M WHERE M.paymentMethod IN ?1")
   List<Member> findMembersByPaymentMethods(EnumSet<PaymentMethod> paymentMethods);

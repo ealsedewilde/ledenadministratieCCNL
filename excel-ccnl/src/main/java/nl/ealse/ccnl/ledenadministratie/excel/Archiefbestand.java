@@ -16,6 +16,7 @@ public class Archiefbestand extends CCNLBestand {
 
   public Archiefbestand(File bestand, CCNLColumnProperties properties) throws IOException {
     super(bestand, properties);
+    addSheet("Leden_archief");
   }
 
   public void addHeading() {

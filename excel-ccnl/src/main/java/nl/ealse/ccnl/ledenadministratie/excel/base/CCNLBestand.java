@@ -37,12 +37,6 @@ public abstract class CCNLBestand implements AutoCloseable {
 
   private CellStyle currencyStyle;
 
-  protected CCNLBestand(String bestand, CCNLColumnProperties properties) {
-    this.file = new File(bestand);
-    this.properties = properties;
-    init();
-  }
-
   protected CCNLBestand(File bestand, CCNLColumnProperties properties) {
     this.file = bestand;
     this.properties = properties;
@@ -100,12 +94,6 @@ public abstract class CCNLBestand implements AutoCloseable {
     newCell.setCellValue(waarde);
   }
 
-  public void addTimestampCell(Date waarde, int kolom) {
-    Cell newCell = currentRow.createCell(kolom, CellType.NUMERIC);
-    newCell.setCellStyle(timestampStyle);
-    newCell.setCellValue(waarde);
-  }
-
   public void addCell(Cell cell) {
     if (cell == null) {
       return;
@@ -145,6 +133,12 @@ public abstract class CCNLBestand implements AutoCloseable {
     }
   }
 
+  public void addTimestampCell(Date waarde, int kolom) {
+    Cell newCell = currentRow.createCell(kolom, CellType.NUMERIC);
+    newCell.setCellStyle(timestampStyle);
+    newCell.setCellValue(waarde);
+  }
+  
   public int addHeadingColumn(String naam, int kolom) {
     Row heading = currentSheet.getRow(0);
     Cell cell = heading.createCell(kolom);

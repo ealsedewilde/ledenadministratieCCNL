@@ -42,8 +42,8 @@ public class PaymentInstructionInformationBuilder {
   /**
    * Betaalinformatie toevoegen.
    * 
-   * @param paymentInformation
-   * @return
+   * @param paymentInformation - betaalinformatie
+   * @return builder
    */
   public PaymentInstructionInformationBuilder metPaymentInformation(String paymentInformation) {
     paymentInstructionInformation.setPmtInfId(paymentInformation);
@@ -53,8 +53,8 @@ public class PaymentInstructionInformationBuilder {
   /**
    * Datum zetten waarop de INCASSO uitgevoerd moet worden.
    * 
-   * @param incassodatum
-   * @return
+   * @param incassodatum - uitvoeringsdatum
+   * @return builder
    */
   public PaymentInstructionInformationBuilder metIncassodatum(LocalDate incassodatum) {
     paymentInstructionInformation.setReqdColltnDt(DateUtil.toXMLDate(incassodatum));
@@ -64,8 +64,8 @@ public class PaymentInstructionInformationBuilder {
   /**
    * Debit transactie toevoegen.
    * 
-   * @param transactie
-   * @return
+   * @param transactie - de toe te voegen transactie
+   * @return builder
    */
   public PaymentInstructionInformationBuilder toevoegenDebitTransactie(
       DirectDebitTransactionInformation9 transactie) {
@@ -76,8 +76,8 @@ public class PaymentInstructionInformationBuilder {
   /**
    * Het totaal aantal van transacties toevoegen.
    * 
-   * @param aantalTransacties
-   * @return
+   * @param aantalTransacties - totaal aantal transacties
+   * @return builder
    */
   public PaymentInstructionInformationBuilder metAantalTransacties(Integer aantalTransacties) {
     paymentInstructionInformation.setNbOfTxs(aantalTransacties.toString());
@@ -87,8 +87,8 @@ public class PaymentInstructionInformationBuilder {
   /**
    * Het totaalbedrag van alle transacties toevoegen.
    * 
-   * @param somTransactieBedrag
-   * @return
+   * @param somTransactieBedrag - totale transactiebedrag
+   * @return builder
    */
   public PaymentInstructionInformationBuilder metSomTransactieBedrag(
       BigDecimal somTransactieBedrag) {
@@ -143,7 +143,7 @@ public class PaymentInstructionInformationBuilder {
   /**
    * Incassant id deel opbouwen.
    * 
-   * @return
+   * @return opgebouwde Incassant Id informatie
    */
   private PartyIdentification32 buildSchemaId(IncassoProperties properties) {
     PartyIdentification32 schemaId = new PartyIdentification32();

@@ -3,7 +3,7 @@ INSERT INTO "PUBLIC"."SETTING" VALUES('subject', '', 'ccnl.mail', STRINGDECODE('
 INSERT INTO "PUBLIC"."SETTING" VALUES('host', '', 'spring.mail', 'server60.hosting2go.nl', 'spring.mail.host');               
 INSERT INTO "PUBLIC"."SETTING" VALUES('port', '', 'spring.mail', '587', 'spring.mail.port');  
 INSERT INTO "PUBLIC"."SETTING" VALUES('username', '', 'spring.mail', 'ledenadministratie@citroenclubnederland.nl', 'spring.mail.username');   
-INSERT INTO "PUBLIC"."SETTING" VALUES('password', '', 'spring.mail', '(CCNL2804hx', 'spring.mail.password');  
+INSERT INTO "PUBLIC"."SETTING" VALUES('password', '', 'spring.mail', '**********', 'spring.mail.password');  
 INSERT INTO "PUBLIC"."SETTING" VALUES('mail.smtp.starttls.enable', '', 'spring.mail.properties', 'true', 'spring.mail.properties.mail.smtp.starttls.enable'); 
 INSERT INTO "PUBLIC"."SETTING" VALUES('mail.smtp.auth', '', 'spring.mail.properties', 'true', 'spring.mail.properties.mail.smtp.auth');       
 INSERT INTO "PUBLIC"."SETTING" VALUES('number', 'Volgnummer clubblad', 'ccnl.magazine', '366', 'ccnl.magazine.number');       

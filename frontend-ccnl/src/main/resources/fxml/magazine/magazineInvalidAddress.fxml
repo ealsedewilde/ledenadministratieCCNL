@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.magazine.InvalidAddressController">
+  <children>
+    <Label fx:id="memberNumber" styleClass="header" />
+    <HBox spacing="20" prefHeight="50.0" prefWidth="200.0">
+      <children>
+        <Label text="Volledige naam:" styleClass="subHeader" />
+        <Label fx:id="memberName" styleClass="subHeader" />
+      </children>
+    </HBox>
+    <Separator prefWidth="Infinity" />
+    <Label text="Adresgegevens" underline="true" styleClass="subHeader" />
+    <GridPane>
+      <columnConstraints>
+        <ColumnConstraints minWidth="150" />
+        <ColumnConstraints percentWidth="80.0" />
+      </columnConstraints>
+      <children>
+        <Label text="Straat" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <TextField fx:id="address" minWidth="450" disable="true" GridPane.rowIndex="0"
+          GridPane.columnIndex="1" />
+        <Label text="Huisnummer" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <TextField fx:id="addressNumber" maxWidth="80" disable="true"
+          GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <Label text="Toevoeging" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <TextField fx:id="addressNumberAppendix" maxWidth="80" disable="true"
+          GridPane.rowIndex="2" GridPane.columnIndex="1" />
+        <Label text="Postcode" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+        <TextField fx:id="postalCode" maxWidth="80" disable="true" GridPane.rowIndex="3"
+          GridPane.columnIndex="1" />
+        <Label text="Woonplaats" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+        <TextField fx:id="city" minWidth="200" disable="true" GridPane.rowIndex="4"
+          GridPane.columnIndex="1" />
+        <Label text="Land" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+        <TextField fx:id="country" maxWidth="80" disable="true" GridPane.rowIndex="5"
+          GridPane.columnIndex="1" />
+        <Label text="Reden clubblad retour" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+        <TextArea fx:id="memberInfo" prefHeight="100.0" GridPane.rowIndex="6"
+          GridPane.columnIndex="1" />
+      </children>
+    </GridPane>
+    <HBox translateX="180" translateY="20" spacing="20">
+      <children>
+        <SaveButton text="adres ongeldig" onAction="#addressInvalid" />
+        <CancelButton text="annuleren" onAction="#cancel" />
+      </children>
+    </HBox>
+  </children>
+</VBox>

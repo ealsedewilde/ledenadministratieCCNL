@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.ledenadministratie.payment.strategy;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,24 +14,21 @@ import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
  * @author Ealse
  */
 @Slf4j
-public class NaamStrategie implements LidnummerStrategie {
-  private final List<Integer> nummers;
+public class NaamStrategie extends BetalingStrategie {
+
   private final List<Member> members;
   private Map<Integer, Integer> scores = new HashMap<>();
 
-  public NaamStrategie(List<Integer> nummers, List<Member> members) {
-    this.nummers = nummers;
+  public NaamStrategie(List<Member> members) {
+    super(new ArrayList<>());
     this.members = members;
   }
 
   @Override
   public void bepaalLidnummer(IngBooking booking) {
-    if (booking.getLidnummer() > 0) {
-      return;
-    }
+    getNummers().clear();
     String naam = bepaalNaam(booking);
     scores.clear();
-    nummers.clear();
 
     // match op het ledenbestand
     for (Member member : members) {
@@ -40,16 +38,29 @@ public class NaamStrategie implements LidnummerStrategie {
       }
     }
 
-    // Op dit punt hebben we alle mogelijke matchs bepaald.
+    // Op dit punt hebben we alle mogelijke matches bepaald.
     // Nu omzetten naar gewogen matches.
     handleScore();
 
-    // We hebben nu gewogen matches (dwz alleen de overeenkomsten met het zwaarste gewicht)
-    if (nummers.size() == 1) {
-      booking.setLidnummer(nummers.get(0));
-      log.debug(String.format("lid %s bij naam %s", nummers.get(0), naam));
+    if (getNummers().size() > 1) {
+      // Er zijn meerdere leden met dezelfde naam gevonden
+      String omschrijving = booking.getOmschrijving();
+      for (Integer nr : getNummers()) {
+        if (omschrijving.indexOf(nr.toString()) > -1) {
+          booking.setLidnummer(nr);
+          log.debug(String.format("lid %s bij naam %s", nr, booking.getNaam()));
+          break;
+        }
+      }
+      if (booking.getLidnummer() == 0) {
+        logResult(booking);
+      }
+    } else if (!getNummers().isEmpty()) { 
+      Integer nr = getNummers().get(0);
+      booking.setLidnummer(nr);
+      log.debug(String.format("lid %s bij naam %s", nr, booking.getNaam()));
     } else {
-      log.debug(String.format("%s resultaten bij naam %s", nummers.size(), booking.getNaam()));
+      logResult(booking);
     }
   }
 
@@ -64,11 +75,11 @@ public class NaamStrategie implements LidnummerStrategie {
 
       for (Map.Entry<Integer, Integer> entry : scores.entrySet()) {
         if (entry.getValue() == score) {
-          nummers.add(entry.getKey());
+          getNummers().add(entry.getKey());
         }
       }
     } else if (scores.size() == 1) {
-      nummers.add(scores.keySet().iterator().next());
+      getNummers().add(scores.keySet().iterator().next());
     }
   }
 
@@ -78,14 +89,24 @@ public class NaamStrategie implements LidnummerStrategie {
       naam = naam.substring(0, naam.length() - 3);
     }
     // Als de VOORLETTERS achter de naam staan dan deze weghalen
-    while (Character.isSpaceChar(naam.toCharArray()[naam.length() - 2])) {
-      naam = naam.substring(0, naam.length() - 2);
+    String[] parts = naam.split(" ");
+    boolean initial = false; 
+    for (int q = parts.length -1 ; q >= 0 ; q--) {
+      String p = parts[q];
+      if (p.length() == 1) {
+        initial = true;
+      } else if (initial) {
+        int ix = naam.indexOf(p) + p.length();
+        naam =  naam.substring(0, ix);
+        break;
+      }
     }
     return naam;
   }
 
   /**
-   * Op hoeveel letters is er een overeenkomst? Omdatde naam ook voorvoegsel kan bevatten, wordt er
+   * Op hoeveel letters is er een overeenkomst? 
+   * Omdat e naam ook voorvoegsel kan bevatten, wordt er
    * van achter naar voren gewerkt.
    * 
    * @param naam

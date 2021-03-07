@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" font-size="11.0pt" font-family="Century Gothic">
+  <fo:layout-master-set>
+    <fo:simple-page-master margin-bottom="12mm" margin-left="25mm"
+      margin-right="18mm" margin-top="15mm" master-name="s1-firstpage" page-height="297mm"
+      page-width="210mm">
+      <fo:region-body column-count="1" column-gap="12mm" margin-bottom="33.0pt"
+        margin-left="0mm" margin-right="0mm" margin-top="69.0pt" />
+      <fo:region-before extent="69.0pt" region-name="xsl-region-before-firstpage" />
+      <fo:region-after extent="33.0pt" region-name="xsl-region-after-firstpage" />
+    </fo:simple-page-master>
+    <fo:simple-page-master margin-bottom="12mm" margin-left="25mm"
+      margin-right="18mm" margin-top="15mm" master-name="s1-default" page-height="297mm"
+      page-width="210mm">
+      <fo:region-body column-count="1" column-gap="12mm" margin-bottom="33.0pt"
+        margin-left="0mm" margin-right="0mm" />
+      <fo:region-after extent="33.0pt" region-name="xsl-region-after-default" />
+    </fo:simple-page-master>
+    <ns2:page-sequence-master master-name="s1" xmlns:ns2="http://www.w3.org/1999/XSL/Format">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference
+          master-reference="s1-firstpage" page-position="first" />
+        <fo:conditional-page-master-reference
+          master-reference="s1-default" />
+      </fo:repeatable-page-master-alternatives>
+    </ns2:page-sequence-master>
+  </fo:layout-master-set>
+  
+  <fo:page-sequence master-reference="s1">
+    <fo:static-content flow-name="xsl-region-before-firstpage">
+
+      <fo:table display-align="before" table-layout="fixed"
+        width="6.59in">
+        <fo:table-column column-width="5.00in" />
+        <fo:table-column column-width="1.90in" />
+        <fo:table-body>
+          <fo:table-row height="12mm">
+            <fo:table-cell padding-bottom="0mm" padding-left="1.91mm"
+              padding-right="1.91mm" padding-top="0mm">
+              <fo:block>
+                  <fo:external-graphic content-height="51px"
+                    content-width="106px" src="url('CCNLLogo.png')" />
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell padding-bottom="0mm" padding-left="1.91mm"
+              padding-right="1.91mm" padding-top="0mm">
+              <fo:block font-size="9.0pt" white-space-treatment="preserve">
+              </fo:block>
+              <fo:block font-size="9.0pt">
+                Citroën Club Nederland
+              </fo:block>
+              <fo:block font-size="9.0pt">
+                Postbus 434
+              </fo:block>
+              <fo:block font-size="9.0pt" white-space-collapse="false">
+                1940 AK  Beverwijk
+              </fo:block>
+              <fo:block>
+                <fo:basic-link
+                  external-destination="url(http://www.citroenclubnederland.nl)">
+                  <fo:inline color="#0563C1" font-size="9.0pt" text-decoration="underline"
+                    font-family="Calibri">
+                    www.citroenclubnederland.nl
+                  </fo:inline>
+                </fo:basic-link>
+              </fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+      <fo:block>
+        <fo:leader rule-thickness="0.5pt" rule-style="solid" leader-length="100%"
+          leader-pattern="rule" />
+      </fo:block>
+    </fo:static-content>
+    
+    <fo:static-content flow-name="xsl-region-after-firstpage">
+      <fo:block>
+        <fo:leader rule-thickness="0.5pt" rule-style="solid" leader-length="100%"
+          leader-pattern="rule" />
+      </fo:block>
+      <fo:table display-align="before" table-layout="fixed"
+        width="6.6in">
+        <fo:table-column column-width="2.40in" />
+        <fo:table-column column-width="4.25in" />
+        <fo:table-body>
+          <fo:table-row>
+            <fo:table-cell display-align="after">
+              <fo:block font-size="9.0pt">
+                KvK 40341923
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell display-align="after">
+              <fo:block font-size="9.0pt">
+                Bankrekening: NL97INGB0004160835 t.n.v. CITROEN CLUB NEDERLAND
+              </fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+    </fo:static-content>
+    
+    <fo:static-content flow-name="xsl-region-after-default">
+      <fo:block>
+        <fo:leader rule-thickness="0.5pt" rule-style="solid" leader-length="100%"
+          leader-pattern="rule" />
+      </fo:block>
+     <fo:table display-align="before" table-layout="fixed"
+        width="6.6in">
+        <fo:table-column column-width="2.40in" />
+        <fo:table-column column-width="4.25in" />
+        <fo:table-body>
+          <fo:table-row>
+            <fo:table-cell display-align="after">
+              <fo:block text-align="justify" font-size="9.0pt">
+                KvK 40341923
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell display-align="after">
+              <fo:block text-align="justify" font-size="9.0pt">
+                Bankrekening: NL97INGB0004160835 t.n.v. CITROEN CLUB NEDERLAND
+              </fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+    </fo:static-content>
+    
+    <fo:static-content flow-name="xsl-footnote-separator">
+      <fo:block>
+        <fo:leader rule-thickness="0.5pt" rule-style="solid" leader-length="100%"
+          leader-pattern="rule" />
+      </fo:block>
+    </fo:static-content>
+    
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block white-space-treatment="preserve" space-after.minimum="22pt"/>
+      <fo:block space-after="4mm" linefeed-treatment="preserve"
+        white-space-treatment="preserve" white-space-collapse="false">
+        {{naw}}
+      </fo:block>
+      <fo:block white-space-treatment="preserve" space-after.minimum="66pt"/>
+      {{inhoud}}
+    </fo:flow>
+  </fo:page-sequence>
+</fo:root>

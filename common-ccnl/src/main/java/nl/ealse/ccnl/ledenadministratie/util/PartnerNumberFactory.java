@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class PartnerNumberFactory extends NumberFactory {
 
   public PartnerNumberFactory(ExternalRelationPartnerRepository dao) {
-    super(100, 8500);
+    super(99, 8500);
     initialize(dao);
   }
 

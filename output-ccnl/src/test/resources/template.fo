@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" font-size="11.0pt"
+  font-family="Century Gothic">
+  <ns2:layout-master-set xmlns:ns2="http://www.w3.org/1999/XSL/Format"
+    xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+    xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml"
+    xmlns:w16cid="http://schemas.microsoft.com/office/word/2016/wordml/cid"
+    xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex"
+    xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing">
+    <ns2:simple-page-master margin-bottom="12mm" margin-left="0.98in"
+      margin-right="17mm" margin-top="15mm" master-name="s1-firstpage" page-height="297mm"
+      page-width="210mm">
+      <ns2:region-body column-count="1" column-gap="12mm" margin-bottom="33.0pt"
+        margin-left="0mm" margin-right="0mm" margin-top="69.0pt" />
+      <ns2:region-before extent="69.0pt" region-name="xsl-region-before-firstpage" />
+      <ns2:region-after extent="33.0pt" region-name="xsl-region-after-firstpage" />
+    </ns2:simple-page-master>
+    <ns2:simple-page-master margin-bottom="12mm" margin-left="0.98in"
+      margin-right="17mm" margin-top="15mm" master-name="s1-default" page-height="297mm"
+      page-width="210mm">
+      <ns2:region-body column-count="1" column-gap="12mm" margin-bottom="33.0pt"
+        margin-left="0mm" margin-right="0mm" />
+      <ns2:region-after extent="33.0pt" region-name="xsl-region-after-default" />
+    </ns2:simple-page-master>
+    <ns2:page-sequence-master master-name="s1">
+      <ns2:repeatable-page-master-alternatives>
+        <ns2:conditional-page-master-reference
+          master-reference="s1-firstpage" page-position="first" />
+        <ns2:conditional-page-master-reference
+          master-reference="s1-default" />
+      </ns2:repeatable-page-master-alternatives>
+    </ns2:page-sequence-master>
+  </ns2:layout-master-set>
+  
+  <fo:page-sequence force-page-count="no-force" id="section_s1" format=""
+    master-reference="s1">
+    <fo:static-content flow-name="xsl-region-before-firstpage">
+
+      <fo:table border-color="#000000" border-style="none" border-width="0pt"
+        border-collapse="collapse" display-align="before" start-indent="-0in" table-layout="fixed"
+        width="6.59in">
+        <fo:table-column column-number="1" column-width="5.05in" />
+        <fo:table-column column-number="2" column-width="1.85in" />
+        <fo:table-body start-indent="0in">
+          <fo:table-row height="12mm">
+            <fo:table-cell padding-bottom="0mm" padding-left="1.91mm"
+              padding-right="1.91mm" padding-top="0mm">
+              <fo:block>
+                <fo:inline>
+                  <fo:external-graphic content-height="51px"
+                    content-width="106px" src="url('CCNLLogo.png')" />
+                </fo:inline>
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell padding-bottom="0mm" padding-left="1.91mm"
+              padding-right="1.91mm" padding-top="0mm">
+              <fo:block font-size="9.0pt" white-space-treatment="preserve">
+              </fo:block>
+              <fo:block font-size="9.0pt">
+                Citroën Club Nederland
+              </fo:block>
+              <fo:block font-size="9.0pt">
+                Postbus 434
+              </fo:block>
+              <fo:block font-size="9.0pt">
+                1940 AK Beverwijk
+              </fo:block>
+              <fo:block>
+                <fo:basic-link
+                  external-destination="url(http://www.citroenclubnederland.nl)">
+                  <fo:inline color="#0563C1" font-size="9.0pt" text-decoration="underline"
+                    font-family="Calibri">
+                    www.citroenclubnederland.nl
+                  </fo:inline>
+                </fo:basic-link>
+              </fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+      <fo:block>
+        <fo:leader rule-thickness="0.5pt" rule-style="solid" leader-length="100%"
+          leader-pattern="rule" />
+      </fo:block>
+    </fo:static-content>
+    
+    <fo:static-content flow-name="xsl-region-after-firstpage">
+      <fo:block border-bottom-color="#000000" border-bottom-style="solid"
+        border-bottom-width="0.53mm" font-size="8.0pt">
+        <fo:block font-size="8.0pt" white-space-treatment="preserve">
+        </fo:block>
+
+        <fo:table border-color="#000000" border-style="none" border-width="0pt"
+          border-collapse="collapse" display-align="before" start-indent="0in" table-layout="fixed"
+          width="6.6in">
+          <fo:table-column column-number="1" column-width="2.35in" />
+          <fo:table-column column-number="2" column-width="4.25in" />
+          <fo:table-body start-indent="0in">
+            <fo:table-row>
+              <fo:table-cell display-align="after" padding-bottom="0mm"
+                padding-left="0mm" padding-right="0mm" padding-top="0mm">
+                <fo:block font-size="9.0pt">
+                  KvK 40341923
+                </fo:block>
+              </fo:table-cell>
+              <fo:table-cell display-align="after" padding-bottom="0mm"
+                padding-left="0mm" padding-right="0mm" padding-top="0mm">
+                <fo:block font-size="9.0pt">
+                  Bankrekening: NL97INGB0004160835 t.n.v. CITROEN CLUB NEDERLAND
+                </fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+          </fo:table-body>
+        </fo:table>
+      </fo:block>
+    </fo:static-content>
+    
+    <fo:static-content flow-name="xsl-region-after-default">
+      <fo:block border-bottom-color="#000000" border-bottom-style="solid"
+        border-bottom-width="0.53mm" font-size="8.0pt">
+        <fo:block font-size="8.0pt" white-space-treatment="preserve">
+        </fo:block>
+
+        <fo:table border-color="#000000" border-style="none" border-width="0pt"
+          border-collapse="collapse" display-align="before" start-indent="0in" table-layout="fixed"
+          width="6.6in">
+          <fo:table-column column-number="1" column-width="2.35in" />
+          <fo:table-column column-number="2" column-width="4.25in" />
+          <fo:table-body start-indent="0in">
+            <fo:table-row>
+              <fo:table-cell display-align="after" padding-bottom="0mm"
+                padding-left="0mm" padding-right="0mm" padding-top="0mm">
+                <fo:block text-align="justify" font-size="9.0pt">
+                  KvK 40341923
+                </fo:block>
+              </fo:table-cell>
+              <fo:table-cell display-align="after" padding-bottom="0mm"
+                padding-left="0mm" padding-right="0mm" padding-top="0mm">
+                <fo:block text-align="justify" font-size="9.0pt">
+                  Bankrekening: NL97INGB0004160835 t.n.v. CITROEN CLUB NEDERLAND
+                </fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+          </fo:table-body>
+        </fo:table>
+      </fo:block>
+    </fo:static-content>
+    
+    <fo:static-content flow-name="xsl-footnote-separator">
+      <fo:block>
+        <fo:leader rule-thickness="0.5pt" rule-style="solid" leader-length="100%"
+          leader-pattern="rule" />
+      </fo:block>
+    </fo:static-content>
+    
+    <fo:flow flow-name="xsl-region-body">
+      <!-- vanaf hier -->
+      <fo:block white-space-treatment="preserve">
+      </fo:block>
+      <fo:block white-space-treatment="preserve">
+      </fo:block>
+      <fo:block space-after="4mm" linefeed-treatment="preserve"
+        white-space-treatment="preserve">
+        Irene van der Wolf
+        Helena Hoeve 26
+        2804 HX Gouda
+      </fo:block>
+      <fo:block white-space-treatment="preserve">
+      </fo:block>
+      <fo:block white-space-treatment="preserve">
+      </fo:block>
+      <fo:block white-space-treatment="preserve">
+      </fo:block>
+      <fo:block white-space-treatment="preserve">
+      </fo:block>
+      <fo:block white-space-treatment="preserve">
+      </fo:block>
+      
+      <fo:block space-after="4mm">
+        Beste Irene,
+      </fo:block>
+      
+      <fo:block space-after="4mm">
+        Welkom bij Citroën Club Nederland.
+      </fo:block>
+      
+      <fo:block space-after="4mm">
+        Je ontvangt hierbij het jubileumboekje en de laatste twee nummers van `t2PKtje.
+      </fo:block>
+
+      <fo:block space-after="4mm">
+        De meest actuele
+          clubinformatie vind je op facebook:
+        <fo:block line-height="0pt" linefeed-treatment="preserve"
+          white-space-treatment="preserve"/>
+        <fo:basic-link
+          external-destination="url(https://nl-nl.facebook.com/citroenclubnederland/)">
+          <fo:inline color="#0563C1" text-decoration="underline">
+            https://nl-nl.facebook.com/citroenclubnederland/</fo:inline>
+        </fo:basic-link>
+        .
+        <fo:block line-height="0pt" linefeed-treatment="preserve"
+          white-space-treatment="preserve"/>
+        Citroën Club Nederland verzorgt in een normaal jaar een drietal meetings:
+      </fo:block>
+
+      <fo:list-block provisional-distance-between-starts="0.25in"
+        start-indent="0.25in" text-indent="0in">
+        <fo:list-item>
+          <fo:list-item-label>
+            <fo:block>1.</fo:block>
+          </fo:list-item-label>
+          <fo:list-item-body start-indent="body-start()">
+            <fo:block>Waggelmeeting (rond hemelvaart)
+            </fo:block>
+          </fo:list-item-body>
+        </fo:list-item>
+        <fo:list-item>
+          <fo:list-item-label>
+            <fo:block>2.</fo:block>
+          </fo:list-item-label>
+          <fo:list-item-body start-indent="body-start()">
+            <fo:block>
+              Lindetreffen (in juni)
+            </fo:block>
+          </fo:list-item-body>
+        </fo:list-item>
+       <fo:list-item>
+          <fo:list-item-label>
+            <fo:block>3.</fo:block>
+          </fo:list-item-label>
+          <fo:list-item-body start-indent="body-start()">
+            <fo:block>
+              Kindermeeting (begin september)
+            </fo:block>
+          </fo:list-item-body>
+        </fo:list-item>
+      </fo:list-block>
+
+      <fo:block space-after="4mm">
+        Vanwege Corona gaan de meetings dit jaar helaas niet door.
+      </fo:block>
+
+      <fo:block space-after="4mm">
+        Naast bovenstaande meerdaagse meetings proberen we jaarlijks
+        een tweetal ééndaags activiteiten te organiseren. De najaarspuzzelrit
+        gaat wel door. Ik
+        beveel de rit van harte aan want de organisator is zeer
+        bedreven in het maken van mooie maar
+        uitdagende puzzelritten.
+      </fo:block>
+
+      <fo:block space-after="4mm">
+        Verder verschijnt 6
+        maal per ons clubblad ‘t 2PKtje.
+      </fo:block>
+      <fo:block break-before="page" space-after="4mm">
+        Je lidnummer is 1473.
+        Het lidmaatschapsjaar
+        loopt van april
+        tot april.
+      </fo:block>
+      <fo:block space-after="4mm">
+        De jaarlijkse contributie bedraagt € 27,50 bij automatische
+        incasso en € 30,00 bij zelf overmaken.
+        Alleen met een SEPA machtiging mag Citroën Club
+        Nederland een
+        automatische incasso uitvoeren. Ik stuur een SEPA incasso machtigingsformulier mee.
+      </fo:block>
+
+      <fo:block space-after="4mm">
+        Als je kiest voor
+          automatische incasso dan graag dit formulier ingevuld opsturen
+          naar
+       
+        <fo:basic-link external-destination="url(mailto:ledenadministratie@ccnl.nl)">
+          <fo:inline color="#0563C1" text-decoration="underline" font-family="Calibri">
+            ledenadministratie@ccnl.nl
+          </fo:inline>
+        </fo:basic-link>
+        of het adres onderaan
+          deze brief.
+      </fo:block>
+
+      <fo:block space-after="4mm">
+        Voor dit
+        lidmaatschapsjaar is de automatische
+        incasso al
+        uitgevoerd. Voor het lopende jaar vraag ik
+        je € 15,00 over te maken naar rekening
+        NL97INGB0004160835 van Citroën Club Nederland onder
+        vermelding van lidnummer 1473.
+      </fo:block>
+
+      <fo:block space-after="4mm">
+        Veel plezier van jouw lidmaatschap.
+      </fo:block>
+
+      <fo:block space-after="4mm" white-space-treatment="preserve" />
+
+      <fo:block space-after="4mm" linefeed-treatment="preserve"
+        white-space-treatment="preserve">
+        Met vriendelijke groet,
+        Ealse de
+        WildeLedenadministratie Citroën Club
+        Nederland
+        Helena Hoeve 26
+        2804 HX Gouda
+      </fo:block>
+
+    </fo:flow>
+  </fo:page-sequence>
+</fo:root>

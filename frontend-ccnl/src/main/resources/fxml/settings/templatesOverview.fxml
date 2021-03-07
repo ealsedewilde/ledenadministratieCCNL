@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+<?import nl.ealse.ccnl.control.settings.TemplateRowFactory?>
+<?import nl.ealse.ccnl.control.DatePropertyValueFactory?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.settings.TemplatesController">
+  <children>
+    <Label text="Beheren document templates" styleClass="header" />
+    <TableView fx:id="tableView" prefHeight="400.0" maxWidth="600.0">
+      <placeholder>
+        <Label text="Geen gegevens gevonden" />
+      </placeholder>
+      <rowFactory>
+        <TemplateRowFactory onMouseClicked="#selectTemplate" />
+      </rowFactory>
+      <columns>
+        <TableColumn prefWidth="150.0" text="Type">
+          <cellValueFactory>
+            <PropertyValueFactory property="description" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn prefWidth="150.0" text="Template naam">
+          <cellValueFactory>
+            <PropertyValueFactory property="name" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn prefWidth="150.0" text="Wijzigingsdatum">
+          <cellValueFactory>
+            <DatePropertyValueFactory property="modificationDate" />
+          </cellValueFactory>
+        </TableColumn>
+      </columns>
+    </TableView>
+  </children>
+  <HBox spacing="10">
+    <children>
+      <AddButton text="Welkomsbrief toevoegen" onAction="#newWelcomeLetterTemplate"/>
+      <AddButton text="Herinneringsbrief toevoegen" onAction="#newReminderLetterTemplate"/>
+      <AddButton text="Email opzegging toevoegen" onAction="#newCancelationMailTemplate"/>
+    </children>
+  </HBox>
+</VBox>

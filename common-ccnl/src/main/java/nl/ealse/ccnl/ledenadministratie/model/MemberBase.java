@@ -30,6 +30,8 @@ public class MemberBase implements AddressOwner {
   private MembershipStatus memberStatus = MembershipStatus.ACTIVE;
 
   private String ibanNumber;
+  private String ibanOwner;
+  private LocalDate directDebitMandate;
 
   @Basic(optional = false)
   @Enumerated(EnumType.STRING)

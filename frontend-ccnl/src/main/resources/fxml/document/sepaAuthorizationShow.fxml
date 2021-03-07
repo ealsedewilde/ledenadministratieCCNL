@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import nl.ealse.ccnl.control.PDFViewer?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+  prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" spacing="10"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.member.MemberController">
+  <children>
+    <PDFViewer fx:id="pdfViewer" windowTitle="SEPA machtiging voor lid: %d (%s)"/>
+    <HBox prefHeight="40.0" prefWidth="200.0" spacing="20">
+      <children>
+        <DeleteButton mnemonicParsing="false" onAction="#deletePDF" />
+        <PrintButton mnemonicParsing="false" onAction="#printPDF" />
+        <CancelButton mnemonicParsing="false" onAction="#closePDF" text="Sluiten" />
+      </children>
+    </HBox>
+  </children>
+  <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+</VBox>

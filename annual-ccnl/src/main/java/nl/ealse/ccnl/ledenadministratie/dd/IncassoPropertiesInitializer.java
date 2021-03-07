@@ -31,7 +31,7 @@ public class IncassoPropertiesInitializer {
 
     e = new DDConfigStringEntry();
     e.setValue("RCUR");
-    e.setDescription("Vast waarde; herhalende INCASSO");
+    e.setDescription("Vast waarde; herhalende incasso");
     config.setAuthorizationType(e);
 
     e = new DDConfigStringEntry();
@@ -51,7 +51,7 @@ public class IncassoPropertiesInitializer {
 
     e = new DDConfigStringEntry();
     e.setValue("NL97INGB0004160835");
-    e.setDescription("Nummer waarop INCASSO binnenkomt");
+    e.setDescription("Nummer waarop incasso binnenkomt");
     config.setIbanNumber(e);
 
     e = new DDConfigStringEntry();
@@ -68,11 +68,11 @@ public class IncassoPropertiesInitializer {
     DDConfigAmountEntry a = new DDConfigAmountEntry();
     config.setDirectDebitAmount(a);
     a.setValue(BigDecimal.valueOf(27.5));
-    a.setDescription("In euro's met decimale punt");
+    a.setDescription("Contributie bij Automatische Incasso");
 
     DDConfigDateEntry d = new DDConfigDateEntry();
     d.setValue(LocalDate.now().plusDays(6));
-    d.setDescription("Datum waarop de INCASSO uitgevoerd moet worden");
+    d.setDescription("Datum waarop de incasso uitgevoerd moet worden");
     config.setDirectDebitDate(d);
 
     DDConfigBooleanEntry b = new DDConfigBooleanEntry();

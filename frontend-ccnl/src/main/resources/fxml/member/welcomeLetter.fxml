@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<GridPane minHeight="650.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.member.WelcomeLetterController">
+  <columnConstraints>
+    <ColumnConstraints percentWidth="60.0" />
+    <ColumnConstraints />
+  </columnConstraints>
+  <children>
+    <VBox spacing="10" GridPane.columnSpan="2">
+      <children>
+        <Label styleClass="header" text="Welkomsbrief nieuw lid" />
+        <Label styleClass="subHeader" text="Beschikbare teksten" />
+        <ChoiceBox fx:id="textSelection" prefWidth="150.0" onAction="#selectText" />
+      </children>
+    </VBox>
+    <HBox GridPane.rowIndex="1">
+      <children>
+        <Label styleClass="subHeader" text="Brief tekst" />
+        <Region HBox.hgrow="ALWAYS" />
+        <InfoButton onAction="#textHelp" mnemonicParsing="false" text="Invul hulp" />
+      </children>
+    </HBox>
+    <Label translateX="20" styleClass="subHeader" text="Brieftekst opslaan"
+      GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <TextArea fx:id="letterText" minHeight="390.0" minWidth="350.0" GridPane.rowIndex="2" />
+
+    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <children>
+        <Label text="Brief bij SEPA-machtiging" />
+        <CheckBox fx:id="addSepa" mnemonicParsing="false" GridPane.columnIndex="1" />
+        <HBox GridPane.rowIndex="1">
+          <children>
+            <Label text="Naam voor de tekst" />
+            <Label styleClass="required" text=" *" />
+          </children>
+        </HBox>
+        <TextField fx:id="textId" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label fx:id="textIdE" text="Invullen a.u.b." styleClass="required" visible="false"
+          GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <Button onAction="#saveText" mnemonicParsing="false" text="Tekst Opslaan"
+          GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      </children>
+    </GridPane>
+
+    <VBox spacing="20" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <children>
+        <Separator prefWidth="Infinity" />
+        <HBox spacing="20">
+          <children>
+            <ShowButton onAction="#showLetterExample" mnemonicParsing="false"
+              text="Voorbeeld brief" />
+            <SaveButton onAction="#saveletter" mnemonicParsing="false"
+              text="Brief opslaan" />
+            <PrintButton onAction="#printLetter" mnemonicParsing="false"
+              text="Brief Afdrukken" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+
+  </children>
+</GridPane>

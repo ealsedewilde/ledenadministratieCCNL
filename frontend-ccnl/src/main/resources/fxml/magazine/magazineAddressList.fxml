@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.SaveButton?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.magazine.AddressListController">
+  <children>
+    <Label text="Adresbestand voor het clubblad aanmaken" styleClass="header" />
+    <HBox spacing="20">
+      <children>
+        <HBox>
+          <children>
+            <Label text="Clubblad nummer" />
+            <Label styleClass="required" text=" *" />
+          </children>
+        </HBox>
+        <TextField fx:id="magazineNumber" maxWidth="80" />
+        <Label fx:id="magazineNumberE" text="Voer een geldig numer in" styleClass="required"
+          visible="false" />
+      </children>
+    </HBox>
+    <SaveButton text="Adressenbestand aanmaken" onAction="#generateAddressList" />
+  </children>
+</VBox>

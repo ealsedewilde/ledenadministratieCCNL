@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.document.DocumentRowFactory?>
+<?import nl.ealse.ccnl.control.DatePropertyValueFactory?>
+
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" 
+  fx:controller="nl.ealse.ccnl.control.document.DocumentController">
+  <children>
+    <Label fx:id="memberNumber" styleClass="header" />
+    <HBox spacing="20" prefHeight="100.0" prefWidth="200.0" >
+      <children>
+        <Label text="Volledige naam:" styleClass="subHeader"/>
+        <Label fx:id="memberName" styleClass="subHeader" />
+      </children>
+    </HBox>
+    <Separator prefWidth="Infinity" />
+    <Label text="Gevonden documenten" styleClass="subHeader" />
+    <TableView fx:id="tableView" prefHeight="400.0" maxWidth="600.0" >
+      <placeholder>
+        <Label text="Geen gegevens gevonden" />
+      </placeholder>
+      <rowFactory>
+        <DocumentRowFactory onMouseClicked="#selectDocument" />
+      </rowFactory>
+      <columns>
+        <TableColumn prefWidth="150.0" text="Naam">
+          <cellValueFactory>
+            <PropertyValueFactory property="documentName" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn prefWidth="150.0" text="Aanmaakdatum">
+          <cellValueFactory>
+            <DatePropertyValueFactory property="creationDate" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn prefWidth="250.0" text="Soort document">
+          <cellValueFactory>
+            <PropertyValueFactory property="description" />
+          </cellValueFactory>
+        </TableColumn>
+      </columns>
+    </TableView>
+  </children>
+</VBox>

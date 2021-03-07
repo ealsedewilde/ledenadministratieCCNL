@@ -28,8 +28,8 @@ public class DocumentBuilder {
   /**
    * Aanmaakdatum vullen
    * 
-   * @param CreDtTm
-   * @return
+   * @param creDtTm - aanmaakdatum
+   * @return builder
    */
   public DocumentBuilder metCreateDate(LocalDateTime creDtTm) {
     document.getCstmrDrctDbtInitn().getGrpHdr().setCreDtTm(DateUtil.toXMLDateTime(creDtTm));
@@ -39,8 +39,8 @@ public class DocumentBuilder {
   /**
    * (Optioneel) Som van alle te incasseren bedragen.
    * 
-   * @param ctrlSum
-   * @return
+   * @param ctrlSum - totaal te incasseren bedrag
+   * @return builder
    */
   public DocumentBuilder metControlSum(BigDecimal ctrlSum) {
     document.getCstmrDrctDbtInitn().getGrpHdr().setCtrlSum(ctrlSum);
@@ -50,8 +50,8 @@ public class DocumentBuilder {
   /**
    * MessageId (maximaal 35 tekens)
    * 
-   * @param NbOfTxs
-   * @return
+   * @param messageId - incasso referentie
+   * @return builder
    */
   public DocumentBuilder metMessageId(String messageId) {
     document.getCstmrDrctDbtInitn().getGrpHdr().setMsgId(messageId);
@@ -61,8 +61,8 @@ public class DocumentBuilder {
   /**
    * Totaal aantal transacties
    * 
-   * @param NbOfTxs
-   * @return
+   * @param nbOfTxs - totaal aantal transacties
+   * @return builder
    */
   public DocumentBuilder metNumberOfTransactions(Integer nbOfTxs) {
     document.getCstmrDrctDbtInitn().getGrpHdr().setNbOfTxs(nbOfTxs.toString());
@@ -72,15 +72,19 @@ public class DocumentBuilder {
   /**
    * Crediteur gedeelte toevoegen.
    * 
-   * @param paymentInstruction
-   * @return
+   * @param paymentInstruction - opgebouwde <code>PaymentInstruction</code>.
+   * @return builder
    */
-  public DocumentBuilder metPaymentInstructionInformationBuilder(
+  public DocumentBuilder metPaymentInstructionInformation(
       PaymentInstructionInformation4 paymentInstruction) {
     document.getCstmrDrctDbtInitn().getPmtInf().add(paymentInstruction);
     return this;
   }
 
+  /**
+   * Het gebouwde document opvragen.
+   * @return het gebouwde document
+   */
   public Document build() {
     return document;
   }

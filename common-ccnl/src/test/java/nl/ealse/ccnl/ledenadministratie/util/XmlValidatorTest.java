@@ -18,13 +18,13 @@ class XmlValidatorTest {
   @Test
   void validationTest() {
     try {
-      File xml = new ClassPathResource("NL97INGB0004160835_01-02-2020_01-03-2020.xml").getFile();
+      File xml = new ClassPathResource("booking.xml").getFile();
       String xmlString = getXml(xml);
       boolean result = XmlValidator.validate(xsd, xmlString);
       Assertions.assertTrue(result);
     } catch (IOException e) {
       log.error("Error finding file", e);
-      e.printStackTrace();
+      Assertions.fail(e.getMessage());
     }
 
   }

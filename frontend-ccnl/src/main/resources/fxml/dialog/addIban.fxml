@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<GridPane stylesheets="@../../css/main.css" prefWidth="Infinity" minWidth="800"
+  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.member.IbanController">
+  <columnConstraints>
+    <ColumnConstraints minWidth="150.0" />
+    <ColumnConstraints percentWidth="80.0" />
+  </columnConstraints>
+  <children>
+    <Label fx:id="memberInfo" styleClass="header" GridPane.rowIndex="0"
+      GridPane.columnSpan="2" />
+    <Label text="Geen IBAN-nummer aanwezig; toevoegen a.u.b." styleClass="subHeader"
+      GridPane.rowIndex="1" GridPane.columnSpan="2" />
+
+    <HBox GridPane.rowIndex="2">
+      <Label text="IBAN nummer" />
+      <Label style="-fx-text-fill: red;" text=" *" />
+    </HBox>
+    <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <TextField fx:id="ibanNumber" maxWidth="146" />
+      <Label fx:id="ibanNumberE" styleClass="required" visible="false" />
+    </HBox>
+    <SaveButton onAction="#save" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+  </children>
+</GridPane>

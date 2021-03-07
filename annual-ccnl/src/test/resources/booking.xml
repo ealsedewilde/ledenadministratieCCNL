@@ -143,7 +143,7 @@
         <NtryDtls>
           <TxDtls>
             <Refs>
-              <EndToEndId>TRIODOS/NL/20200201/36864812</EndToEndId>
+              <EndToEndId>TESTING/NL/20200201/36864812</EndToEndId>
             </Refs>
             <RltdPties>
               <Dbtr>
@@ -156,7 +156,7 @@
               </Dbtr>
               <DbtrAcct>
                 <Id>
-                  <IBAN>NL06TRIO0786845694</IBAN>
+                  <IBAN>GB33BUKB20201555555555</IBAN>
                 </Id>
                 <Tp>
                   <Prtry>General</Prtry>
@@ -208,7 +208,7 @@
         <NtryDtls>
           <TxDtls>
             <Refs>
-              <EndToEndId>TRIODOS/NL/20200201/36864812</EndToEndId>
+              <EndToEndId>TESTING/NL/20200201/36864812</EndToEndId>
             </Refs>
             <RltdPties>
               <Dbtr>
@@ -216,7 +216,7 @@
               </Dbtr>
               <DbtrAcct>
                 <Id>
-                  <IBAN>NL06TRIO0786845694</IBAN>
+                  <IBAN>GB33BUKB20201555555555</IBAN>
                 </Id>
                 <Tp>
                   <Prtry>General</Prtry>

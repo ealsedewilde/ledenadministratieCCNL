@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" font-size="11.0pt"
+  font-family="Calibri">
+  <fo:layout-master-set>
+    <fo:simple-page-master master-name="simple" page-height="290mm"
+      page-width="204mm" margin-top="15mm" margin-bottom="12mm" margin-left="25mm"
+      margin-right="18mm">
+      <fo:region-body margin-top="5mm" />
+    </fo:simple-page-master>
+  </fo:layout-master-set>
+  <fo:page-sequence master-reference="simple">
+    <fo:flow flow-name="xsl-region-body">
+      <fo:table table-layout="fixed" width="160mm" border-color="grey"
+        border-collapse="separate" border-spacing="3mm 1mm">
+        <fo:table-column column-width="20%" />
+        <fo:table-column column-width="80%"/>
+        <fo:table-body>
+          <fo:table-row>
+            <fo:table-cell border-width="1px" border-style="solid">
+              <fo:block>
+                <fo:inline padding-left="5px">Aan:</fo:inline>
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-width="1px" border-style="solid">
+              <fo:block>
+                <fo:inline padding-left="5px">{{mail.to}}</fo:inline>
+              </fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+          <fo:table-row>
+            <fo:table-cell border-width="1px" border-style="solid">
+              <fo:block>
+                <fo:inline padding-left="5px">Cc:</fo:inline>
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-width="1px" border-style="solid">
+              <fo:block>
+                <fo:inline padding-left="5px">{{mail.cc}}</fo:inline>
+              </fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+          <fo:table-row>
+            <fo:table-cell>
+              <fo:block>
+                <fo:inline padding-left="5px">Onderwerp:</fo:inline>
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-width="1px" border-style="solid">
+              <fo:block>
+                <fo:inline padding-left="5px">{{mail.subject}}</fo:inline>
+              </fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+      {{mail.content}}
+    </fo:flow>
+  </fo:page-sequence>
+</fo:root>

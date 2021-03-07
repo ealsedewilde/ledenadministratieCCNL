@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.SaveButton?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.settings.ManageArchiveController">
+  <columnConstraints>
+    <ColumnConstraints minWidth="100" />
+    <ColumnConstraints />
+    <ColumnConstraints />
+  </columnConstraints>
+  <children>
+    <Label text="Archief Opschonen" styleClass="header" />
+    <HBox GridPane.rowIndex="1">
+      <children>
+        <Label text="Op te schonen archiefjaar" />
+        <Label style="-fx-text-fill: red;" text=" *" />
+      </children>
+    </HBox>
+    <TextField fx:id="referenceYear" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+    <Label fx:id="referenceYearE" visible="false" styleClass="required" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+    <SaveButton text="archief opschonen" onAction="#delete" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+  </children>
+</GridPane>

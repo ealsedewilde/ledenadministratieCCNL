@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<VBox prefWidth="Infinity" minWidth="800" spacing="20.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.settings.ExcelImportController">
+  <children>
+    <Label styleClass="header" text="Gegevens importeren vanuit Excel" />
+    <SearchButton mnemonicParsing="false" text="Selecteer te importeren Excel-bestand" onAction="#selectFile"/>
+    <Label fx:id="fileLabel" />
+    <Separator prefWidth="1280.0" />
+    <Label styleClass="subHeader" text="Manier van importeren" />
+    <HBox prefHeight="26.0" prefWidth="580.0" spacing="20.0">
+      <children>
+        <RadioButton id="add" mnemonicParsing="false" text="Alleen toevoegen">
+          <toggleGroup>
+            <ToggleGroup fx:id="importGroup" />
+          </toggleGroup>
+        </RadioButton>
+        <RadioButton id="addReplace" mnemonicParsing="false" text="Toevoegen + overschrijven"
+          toggleGroup="$importGroup" />
+        <RadioButton id="replace" mnemonicParsing="false" text="Vervangen" toggleGroup="$importGroup" selected="true"/>
+      </children>
+    </HBox>
+    <Separator prefWidth="1280.0" />
+    <Label styleClass="subHeader" text="Te importeren Excel tabbladen" />
+    <CheckBox fx:id="all" id="all" mnemonicParsing="false" text="Alles" onAction="#importAllTabs"/>
+    <CheckBox fx:id="members" id="members" mnemonicParsing="false" text="Leden tabbladen" onAction="#importTab"/>
+    <CheckBox fx:id="partners" id="partners" mnemonicParsing="false" text="Adverteerders" onAction="#importTab"/>
+    <CheckBox fx:id="clubs" id="clubs" mnemonicParsing="false" text="Clubs" onAction="#importTab"/>
+    <CheckBox fx:id="external" id="external" mnemonicParsing="false" text="Externe relaties" onAction="#importTab"/>
+    <CheckBox fx:id="internal" id="internal" mnemonicParsing="false" text="Functies" onAction="#importTab"/>
+    <SaveButton fx:id="importButton" mnemonicParsing="false" text="Importeer" onAction="#importFile" disable="true"/>
+  </children>
+  <padding>
+    <Insets left="20.0" />
+  </padding>
+</VBox>

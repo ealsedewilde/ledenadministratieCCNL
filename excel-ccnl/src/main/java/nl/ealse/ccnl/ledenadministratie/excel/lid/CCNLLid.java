@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.excel.lid;
 
 import java.io.EOFException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.StringJoiner;
 import lombok.Getter;
@@ -18,6 +19,14 @@ import org.apache.poi.ss.usermodel.Row;
  */
 @Getter
 public class CCNLLid extends CCNLAdres implements Comparable<CCNLLid> {
+  
+  private static final Date DEFAULT_DATE;
+  
+  static {
+    Calendar c = Calendar.getInstance();
+    c.set(2000, 0, 1);
+    DEFAULT_DATE = c.getTime();
+  }
 
   private int lidNummer;
 
@@ -97,6 +106,9 @@ public class CCNLLid extends CCNLAdres implements Comparable<CCNLLid> {
     mutatiedatum = getDateValue(cell);
     cell = getCell(LidColumnDefinition.LID_VANAF);
     lidVanaf = getDateValue(cell);
+    if (lidVanaf == null) {
+      lidVanaf = DEFAULT_DATE;
+    }
     cell = getCell(LidColumnDefinition.EMAIL);
     email = getValue(cell);
     cell = getCell(LidColumnDefinition.OPMERKING);

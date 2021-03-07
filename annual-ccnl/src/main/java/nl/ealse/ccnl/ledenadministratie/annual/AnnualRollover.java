@@ -14,6 +14,10 @@ import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Rollover to a new membership year.
+ * @author ealse
+ */
 @Component
 public class AnnualRollover {
 
@@ -30,9 +34,18 @@ public class AnnualRollover {
   }
 
   /**
-   * Rollover to a new membership year. All non renewal members will be archived and removed from
-   * members database table. The status is changed to OVERDUE for for all members that haven't paid
-   * yet. The member card status is reset for all remaining members.
+   * Rollover to a new membership year. 
+   * <p>
+   * All non renewal members will be archived and removed from
+   * members database table. 
+   * </p>
+   * <p>
+   * The status is changed to OVERDUE for for all members that haven't paid
+   * yet.
+   * </p> 
+   * <p>
+   * The member card status is reset for all remaining members.
+   * </p>
    */
   @Transactional
   public void rollover() {

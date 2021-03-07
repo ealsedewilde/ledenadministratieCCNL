@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.member.MemberCancelController">
+  <children>
+    <VBox minWidth="145.0" />
+    <GridPane prefWidth="Infinity">
+      <columnConstraints>
+        <ColumnConstraints minWidth="150" />
+        <ColumnConstraints percentWidth="80.0" />
+      </columnConstraints>
+      <children>
+        <Label text="Beëindigen lidmaatschap" styleClass="header" GridPane.rowIndex="0"
+          GridPane.columnIndex="0" GridPane.columnSpan="2" />
+        <Label text="Persoonsgegevens" underline="true" styleClass="subHeader"
+          GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" />
+
+        <Label text="Lidnummer" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="memberNumber" disable="true" GridPane.columnIndex="1"
+          GridPane.rowIndex="2" />
+
+        <Label fx:id="initialsLabel" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <TextField fx:id="initials" maxWidth="80" disable="true" GridPane.columnIndex="1"
+          GridPane.rowIndex="3" />
+
+        <Label text="Voorvoegsels" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <TextField fx:id="lastNamePrefix" disable="true" maxWidth="80"
+          GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+        <Label text="Achternaam" GridPane.columnIndex="0" GridPane.rowIndex="5" maxHeight="20" />
+        <TextField fx:id="lastName" disable="true" minWidth="450" GridPane.columnIndex="1"
+          GridPane.rowIndex="5" />
+
+        <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <TextField fx:id="email" disable="true" minWidth="450" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+        <Label text="Telefoon" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <TextField fx:id="telephoneNumber" disable="true" maxWidth="120" GridPane.columnIndex="1"
+          GridPane.rowIndex="7" />
+
+        <Label text="Lidmaatschap status" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <ChoiceBox fx:id="memberStatus" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+        <Label text="Lid sinds datum" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+        <TextField fx:id="memberSince" disable="true" maxWidth="120" GridPane.columnIndex="1"
+          GridPane.rowIndex="9" />
+
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="11" spacing="20">
+          <children>
+            <SaveButton onAction="#save" />
+          </children>
+        </HBox>
+      </children>
+    </GridPane>
+  </children>
+</HBox>
+

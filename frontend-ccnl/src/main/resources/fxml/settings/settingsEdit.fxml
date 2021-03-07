@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Parent?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+
+<VBox stylesheets="@../../css/main.css" maxHeight="-Infinity" maxWidth="-Infinity"
+  minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" spacing="20" fx:controller="nl.ealse.ccnl.control.settings.SettingsEdit">
+  <children>
+    <Label styleClass="header" text="Instelling wijzigen" />
+    <HBox spacing="10" prefWidth="1200.0">
+      <children>
+        <HBox>
+          <children>
+            <Label text="Sleutel" />
+            <Label style="-fx-text-fill: red;" text=" *" />
+          </children>
+        </HBox>
+        <VBox spacing="5">
+          <children>
+            <TextField fx:id="key" prefWidth="150.0" />
+            <Label fx:id="keyE" text="Invullen a.u.b." styleClass="required" visible="false" />
+          </children>
+        </VBox>
+        <Label text="Groep:" />
+        <TextField fx:id="group" prefWidth="150.0" />
+        <HBox>
+          <children>
+            <Label text="Waarde" />
+            <Label style="-fx-text-fill: red;" text=" *" />
+          </children>
+        </HBox>
+        <VBox spacing="5">
+          <children>
+            <TextField fx:id="value" prefWidth="250.0" />
+            <Label fx:id="valueE" text="Invullen a.u.b." styleClass="required" visible="false" />
+          </children>
+        </VBox>
+        <Label text="Omschrijving:" />
+        <TextField fx:id="description" prefWidth="250.0" />
+      </children>
+    </HBox>
+    <HBox spacing="20" prefHeight="100.0" prefWidth="200.0" translateX="55">
+      <children>
+        <SaveButton mnemonicParsing="false" onAction="#update" />
+        <DeleteButton mnemonicParsing="false" onAction="#delete" />
+        <UndoButton mnemonicParsing="false" onAction="#reset" />
+      </children>
+    </HBox>
+  </children>
+</VBox>

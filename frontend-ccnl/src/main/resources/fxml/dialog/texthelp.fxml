@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"  stylesheets="@../../css/main.css" >
+  <children>
+    <Label styleClass="subHeader" text="Variabelen"/>
+    <Label text="(Worden door de briefgenerator ingevuld.)" GridPane.columnIndex="2"/>
+
+    <Label text="&lt;&lt;naam&gt;&gt;" GridPane.rowIndex="1"/>
+    <Label text="=" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    <Label text="Voornaam (indien bekend), anders initialen + achternaam" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+
+    <Label text="&lt;&lt;nummer&gt;&gt;" GridPane.rowIndex="2"/>
+    <Label text="=" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Label text="lidnummer" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+
+    <Label styleClass="subHeader" text="Opmaak"  GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+
+    <Label text="{{afsluiting}}" GridPane.rowIndex="4"/>
+    <Label text="=" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    <Label text="Geef hierna de ondertekening" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+
+    <Label text="{{pagina}}" GridPane.rowIndex="5"/>
+    <Label text="=" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    <Label text="Pagina overgang" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
+
+    <Label text="{{link:&lt;link&gt;}}" GridPane.rowIndex="6"/>
+    <Label text="=" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+    <Label text="Hyperlink; vervang &lt;link&gt; door de beoogde link" GridPane.rowIndex="6" GridPane.columnIndex="2"/>
+
+    <Label text="{{mail:&lt;email&gt;}}" GridPane.rowIndex="7"/>
+    <Label text="=" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+    <Label text="Hyperlink; vervang &lt;email&gt; door het beoogde mailadres" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
+
+    <Label text="{{ol}}" GridPane.rowIndex="8"/>
+    <Label text="=" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+    <Label text="Begin of einde van een genummerde lijst" GridPane.rowIndex="8" GridPane.columnIndex="2"/>
+
+    <Label text="{{ul}}" GridPane.rowIndex="9"/>
+    <Label text="=" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+    <Label text="Begin of einde van een lijst met punten" GridPane.rowIndex="9" GridPane.columnIndex="2"/>
+
+    <Label text="{{li}}" GridPane.rowIndex="10"/>
+    <Label text="=" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+    <Label text="Begin van item in een lijst" GridPane.rowIndex="10" GridPane.columnIndex="2"/>
+  </children>
+</GridPane>

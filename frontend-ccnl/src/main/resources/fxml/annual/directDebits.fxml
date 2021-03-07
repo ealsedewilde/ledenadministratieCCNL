@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+<?import nl.ealse.ccnl.control.button.SaveButton?>
+<?import nl.ealse.ccnl.control.button.NextPageButton?>
+<?import nl.ealse.ccnl.control.button.SearchButton?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.annual.SepaDirectDebitsController">
+  <children>
+    <Label text="Incassobestand aanmaken" styleClass="header"/>
+    <NextPageButton text="Incasso instellingen openen" onAction="#manageSettings" minWidth="200"/>
+    <SearchButton text="Doelbestand selecteren" onAction="#selectFile"  minWidth="200"/>
+    <SaveButton fx:id="generateButton" text="Bestand aanmaken" minWidth="200" onAction="#generateDirectDebits"/>
+  </children>
+</VBox>

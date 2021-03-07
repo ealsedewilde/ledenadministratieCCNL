@@ -35,6 +35,9 @@ class DocumentRepositoryTest extends JpaTestBase {
     List<Document> sepaList =
         dao.findByOwnerAndDocumentType(savedMember, DocumentType.SEPA_AUTHORIZATION);
     Assertions.assertEquals(1, sepaList.size());
+    
+    List<Integer> numberList = dao.findMemberNummbersWithSepa();
+    Assertions.assertEquals(1, numberList.size());
   }
 
   private Document initializeDocument(Member owner) {
