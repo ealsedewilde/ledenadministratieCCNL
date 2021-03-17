@@ -1,7 +1,9 @@
 package nl.ealse.ccnl.control.annual;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,6 +14,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import lombok.Getter;
+import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -25,6 +29,7 @@ import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -32,6 +37,8 @@ public class SepaDirectDebitsController implements ApplicationListener<MenuChoic
   private final PageController pageController;
 
   private final SepaDirectDebitService service;
+
+  private final TaskExecutor executor;
 
   private File selectedFile;
 
@@ -56,13 +63,15 @@ public class SepaDirectDebitsController implements ApplicationListener<MenuChoic
 
   @FXML
   private TableColumn<FlatProperty, String> descriptionColumn;
-  
+
   private Stage messagesStage;
 
 
-  public SepaDirectDebitsController(SepaDirectDebitService service, PageController pageController) {
+  public SepaDirectDebitsController(SepaDirectDebitService service, PageController pageController,
+      TaskExecutor executor) {
     this.pageController = pageController;
     this.service = service;
+    this.executor = executor;
   }
 
   @Override
@@ -133,17 +142,20 @@ public class SepaDirectDebitsController implements ApplicationListener<MenuChoic
 
   @FXML
   public void generateDirectDebits() {
-    try {
-      List<String> messages = service.generateSepaDirectDebitFile(selectedFile);
+    pageController.showPermanentMessage("Incassobestand wordt aangemaakt; even geduld a.u.b.");
+    DirectDebitTask directDebitTask = new DirectDebitTask(service, selectedFile);
+    directDebitTask.setOnFailed(
+        t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+    directDebitTask.setOnSucceeded(t -> {
+      List<String> messages = directDebitTask.getMessages();
       if (!messages.isEmpty()) {
         directDebitMessages.getItems().clear();
         directDebitMessages.getItems().addAll(messages);
         messagesStage.show();
       }
-      pageController.setMessage("Incassobestand is aangemaakt");
-    } catch (IncassoException e) {
-      pageController.setErrorMessage("Aanmaken incassobestand is mislukt");
-    }
+      pageController.showMessage("Incassobestand is aangemaakt");
+    });
+    executor.execute(directDebitTask);
     pageController.setActivePage(PageName.LOGO);
   }
 
@@ -165,6 +177,30 @@ public class SepaDirectDebitsController implements ApplicationListener<MenuChoic
         fileChooser.setInitialDirectory(new File(newValue.getValue()));
       }
     }
+  }
+
+  protected static class DirectDebitTask extends Task<Void> {
+    @Getter
+    private List<String> messages = new ArrayList<>();
+
+    private final SepaDirectDebitService service;
+    private final File selectedFile;
+
+    DirectDebitTask(SepaDirectDebitService service, File selectedFile) {
+      this.service = service;
+      this.selectedFile = selectedFile;
+    }
+
+    @Override
+    protected Void call() {
+      try {
+        service.generateSepaDirectDebitFile(selectedFile);
+      } catch (IncassoException e) {
+        throw new AsyncTaskException("Aanmaken incassobestand is mislukt");
+      }
+      return null;
+    }
+
   }
 
 }

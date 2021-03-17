@@ -6,7 +6,7 @@ import lombok.Setter;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
-import nl.ealse.ccnl.service.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.view.ExternalRelationDeleteView;
 import nl.ealse.javafx.mapping.Mapping;
 
@@ -31,7 +31,7 @@ public abstract class ExternalRelationDeleteController<T extends ExternalRelatio
   @FXML
   public void delete() {
     service.deleteExternalRelation(selectedEntity);
-    pageController.setMessage("Gegevens zijn verwijderd");
+    pageController.showMessage("Gegevens zijn verwijderd");
     pageController.setActivePage(PageName.LOGO);
   }
 

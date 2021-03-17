@@ -56,7 +56,7 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
     sut.selectDocument(mouseEvent);
     sut.printDocument();
     sut.deleteDocument();
-    verify(pageController).setMessage("Het document is verwijderd");
+    verify(pageController).showMessage("Het document is verwijderd");
     sut.closeDocument();
   }
 

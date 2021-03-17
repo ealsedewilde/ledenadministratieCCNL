@@ -22,7 +22,7 @@ class PDFGeneratorTest {
     System.out.println(content.toString());
     PDFGenerator generator = new PDFGenerator();
     byte[] pdf = generator.generatePDF(content, data);
-    Assertions.assertEquals(54658, pdf.length);
+    Assertions.assertEquals(54307, pdf.length);
   }
 
 

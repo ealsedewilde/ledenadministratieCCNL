@@ -14,7 +14,7 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
@@ -58,7 +58,7 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
     sut.onApplicationEvent(event);
 
     sut.addSepaPDF();
-    verify(pageController).setMessage("SEPA-machtiging opgeslagen bij lid");
+    verify(pageController).showMessage("SEPA-machtiging opgeslagen bij lid");
 
     sut.printSepaPDF();
     sut.closePDFViewer();

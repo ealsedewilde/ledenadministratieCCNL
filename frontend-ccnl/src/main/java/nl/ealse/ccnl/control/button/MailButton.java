@@ -3,11 +3,11 @@ package nl.ealse.ccnl.control.button;
 public class MailButton extends ImageButton {
 
   public MailButton(String text) {
-    super("EMAIL.png", text);
+    super("email.png", text);
   }
 
   public MailButton() {
-    super("EMAIL.png", "Mail verzenden");
+    super("email.png", "Mail verzenden");
   }
 
 }

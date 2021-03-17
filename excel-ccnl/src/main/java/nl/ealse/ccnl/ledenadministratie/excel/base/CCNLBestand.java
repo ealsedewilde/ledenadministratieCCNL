@@ -13,7 +13,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -41,12 +40,6 @@ public abstract class CCNLBestand implements AutoCloseable {
     this.file = bestand;
     this.properties = properties;
     init();
-  }
-
-  public Sheet addSheet() {
-    currentSheet = workbook.createSheet();
-    currentRow = null;
-    return currentSheet;
   }
 
   public Sheet addSheet(SheetDefinition sheetDef) {
@@ -94,58 +87,12 @@ public abstract class CCNLBestand implements AutoCloseable {
     newCell.setCellValue(waarde);
   }
 
-  public void addCell(Cell cell) {
-    if (cell == null) {
-      return;
-    }
-    Cell newCell = currentRow.createCell(cell.getColumnIndex(), cell.getCellType());
-    switch (cell.getCellType()) {
-      case BLANK:
-        newCell.setCellValue("");
-        break;
-
-      case BOOLEAN:
-        newCell.setCellValue(cell.getBooleanCellValue());
-        break;
-
-      case ERROR:
-        newCell.setCellErrorValue(cell.getErrorCellValue());
-        break;
-
-      case FORMULA:
-        newCell.setCellFormula(cell.getCellFormula());
-        break;
-
-      case NUMERIC:
-        if (DateUtil.isCellDateFormatted(cell)) {
-          newCell.setCellStyle(dateStyle);
-          newCell.setCellValue(cell.getDateCellValue());
-        } else {
-          newCell.setCellValue(cell.getNumericCellValue());
-        }
-        break;
-
-      case STRING:
-        newCell.setCellValue(cell.getStringCellValue());
-        break;
-      default:
-        newCell.setCellFormula(cell.getCellFormula());
-    }
-  }
-
   public void addTimestampCell(Date waarde, int kolom) {
     Cell newCell = currentRow.createCell(kolom, CellType.NUMERIC);
     newCell.setCellStyle(timestampStyle);
     newCell.setCellValue(waarde);
   }
   
-  public int addHeadingColumn(String naam, int kolom) {
-    Row heading = currentSheet.getRow(0);
-    Cell cell = heading.createCell(kolom);
-    cell.setCellValue(naam);
-    return heading.getLastCellNum() - 1;
-  }
-
   @Override
   public void close() throws IOException {
     for (int i = 0; i < workbook.getNumberOfSheets(); i++) {

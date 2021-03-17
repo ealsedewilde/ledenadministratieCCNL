@@ -62,10 +62,10 @@ public class SepaAuthorizationFormController implements ApplicationListener<Menu
     try (FileInputStream fis = new FileInputStream(selectedFile)) {
       byte[] form = fis.readAllBytes();
       documentService.saveSepaAuthorizationForm(selectedFile.getName(), form);
-      pageController.setMessage("Formulier is opgeslagen");
+      pageController.showMessage("Formulier is opgeslagen");
     } catch (IOException e) {
       log.error("Error loading file", e);
-      pageController.setErrorMessage("Fout bij inlezen bestand");
+      pageController.showErrorMessage("Fout bij inlezen bestand");
     }
   }
 

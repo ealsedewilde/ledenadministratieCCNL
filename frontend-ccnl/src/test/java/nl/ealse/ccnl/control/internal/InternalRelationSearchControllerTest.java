@@ -3,7 +3,7 @@ package nl.ealse.ccnl.control.internal;
 import java.util.Map;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
-import nl.ealse.ccnl.service.SearchItem;
+import nl.ealse.ccnl.service.relation.SearchItem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

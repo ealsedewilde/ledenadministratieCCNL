@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -17,6 +18,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import lombok.Getter;
 import nl.ealse.ccnl.control.button.ButtonCell;
 import nl.ealse.ccnl.control.button.DeleteButton;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -30,6 +32,7 @@ import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -38,6 +41,8 @@ public class ReconciliationController implements ApplicationListener<MenuChoiceE
   private final PageController pageController;
 
   private final ApplicationContext springContext;
+
+  private final TaskExecutor executor;
 
   private ReconciliationService service;
 
@@ -51,7 +56,7 @@ public class ReconciliationController implements ApplicationListener<MenuChoiceE
 
   @FXML
   private TableColumn<PaymentFile, String> buttonColumn;
-  
+
   @FXML
   private CheckBox includeDD;
 
@@ -60,12 +65,14 @@ public class ReconciliationController implements ApplicationListener<MenuChoiceE
 
   @FXML
   private Label referenceDateE;
-  
+
   private Stage messagesStage;
 
-  public ReconciliationController(PageController pageController, ApplicationContext springContext) {
+  public ReconciliationController(PageController pageController, ApplicationContext springContext,
+      TaskExecutor executor) {
     this.pageController = pageController;
     this.springContext = springContext;
+    this.executor = executor;
   }
 
   @Override
@@ -110,10 +117,10 @@ public class ReconciliationController implements ApplicationListener<MenuChoiceE
           tableView.getItems().clear();
           tableView.getItems().addAll(service.allFiles());
         } else {
-          pageController.setErrorMessage("Bestand is geen geldig 'camt.053' betalingenbestand");
+          pageController.showErrorMessage("Bestand is geen geldig 'camt.053' betalingenbestand");
         }
       } catch (IOException e) {
-        pageController.setErrorMessage("Inlezen bestand is mislukt");
+        pageController.showErrorMessage("Inlezen bestand is mislukt");
       }
     }
   }
@@ -135,14 +142,44 @@ public class ReconciliationController implements ApplicationListener<MenuChoiceE
       referenceDateE.setVisible(true);
     } else {
       referenceDateE.setVisible(false);
-      List<String> messages = service.reconcilePayments(dateValue, includeDD.isSelected());
-      if (!messages.isEmpty()) {
-        reconcileMessages.getItems().clear();
-        reconcileMessages.getItems().addAll(messages);
-        messagesStage.show();
-         }
-     pageController.setMessage("Betalingen zijn verwerkt");
+      pageController.showPermanentMessage("Betalingen worden verwerkt; even geduld a.u.b.");
+      ReconcileTask reconcileTask = new ReconcileTask(service, dateValue, includeDD.isSelected());
+      reconcileTask.setOnSucceeded(t -> {
+        List<String> messages = reconcileTask.getMessages();
+        if (!messages.isEmpty()) {
+          reconcileMessages.getItems().clear();
+          reconcileMessages.getItems().addAll(messages);
+          messagesStage.show();
+        }
+        pageController.showMessage("Betalingen zijn verwerkt");
+      });
+      reconcileTask.setOnFailed(
+          t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+      executor.execute(reconcileTask);
     }
+  }
+
+  protected static class ReconcileTask extends Task<Void> {
+    @Getter
+    private List<String> messages;
+
+    private final ReconciliationService service;
+    private final LocalDate referenceDate;
+    private final boolean includeDD;
+
+    ReconcileTask(ReconciliationService service, LocalDate referenceDate, boolean includeDD) {
+      this.service = service;
+      this.referenceDate = referenceDate;
+      this.includeDD = includeDD;
+    }
+
+
+    @Override
+    protected Void call() {
+      messages = service.reconcilePayments(referenceDate, includeDD);
+      return null;
+    }
+
   }
 
 

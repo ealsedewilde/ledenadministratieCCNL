@@ -12,7 +12,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.service.InternalRelationService;
+import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
@@ -47,7 +47,7 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
     sut.onApplicationEvent(event);
 
     sut.save();
-    verify(pageController).setMessage("Functiegegevens opgeslagen");
+    verify(pageController).showMessage("Functiegegevens opgeslagen");
 
     sut.nextPage();
     sut.previousPage();

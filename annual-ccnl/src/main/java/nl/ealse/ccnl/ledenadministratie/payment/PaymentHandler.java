@@ -77,16 +77,16 @@ public class PaymentHandler {
         Member m = member.get();
         m.setPaymentInfo(mc.toString());
         m.setPaymentDate(mc.getPaymentDate());
-        if (mc.getTotalAmount().equals(BigDecimal.ZERO)) {
-          m.setCurrentYearPaid(false);
-        } else {
-          m.setCurrentYearPaid(true);
-          if (mc.getTotalAmount().compareTo(refAmount) > 0) {
+        boolean withAmount = mc.getTotalAmount().compareTo(BigDecimal.ZERO) > 0;
+        m.setCurrentYearPaid(withAmount);
+        if (mc.isInactief() && withAmount) {
+          String msg = "Betaling ontvangen voor inactief lid " + m.getMemberNumber();
+          rc.getMessages().add(msg);
+        } else if (mc.getTotalAmount().compareTo(refAmount) > 0) {
             String amountString = AmountFormatter.format(mc.getTotalAmount());
             String msg =
                 String.format("Lid %d heeft totaal %s betaald", m.getMemberNumber(), amountString);
-             rc.getMessages().add(msg);
-          }
+            rc.getMessages().add(msg);
         }
         dao.save(m);
       }

@@ -9,7 +9,7 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.mappers.MembershipStatusMapper;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberCancelView;
 import nl.ealse.javafx.mapping.DataMapper;
 import org.springframework.context.ApplicationListener;
@@ -47,7 +47,7 @@ public class MemberCancelController extends MemberCancelView
     MembershipStatus status = membershipStatusMapper.getPropertyFromJavaFx(getMemberStatus());
     selectedMember.setMemberStatus(status);
     service.persistMember(selectedMember);
-    pageController.setMessage("Lidgegevens opgeslagen");
+    pageController.showMessage("Lidgegevens opgeslagen");
 
     if (status == MembershipStatus.LAST_YEAR_MEMBERSHIP) {
       // next page

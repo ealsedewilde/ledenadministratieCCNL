@@ -45,8 +45,8 @@ class PageControllerTest extends FXBase {
       Parent p = sut.loadPage(PageName.LOGO);
       Assertions.assertTrue(p instanceof VBox);
       sut.setActivePage(PageName.LOGO);
-      sut.setErrorMessage("error");
-      sut.setMessage("message");
+      sut.showErrorMessage("error");
+      sut.showMessage("message");
       StageReadyEvent event = mock(StageReadyEvent.class);
       sut.onApplicationEvent(event);
       Platform.setImplicitExit(false);

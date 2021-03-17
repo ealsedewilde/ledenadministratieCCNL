@@ -26,6 +26,7 @@ class ArchiefbestandTest {
     File f = new File(tempDir, "archiefTest.xlsx");
     try {
       sut = new Archiefbestand(f, ccnlColumnProperties);
+      sut.addSheet("test");
       sut.addHeading();
       sut.addMember(member());
       sut.close();

@@ -72,7 +72,7 @@ public class WelcomeLetterController extends DocumentTemplateController
         fos.write(docx);
       } catch (IOException e) {
         log.error("Could not write Word document", e);
-        pageController.setErrorMessage("Schrijven MS Word-document is mislukt");
+        pageController.showErrorMessage("Schrijven MS Word-document is mislukt");
       }
     }
   }
@@ -90,7 +90,7 @@ public class WelcomeLetterController extends DocumentTemplateController
         pageController.setActivePage(PageName.LOGO);
       }
     } catch (PrintException e) {
-      pageController.setErrorMessage(e.getMessage());
+      pageController.showErrorMessage(e.getMessage());
     }
   }
 
@@ -121,7 +121,7 @@ public class WelcomeLetterController extends DocumentTemplateController
         pageController.setActivePage(PageName.LOGO);
       }
     } catch (PrintException e) {
-      pageController.setErrorMessage(e.getMessage());
+      pageController.showErrorMessage(e.getMessage());
     }
   }
 

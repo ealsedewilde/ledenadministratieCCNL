@@ -18,7 +18,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
@@ -63,6 +63,7 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     when(documentService.findSepaAuthorization(m)).thenReturn(Optional.of(document));
     MemberSeLectionEvent event = new MemberSeLectionEvent(controller, MenuChoice.AMEND_MEMBER, m);
     controller.onApplicationEvent(event);
+    fillIbanNumber();
     controller.nextPage();
     controller.nextPage();
     controller.nextPage();
@@ -105,8 +106,8 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
 
   private Member getMember() {
     Member m = new Member();
-    m.setInitials("T.");
-    m.setLastName("Tester");
+    //m.setInitials("T.");
+    //m.setLastName("Tester");
     Address a = m.getAddress();
     a.setAddress("Straat");
     a.setAddressNumber("1");
@@ -127,6 +128,14 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
       e.printStackTrace();
     }
     return b;
+  }
+
+
+  private void fillIbanNumber() {
+    controller.getInitials().setText("T.");
+    controller.getLastNamePrefix().setText("de");
+    controller.getLastName().setText("Tester");
+    controller.getIbanNumber().setText("foo");
   }
 
 

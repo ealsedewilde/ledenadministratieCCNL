@@ -198,6 +198,11 @@ public class MenuController {
     pageController.setActivePage(PageName.RECONCILE_PAYMENTS);
     springContext.publishEvent(new MenuChoiceEvent(this, MenuChoice.RECONCILE_PAYMENTS));
   }
+  
+  public void reminderReport() {
+    pageController.setActivePage(PageName.LOGO);
+    springContext.publishEvent(new MenuChoiceEvent(this, MenuChoice.PRODUCE_REMINDER_REPORT));
+  }
 
   public void makeReminderLettersDD() {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);

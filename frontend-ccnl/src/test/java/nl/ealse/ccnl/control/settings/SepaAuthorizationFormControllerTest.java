@@ -46,7 +46,7 @@ class SepaAuthorizationFormControllerTest extends FXBase {
     setFileChooser();
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_SEPA_FORM);
     sut.onApplicationEvent(event);
-    verify(pageController).setMessage("Formulier is opgeslagen");
+    verify(pageController).showMessage("Formulier is opgeslagen");
   }
 
   @BeforeAll

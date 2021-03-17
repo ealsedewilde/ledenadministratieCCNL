@@ -82,6 +82,8 @@
           text="Incassobestand aanmaken" />
         <MenuItem onAction="#reconcilePayments" mnemonicParsing="false"
           text="Betalingen afletteren" />
+        <MenuItem onAction="#reminderReport" mnemonicParsing="false"
+          text="Overzicht Herinneringen" />
         <Menu mnemonicParsing="false" text="Herinneringsbrieven aanmaken">
           <items>
             <MenuItem onAction="#makeReminderLettersDD" mnemonicParsing="false"

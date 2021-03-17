@@ -8,7 +8,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.AddressView;
 import nl.ealse.javafx.mapping.DataMapper;
 import org.springframework.context.ApplicationListener;
@@ -53,7 +53,7 @@ public class InvalidAddressController extends AddressView
     selectedMember.getAddress().setAddressInvalid(true);
     selectedMember.setMemberInfo(memberInfo.getText());
     service.persistMember(selectedMember);
-    pageController.setMessage("Wijziging opgeslagen");
+    pageController.showMessage("Wijziging opgeslagen");
     pageController.setActivePage(PageName.LOGO);
   }
 

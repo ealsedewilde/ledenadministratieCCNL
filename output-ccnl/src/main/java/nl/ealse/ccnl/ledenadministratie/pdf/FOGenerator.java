@@ -12,6 +12,7 @@ import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.UNORDERED
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
 import lombok.Data;
 import nl.ealse.ccnl.ledenadministratie.output.GeneratorException;
@@ -71,8 +72,8 @@ public class FOGenerator {
     FOContent content = new FOContent();
     LineContext context = new LineContext();
     StringJoiner sj = context.newStringJoiner();
-    try (BufferedReader reader =
-        new BufferedReader(new InputStreamReader(template.getInputStream()))) {
+    try (BufferedReader reader = new BufferedReader(
+        new InputStreamReader(template.getInputStream(), StandardCharsets.UTF_8))) {
       String line = reader.readLine();
       while (line != null && line.indexOf(CONTENT_START) == -1) {
         sj.add(line);

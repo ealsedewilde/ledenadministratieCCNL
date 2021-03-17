@@ -22,7 +22,7 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
 import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberView;
 import nl.ealse.javafx.mapping.DataMapper;
 import nl.ealse.javafx.util.PrintException;
@@ -208,7 +208,7 @@ public class MemberController extends MemberView
     }
 
     service.persistMember(model);
-    pageController.setMessage("Lidgegevens opgeslagen");
+    pageController.showMessage("Lidgegevens opgeslagen");
 
     if (currentMenuChoice == MenuChoice.NEW_MEMBER) {
       // next page
@@ -222,7 +222,7 @@ public class MemberController extends MemberView
   @FXML
   public void deletePDF() {
     documentService.deleteDocument(sepaAuthorization);
-    pageController.setMessage("SEPA-machtiging is verwijderd");
+    pageController.showMessage("SEPA-machtiging is verwijderd");
     pdfViewer.close();
 
     selectedMember.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
@@ -239,7 +239,7 @@ public class MemberController extends MemberView
     try {
       PrintUtil.print(pdfViewer.getPdf());
     } catch (PrintException e) {
-      pageController.setErrorMessage(e.getMessage());
+      pageController.showErrorMessage(e.getMessage());
     }
   }
 

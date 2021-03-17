@@ -22,13 +22,23 @@ public class AdresStrategie extends BetalingStrategie {
   public void bepaalLidnummer(IngBooking booking) {
     getNummers().clear();
     final String pc1 = booking.getPostcode();
-    for (Member member : members) {
-      if (pc1.indexOf(member.getAddress().getPostalCode().replaceAll("\\s", "")) > -1
-          || booking.getAdres().indexOf(member.getAddress().getAddress()) > -1) {
-        getNummers().add(member.getMemberNumber());
-        break;
+    if (!pc1.isBlank()) {
+      for (Member member : members) {
+        if (pc1.indexOf(member.getAddress().getPostalCode().replaceAll("\\s", "")) > -1) {
+          getNummers().add(member.getMemberNumber());
+          break;
+        }
       }
+    }
+    String ad1 = booking.getAdres();
+    if (!ad1.isBlank() && getNummers().isEmpty()) {
+      for (Member member : members) {
+        if (ad1.indexOf(member.getAddress().getAddress()) > -1) {
+          getNummers().add(member.getMemberNumber());
+          break;
+        }
 
+      }
     }
     logResult(booking);
   }

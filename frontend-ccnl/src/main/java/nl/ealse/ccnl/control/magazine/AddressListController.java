@@ -12,9 +12,9 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ledenadministratie.excelexport.ExportAddressService;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
+import nl.ealse.ccnl.service.excelexport.ExportAddressService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,11 +88,11 @@ public class AddressListController implements ApplicationListener<MenuChoiceEven
           Setting setting = getSetting();
           setting.setValue(magazineNumber.getText());
           service.save(setting);
-          pageController.setMessage("Bestand is aangemaakt");
+          pageController.showMessage("Bestand is aangemaakt");
           pageController.setActivePage(PageName.LOGO);
         } catch (IOException e) {
           log.error("error creating Excel file", e);
-          pageController.setErrorMessage("Bestand aanmaken is mislukt");
+          pageController.showErrorMessage("Bestand aanmaken is mislukt");
         }
       }
     }
@@ -107,11 +107,11 @@ public class AddressListController implements ApplicationListener<MenuChoiceEven
         Setting setting = getSetting();
         setting.setValue(magazineNumber.getText());
         service.save(setting);
-        pageController.setMessage("Bestand is aangemaakt");
+        pageController.showMessage("Bestand is aangemaakt");
         pageController.setActivePage(PageName.LOGO);
       } catch (IOException e) {
         log.error("error creating Excel file", e);
-        pageController.setErrorMessage("Bestand aanmaken is mislukt");
+        pageController.showErrorMessage("Bestand aanmaken is mislukt");
       }
     }
   }

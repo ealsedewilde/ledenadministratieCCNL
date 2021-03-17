@@ -6,8 +6,8 @@ import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.service.ExternalRelationService;
-import nl.ealse.ccnl.service.SearchItem;
+import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.SearchItem;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 

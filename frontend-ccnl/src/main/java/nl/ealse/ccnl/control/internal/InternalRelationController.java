@@ -13,7 +13,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.service.InternalRelationService;
+import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationView;
 import nl.ealse.javafx.mapping.DataMapper;
 import org.springframework.context.ApplicationListener;
@@ -121,7 +121,7 @@ public class InternalRelationController extends InternalRelationView
     RelationNumberValue rn = RelationNumberValue.fromLabel(model.getTitle());
     model.setRelationNumber(rn.getRelationNumber());
     internalRelationService.persistInternalRelation(model);
-    pageController.setMessage("Functiegegevens opgeslagen");
+    pageController.showMessage("Functiegegevens opgeslagen");
     pageController.setActivePage(PageName.LOGO);
   }
 

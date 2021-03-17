@@ -8,15 +8,14 @@ import java.util.List;
 import nl.ealse.ccnl.ledenadministratie.excel.base.AdresColumnDefinition;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLBestand;
 import nl.ealse.ccnl.ledenadministratie.excel.base.ColumnDefinition;
-import nl.ealse.ccnl.ledenadministratie.excel.file.ArchivedMemberExport;
 import nl.ealse.ccnl.ledenadministratie.excel.lid.LidColumnDefinition;
+import nl.ealse.ccnl.ledenadministratie.excelexport.ArchivedMemberExport;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 
 public class Archiefbestand extends CCNLBestand {
 
   public Archiefbestand(File bestand, CCNLColumnProperties properties) throws IOException {
     super(bestand, properties);
-    addSheet("Leden_archief");
   }
 
   public void addHeading() {

@@ -55,13 +55,13 @@ class ManageTemplateControllerTest extends FXMLBaseTest<ManageTemplateController
     sut.textHelp();
 
     sut.save();
-    verify(pageController, never()).setMessage("Document template is toegevoegd");
+    verify(pageController, never()).showMessage("Document template is toegevoegd");
     templateId.setText("test");
     sut.save();
-    verify(pageController).setMessage("Document template is toegevoegd");
+    verify(pageController).showMessage("Document template is toegevoegd");
 
     sut.delete();
-    pageController.setMessage("Document template is verwijderd");
+    pageController.showMessage("Document template is verwijderd");
   }
 
   private void prepare() {

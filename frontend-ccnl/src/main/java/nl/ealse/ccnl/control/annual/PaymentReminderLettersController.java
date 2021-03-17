@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.PDFViewer;
+import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -18,14 +20,14 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Slf4j
 public class PaymentReminderLettersController extends DocumentTemplateController
     implements ApplicationListener<MenuChoiceEvent> {
 
@@ -36,6 +38,8 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   private final MemberService memberService;
 
   private final MemberLetterHandler memberLetterHandler;
+
+  private final TaskExecutor executor;
 
   private List<Member> selectedMembers;
 
@@ -50,12 +54,13 @@ public class PaymentReminderLettersController extends DocumentTemplateController
 
   public PaymentReminderLettersController(DocumentService documentService,
       MemberService memberService, PageController pageController,
-      MemberLetterHandler memberLetterHandler) {
+      MemberLetterHandler memberLetterHandler, TaskExecutor executor) {
     super(pageController, documentService, DocumentTemplateContext.PAYMENT_REMINDER);
     this.pageController = pageController;
     this.documentService = documentService;
     this.memberService = memberService;
     this.memberLetterHandler = memberLetterHandler;
+    this.executor = executor;
   }
 
   @Override
@@ -96,18 +101,14 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     if (overdueExists()) {
       File file = getFileChooser().showSaveDialog();
       if (file != null) {
-        LetterData data = new LetterData(getLetterText().getText());
-        data.getMembers().addAll(selectedMembers);
-        FOContent foContent = documentService.generateFO(data);
-        byte[] pdf = documentService.generatePDF(foContent, data);
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-          fos.write(pdf);
-          memberLetterHandler.addLetterToMembers(foContent, selectedMembers);
-          pageController.setMessage("Bestand is aangemaakt");
-        } catch (IOException e) {
-          log.error("Could not letters document", e);
-          pageController.setErrorMessage("Schrijven brieven is mislukt");
-        }
+        pageController.showPermanentMessage("Brieven worden aangemaakt; even geduld a.u.b.");
+        PdfToFile pdfToFile = new PdfToFile(this, getLetterText().getText(), file);
+        pdfToFile
+            .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
+        pdfToFile.setOnFailed(
+            t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+        executor.execute(pdfToFile);
+        pageController.setActivePage(PageName.LOGO);
       }
     }
   }
@@ -115,17 +116,14 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   @FXML
   public void printLetters() {
     if (overdueExists()) {
-      LetterData data = new LetterData(getLetterText().getText());
-      data.getMembers().addAll(selectedMembers);
-      FOContent foContent = documentService.generateFO(data);
-      byte[] pdf = documentService.generatePDF(foContent, data);
-      try {
-        PrintUtil.print(pdf);
-      } catch (PrintException e) {
-        pageController.setErrorMessage(e.getMessage());
-      }
+      pageController.showPermanentMessage("Printen wordt voorbereid; even geduld a.u.b.");
+      PdfToPrint pdfToPrint = new PdfToPrint(this, getLetterText().getText());
+      pdfToPrint
+          .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
+      pdfToPrint.setOnFailed(
+          t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+      executor.execute(pdfToPrint);
       pageController.setActivePage(PageName.LOGO);
-      memberLetterHandler.addLetterToMembers(foContent, selectedMembers);
     }
   }
 
@@ -136,7 +134,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     try {
       PrintUtil.print(pdfViewer.getPdf());
     } catch (PrintException e) {
-      pageController.setErrorMessage(e.getMessage());
+      pageController.showErrorMessage(e.getMessage());
     }
     pdfViewer.close();
     pageController.setActivePage(PageName.LOGO);
@@ -149,10 +147,75 @@ public class PaymentReminderLettersController extends DocumentTemplateController
 
   private boolean overdueExists() {
     if (selectedMembers.isEmpty()) {
-      pageController.setMessage("Geen betalingsachterstanden gevonden");
+      pageController.showMessage("Geen betalingsachterstanden gevonden");
       return false;
     }
     return true;
+  }
+
+  private abstract static class AsyncGenerator extends Task<String> {
+
+    private final PaymentReminderLettersController controller;
+    private final String template;
+
+    AsyncGenerator(PaymentReminderLettersController controller, String template) {
+      this.controller = controller;
+      this.template = template;
+    }
+
+    @Override
+    protected String call() {
+      LetterData data = new LetterData(template);
+      data.getMembers().addAll(controller.selectedMembers);
+      FOContent foContent = controller.documentService.generateFO(data);
+      controller.memberLetterHandler.addLetterToMembers(foContent, controller.selectedMembers);
+      byte[] pdf = controller.documentService.generatePDF(foContent, data);
+      return postProcess(pdf);
+    }
+
+    protected abstract String postProcess(byte[] pdf);
+  }
+
+  @Slf4j
+  protected static class PdfToFile extends AsyncGenerator {
+    private final File targetFile;
+
+    PdfToFile(PaymentReminderLettersController controller, String template, File targetFile) {
+      super(controller, template);
+      this.targetFile = targetFile;
+    }
+
+    @Override
+    protected String postProcess(byte[] pdf) {
+      try (FileOutputStream fos = new FileOutputStream(targetFile)) {
+        fos.write(pdf);
+        return "Bestand is aangemaakt";
+      } catch (IOException e) {
+        log.error("Bestand aanmaken is mislukt", e);
+        throw new AsyncTaskException("Bestand aanmaken is mislukt");
+      }
+    }
+
+  }
+
+  @Slf4j
+  protected static class PdfToPrint extends AsyncGenerator {
+
+    PdfToPrint(PaymentReminderLettersController controller, String template) {
+      super(controller, template);
+    }
+
+    @Override
+    protected String postProcess(byte[] pdf) {
+      try {
+        PrintUtil.print(pdf);
+        return "";
+      } catch (PrintException e) {
+        log.error("Printen is mislukt", e);
+        throw new AsyncTaskException("Printen is mislukt");
+      }
+    }
+
   }
 
 }

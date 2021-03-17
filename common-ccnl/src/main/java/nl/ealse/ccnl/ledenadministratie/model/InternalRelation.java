@@ -24,6 +24,9 @@ public class InternalRelation implements AddressOwner {
   private String telephoneNumber;
   private LocalDate modificationDate;
 
+  private boolean noMagazine;
+
+
   @Embedded
   private Address address = new Address();
 

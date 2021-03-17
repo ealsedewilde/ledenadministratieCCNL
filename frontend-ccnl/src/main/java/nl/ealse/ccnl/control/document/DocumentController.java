@@ -88,7 +88,7 @@ public class DocumentController implements ApplicationListener<MemberSeLectionEv
     try {
       PrintUtil.print(pdfViewer.getPdf());
     } catch (PrintException e) {
-      pageController.setErrorMessage(e.getMessage());
+      pageController.showErrorMessage(e.getMessage());
     }
   }
 
@@ -97,7 +97,7 @@ public class DocumentController implements ApplicationListener<MemberSeLectionEv
     documentService.deleteDocument(selectedDocument);
     pdfViewer.close();
     fillTableView(selectedDocument.getOwner());
-    pageController.setMessage("Het document is verwijderd");
+    pageController.showMessage("Het document is verwijderd");
   }
 
   @FXML

@@ -46,7 +46,7 @@ class ManageArchiveControllerTest extends FXMLBaseTest<ManageArchiveController> 
     String y = referenceYear.getText();
     String msg =
         String.format("Archiefgegevens van %s of ouder zijn verwijderd", referenceYear.getText());
-    verify(pageController).setMessage(msg);
+    verify(pageController).showMessage(msg);
 
     int year = Integer.parseInt(y) + 3;
     referenceYear.setText(Integer.toString(year));

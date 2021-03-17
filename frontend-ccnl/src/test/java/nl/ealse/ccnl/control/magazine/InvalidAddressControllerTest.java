@@ -8,7 +8,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
@@ -40,7 +40,7 @@ class InvalidAddressControllerTest extends FXMLBaseTest<InvalidAddressController
     sut.onApplicationEvent(event);
 
     sut.addressInvalid();
-    verify(pageController).setMessage("Wijziging opgeslagen");
+    verify(pageController).showMessage("Wijziging opgeslagen");
     sut.cancel();
   }
 

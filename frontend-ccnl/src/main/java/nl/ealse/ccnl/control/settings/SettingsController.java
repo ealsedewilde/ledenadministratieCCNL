@@ -80,7 +80,7 @@ public class SettingsController extends SettingsView
   }
 
   private void refresh(String message) {
-    pageController.setMessage(message);
+    pageController.showMessage(message);
     tableView.getItems().clear();
     tableView.getItems().addAll(service.findByOrderBySettingsGroupAscKeyAsc());
   }

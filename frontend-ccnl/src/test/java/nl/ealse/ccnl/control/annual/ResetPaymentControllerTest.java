@@ -22,7 +22,7 @@ class ResetPaymentControllerTest {
     ResetPaymentController sut = new ResetPaymentController(pageController, springContext);
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.RESET_PAYMENTS);
     sut.onApplicationEvent(event);
-    verify(pageController).setMessage("Betaalgegevens zijn gewist");
+    verify(pageController).showMessage("Betaalgegevens zijn gewist");
   }
 
   @BeforeAll

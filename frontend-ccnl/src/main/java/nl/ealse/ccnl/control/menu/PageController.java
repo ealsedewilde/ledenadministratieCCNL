@@ -42,6 +42,8 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
 
   @Getter
   private Stage primaryStage;
+  
+  private PauseTransition delay;
 
   public PageController(FXMLNodeMap fxmlNodeMap) {
     this.fxmlNodeMap = fxmlNodeMap;
@@ -67,20 +69,29 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
     mainPage.setCenter(page);
   }
 
-  public void setMessage(String message) {
+  public void showPermanentMessage(String message) {
+    if (delay != null) {
+      delay.stop();
+    }
     mainInfo.getStyleClass().clear();
     mainInfo.getStyleClass().add("info");
     mainInfo.setText(message);
-    PauseTransition delay = new PauseTransition(Duration.seconds(5));
+  }
+
+  public void showMessage(String message) {
+    mainInfo.getStyleClass().clear();
+    mainInfo.getStyleClass().add("info");
+    mainInfo.setText(message);
+    delay = new PauseTransition(Duration.seconds(5));
     delay.setOnFinished(event -> mainInfo.setText(""));
     delay.play();
   }
 
-  public void setErrorMessage(String message) {
+  public void showErrorMessage(String message) {
     mainInfo.getStyleClass().clear();
     mainInfo.getStyleClass().add("error");
     mainInfo.setText(message);
-    PauseTransition delay = new PauseTransition(Duration.seconds(5));
+    delay = new PauseTransition(Duration.seconds(5));
     delay.setOnFinished(event -> mainInfo.setText(""));
     delay.play();
   }

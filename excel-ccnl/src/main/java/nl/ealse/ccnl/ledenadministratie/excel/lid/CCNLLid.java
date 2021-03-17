@@ -147,71 +147,16 @@ public class CCNLLid extends CCNLAdres implements Comparable<CCNLLid> {
     return checkBoolean(incassoAanduiding, LidColumnDefinition.Property.INCASSO_AUTOMATISCH);
   }
 
+  public boolean isOverschrijving() {
+    return checkBoolean(incassoAanduiding, LidColumnDefinition.Property.INCASSO_OVERSCHRIJVING);
+  }
+
   public boolean isErelid() {
     return checkBoolean(incassoAanduiding, LidColumnDefinition.Property.INCASSO_ERELID);
   }
 
   public boolean isEenmalig() {
     return checkBoolean(incassoAanduiding, LidColumnDefinition.Property.INCASSO_EENMALIG);
-  }
-
-  public void setHeeftBetaald(boolean heeftBetaald) {
-    this.heeftBetaald = heeftBetaald;
-    int kolomIx = getProperties().getKolomnummer(LidColumnDefinition.HEEFT_BETAALD);
-    Cell cell = getRow().getCell(kolomIx);
-    if (cell == null) {
-      cell = getRow().createCell(kolomIx);
-    }
-    if (heeftBetaald) {
-      cell.setCellValue(getProperties().getPropertyHeeftBetaald());
-    } else {
-      cell.setCellValue(getProperties().getPropertyNietBetaald());
-    }
-  }
-
-  public void setBetaalDatum(Date betaaldatum) {
-    this.betaaldatum = betaaldatum;
-    int kolomIx = getProperties().getKolomnummer(LidColumnDefinition.BETAALDATUM);
-    Cell cell = getRow().getCell(kolomIx);
-    if (cell == null) {
-      cell = getRow().createCell(kolomIx, CellType.NUMERIC);
-      cell.setCellStyle(getDateStyle());
-    }
-    cell.setCellValue(betaaldatum);
-  }
-
-  public void setIncassoAanduiding(String incassoAanduiding) {
-    this.incassoAanduiding = incassoAanduiding;
-    int kolomIx = getProperties().getKolomnummer(LidColumnDefinition.INCASSO);
-    Cell cell = getRow().getCell(kolomIx);
-    if (cell == null) {
-      cell = getRow().createCell(kolomIx);
-    }
-    cell.setCellValue(getProperties().getPropertyAutomatischeIncasso());
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-    setStringCell(email, LidColumnDefinition.EMAIL);
-  }
-
-  public void setOpmerking(String opmerking) {
-    this.opmerking = opmerking;
-    setStringCell(opmerking, LidColumnDefinition.OPMERKING);
-  }
-
-  public void setBetaalInfo(String betaalInfo) {
-    this.betaalInfo = betaalInfo;
-    setStringCell(opmerking, LidColumnDefinition.BETAAL_INFO);
-  }
-
-  private void setStringCell(String value, LidColumnDefinition columnDefinition) {
-    int kolomIx = getProperties().getKolomnummer(columnDefinition);
-    Cell cell = getRow().getCell(kolomIx);
-    if (cell == null) {
-      cell = getRow().createCell(kolomIx, CellType.STRING);
-    }
-    cell.setCellValue(value);
   }
 
   @Override

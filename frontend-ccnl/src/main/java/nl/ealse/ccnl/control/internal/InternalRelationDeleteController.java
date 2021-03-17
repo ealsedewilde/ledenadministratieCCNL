@@ -6,7 +6,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.service.InternalRelationService;
+import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationDeleteView;
 import nl.ealse.javafx.mapping.DataMapper;
 import org.springframework.context.ApplicationListener;
@@ -30,7 +30,7 @@ public class InternalRelationDeleteController extends InternalRelationDeleteView
   @FXML
   public void delete() {
     service.deleteInternalRelation(selectedEntity);
-    pageController.setMessage("Gegevens zijn verwijderd");
+    pageController.showMessage("Gegevens zijn verwijderd");
     pageController.setActivePage(PageName.LOGO);
   }
 

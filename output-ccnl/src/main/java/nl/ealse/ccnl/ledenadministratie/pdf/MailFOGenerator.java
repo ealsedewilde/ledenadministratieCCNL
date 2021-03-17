@@ -3,6 +3,7 @@ package nl.ealse.ccnl.ledenadministratie.pdf;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.output.GeneratorException;
@@ -53,8 +54,8 @@ public class MailFOGenerator {
   private FOContent initializeFOContent(String to, String cc, String subject) {
     FOContent content = new FOContent();
     StringJoiner sj = new StringJoiner("\n");
-    try (BufferedReader reader =
-        new BufferedReader(new InputStreamReader(template.getInputStream()))) {
+    try (BufferedReader reader = new BufferedReader(
+        new InputStreamReader(template.getInputStream(), StandardCharsets.UTF_8))) {
       String line = reader.readLine();
       while (line != null && line.indexOf(CONTENT_TOKEN) == -1) {
         line = inspectLine(line, to, cc, subject);

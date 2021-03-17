@@ -11,7 +11,7 @@ import lombok.Setter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.service.SearchItem;
+import nl.ealse.ccnl.service.relation.SearchItem;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 

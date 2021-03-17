@@ -26,7 +26,7 @@ public class ResetPaymentController implements ApplicationListener<MenuChoiceEve
   public void onApplicationEvent(MenuChoiceEvent event) {
     if (MenuChoice.RESET_PAYMENTS == event.getMenuChoice()) {
       springContext.getBean(ReconciliationService.class).resetPaymentStatus();
-      pageController.setMessage("Betaalgegevens zijn gewist");
+      pageController.showMessage("Betaalgegevens zijn gewist");
     }
   }
 

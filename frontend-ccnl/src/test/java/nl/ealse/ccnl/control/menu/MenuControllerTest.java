@@ -267,6 +267,14 @@ class MenuControllerTest {
   }
 
   @Test
+  void reminderReport() {
+    sut.reminderReport();
+    verify(springContext, atLeastOnce()).publishEvent(am.capture());
+    MenuChoiceEvent event = am.getValue();
+    Assertions.assertEquals(MenuChoice.PRODUCE_REMINDER_REPORT, event.getMenuChoice());
+  }
+
+  @Test
   void makeReminderLettersDD() {
     sut.makeReminderLettersDD();
     verify(springContext, atLeastOnce()).publishEvent(am.capture());

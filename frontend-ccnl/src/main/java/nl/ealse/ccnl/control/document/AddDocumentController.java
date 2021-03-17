@@ -120,7 +120,8 @@ public class AddDocumentController implements ApplicationListener<MemberSeLectio
       document.setDocumentName(selectedFile.getName());
       document.setOwner(selectedMember);
       documentService.saveDocument(document);
-      pageController.setMessage("Document is toegevoegd");
+      pageController.showMessage("Document is toegevoegd");
+      pageController.setActivePage(PageName.LOGO);
 
       saveButton.setDisable(true);
       fileName.setText(null);
@@ -132,7 +133,7 @@ public class AddDocumentController implements ApplicationListener<MemberSeLectio
       return Optional.of(fis.readAllBytes());
     } catch (IOException e) {
       log.error("Error loading file", e);
-      pageController.setErrorMessage("Fout bij inlezen bestand");
+      pageController.showErrorMessage("Fout bij inlezen bestand");
       return Optional.empty();
     }
   }

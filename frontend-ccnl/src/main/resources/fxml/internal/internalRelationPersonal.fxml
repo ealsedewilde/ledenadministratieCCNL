@@ -47,8 +47,11 @@
         <Label text="Telefoonnummer" GridPane.columnIndex="0" GridPane.rowIndex="6" />
         <TextField fx:id="telephoneNumber" maxWidth="120" GridPane.columnIndex="1"
           GridPane.rowIndex="6" />
+
+        <Label text="Wil geen clubblad" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <CheckBox fx:id="noMagazine" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         
-        <HBox GridPane.columnIndex="1" GridPane.rowIndex="7" spacing="20">
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="8" spacing="20">
           <children>
             <NextPageButton onAction="#nextPage"/>
             <SaveButton fx:id="saveButton" disable="true" onAction="#save"/>

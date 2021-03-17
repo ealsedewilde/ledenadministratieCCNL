@@ -7,7 +7,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
-import nl.ealse.ccnl.service.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Controller;
 

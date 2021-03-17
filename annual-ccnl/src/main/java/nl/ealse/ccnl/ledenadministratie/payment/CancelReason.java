@@ -24,7 +24,7 @@ public enum CancelReason {
   /*
    * 
    */
-  MD06("Terugbooking op verzoek klant"),
+  MD06("Terugboeking op verzoek klant"),
 
   /*
    * De debiteur heeft het INCASSO vóór de verwerkingsdatum geweigerd.

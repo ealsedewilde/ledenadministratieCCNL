@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import nl.ealse.ccnl.control.button.ImageCell;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.EntitySelectionEvent;
-import nl.ealse.ccnl.service.SearchItem;
+import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.javafx.FXMLLoadException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;

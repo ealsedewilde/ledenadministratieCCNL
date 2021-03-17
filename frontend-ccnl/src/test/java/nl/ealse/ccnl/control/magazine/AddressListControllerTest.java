@@ -11,9 +11,9 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ledenadministratie.excelexport.ExportAddressService;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
+import nl.ealse.ccnl.service.excelexport.ExportAddressService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
@@ -52,11 +52,11 @@ class AddressListControllerTest extends FXMLBaseTest<AddressListController> {
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MAGAZINE_ADDRESS_LIST);
     sut.onApplicationEvent(event);
     sut.generateAddressList();
-    verify(pageController).setMessage("Bestand is aangemaakt");
+    verify(pageController).showMessage("Bestand is aangemaakt");
 
     event = new MenuChoiceEvent(sut, MenuChoice.CARD_ADDRESS_LIST);
     sut.onApplicationEvent(event);
-    verify(pageController, times(2)).setMessage("Bestand is aangemaakt");
+    verify(pageController, times(2)).showMessage("Bestand is aangemaakt");
   }
 
   private void prepare() {

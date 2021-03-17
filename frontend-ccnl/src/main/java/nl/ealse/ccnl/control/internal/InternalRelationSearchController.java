@@ -10,8 +10,8 @@ import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.service.InternalRelationService;
-import nl.ealse.ccnl.service.SearchItem;
+import nl.ealse.ccnl.service.relation.InternalRelationService;
+import nl.ealse.ccnl.service.relation.SearchItem;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 

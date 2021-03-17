@@ -12,7 +12,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.service.CommercialPartnerService;
+import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
@@ -45,7 +45,7 @@ class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
     sut.onApplicationEvent(event);
 
     sut.save();
-    verify(pageController).setMessage("Partnergegevens opgeslagen");
+    verify(pageController).showMessage("Partnergegevens opgeslagen");
 
     sut.nextPage();
     sut.previousPage();

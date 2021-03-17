@@ -3,6 +3,7 @@ package nl.ealse.ccnl.ledenadministratie.annual;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Rollover to a new membership year.
+ * 
  * @author ealse
  */
 @Component
@@ -34,15 +36,13 @@ public class AnnualRollover {
   }
 
   /**
-   * Rollover to a new membership year. 
+   * Rollover to a new membership year.
    * <p>
-   * All non renewal members will be archived and removed from
-   * members database table. 
+   * All non renewal members will be archived and removed from members database table.
    * </p>
    * <p>
-   * The status is changed to OVERDUE for for all members that haven't paid
-   * yet.
-   * </p> 
+   * The status is changed to OVERDUE for for all members that haven't paid yet.
+   * </p>
    * <p>
    * The member card status is reset for all remaining members.
    * </p>
@@ -51,14 +51,22 @@ public class AnnualRollover {
   public void rollover() {
     final List<Member> membersToRemove = memberRepository.findMembersByStatuses(statuses);
     final List<ArchivedMember> archiveList = new ArrayList<>();
-    for (Member member : membersToRemove) {
-      ArchiveId archiveId = new ArchiveId();
-      archiveId.setArchiveYear(LocalDate.now().getYear());
-      archiveId.setMemberNumber(member.getMemberNumber());
-      ArchivedMember archivedMember = new ArchivedMember();
-      archivedMember.setId(archiveId);
-      archivedMember.setMember(member);
-      archiveList.add(archivedMember);
+    for (Iterator<Member> itr = membersToRemove.iterator(); itr.hasNext();) {
+      Member member = itr.next();
+      if (member.getMemberStatus() == MembershipStatus.LAST_YEAR_MEMBERSHIP
+          && member.isCurrentYearPaid()) {
+        // Current year paid indicates that the membership cancelation is for next year's rollover.
+        // This is a very unusual situation
+        itr.remove();
+      } else {
+         ArchiveId archiveId = new ArchiveId();
+        archiveId.setArchiveYear(LocalDate.now().getYear());
+        archiveId.setMemberNumber(member.getMemberNumber());
+        ArchivedMember archivedMember = new ArchivedMember();
+        archivedMember.setId(archiveId);
+        archivedMember.setMember(member);
+        archiveList.add(archivedMember);
+      }
     }
     archiveRepository.saveAll(archiveList);
     memberRepository.deleteAll(membersToRemove);

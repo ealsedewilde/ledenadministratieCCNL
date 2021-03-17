@@ -37,10 +37,10 @@ public class ManageArchiveController implements ApplicationListener<MenuChoiceEv
       if (valid(year)) {
         service.delete(year);
         pageController
-            .setMessage(String.format("Archiefgegevens van %d of ouder zijn verwijderd", year));
+            .showMessage(String.format("Archiefgegevens van %d of ouder zijn verwijderd", year));
       }
     } catch (NullPointerException e) {
-      pageController.setErrorMessage("Geef een geldig jaar op");
+      pageController.showErrorMessage("Geef een geldig jaar op");
     }
   }
 

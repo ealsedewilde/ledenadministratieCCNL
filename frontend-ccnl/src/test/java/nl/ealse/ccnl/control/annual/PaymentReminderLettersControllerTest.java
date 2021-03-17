@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
+import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToFile;
+import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToPrint;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -27,8 +29,9 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.TestExecutor;
 import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -38,6 +41,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.task.TaskExecutor;
 
 class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderLettersController> {
 
@@ -46,6 +50,16 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderL
   private static MemberService memberService;
   private static MemberLetterHandler memberLetterHandler;
   private static WrappedFileChooser fileChooser;
+  private static TaskExecutor toFileEexecutor = new TestExecutor<PdfToFile>();
+  private static TaskExecutor toPrintEexecutor = new TestExecutor<PdfToPrint>();
+  private static TaskExecutor executor = (task -> {
+    if (task instanceof PdfToFile) {
+      toFileEexecutor.execute(task);
+    } else {
+      toPrintEexecutor.execute(task);
+    }
+  });
+
 
   @TempDir
   File tempDir;
@@ -55,14 +69,14 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderL
 
   @Test
   void test() {
-   
+
     File exportFile = new File(tempDir, "test.docx");
     when(fileChooser.showSaveDialog()).thenReturn(exportFile);
 
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       sut = new PaymentReminderLettersController(documentService, memberService, pageController,
-          memberLetterHandler);
+          memberLetterHandler, executor);
       prepare();
       doTest();
       ar.set(true);
@@ -81,7 +95,9 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderL
     verify(documentService).generatePDF(any(LetterData.class));
     sut.saveLettersToFile();
     verify(documentService).generatePDF(any(FOContent.class), any(LetterData.class));
+    verify(pageController).showMessage("Bestand is aangemaakt");
     sut.printLetters();
+    verify(pageController).showMessage("");
     sut.printPDF();
   }
 

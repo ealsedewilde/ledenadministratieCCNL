@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
 import javafx.stage.Stage;
+import nl.ealse.ccnl.control.annual.ReconciliationController.ReconcileTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -26,6 +27,7 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.TestExecutor;
 import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -34,13 +36,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.task.TaskExecutor;
 
 class ReconciliationControllerTest extends FXMLBaseTest<ReconciliationController> {
   private static ApplicationContext context;
   private static PageController pageController;
   private static ReconciliationService service;
   private static WrappedFileChooser fileChooser;
-
+  private static TaskExecutor executor = new TestExecutor<ReconcileTask>();
 
   @TempDir
   File tempDir;
@@ -49,7 +52,7 @@ class ReconciliationControllerTest extends FXMLBaseTest<ReconciliationController
 
   @Test
   void testController() {
-    sut = new ReconciliationController(pageController, context);
+    sut = new ReconciliationController(pageController, context, executor);
     File reconcileFile = new File(tempDir, "reconcile.xml");
     when(fileChooser.showOpenDialog()).thenReturn(reconcileFile);
     final AtomicBoolean ar = new AtomicBoolean();
@@ -75,10 +78,10 @@ class ReconciliationControllerTest extends FXMLBaseTest<ReconciliationController
     verify(service, times(2)).allFiles();
 
     sut.selectFile();
-    verify(pageController, never()).setErrorMessage(any(String.class));
+    verify(pageController, never()).showErrorMessage(any(String.class));
 
     sut.reconcilePayments();
-    verify(pageController).setMessage("Betalingen zijn verwerkt");
+    verify(pageController).showMessage("Betalingen zijn verwerkt");
 
   }
 
@@ -138,7 +141,7 @@ class ReconciliationControllerTest extends FXMLBaseTest<ReconciliationController
       e.printStackTrace();
     }
   }
-  
+
 
   private void setDialog(boolean b, String name) {
     try {

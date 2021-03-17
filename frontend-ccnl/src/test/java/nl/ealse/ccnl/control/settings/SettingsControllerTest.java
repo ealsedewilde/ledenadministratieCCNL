@@ -56,16 +56,16 @@ class SettingsControllerTest extends FXMLBaseTest<SettingsController> {
     verify(context).publishEvent(any(SettingSelectionEvent.class));
 
     sut.save();
-    verify(pageController, never()).setMessage("Instelling is opgeslagen; actief na herstart");
+    verify(pageController, never()).showMessage("Instelling is opgeslagen; actief na herstart");
     setInput();
     sut.save();
-    verify(pageController).setMessage("Instelling is opgeslagen; actief na herstart");
+    verify(pageController).showMessage("Instelling is opgeslagen; actief na herstart");
 
     sut.delete(setting());
-    verify(pageController).setMessage("Instelling is verwijderd; actief na herstart");
+    verify(pageController).showMessage("Instelling is verwijderd; actief na herstart");
 
     sut.update(setting(), "foo");
-    verify(pageController).setMessage("Instelling is bijgewerkt; actief na herstart");
+    verify(pageController).showMessage("Instelling is bijgewerkt; actief na herstart");
   }
 
   private void prepare() {

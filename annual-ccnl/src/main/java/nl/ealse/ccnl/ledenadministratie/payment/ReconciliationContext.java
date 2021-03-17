@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 import lombok.Data;
 import lombok.Getter;
@@ -44,9 +46,7 @@ public class ReconciliationContext {
   public MemberContext getMemberContext(Integer lidnummer) {
     MemberContext mc = contexts.get(lidnummer); // NOSONAR
     if (mc == null) {
-      String msg = "Betaling ontvangen voor inactief lid " + lidnummer;
-      messages.add(msg);
-      mc = new MemberContext(lidnummer);
+      mc = new MemberContext(lidnummer, true);
       contexts.put(lidnummer, mc);
     }
     return mc;
@@ -56,10 +56,17 @@ public class ReconciliationContext {
   public static class MemberContext {
 
     private final int number;
-    private final List<Transaction> transactions = new ArrayList<>();
+    private final Set<Transaction> transactions = new HashSet<>();
+    private final boolean inactief;
 
     private MemberContext(int number) {
       this.number = number;
+      this.inactief = false;
+    }
+
+    private MemberContext(int number, boolean inactief) {
+      this.number = number;
+      this.inactief = inactief;
     }
 
     public BigDecimal getTotalAmount() {

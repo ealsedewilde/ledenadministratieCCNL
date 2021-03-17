@@ -8,8 +8,8 @@ import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
-import nl.ealse.ccnl.service.ExternalRelationService;
-import nl.ealse.ccnl.service.SearchItem;
+import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.SearchItem;
 import org.springframework.context.ApplicationContext;
 
 public abstract class ExternalRelationSearchController<T extends ExternalRelation>

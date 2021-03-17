@@ -10,7 +10,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
-import nl.ealse.ccnl.service.ExternalOtherService;
+import nl.ealse.ccnl.service.relation.ExternalOtherService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
@@ -44,7 +44,7 @@ class ExternalOtherDeleteControllerTest extends FXMLBaseTest<ExternalOtherDelete
     sut.onApplicationEvent(event);
 
     sut.delete();
-    verify(pageController).setMessage("Gegevens zijn verwijderd");
+    verify(pageController).showMessage("Gegevens zijn verwijderd");
   }
 
   @BeforeAll

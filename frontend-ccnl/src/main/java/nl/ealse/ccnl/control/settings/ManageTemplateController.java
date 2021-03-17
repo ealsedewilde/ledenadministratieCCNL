@@ -155,7 +155,7 @@ public class ManageTemplateController implements ApplicationListener<TemplateSel
         selectedTemplate.setIncludeSepaForm(addSepa.isSelected());
       }
       documentService.persistDocumentemplate(selectedTemplate);
-      pageController.setMessage("Document template is toegevoegd");
+      pageController.showMessage("Document template is toegevoegd");
       close();
     }
   }
@@ -163,7 +163,7 @@ public class ManageTemplateController implements ApplicationListener<TemplateSel
   @FXML
   public void delete() {
     documentService.deleteDocumentTemplate(selectedTemplate);
-    pageController.setMessage("Document template is verwijderd");
+    pageController.showMessage("Document template is verwijderd");
     close();
   }
 

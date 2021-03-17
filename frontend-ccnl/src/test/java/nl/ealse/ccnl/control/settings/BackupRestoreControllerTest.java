@@ -10,6 +10,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.BackupRestoreService;
 import nl.ealse.ccnl.test.FXBase;
+import nl.ealse.ccnl.test.TestExecutor;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.task.TaskExecutor;
 
 class BackupRestoreControllerTest extends FXBase {
 
@@ -24,12 +26,13 @@ class BackupRestoreControllerTest extends FXBase {
   private static ApplicationContext springContext;
   private static BackupRestoreService service;
   private static WrappedFileChooser fileChooser;
+  private static TaskExecutor executor = new TestExecutor<BackupRestoreController.AsyncTask>();
 
   private BackupRestoreController sut;
 
   @Test
   void testController() {
-    sut = new BackupRestoreController(pageController, springContext);
+    sut = new BackupRestoreController(pageController, springContext, executor);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       doTest();
@@ -45,11 +48,11 @@ class BackupRestoreControllerTest extends FXBase {
 
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_BACKUP_DATABASE);
     sut.onApplicationEvent(event);
-    verify(pageController).setMessage("Backup is aangemaakt");
+    verify(pageController).showMessage("Backup is aangemaakt");
 
     event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_RESTORE_DATABASE);
     sut.onApplicationEvent(event);
-    verify(pageController).setMessage("Backup is teruggezet");
+    verify(pageController).showMessage("Backup is teruggezet");
   }
 
   @BeforeAll

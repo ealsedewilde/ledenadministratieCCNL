@@ -146,7 +146,7 @@ public abstract class DocumentTemplateController {
       template.setTemplate(letterText.getText());
       template.setIncludeSepaForm(addSepa.isSelected());
       documentService.persistDocumentemplate(template);
-      pageController.setMessage("DocumentTemplate is opgeslagen");
+      pageController.showMessage("DocumentTemplate is opgeslagen");
     }
   }
 

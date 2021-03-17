@@ -36,6 +36,12 @@ public class CCNLColumnProperties {
         getProperty(LidColumnDefinition.Property.INCASSO_AUTOMATISCH.name().toLowerCase());
     return getFirstValue(waarde);
   }
+  
+  public String getPropertyOverschrijving() {
+    String waarde =
+        getProperty(LidColumnDefinition.Property.INCASSO_OVERSCHRIJVING.name().toLowerCase());
+    return getFirstValue(waarde);
+  }
 
   public String getPropertyErelid() {
     String waarde = getProperty(LidColumnDefinition.Property.INCASSO_ERELID.name().toLowerCase());

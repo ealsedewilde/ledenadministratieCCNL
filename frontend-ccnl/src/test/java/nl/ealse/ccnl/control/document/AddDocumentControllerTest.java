@@ -51,7 +51,7 @@ class AddDocumentControllerTest extends FXMLBaseTest<AddDocumentController> {
     sut.searchDocument();
 
     sut.addDocument();
-    verify(pageController).setMessage("Document is toegevoegd");
+    verify(pageController).showMessage("Document is toegevoegd");
   }
 
   private void prepare() {

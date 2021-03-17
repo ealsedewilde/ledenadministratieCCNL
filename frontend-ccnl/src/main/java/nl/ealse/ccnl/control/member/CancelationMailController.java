@@ -17,7 +17,7 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.MailService;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
@@ -93,13 +93,13 @@ public class CancelationMailController extends DocumentTemplateController
     SimpleMailMessage mailMessage =
         mailService.sendMail(toMailAddress.getText(), mailSubject, mailContent);
     mailService.saveMail(selectedMember, mailMessage);
-    pageController.setMessage("Email is verzonden");
+    pageController.showMessage("Email is verzonden");
     pageController.setActivePage(PageName.LOGO);
   }
 
   @FXML
   public void noMail() {
-    pageController.setMessage("Geen Email verzonden");
+    pageController.showMessage("Geen Email verzonden");
     pageController.setActivePage(PageName.LOGO);
   }
 

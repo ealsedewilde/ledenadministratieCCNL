@@ -23,6 +23,6 @@
     <Label text="Stap 3: Excel exportbestanden aanmaken" styleClass="subHeader"/>
     <SaveButton fx:id="exportButton" text="Excel exportbestanden aanmaken" minWidth="200" onAction="#exportToExcel"/>
     
-    <Label text="Stap 4: Controleer handmatig de Excel exportbestanden" styleClass="subHeader"/>
+    <Label fx:id="step4" text="Stap 4: Handmatige controle" styleClass="subHeader"/>
   </children>
 </VBox>

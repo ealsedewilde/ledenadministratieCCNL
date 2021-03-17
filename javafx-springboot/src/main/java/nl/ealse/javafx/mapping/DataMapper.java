@@ -42,7 +42,7 @@ public final class DataMapper {
   public <T> T formToModel(Object form, T model) {
     Map<String, PropertyContext> formProperties = new BeanExplorer(form).describeBean();
     Map<String, PropertyContext> beanProperties = new BeanExplorer(model).describeBean();
-    FormToModelUtil<T> formToModelUtil = new FormToModelUtil<T>(model, beanProperties);
+    FormToModelUtil<T> formToModelUtil = new FormToModelUtil<>(model, beanProperties);
     try {
       for (PropertyContext formProperty : formProperties.values()) {
         PropertyContext beanProperty = beanProperties.get(formProperty.getName());

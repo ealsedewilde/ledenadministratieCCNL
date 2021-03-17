@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.settings;
 
 import java.io.File;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,21 +10,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ledenadministratie.excelimport.ImportService;
-import nl.ealse.ccnl.ledenadministratie.excelimport.ImportService.ImportSelection;
-import nl.ealse.ccnl.ledenadministratie.excelimport.ImportService.ProcessType;
+import nl.ealse.ccnl.service.excelimport.ImportService;
+import nl.ealse.ccnl.service.excelimport.ImportService.ImportSelection;
+import nl.ealse.ccnl.service.excelimport.ImportType;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Slf4j
 public class ExcelImportController implements ApplicationListener<MenuChoiceEvent> {
 
   @Value("${ccnl.directory.excel:c:/temp}")
@@ -32,6 +32,9 @@ public class ExcelImportController implements ApplicationListener<MenuChoiceEven
   private final PageController pageController;
 
   private final ImportService importService;
+
+  private final TaskExecutor executor;
+
 
   @FXML
   private ToggleGroup importGroup;
@@ -62,9 +65,11 @@ public class ExcelImportController implements ApplicationListener<MenuChoiceEven
 
   private File selectedFile;
 
-  public ExcelImportController(PageController pageController, ImportService importService) {
+  public ExcelImportController(PageController pageController, ImportService importService,
+      TaskExecutor executor) {
     this.pageController = pageController;
     this.importService = importService;
+    this.executor = executor;
   }
 
   @FXML
@@ -113,23 +118,21 @@ public class ExcelImportController implements ApplicationListener<MenuChoiceEven
 
   @FXML
   public void importFile() {
-    ProcessType type = ProcessType.REPLACE;
+    ImportType type = ImportType.REPLACE;
     for (Toggle t : importGroup.getToggles()) {
       if (t.isSelected()) {
         ToggleButton b = (ToggleButton) t;
-        type = ProcessType.fromId(b.getId());
+        type = ImportType.fromId(b.getId());
         break;
       }
     }
     ImportSelection selection = new ImportSelection(members.isSelected(), partners.isSelected(),
         clubs.isSelected(), external.isSelected(), internal.isSelected(), type);
-    try {
-      importService.importFromExcel(selectedFile, selection);
-      pageController.setMessage("Import succesvol uitgevoerd");
-    } catch (Exception e) {
-      log.error("Import error", e);
-      pageController.setErrorMessage("Import niet succesvol");
-    }
+    pageController.showPermanentMessage("Import wordt uitgevoerd; even geduld a.u.b.");
+    AsyncTask asyncTask = new AsyncTask(importService, selection, selectedFile);
+    asyncTask.setOnSucceeded(t -> pageController.showMessage("Import succesvol uitgevoerd"));
+    asyncTask.setOnFailed(t -> pageController.showErrorMessage("Import niet succesvol"));
+    executor.execute(asyncTask);
   }
 
   @Override
@@ -147,6 +150,26 @@ public class ExcelImportController implements ApplicationListener<MenuChoiceEven
       external.setSelected(false);
       internal.setSelected(false);
     }
+  }
+
+  protected static class AsyncTask extends Task<Void> {
+
+    private final ImportService importService;
+    private final ImportSelection selection;
+    private final File selectedFile;
+
+    AsyncTask(ImportService importService, ImportSelection selection, File selectedFile) {
+      this.importService = importService;
+      this.selection = selection;
+      this.selectedFile = selectedFile;
+    }
+
+    @Override
+    protected Void call() throws Exception {
+      importService.importFromExcel(selectedFile, selection);
+      return null;
+    }
+
   }
 
 }

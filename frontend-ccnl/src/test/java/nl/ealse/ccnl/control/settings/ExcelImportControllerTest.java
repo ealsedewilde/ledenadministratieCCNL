@@ -11,8 +11,9 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ledenadministratie.excelimport.ImportService;
+import nl.ealse.ccnl.service.excelimport.ImportService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.TestExecutor;
 import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -21,18 +22,20 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.task.TaskExecutor;
 
 class ExcelImportControllerTest extends FXMLBaseTest<ExcelImportController> {
 
   private static PageController pageController;
   private static ImportService importService;
   private static WrappedFileChooser fileChooser;
+  private static TaskExecutor executor = new TestExecutor<ExcelImportController.AsyncTask>();
 
   private ExcelImportController sut;
 
   @Test
   void testImport() {
-    sut = new ExcelImportController(pageController, importService);
+    sut = new ExcelImportController(pageController, importService, executor);
     setDirectory();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -59,7 +62,7 @@ class ExcelImportControllerTest extends FXMLBaseTest<ExcelImportController> {
     sut.importTab(ae);
 
     sut.importFile();
-    verify(pageController).setMessage("Import succesvol uitgevoerd");
+    verify(pageController).showMessage("Import succesvol uitgevoerd");
   }
 
   private void prepare() {

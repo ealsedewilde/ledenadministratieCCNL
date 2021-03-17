@@ -22,7 +22,7 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.ccnl.service.MemberService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
@@ -105,7 +105,7 @@ public class SepaAuthorizarionController implements ApplicationListener<MemberSe
     try {
       PrintUtil.print(pdfViewer.getPdf());
     } catch (PrintException e) {
-      pageController.setErrorMessage(e.getMessage());
+      pageController.showErrorMessage(e.getMessage());
     }
   }
 
@@ -118,7 +118,7 @@ public class SepaAuthorizarionController implements ApplicationListener<MemberSe
     document.setOwner(selectedMember);
 
     documentService.saveDocument(document);
-    pageController.setMessage("SEPA-machtiging opgeslagen bij lid");
+    pageController.showMessage("SEPA-machtiging opgeslagen bij lid");
     pdfViewer.close();
     
     selectedMember.setPaymentMethod(PaymentMethod.DIRECT_DEBIT);

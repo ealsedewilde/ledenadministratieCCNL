@@ -12,7 +12,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.service.ExternalClubService;
+import nl.ealse.ccnl.service.relation.ExternalClubService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
@@ -46,7 +46,7 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
     sut.onApplicationEvent(event);
 
     sut.save();
-    verify(pageController).setMessage("Club gegevens zijn opgeslagen");
+    verify(pageController).showMessage("Club gegevens zijn opgeslagen");
 
     sut.nextPage();
     sut.previousPage();

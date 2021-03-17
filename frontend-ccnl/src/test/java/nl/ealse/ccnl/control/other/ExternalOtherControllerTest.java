@@ -12,7 +12,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
-import nl.ealse.ccnl.service.ExternalOtherService;
+import nl.ealse.ccnl.service.relation.ExternalOtherService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
@@ -46,7 +46,7 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
     sut.onApplicationEvent(event);
 
     sut.save();
-    verify(pageController).setMessage("Externe relatie opgeslagen");
+    verify(pageController).showMessage("Externe relatie opgeslagen");
 
     sut.nextPage();
     sut.previousPage();

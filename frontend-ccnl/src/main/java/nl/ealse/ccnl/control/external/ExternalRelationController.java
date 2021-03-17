@@ -11,7 +11,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
-import nl.ealse.ccnl.service.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.view.ExternalRelationView;
 import nl.ealse.javafx.mapping.DataMapper;
 import nl.ealse.javafx.mapping.Mapping;
@@ -81,7 +81,7 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
     addressController.enrich();
     DataMapper.formToModel(this, model);
     externalRelationService.persistExternalRelation(model);
-    pageController.setMessage(getSaveText());
+    pageController.showMessage(getSaveText());
     pageController.setActivePage(PageName.LOGO);
   }
 

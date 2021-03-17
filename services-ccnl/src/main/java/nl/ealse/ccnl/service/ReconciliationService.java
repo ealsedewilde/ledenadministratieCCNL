@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -23,6 +25,9 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class ReconciliationService {
+
+  private static final Set<MembershipStatus> STATUSES =
+      EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
 
   private final PaymentFileRepository dao;
   private final MemberRepository memberDao;
@@ -83,7 +88,7 @@ public class ReconciliationService {
 
   @Transactional
   public void resetPaymentStatus() {
-    List<Member> members = memberDao.findMemberByMemberStatus(MembershipStatus.ACTIVE);
+    List<Member> members = memberDao.findMembersByStatuses(STATUSES);
     members.forEach(member -> {
       member.setCurrentYearPaid(PaymentMethod.NOT_APPLICABLE == member.getPaymentMethod());
       member.setPaymentDate(null);
