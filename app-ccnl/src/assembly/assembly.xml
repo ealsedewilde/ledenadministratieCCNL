@@ -1,0 +1,34 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+  <id>CCNL</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>true</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+        <includes>
+            <include>nl.ealse.ccnl.leden:frontend-ccnl</include>
+        </includes>
+        <outputDirectory>app</outputDirectory>
+        <outputFileNameMapping>LedenadministratieApp.${artifact.extension}</outputFileNameMapping>
+        <useProjectArtifact>false</useProjectArtifact>
+    </dependencySet>
+    <dependencySet>
+        <includes>
+            <include>nl.ealse.ccnl.leden:minimal-jre:zip</include>
+        </includes>
+        <unpack>true</unpack>
+        <outputDirectory>runtime</outputDirectory>
+        <useProjectArtifact>false</useProjectArtifact>
+    </dependencySet>
+  </dependencySets>
+  <fileSets>
+    <fileSet>
+        <directory>src/dist</directory>
+        <outputDirectory>.</outputDirectory>
+    </fileSet>
+  </fileSets>
+
+</assembly>

@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.StringJoiner;
 import java.util.concurrent.ExecutorService;
@@ -33,7 +34,7 @@ public class DatabasePropertySource extends PropertySource<Properties> {
 
   public DatabasePropertySource(ConfigurableEnvironment environment) {
     super("databaseProperties", new Properties());
-     initialize(environment);
+    initialize(environment);
   }
 
   @Override
@@ -46,6 +47,7 @@ public class DatabasePropertySource extends PropertySource<Properties> {
    * DataSource to load properties from the SETTINGS database table.
    */
   private void initialize(final ConfigurableEnvironment environment) {
+    initializeDbLocation();
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     executorService.execute(() -> {
       String userName = environment.getProperty("spring.datasource.username");
@@ -56,10 +58,23 @@ public class DatabasePropertySource extends PropertySource<Properties> {
       try {
         load(ds);
       } catch (SQLException e) {
-        log.warn("Error loading properties from the database", e);
+        log.warn("Error loading properties from the database");
         initSql(ds);
       }
     });
+  }
+
+  /**
+   * Is the default "spring.datasource.url" overridden?
+   * If so put the new URL is this PropertySource.
+   */
+  private void initializeDbLocation() {
+    DatabaseLocation dbl = new DatabaseLocation();
+    Optional<String> dbUrl = dbl.getDataBaseUrl();
+    if (dbUrl.isPresent()) {
+      log.warn("spring.datasource.url"+ dbUrl.get());
+      getSource().put("spring.datasource.url", dbUrl.get());
+    }
   }
 
   /**

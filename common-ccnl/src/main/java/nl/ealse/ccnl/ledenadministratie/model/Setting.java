@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import lombok.Data;
 
 @Entity
@@ -25,6 +26,7 @@ public class Setting {
   private String description;
 
   @PrePersist
+  @PreUpdate
   public void prePersist() {
     if (settingsGroup == null) {
       id = key;

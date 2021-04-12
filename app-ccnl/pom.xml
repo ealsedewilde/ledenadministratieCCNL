@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>nl.ealse.ccnl</groupId>
+    <artifactId>ledenadministratieCCNL</artifactId>
+    <version>00.00.01-SNAPSHOT</version>
+  </parent>
+  <artifactId>app-ccnl</artifactId>
+  <packaging>pom</packaging>
+  
+   <build>
+    <finalName>LedenadministratieCCNL</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>assemble-dist</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>src/assembly/assembly.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  
+   <dependencies>
+    <dependency>
+      <groupId>nl.ealse.ccnl</groupId>
+      <artifactId>frontend-ccnl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>nl.ealse.ccnl</groupId>
+      <artifactId>minimal-jre</artifactId>
+      <type>zip</type>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+  
+</project>

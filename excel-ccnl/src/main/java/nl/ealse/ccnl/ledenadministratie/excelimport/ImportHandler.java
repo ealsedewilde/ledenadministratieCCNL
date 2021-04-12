@@ -36,27 +36,27 @@ public class ImportHandler {
 
   @Transactional
   public void importMembersFromExcel(CCNLWorkbook workbook, ProcessType importType) {
-    CCNLLidSheet leden = (CCNLLidSheet) workbook.getSheet(SheetDefinition.LEDEN);
+    CCNLLidSheet leden = workbook.getSheet(SheetDefinition.LEDEN, CCNLLidSheet.class);
 
     // The sequence of following actions is important.
     // If a member exists on multiple Excel-sheets then the
     // most relevant state must be handled last to reflect the correct state.
     final MemberImport importHandler = new MemberImport(memberRepository, importType);
     leden.forEach(importHandler::importMember);
-    leden = (CCNLLidSheet) workbook.getSheet(SheetDefinition.OPZEGGEN_VOLGEND_JAAR);
+    leden = workbook.getSheet(SheetDefinition.OPZEGGEN_VOLGEND_JAAR, CCNLLidSheet.class);
     leden.forEach(importHandler::lastYearMembership);
-    leden = (CCNLLidSheet) workbook.getSheet(SheetDefinition.OPZEGGERS);
+    leden = workbook.getSheet(SheetDefinition.OPZEGGERS, CCNLLidSheet.class);
     leden.forEach(importHandler::inactiveMembership);
-    leden = (CCNLLidSheet) workbook.getSheet(SheetDefinition.NIET_BETAALD);
+    leden = workbook.getSheet(SheetDefinition.NIET_BETAALD, CCNLLidSheet.class);
     leden.forEach(importHandler::overDueMembership);
-    leden = (CCNLLidSheet) workbook.getSheet(SheetDefinition.RETOUR);
+    leden = workbook.getSheet(SheetDefinition.RETOUR, CCNLLidSheet.class);
     leden.forEach(importHandler::addressInvalid);
     importHandler.finalizeImport();
   }
 
   @Transactional
   public void importPartnersFromExcel(CCNLWorkbook workbook, ProcessType importType) {
-    CCNLPartnerSheet partners = (CCNLPartnerSheet) workbook.getSheet(SheetDefinition.RELATIES);
+    CCNLPartnerSheet partners = workbook.getSheet(SheetDefinition.RELATIES, CCNLPartnerSheet.class);
     final CommercialPartnerImport importHandler =
         new CommercialPartnerImport(partnerRepository, importType);
     partners.forEach(partner -> {
@@ -69,15 +69,15 @@ public class ImportHandler {
 
   @Transactional
   public void importClubsFromExcel(CCNLWorkbook workbook, ProcessType importType) {
-    CCNLClubSheet partners = (CCNLClubSheet) workbook.getSheet(SheetDefinition.CLUBS);
+    CCNLClubSheet clubs =  workbook.getSheet(SheetDefinition.CLUBS, CCNLClubSheet.class);
     final ExternalClubImport importHandler = new ExternalClubImport(clubRepository, importType);
-    partners.forEach(importHandler::importExternalRelation);
+    clubs.forEach(importHandler::importExternalRelation);
     importHandler.finalizeImport();
   }
 
   @Transactional
   public void importExternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType) {
-    CCNLPartnerSheet partners = (CCNLPartnerSheet) workbook.getSheet(SheetDefinition.RELATIES);
+    CCNLPartnerSheet partners = workbook.getSheet(SheetDefinition.RELATIES, CCNLPartnerSheet.class);
     final OtherExternalRelationImport importHandler =
         new OtherExternalRelationImport(otherRepository, importType);
     partners.forEach(partner -> {
@@ -90,7 +90,7 @@ public class ImportHandler {
 
   @Transactional
   public void importInternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType) {
-    CCNLInternSheet functies = (CCNLInternSheet) workbook.getSheet(SheetDefinition.INTERN);
+    CCNLInternSheet functies = workbook.getSheet(SheetDefinition.INTERN, CCNLInternSheet.class);
     InternalRelationImport importHandler =
         new InternalRelationImport(internalRepository, importType);
     functies.forEach(importHandler::importInternalRelation);

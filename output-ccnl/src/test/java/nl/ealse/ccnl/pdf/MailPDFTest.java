@@ -42,7 +42,7 @@ class MailPDFTest {
       transformer.transform(src, res);
       byte[] pdf = out.toByteArray();
       out.close();
-      Assertions.assertEquals(5912, pdf.length);
+      Assertions.assertEquals(5808, pdf.length);
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

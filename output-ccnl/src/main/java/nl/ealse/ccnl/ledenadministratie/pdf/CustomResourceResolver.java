@@ -28,12 +28,7 @@ public class CustomResourceResolver implements ResourceResolver {
    * @param baseUri = locations of 'fop.xconf' file
    */
   public CustomResourceResolver(URI baseUri) {
-    String base = baseUri.toString();
-    int ix = base.lastIndexOf('/');
-    if (ix != -1) {
-      base = base.substring(0, ++ix);
-    }
-    classpathBase = base;
+    classpathBase = baseUri.toString();
   }
 
   /**
@@ -46,7 +41,7 @@ public class CustomResourceResolver implements ResourceResolver {
       Path resourcePath = Paths.get(uri);
       return new Resource(Files.newInputStream(resourcePath));
     } else {
-      // resource is on the classpath in a jar.
+      // resource is on the (BOOT-INF) classpath in a jar.
       String path = classpathBase + uri.toString();
       ClassPathResource resource = new ClassPathResource(path);
       return new Resource(resource.getInputStream());

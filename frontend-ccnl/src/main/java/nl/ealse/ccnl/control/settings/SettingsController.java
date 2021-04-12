@@ -67,7 +67,6 @@ public class SettingsController extends SettingsView
   }
 
   public void update(Setting selectedSettings, String oldId) {
-    selectedSettings.prePersist();
     service.save(selectedSettings, oldId);
     editStage.close();
     refresh("Instelling is bijgewerkt; actief na herstart");

@@ -31,7 +31,9 @@ public abstract class CCNLSheet<T extends CCNLRow> implements Iterable<T> {
   protected CCNLSheet(Sheet sheet, CCNLColumnProperties properties) {
     this.sheet = sheet;
     this.properties = properties;
-    init();
+    if (sheet != null) {
+      init();
+    }
   }
 
   private void init() {
@@ -46,7 +48,10 @@ public abstract class CCNLSheet<T extends CCNLRow> implements Iterable<T> {
   }
 
   public String getName() {
-    return sheet.getSheetName();
+    if (sheet != null) {
+      return sheet.getSheetName();
+    }
+    return null;
   }
 
   public Sheet getSheet() {
@@ -63,6 +68,9 @@ public abstract class CCNLSheet<T extends CCNLRow> implements Iterable<T> {
 
       @Override
       public boolean hasNext() {
+        if (sheet == null) {
+          return false;
+        }
         currentRow = sheet.getRow(ix);
         if (currentRow == null) {
           return false;

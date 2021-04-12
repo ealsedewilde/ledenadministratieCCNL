@@ -8,7 +8,6 @@
   </parent>
   <artifactId>common-ccnl</artifactId>
   <name>common-ccnl</name>
-  <url>http://maven.apache.org</url>
 
   <dependencies>
     <dependency>
@@ -19,11 +18,6 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.platform</groupId>

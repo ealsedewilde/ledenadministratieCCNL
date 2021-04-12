@@ -36,6 +36,7 @@ class SettingsServiceTest {
     String oldId = "oldId";
     Optional<Setting> old = Optional.of(setting);
     when(dao.findById(oldId)).thenReturn(old);
+    setting.prePersist(); // simulate @PrePersist, @PreUpdate
     sut.save(setting, oldId);
     verify(dao).delete(setting);
   }

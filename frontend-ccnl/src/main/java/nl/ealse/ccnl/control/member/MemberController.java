@@ -80,6 +80,9 @@ public class MemberController extends MemberView
 
   @FXML
   private SaveButton saveButton;
+  
+  // Helper to detect changes in the iban owner
+  private String savedName;
 
   /**
    * Every page attached to this controller has its own SaveButton. This List will contain all
@@ -149,6 +152,7 @@ public class MemberController extends MemberView
     DataMapper.modelToForm(this, selectedMember);
     DataMapper.formToModel(this, model);
     initializeInitialsType();
+    savedName = getIbanOwnerName().getText();
 
     if (sepaAuthorization == null) {
       getSepaButton().setVisible(false);
@@ -199,6 +203,11 @@ public class MemberController extends MemberView
   public void save() {
     enrich();
     addressController.enrich();
+    updateIbanOwnerName();
+    if (savedName == null || savedName.equals(formatMemberName())) {
+      // The iban owner is implicit 
+      getIbanOwnerName().setText(null);
+    }
     DataMapper.formToModel(this, model);
 
     if (model.getAddress().isAddressInvalid() && !model.getAddress().getAddressAndNumber()
@@ -328,27 +337,60 @@ public class MemberController extends MemberView
   }
 
   private void formatIbanOwnerName(String ibanNumber) {
-    if (ibanNumber != null && !ibanNumber.isBlank()) {
-      String name = getIbanOwnerName().getText();
-      if (name == null || name.isBlank() || name.indexOf("null") != -1) {
-        StringJoiner sj = new StringJoiner(" ");
-        if (getInitials().getText() != null && getLastName().getText() != null) {
-          formatName();
-          sj.add(getInitials().getText());
-          if (getLastNamePrefix() != null) {
-            sj.add(getLastNamePrefix().getText());
-          }
-          sj.add(getLastName().getText());
-        }
-        getIbanOwnerName().setText(sj.toString());
-        getIbanOwnerNameL().setVisible(true);
-        getIbanOwnerName().setVisible(true);
-      }
+    if (hasContent(ibanNumber)) {
+      updateIbanOwnerName();
+      getIbanOwnerNameL().setVisible(true);
+      getIbanOwnerName().setVisible(true);
     } else {
+      savedName = null;
       getIbanOwnerName().setText(null);
       getIbanOwnerNameL().setVisible(false);
       getIbanOwnerName().setVisible(false);
     }
+  }
+
+  private void updateIbanOwnerName() {
+    String ibanName = getIbanOwnerName().getText();
+    String memberName = formatMemberName();
+    if (hasContent(ibanName)) {
+      if (!ibanName.equals(savedName)) {
+        // an explicit iban owner is specified by the user
+        savedName = ibanName;
+      } else if (!ibanName.equals(memberName)) {
+        // the member name is changed an thus the implicit iban owner
+        getIbanOwnerName().setText(memberName);
+        savedName = memberName;
+      }
+    } else {
+      //There is no iban owner yet
+      getIbanOwnerName().setText(memberName);
+      savedName = memberName;
+    }
+  }
+  
+  /**
+   * Return the full name of teh member as filled in the user interface.
+   * Return null when nothing is filled in the user interface
+   * @return the full name of the member or null
+   */
+  private String formatMemberName() {
+    StringJoiner sj = new StringJoiner(" ");
+    if (getInitials().getText() != null && getLastName().getText() != null) {
+      formatName();
+      sj.add(getInitials().getText());
+      String lastNamePrefix = getLastNamePrefix().getText();
+      if (hasContent(lastNamePrefix) && !"null".equals(lastNamePrefix)) {
+        sj.add(lastNamePrefix);
+      }
+      sj.add(getLastName().getText());
+      return sj.toString();
+    }
+    return null;
+  }
+  
+  
+  private boolean hasContent(String text) {
+    return text != null && !text.isBlank();
   }
 
 }

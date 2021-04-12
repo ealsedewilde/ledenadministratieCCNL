@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,10 +21,14 @@ public class Member extends MemberBase {
   @Id
   private Integer memberNumber;
   
+  /**
+   * Value as used in the frontend.
+   * It is either the ibanOwner or the full name of the member.
+   */
   @Transient
   private String ibanOwnerName;
 
-  // CascadeType.REMOVE is inefficient, but there at most a just documents in the list
+  // CascadeType.REMOVE is inefficient, but there at most a just a few documents in the list
   @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
   private List<Document> documents;
 
@@ -46,23 +51,37 @@ public class Member extends MemberBase {
   
   public void setIbanOwnerName(String ibanOwnerName) {
     this.ibanOwnerName = ibanOwnerName;
-    if (!getFullName().equals(ibanOwnerName)) {
-      setIbanOwner(ibanOwnerName);
-    }
   }
 
+  /**
+   * Format the full name from its parts.
+   * Initially the member is empty. In that case null is returned.
+   * @return the full name or null
+   */
   public String getFullName() {
     StringJoiner sj = new StringJoiner(" ");
-    sj.add(getInitials());
+    if (getInitials() != null) {
+      sj.add(getInitials());
+    }
     if (getLastNamePrefix() != null) {
       sj.add(getLastNamePrefix());
     }
-    sj.add(getLastName());
-    return sj.toString();
+    if (getLastName() != null) {
+      sj.add(getLastName());
+    }
+    if (sj.length() > 0) {
+      return sj.toString();
+    }
+    return null;
   }
 
   @PrePersist
+  @PreUpdate
   public void prePersist() {
+    String memberName = getFullName();
+    if (memberName == null || !memberName.equals(ibanOwnerName)) {
+      setIbanOwner(ibanOwnerName);
+    }
     setModificationDate(LocalDate.now());
   }
 

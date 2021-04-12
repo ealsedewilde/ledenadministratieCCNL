@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.ledenadministratie.pdf;
 
+import java.net.URI;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +30,12 @@ public class FopFactoryProvider {
   static {
     // The resource is on the classpath of the output-ccnl module
     Resource fopConf = new ClassPathResource("fop.xconf");
+    
     try {
+      URI basUri = getBaseUri(fopConf.getURI());
       log.info(fopConf.getURI().toString());
       FopFactoryBuilder factoryBuilder =
-          new FopFactoryBuilder(fopConf.getURI(), new CustomResourceResolver(fopConf.getURI()));
+          new FopFactoryBuilder(basUri, new CustomResourceResolver(basUri));
       DefaultConfigurationBuilder cfgBuilder = new DefaultConfigurationBuilder();
       Configuration cfg = cfgBuilder.build(fopConf.getInputStream());
       fopFactory = factoryBuilder.setConfiguration(cfg).build();
@@ -41,5 +44,15 @@ public class FopFactoryProvider {
       throw new ExceptionInInitializerError(e);
     }
   }
+  
+  public URI getBaseUri(URI configUri) {
+    String base = configUri.toString();
+    int ix = base.lastIndexOf('/');
+    if (ix != -1) {
+      base = base.substring(0, ++ix);
+    }
+    return URI.create(base);
+  }
+
 
 }

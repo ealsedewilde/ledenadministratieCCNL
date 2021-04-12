@@ -7,6 +7,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import lombok.Data;
 
 @Entity
@@ -35,6 +36,7 @@ public class InternalRelation implements AddressOwner {
   }
 
   @PrePersist
+  @PreUpdate
   public void prePersist() {
     setModificationDate(LocalDate.now());
   }

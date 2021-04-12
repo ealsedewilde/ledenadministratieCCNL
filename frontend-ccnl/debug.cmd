@@ -1,1 +1,0 @@
-java -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y -jar target/LedenadministratieCCNL.jar --spring.datasource.url=jdbc:h2:C:/Users/SKIKK/OneDrive/prive/CCNL_prive/ledenadministratie/data

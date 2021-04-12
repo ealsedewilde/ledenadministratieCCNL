@@ -16,7 +16,7 @@ public abstract class FXBase {
 
   protected AtomicBoolean runFX(Runnable runnable, final AtomicBoolean ar) {
     Platform.runLater(runnable);
-    Awaitility.await().atMost(Duration.ofSeconds(60)).untilAtomic(ar, equalTo(Boolean.TRUE));
+    Awaitility.await().atMost(Duration.ofSeconds(6000)).untilAtomic(ar, equalTo(Boolean.TRUE));
     return ar;
   }
 }

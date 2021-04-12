@@ -34,13 +34,11 @@ public class SettingsService {
   }
 
   public void save(Setting setting) {
-    setting.prePersist();
     dao.save(setting);
   }
 
   @Transactional
   public void save(Setting setting, String oldId) {
-    setting.prePersist();
     String newId = setting.getId();
     if (!newId.equals(oldId)) {
       Optional<Setting> old = dao.findById(oldId);

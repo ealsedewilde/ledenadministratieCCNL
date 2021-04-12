@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import lombok.Data;
 
 @Entity
@@ -44,6 +45,7 @@ public class Document {
   private LocalDate creationDate;
 
   @PrePersist
+  @PreUpdate
   public void prePersist() {
     creationDate = LocalDate.now();
   }

@@ -6,6 +6,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import lombok.Data;
 
 /**
@@ -32,6 +33,7 @@ public class DocumentTemplate {
   private LocalDate modificationDate = LocalDate.now();
 
   @PrePersist
+  @PreUpdate
   public void prePersist() {
     modificationDate = LocalDate.now();
   }

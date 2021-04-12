@@ -222,6 +222,10 @@ public class FOGenerator {
     StringJoiner sj = context.getStringJoiner();
     if (nameIx != -1) {
       if (nameIx > 0) {
+        if (context.isEmptyLine()) {
+          context.setEmptyLine(false);
+          sj.add(NEW_PARAGRAPH);
+        }
         sj.add(line.subSequence(0, nameIx));
         content.getContentSnippets().add(new StringSnippet(sj.toString()));
         content.getContentSnippets().add(new NameSnippet());
@@ -234,6 +238,10 @@ public class FOGenerator {
     int numberIx = line.indexOf(NUMBER.symbol());
     if (numberIx != -1) {
       if (numberIx > 0) {
+        if (context.isEmptyLine()) {
+          context.setEmptyLine(false);
+          sj.add(NEW_PARAGRAPH);
+        }
         sj.add(line.subSequence(0, numberIx));
         content.getContentSnippets().add(new StringSnippet(sj.toString()));
         content.getContentSnippets().add(new NumberSnippet());

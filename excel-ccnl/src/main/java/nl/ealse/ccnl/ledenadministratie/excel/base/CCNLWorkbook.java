@@ -5,12 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
-import nl.ealse.ccnl.ledenadministratie.excel.club.CCNLClubSheet;
-import nl.ealse.ccnl.ledenadministratie.excel.intern.CCNLInternSheet;
-import nl.ealse.ccnl.ledenadministratie.excel.lid.CCNLLidSheet;
-import nl.ealse.ccnl.ledenadministratie.excel.partner.CCNLPartnerSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -40,22 +37,16 @@ public class CCNLWorkbook implements AutoCloseable {
     return workbook;
   }
 
-  public CCNLSheet<? extends CCNLRow> getSheet(SheetDefinition sheet) {
+  public <T extends CCNLSheet<? extends CCNLRow>> T getSheet(SheetDefinition sheet, Class<T> type) {
     String sheetName = properties.getProperty(sheet.name().toLowerCase());
     Sheet excelSheet = workbook.getSheet(sheetName);
-    if (excelSheet == null) {
-      return null;
-    }
-    switch (sheet.getType()) {
-      case CLUB:
-        return new CCNLClubSheet(excelSheet, properties);
-      case INTERN:
-        return new CCNLInternSheet(excelSheet, properties);
-      case PARTNER:
-        return new CCNLPartnerSheet(excelSheet, properties);
-      case LID:
-      default:
-        return new CCNLLidSheet(excelSheet, properties);
+    try {
+      return type
+          .getConstructor(Sheet.class, CCNLColumnProperties.class)
+          .newInstance(excelSheet, properties);
+    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+        | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+      throw new CCNLRuntimeException(e);
     }
   }
 

@@ -27,6 +27,7 @@ public final class AddressMapping {
     if (helper.appendix != null) {
       address.setAddressNumberAppendix(helper.appendix);
     }
+
     return address;
   }
 
@@ -36,21 +37,22 @@ public final class AddressMapping {
     String appendix = null;
 
     void splitStreet(CCNLAdres adres) {
-      String[] parts = adres.getStraat().split("[\\s.]+");
+      String straat = adres.getStraat().trim();
+      String[] parts = straat.split("[\\s.]+");
       int px = 0;
       while (number.length() == 0 && px < parts.length) {
         extractNumber(parts[px++]);
       }
-      int ix = adres.getStraat().indexOf(number.toString());
+      int ix = straat.indexOf(number.toString());
       if (ix > 0) {
-        street = adres.getStraat().substring(0, ix);
+        street = straat.substring(0, ix);
         ix = ix + number.length();
-        int l = adres.getStraat().length();
+        int l = straat.length();
         if (l > ix) {
-          appendix = adres.getStraat().substring(ix);
+          appendix = straat.substring(ix);
         }
       } else {
-        street = adres.getStraat();
+        street = straat.substring(number.length()).trim();
       }
     }
 
@@ -62,7 +64,7 @@ public final class AddressMapping {
           }
         }
       }
-     }
+    }
 
 
   }
