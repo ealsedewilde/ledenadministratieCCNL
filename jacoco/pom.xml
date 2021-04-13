@@ -27,43 +27,36 @@
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>annual-ccnl</artifactId>
-      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>common-ccnl</artifactId>
-      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>excel-ccnl</artifactId>
-      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>output-ccnl</artifactId>
-      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>services-ccnl</artifactId>
-      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>javafx-springboot</artifactId>
-      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>frontend-ccnl</artifactId>
-      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

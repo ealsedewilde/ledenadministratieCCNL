@@ -49,12 +49,10 @@
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>services-ccnl</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>javafx-springboot</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->

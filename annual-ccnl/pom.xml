@@ -40,7 +40,6 @@
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>excel-ccnl</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-validator</groupId>

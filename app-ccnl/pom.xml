@@ -36,7 +36,6 @@
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>frontend-ccnl</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
