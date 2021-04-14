@@ -47,7 +47,7 @@ I've made it easy on myself and have just chosen an embedded H2-database. Embedd
 The most challenging issue was a way to backup and restore the database while the application kept running. Backup is done via `SCRIPT SIMPLE NOPASSWORDS DROP TO '%s' COMPRESSION ZIP`. The restore is executing all the native sql statements of the backup one by one.
 
 ## Startup 
-I initially have built this application as a single jar via the 'repackage' goal of the spring-boot-maven-plugin. (I changed that later on for a more efficient variant.)
+I initially have built this application as a single jar via the 'repackage' goal of the spring-boot-maven-plugin. (I changed that afterwards for a more efficient variant.)
 
 As said before the startup takes time, so the user needs to know that something is happening when starting the application. I have taken the easiest solution with a 'SplashScreen-Image' in the manifest of the application jar. 
 
@@ -78,7 +78,7 @@ When using forms data has to be mapped between the model (JPA entities) and the 
 My business layer is behind a number of Spring services. Some of these services provide batch functionality. Such a batch function only take a few seconds at most, so need for progress bars. However at the begin of a batch process I want to display a 'batch started message' and at the end a message of either 'successful' or 'error'. When I try to run the batch process in the FX-application thread then the start message is never shown. When I use Java-FX concurrency to asynchronously run the batch process in another thread then the start message is displayed. I use the Spring `TaskExecutor` to provide the threads for the asynchronous `javafx.concurrent.Task`. 
 
 ## A PDF-viewer
-My application needs a way to show multi page PDF's. To my surprise there no framework for that. It is suggested to use pdf.js of Firefox in the webclient. That worked in my IDE, but from within a jar the whole JVM crashes without any notion why. Also pdf.js is extremely slow. I then came across IcePDF. It consists of a core component that renders PDF-pages and a Swing viewer for it. I use a `org.icepdf.core.pobjects.Document` of the IcePDF core component to render a `java.awt.image.BufferedImage` per PDF-page.
+My application needs a way to show multi page PDF's. To my surprise there is no JavaFX framework for that. It is suggested to use pdf.js of Firefox in the webclient. That worked in my IDE, but from within a jar the whole JVM crashes without any notion why. Also pdf.js is extremely slow. I then came across IcePDF. It consists of a core component that renders PDF-pages and a Swing viewer for it. I use a `org.icepdf.core.pobjects.Document` of the IcePDF core component to render a `java.awt.image.BufferedImage` per PDF-page.
 With `SwingFXUtils.toFXImage(bufferedImage, null)` I convert it to a `javafx.scene.image.Image`. That image is than used in a simple PDFViewer that I wrote. This approach delivers fine looking PDF's with an excellent performance.
 
 ## Printing
