@@ -16,7 +16,7 @@ Aside of developing the application, I also wanted to look at an efficient deplo
 # Design
 ## Spring Boot
 I've designed quite some applications
-Over the years Spring Boot has been the natural starting point for structuring to an application. After checking some websites it turned out that combining Spring Boot and Java-FX is quite easy. My Class `SpringJavaFXBase` contains the extendable base structure to accomplish the integration of Spring Boot and Java-FX.
+Over the years Spring Boot has been the natural starting point for structuring an application. After checking some websites it turned out that combining Spring Boot and Java-FX is quite easy. My Class `SpringJavaFXBase` contains the extendable base structure to accomplish the integration of Spring Boot and Java-FX.
 
 ```
 @SpringBootApplication
@@ -39,11 +39,12 @@ public class MyJavaFXApplication extends SpringJavaFXBase {
 ```
 
 Spring Boot has one big disadvantage: the startup takes some time. Starting the application in my IDE took about 9 seconds.
-I've chosen for lazy `lazy-initialization`. This helps a few few seconds.
+I've chosen for lazy `lazy-initialization`. This helps gaining a few seconds.
 
 ## Database
 I've made it easy on myself and have just chosen an embedded H2-database. Embedding the database also has the disadvantage that startup takes time. I've chosen `BootstrapMode.LAZY` to reduce the time to initialize SpringBoot JPA. Starting the application in my IDE was reduced to about 5 seconds.
-The most challenging part was a way to backup and restore the database while the application kept running. Backup is done via `SCRIPT SIMPLE NOPASSWORDS DROP TO '%s' COMPRESSION ZIP`. The restore is executing all the native sql statements of the backup one by one.
+
+The most challenging issue was a way to backup and restore the database while the application kept running. Backup is done via `SCRIPT SIMPLE NOPASSWORDS DROP TO '%s' COMPRESSION ZIP`. The restore is executing all the native sql statements of the backup one by one.
 
 ## Startup 
 I initially have built this application as a single jar via the 'repackage' goal of the spring-boot-maven-plugin. (I changed that later on for a more efficient variant.)
@@ -53,7 +54,7 @@ As said before the startup takes time, so the user needs to know that something 
 ## FXML
 I've chosen for FXML because I had no experience of building screens. In such a situation the SceneBuilder is handy to roughly model the screens. I also had the idea that FXML somehow will give me a ModelViewController like solution. I now think that the View (FXML) is too closely coupled with the Java-FX controller to have a true MVC-paradigm. 
 
-I need a mechanism to control the flow between the dozens of fxml files. I have defined the `PageName` enum that point to the fxml file that it refers to. I noticed that loading fxml is a quite heavy task, so once loaded I cache the fxml; in the `FXMLNodeMap`. Caching means that the initialization of controllers only happens once. When reusing a screen it has to be reset explicitly. (I'm used to it, but I'm not sure if it is the best option. Later i came across the FxWeaver framework. I've looked at it, but found it not flexible enough to suit my needs, so I sticked to the mechanism I had.
+I need a mechanism to control the flow between the dozens of fxml files. I have defined the `PageName` enum that points to the fxml file that it refers to. I noticed that loading fxml is a quite heavy task, so once loaded I cache the fxml; in the `FXMLNodeMap`. Caching means that the initialization of controllers only happens once. When reusing a screen it has to be reset explicitly. (I'm used to it, but I'm not sure if it is the best option. Later i came across the FxWeaver framework. I've looked at it, but found it not flexible enough to suit my needs, so I sticked to the mechanism I had.
 
 ## Controlling the UI.
 Being able to identify an fxml pages via the PageName enum is a start, but not the whole story of controlling the UI.
