@@ -9,7 +9,7 @@
   <dependencySets>
     <dependencySet>
         <includes>
-            <include>nl.ealse.ccnl.leden:frontend-ccnl</include>
+            <include>nl.ealse.ccnl:frontend-ccnl</include>
         </includes>
         <outputDirectory>app</outputDirectory>
         <outputFileNameMapping>LedenadministratieApp.${artifact.extension}</outputFileNameMapping>
@@ -17,7 +17,7 @@
     </dependencySet>
     <dependencySet>
         <includes>
-            <include>nl.ealse.ccnl.leden:minimal-jre:zip</include>
+            <include>nl.ealse.ccnl:minimal-jre:zip</include>
         </includes>
         <unpack>true</unpack>
         <outputDirectory>runtime</outputDirectory>

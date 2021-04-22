@@ -66,13 +66,13 @@ It is the `MenuController` that handles menu choices. When applicable it sends i
 The MenuController then has to activate the applicable controller. This can be every controller in the application.
 I use eventing to decouple the MenuController from all other controllers. I use Spring's ApplicationContext.publishEvent(ApplicationEvent event) for this. 
 
-Eventing works as long as a controller is loaded. Since I have chosen lazy loading of Spring components this is a point of attention. When a controller is attached to a fxml then loading the fxml will instantiate the Spring Controller attached to it.
+Eventing works as long as the controller Spring component is loaded. Since I have chosen lazy loading of Spring components this is a point of attention. When a controller is attached to a fxml then loading the fxml will instantiate the Spring Controller attached to it.
 But there are also menu choices that just execute a command. Explicit Eager instantiation is needed otherwise it can't respond on an event. Autowiring can't be used in eager loaded controllers otherwise eager loading would cascade to other Spring components. So I use `applicationContext.getBean(Bean.class)` instead.
 
-The application uses forms that span multiple pages. All the pages of a form are linked to the same controller. This has the advantage that the form is controlled as a whole, but the disadvantage is that the initialization of the controller is per page.
+The application uses forms that span multiple pages. (Registering all properties for a new member is spread across four pages.) All the pages of a form are linked to the same controller. This has the advantage that the form is controlled as a whole, but the disadvantage is that the initialization of the controller is per page.
 
 ## MVC data mapping.
-When using forms data has to be mapped between the model (JPA entities) and the form (Java-FX controls in the controller). I've built a generic extensible framework that can do this mapping based on name equality of properties in both the model and the form. I rely on Java bean introspection to determine the mapping. The framework works quite well as long as the controller is structured carefully. (For example the controller will have a reference to the model. If the bean introspection picks the model reference as part of the form, then it will try to map the model to the model and the data mapping will fail. Carefully defining getters and setter in combination with the use of the `@Mapping` annotation should be used.)
+When using forms data has to be mapped between the model (JPA entities) and the form (Java-FX controls in the controller). I've built a generic extensible framework that can do this mapping based on name equality of properties in both the model and the form; see the `DataMapper` class. I rely on Java bean introspection to determine the mapping. The DataMapper framework works quite well as long as the controller is structured carefully. (For example the controller will have a reference to the model. If the bean introspection picks the model reference as part of the form, then it will try to map the model to the model and the data mapping will fail. Carefully defining getters and setter in combination with the use of the `@Mapping` annotation should be used.)
 
 ## Java-FX concurrency
 My business layer is behind a number of Spring services. Some of these services provide batch functionality. Such a batch function only take a few seconds at most, so need for progress bars. However at the begin of a batch process I want to display a 'batch started message' and at the end a message of either 'successful' or 'error'. When I try to run the batch process in the FX-application thread then the start message is never shown. When I use Java-FX concurrency to asynchronously run the batch process in another thread then the start message is displayed. I use the Spring `TaskExecutor` to provide the threads for the asynchronous `javafx.concurrent.Task`. 
@@ -86,15 +86,15 @@ JavaFx has a way of printing Nodes. I've tried it for the PDF's an the result wa
 
 ## Business Layer
 For me the business layer is not very special. It uses techniques that a backend Java developer is familiar with. But still it has points that were fun building:
-- Generating a Direct Debit file for the bank for he yearly membership fee; (partly reusing older code)
+- Generating a Direct Debit file for the bank for the yearly membership fee; (partly reusing older code)
 - Playing with Excel in a structured way; (partly reusing older code)
 - Matching payments in a bank statement with a specific member. With the more restrictive AVG privacy regulations it is harder than before because the address of the person that made the payment is no longer supplied. 
 - Generating PDF-documents based on templates. 
 
 ## Unit testing Java-FX
-Java-fx requires the launch of the toolset and a special FX-application thread to run its functionality. That can easily conflict with the way the maven-surefire-plugin uses forking for its tests. I have looked at TestFX , but I haven't used it.
-Initially I had serious performance problems running my Java-FX unit tests. Then I set the forkCount of the maven-sure-fire plugin to 1 and I load Java-FX only once for all my tests. My test run asynchronously in a `Platform.runLater(runnable)`.
-I use `Awaitility` so the thread of the maven-surefire-plugin will wait for the Java-FX runnable to finish. Well what can I say? It works and has a good performance.
+Java-fx requires the launch of the toolset and a special FX-application thread to run its functionality. That can easily conflict with the way the maven-surefire-plugin uses forking for its tests. 
+Initially I had serious performance problems running my Java-FX unit tests. Then I set the forkCount of the maven-sure-fire plugin to 1 and I load the Java-FX toolset only once for all my tests. My test run asynchronously in a `Platform.runLater(runnable)`.
+I use `Awaitility` so the thread of the maven-surefire-plugin will wait for the Java-FX runnable to finish. Well what can I say? It works and has a good performance. I have looked at TestFX , but I haven't used it because I think it doesn't add much to my unit tests.
 
 # What about Java modularity?
 The classpath of application consists of about 100 jars. Some are modules, some have a `Automatic-Module-Name` in their manifest and some are just pre JPMS jars.
