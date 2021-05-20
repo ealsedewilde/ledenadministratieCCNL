@@ -19,19 +19,6 @@ import org.springframework.core.io.ClassPathResource;
 public class CustomResourceResolver implements ResourceResolver {
 
   /**
-   * Classpath either on file system or with a jar.
-   */
-  private final String classpathBase;
-
-  /**
-   * 
-   * @param baseUri = locations of 'fop.xconf' file
-   */
-  public CustomResourceResolver(URI baseUri) {
-    classpathBase = baseUri.toString();
-  }
-
-  /**
    * Resolve the resource for the URI. The resource can be somewhere on the file system or on the
    * classpath in a jar.
    */
@@ -41,10 +28,8 @@ public class CustomResourceResolver implements ResourceResolver {
       Path resourcePath = Paths.get(uri);
       return new Resource(Files.newInputStream(resourcePath));
     } else {
-      // resource is on the (BOOT-INF) classpath in a jar.
-      String path = classpathBase + uri.toString();
-      ClassPathResource resource = new ClassPathResource(path);
-      return new Resource(resource.getInputStream());
+      ClassPathResource resourcex = new ClassPathResource(uri.toString());
+      return new Resource(resourcex.getInputStream());
     }
   }
 

@@ -30,12 +30,13 @@ public class FopFactoryProvider {
   static {
     // The resource is on the classpath of the output-ccnl module
     Resource fopConf = new ClassPathResource("fop.xconf");
+    log.info("FOP conf found: " + fopConf.exists());
     
     try {
       URI basUri = getBaseUri(fopConf.getURI());
       log.info(fopConf.getURI().toString());
       FopFactoryBuilder factoryBuilder =
-          new FopFactoryBuilder(basUri, new CustomResourceResolver(basUri));
+          new FopFactoryBuilder(basUri, new CustomResourceResolver());
       DefaultConfigurationBuilder cfgBuilder = new DefaultConfigurationBuilder();
       Configuration cfg = cfgBuilder.build(fopConf.getInputStream());
       fopFactory = factoryBuilder.setConfiguration(cfg).build();

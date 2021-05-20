@@ -18,6 +18,7 @@ public class LidnummerBepaling {
     filters.add(new AdresStrategie(members));
     filters.add(new IbanStrategie(members));
     filters.add(new NummerStrategie());
+    filters.add(new MemberStrategie(members));
   }
 
   public void bepaalLidnummer(IngBooking booking) {

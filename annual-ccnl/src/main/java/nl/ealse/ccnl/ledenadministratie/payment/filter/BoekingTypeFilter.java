@@ -10,6 +10,7 @@ public class BoekingTypeFilter implements Filter {
     BookingType type = booking.getTypebooking();
     switch (type) {
       case ICDT:
+      case IRCT:
       case RCDT:
       case RRCT:
       case IDDT:

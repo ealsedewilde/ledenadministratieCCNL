@@ -106,7 +106,7 @@ public class NaamStrategie extends BetalingStrategie {
 
   /**
    * Op hoeveel letters is er een overeenkomst? 
-   * Omdat e naam ook voorvoegsel kan bevatten, wordt er
+   * Omdat de naam ook voorvoegsel kan bevatten, wordt er
    * van achter naar voren gewerkt.
    * 
    * @param naam

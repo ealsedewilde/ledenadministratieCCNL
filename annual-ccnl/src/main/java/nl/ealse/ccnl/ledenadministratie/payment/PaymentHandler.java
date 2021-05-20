@@ -47,7 +47,7 @@ public class PaymentHandler {
       if (filterChain.filter(booking)) {
         bookingList.add(booking);
       } else {
-        String msg = "Geen lidnummer te bepalen voor " + booking.getNaam();
+        String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", booking.getNaam(), booking.getOmschrijving());
         log.warn(msg);
         rc.getMessages().add(msg);
       }
@@ -66,7 +66,7 @@ public class PaymentHandler {
     bookingList.forEach(booking -> {
       MemberContext mc = rc.getMemberContext(booking.getLidnummer());
       BigDecimal amount = BigDecimal.valueOf(booking.getBedrag());
-      Transaction t = new Transaction(amount, booking.getBoekdatum(), getPaymentInfo(booking));
+      Transaction t = new Transaction(amount, booking.getBoekdatum(), booking.getTypebooking() ,getPaymentInfo(booking));
       mc.getTransactions().add(t);
     });
 

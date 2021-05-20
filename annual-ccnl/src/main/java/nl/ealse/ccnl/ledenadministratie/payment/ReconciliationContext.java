@@ -4,18 +4,21 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.TreeSet;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 
 @Getter
+@Slf4j
 public class ReconciliationContext {
 
   private final Map<Integer, MemberContext> contexts = new HashMap<>();
@@ -24,13 +27,14 @@ public class ReconciliationContext {
   private ReconciliationContext(List<Member> members, IncassoProperties incassoProperties,
       boolean includeDD) {
     Transaction t = new Transaction(incassoProperties.getIncassoBedrag(),
-        incassoProperties.getIncassoDatum(), incassoProperties.getIncassoReden());
+        incassoProperties.getIncassoDatum(), BookingType.RDDT, incassoProperties.getIncassoReden());
     members.forEach(m -> {
       MemberContext mc = new MemberContext(m.getMemberNumber());
       if (m.getPaymentMethod() == PaymentMethod.DIRECT_DEBIT && includeDD) {
         if (m.getPaymentDate() == null) {
-          messages.add("Er is geen incasso uitgevoerd voor lid " + m.getMemberNumber());
+          log.debug("Er is geen incasso uitgevoerd voor lid " + m.getMemberNumber());
         } else if (m.getPaymentDate().equals(incassoProperties.getIncassoDatum())) {
+          mc.setDirectDebit(incassoProperties.getIncassoDatum());
           mc.getTransactions().add(t);
         }
       }
@@ -56,8 +60,10 @@ public class ReconciliationContext {
   public static class MemberContext {
 
     private final int number;
-    private final Set<Transaction> transactions = new HashSet<>();
+    private final Set<Transaction> transactions = new TreeSet<>();
     private final boolean inactief;
+    @Setter
+    private LocalDate directDebit;
 
     private MemberContext(int number) {
       this.number = number;
@@ -78,6 +84,9 @@ public class ReconciliationContext {
     }
 
     public LocalDate getPaymentDate() {
+      if (directDebit != null) {
+        return directDebit;
+      }
       LocalDate pd = null;
       for (Transaction t : transactions) {
         if (pd == null || t.getTransactionDate().isAfter(pd)) {
@@ -102,7 +111,7 @@ public class ReconciliationContext {
     public String toString() {
       StringJoiner sj = new StringJoiner("\n");
       for (Transaction t : transactions) {
-        sj.add(t.getDescription());
+        sj.add(String.format("%s: %s", t.getBookingType().getOmschrijving(), t.getDescription()));
       }
       return sj.toString();
     }
@@ -110,10 +119,29 @@ public class ReconciliationContext {
   }
 
   @Data
-  public static class Transaction {
+  public static class Transaction implements Comparable<Transaction> {
+    private static final BookingType[] BTM = {BookingType.RDDT, BookingType.IDDT, BookingType.RCDT, BookingType.RDDT, BookingType.IRCT};
     private final BigDecimal amount;
     private final LocalDate transactionDate;
+    private final BookingType bookingType;
     private final String description;
+
+    @Override
+    public int compareTo(Transaction o) {
+      int r = this.transactionDate.compareTo(o.transactionDate);
+      if (r == 0) {
+        int bt1 = 0;
+        int bt2 = 0;
+        while (bt1 < BTM.length && BTM[bt1] != this.bookingType) {
+          bt1++;
+        }
+        while (bt2 < BTM.length && BTM[bt2] != o.bookingType) {
+          bt2++;
+        }
+        return bt1 - bt2;
+      }
+      return r;
+    }
   }
 
 }

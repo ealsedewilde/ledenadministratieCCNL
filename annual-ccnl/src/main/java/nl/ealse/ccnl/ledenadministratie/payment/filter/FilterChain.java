@@ -14,7 +14,6 @@ public final class FilterChain {
     this.peildatumFilter = new PeildatumFilter(referenceDate);
     filters.add(new BoekingTypeFilter());
     filters.add(new BedragFilter());
-    filters.add(new OmschrijvingFilter());
     filters.add(new LidnummerFilter(members));
   }
 
