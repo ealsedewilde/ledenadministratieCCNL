@@ -123,7 +123,15 @@ So now I have a minimal JRE and an executable application jar. How to ship this?
 I've installed WIX-tools on my PC and tried JPACKAGE. It generates an exe which is able to install my application in the Program Files.
 However I want to be able to configure the location of the embedded database before the first start of the application. I'm unable to get that done via JPACKAGE. (I'm sure it is feasible, but I could not find out how.)
 
-The alternative is to produce a zip-file. That is what I've done via the maven-assembly-plugin. I want to start my application as an EXE, but I still have to found out how. (I've tried BatToExe. That worked initially, but suddenly my virusscanner doesn't accept it anymore.)
+The alternative is to produce a zip-file. That is what I've done via the maven-assembly-plugin. 
+
+I want to start my application as an EXE. I used Launch4J to create such a single instance EXE without wrapping the jar and with a relative path to the minimal JRE.
+
+This assembled ZIP will contain:
+- the application jar 
+- the minimal JRE
+- The EXE created via Launch4J
+- `db.properties` file with the configurable database location
 
 
 
