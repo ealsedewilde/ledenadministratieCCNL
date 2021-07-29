@@ -38,6 +38,7 @@
                 <addModule>java.xml</addModule>
                 <addModule>jdk.unsupported</addModule>
                 <addModule>jdk.xml.dom</addModule>
+                <addModule>jdk.charsets</addModule>
               </addModules>
               <compress>2</compress>
               <noHeaderFiles>true</noHeaderFiles>
