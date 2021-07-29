@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -24,6 +25,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Slf4j
 public class ExcelImportController implements ApplicationListener<MenuChoiceEvent> {
 
   @Value("${ccnl.directory.excel:c:/temp}")
@@ -131,7 +133,10 @@ public class ExcelImportController implements ApplicationListener<MenuChoiceEven
     pageController.showPermanentMessage("Import wordt uitgevoerd; even geduld a.u.b.");
     AsyncTask asyncTask = new AsyncTask(importService, selection, selectedFile);
     asyncTask.setOnSucceeded(t -> pageController.showMessage("Import succesvol uitgevoerd"));
-    asyncTask.setOnFailed(t -> pageController.showErrorMessage("Import niet succesvol"));
+    asyncTask.setOnFailed(t -> {
+      log.error("Import niet succesvol", t.getSource().getException());
+      pageController.showErrorMessage("Import niet succesvol");
+    });
     executor.execute(asyncTask);
   }
 

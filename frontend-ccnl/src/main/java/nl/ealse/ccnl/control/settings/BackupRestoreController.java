@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.concurrent.Task;
+import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @Lazy(false) // Because no FXML
+@Slf4j
 public class BackupRestoreController implements ApplicationListener<MenuChoiceEvent> {
 
   private static final DateTimeFormatter formatter =
@@ -66,7 +68,10 @@ public class BackupRestoreController implements ApplicationListener<MenuChoiceEv
       pageController.showPermanentMessage("Backup wordt aangemaakt; even geduld a.u.b.");
       AsyncTask asyncTask = new AsyncTask(backupFile, service, true);
       asyncTask.setOnSucceeded(t -> pageController.showMessage("Backup is aangemaakt"));
-      asyncTask.setOnFailed(t -> pageController.showErrorMessage("Aanmaken backup is mislukt"));
+      asyncTask.setOnFailed(t -> {
+        log.error(t.getSource().getException().getMessage());
+        pageController.showErrorMessage("Aanmaken backup is mislukt");
+      });
       executor.execute(asyncTask);
     }
   }
@@ -81,8 +86,10 @@ public class BackupRestoreController implements ApplicationListener<MenuChoiceEv
       pageController.showPermanentMessage("Backup wordt teruggezet; even geduld a.u.b.");
       AsyncTask asyncTask = new AsyncTask(backupFile, service, false);
       asyncTask.setOnSucceeded(t -> pageController.showMessage("Backup is teruggezet"));
-      asyncTask
-          .setOnFailed(t -> pageController.showErrorMessage("Terugzetten backup is mislukt"));
+      asyncTask.setOnFailed(t -> {
+        log.error(t.getSource().getException().getMessage());
+        pageController.showErrorMessage("Terugzetten backup is mislukt");
+      });
       executor.execute(asyncTask);
     }
   }

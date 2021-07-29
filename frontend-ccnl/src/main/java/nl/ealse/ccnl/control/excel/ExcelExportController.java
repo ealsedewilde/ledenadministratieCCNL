@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import javafx.concurrent.Task;
+import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @Lazy(false) // Because no FXML
+@Slf4j
 public class ExcelExportController implements ApplicationListener<MenuChoiceEvent> {
 
   @Value("${ccnl.directory.excel:c:/temp}")
@@ -78,16 +80,20 @@ public class ExcelExportController implements ApplicationListener<MenuChoiceEven
         AsyncArchiveTask asyncArchiveTask = new AsyncArchiveTask(archiveService, exportFile);
         asyncArchiveTask
             .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-        asyncArchiveTask.setOnFailed(
-            t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+        asyncArchiveTask.setOnFailed(t -> {
+          log.error(t.getSource().getException().getMessage());
+          pageController.showErrorMessage("Schrijven MS Excel-werkblad is mislukt");
+        });
         executor.execute(asyncArchiveTask);
       } else {
         AsyncExportTask asyncExportTask =
             new AsyncExportTask(event.getMenuChoice(), service, exportFile);
         asyncExportTask
             .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-        asyncExportTask.setOnFailed(
-            t -> pageController.showErrorMessage("Schrijven MS Excel-werkblad is mislukt"));
+        asyncExportTask.setOnFailed(t -> {
+          log.error(t.getSource().getException().getMessage());
+          pageController.showErrorMessage("Schrijven MS Excel-werkblad is mislukt");
+        });
         executor.execute(asyncExportTask);
       }
     }
