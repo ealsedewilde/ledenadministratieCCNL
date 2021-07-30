@@ -1,9 +1,8 @@
-package nl.ealse.ccnl.service.excelimport;
+package nl.ealse.ccnl.ledenadministratie.excelimport;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLAdres;
-import nl.ealse.ccnl.ledenadministratie.excelimport.AddressMapping;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -43,6 +42,15 @@ class AddressMappingTest {
     Address result = AddressMapping.mapAddress(ad);
     Assertions.assertEquals("Dorpsstraat O.", result.getAddress());
     Assertions.assertEquals("A", result.getAddressNumberAppendix());
+  }
+  
+  @Test
+  void testMapping5() {
+    CCNLAdres ad = mock( CCNLAdres.class);
+    when(ad.getStraat()).thenReturn("3e Dorpsstraat 9 2H");
+    Address result = AddressMapping.mapAddress(ad);
+    Assertions.assertEquals("3e Dorpsstraat", result.getAddress());
+    Assertions.assertEquals(" 2H", result.getAddressNumberAppendix());
   }
 
 }
