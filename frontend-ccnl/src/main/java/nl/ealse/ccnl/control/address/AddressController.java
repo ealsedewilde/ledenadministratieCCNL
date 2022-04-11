@@ -17,7 +17,7 @@ public class AddressController extends AddressView {
 
   @FXML
   @Mapping(ignore = true)
-  private Label addressE;
+  private Label streetE;
 
   @FXML
   @Mapping(ignore = true)
@@ -44,7 +44,7 @@ public class AddressController extends AddressView {
    */
   public void enrich() {
 
-    ContentUpdate.firstCapital(getAddress());
+    ContentUpdate.firstCapital(getStreet());
     ContentUpdate.firstCapital(getCity());
 
    String country = getCountry().getText();

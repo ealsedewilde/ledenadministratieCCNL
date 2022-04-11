@@ -1,12 +1,12 @@
 .heading {
 	-fx-padding: 0.0 0.0 0.0 20.0;
-	-fx-font-size: 40.0px;
+	-fx-font-size: 4em;
 }
 .header {
-	-fx-font-size: 30.0px;
+	-fx-font-size: 2.5em;
 }
 .subHeader {
-	-fx-font-size: 20.0px;
+	-fx-font-size: 1.5em;
 }
 .menuItem {
 	-fx-padding: 10.0;
@@ -25,13 +25,13 @@
 
 .info {
 	-fx-text-fill: green;
-	-fx-font-size: 30;
+	-fx-font-size: 2em;
 	-fx-font-weight: bold;
 }
 
 .error {
 	-fx-text-fill: red;
-	-fx-font-size: 30;
+	-fx-font-size: 2em;
 	-fx-font-weight: bold;
 }
 
@@ -43,7 +43,7 @@
 
 .tableHeading {
 	-fx-font-weight: bold;
-	-fx-font-size: 20.0px;
+	-fx-font-size: 1.5em;
 	-fx-underline: true;
 }
 

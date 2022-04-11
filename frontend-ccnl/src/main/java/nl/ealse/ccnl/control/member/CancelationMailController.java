@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentTemplateController;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -19,13 +18,12 @@ import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.MailService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class CancelationMailController extends DocumentTemplateController
-    implements ApplicationListener<MemberSeLectionEvent> {
+public class CancelationMailController extends DocumentTemplateController {
 
   private final PageController pageController;
 
@@ -71,16 +69,14 @@ public class CancelationMailController extends DocumentTemplateController
     validation.setCallback(valid -> sendButton.setDisable(!valid));
   }
 
-  @Override
+  @EventListener(condition = "#event.name('CANCEL_MEMBERSHIP')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
-    if (MenuChoice.CANCEL_MEMBERSHIP == event.getMenuChoice()) {
-      selectedMember = event.getSelectedEntity();
-      toMailAddress.setText(selectedMember.getEmail());
-      saveMailAddress.setSelected(false);
-      validation.validate();
+    selectedMember = event.getSelectedEntity();
+    toMailAddress.setText(selectedMember.getEmail());
+    saveMailAddress.setSelected(false);
+    validation.validate();
 
-      initializeTemplates();
-    }
+    initializeTemplates();
   }
 
   @FXML

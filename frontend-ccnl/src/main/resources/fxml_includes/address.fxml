@@ -27,8 +27,8 @@
     </children>
   </HBox>
   <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
-    <TextField fx:id="address" minWidth="450" />
-    <Label fx:id="addressE" styleClass="required" visible="false" />
+    <TextField fx:id="street" minWidth="450" />
+    <Label fx:id="streetE" styleClass="required" visible="false" />
   </HBox>
 
   <HBox GridPane.columnIndex="0" GridPane.rowIndex="3">

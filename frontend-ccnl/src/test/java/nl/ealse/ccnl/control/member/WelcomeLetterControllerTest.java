@@ -77,7 +77,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest<WelcomeLetterController> 
       m.setInitials("Pietje");
       m.setLastName("Puk");
       Address a = m.getAddress();
-      a.setAddress("Straat");
+      a.setStreet("Straat");
       a.setAddressNumber("1");
       a.setPostalCode("1234 AA");
       a.setCity("Plaats");

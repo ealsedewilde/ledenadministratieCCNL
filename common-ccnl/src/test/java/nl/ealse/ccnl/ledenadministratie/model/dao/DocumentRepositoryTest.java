@@ -10,6 +10,7 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
+import nl.ealse.ccnl.ledenadministratie.test.JpaTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ class DocumentRepositoryTest extends JpaTestBase {
   private Member initializedModel() {
     Member member = new Member();
     Address address = new Address();
-    address.setAddress("Ida Hoeve");
+    address.setStreet("Ida Hoeve");
     address.setAddressNumber("16");
     address.setPostalCode("2804 TV");
     address.setCity("Gouda");

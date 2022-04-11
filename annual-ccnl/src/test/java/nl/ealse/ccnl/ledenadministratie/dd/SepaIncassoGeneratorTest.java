@@ -62,7 +62,7 @@ class SepaIncassoGeneratorTest {
     Member m = new Member();
     m.setMemberNumber(1234);
     Address a = m.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setPostalCode("1234 AA");
     a.setCity("Ons Dorp");

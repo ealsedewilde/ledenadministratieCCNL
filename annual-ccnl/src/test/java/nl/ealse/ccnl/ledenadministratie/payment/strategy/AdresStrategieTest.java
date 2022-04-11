@@ -18,7 +18,7 @@ class AdresStrategieTest extends FilterTestBase {
     m.setMemberNumber(1000);
     m.setLastName("Test1");
     m.getAddress().setPostalCode("1234 AA");
-    m.getAddress().setAddress("Straat");
+    m.getAddress().setStreet("Straat");
     members.add(m);
 
     Iterator<IngBooking> itr = init();

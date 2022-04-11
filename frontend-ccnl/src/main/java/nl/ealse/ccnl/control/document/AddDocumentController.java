@@ -11,7 +11,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -22,12 +21,12 @@ import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
 @Controller
-public class AddDocumentController implements ApplicationListener<MemberSeLectionEvent> {
+public class AddDocumentController {
 
   @Value("${ccnl.directory.sepa:c:/temp}")
   private String sepaDirectory;
@@ -65,21 +64,17 @@ public class AddDocumentController implements ApplicationListener<MemberSeLectio
     this.documentService = documentService;
   }
 
-  @Override
-  public void onApplicationEvent(MemberSeLectionEvent event) {
-    if (event.getMenuChoice() == MenuChoice.ADD_DOCUMENT) {
-      this.selectedMember = event.getSelectedEntity();
-      memberNumber
-          .setText("Document voor lidnummer: " + selectedMember.getMemberNumber().toString());
-      memberName.setText(selectedMember.getFullName());
-      documentType.getSelectionModel().select(DocumentType.values().length - 2);
-      documentDescription.setText(null);
-      selectedFile = null;
-      saveButton.setDisable(true);
-      pageController.setActivePage(PageName.ADD_DOCUMENT);
-      fileName.setText(null);
-    }
-
+  @EventListener(condition = "#event.name('ADD_DOCUMENT')")
+  public void addDocument(MemberSeLectionEvent event) {
+    this.selectedMember = event.getSelectedEntity();
+    memberNumber.setText("Document voor lidnummer: " + selectedMember.getMemberNumber().toString());
+    memberName.setText(selectedMember.getFullName());
+    documentType.getSelectionModel().select(DocumentType.values().length - 2);
+    documentDescription.setText(null);
+    selectedFile = null;
+    saveButton.setDisable(true);
+    pageController.setActivePage(PageName.ADD_DOCUMENT);
+    fileName.setText(null);
   }
 
   @FXML

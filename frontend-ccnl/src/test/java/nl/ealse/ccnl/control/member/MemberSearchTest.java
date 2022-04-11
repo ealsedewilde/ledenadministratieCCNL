@@ -48,7 +48,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
     AtomicBoolean result = runFX(() -> {
       prepare();
       MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.AMEND_MEMBER);
-      sut.onApplicationEvent(event);
+      sut.searchMember(event);
 
       sut.doSearch(si, sv);
       verify(service).searchMember(si, sv);

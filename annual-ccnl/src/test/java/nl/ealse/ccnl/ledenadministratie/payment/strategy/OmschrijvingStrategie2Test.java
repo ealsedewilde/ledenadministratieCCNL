@@ -3,6 +3,8 @@ package nl.ealse.ccnl.ledenadministratie.payment.strategy;
 import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.w3c.dom.Element;
 
 class OmschrijvingStrategie2Test {
   
@@ -19,7 +21,7 @@ class OmschrijvingStrategie2Test {
   private static class TestBooking extends IngBooking {
 
     public TestBooking() {
-      super(null);
+      super(Mockito.mock(Element.class));
     }
     
     @Override

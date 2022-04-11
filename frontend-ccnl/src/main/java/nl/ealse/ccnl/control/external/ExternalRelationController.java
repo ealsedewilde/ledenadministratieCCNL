@@ -13,7 +13,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.view.ExternalRelationView;
-import nl.ealse.javafx.mapping.DataMapper;
+import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.mapping.Mapping;
 
 public abstract class ExternalRelationController<T extends ExternalRelation>
@@ -66,8 +66,8 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
     if (selectedExternalRelation.getRelationNumber() == null) {
       selectedExternalRelation.setRelationNumber(externalRelationService.getFreeNumber());
     }
-    DataMapper.modelToForm(this, selectedExternalRelation);
-    DataMapper.formToModel(this, model);
+    ViewModel.modelToView(this, selectedExternalRelation);
+    ViewModel.viewToModel(this, model);
     addressController.getHeaderText().setText(getHeaderText());
     externalRelationValidation.initialize();
     saveButtonList
@@ -79,7 +79,7 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
   public void save() {
     enrich();
     addressController.enrich();
-    DataMapper.formToModel(this, model);
+    ViewModel.viewToModel(this, model);
     externalRelationService.persistExternalRelation(model);
     pageController.showMessage(getSaveText());
     pageController.setActivePage(PageName.LOGO);

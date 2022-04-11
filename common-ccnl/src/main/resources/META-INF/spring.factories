@@ -1,0 +1,1 @@
+org.springframework.boot.env.EnvironmentPostProcessor=nl.ealse.ccnl.ledenadministratie.config.DatabasePropertySourceProcessor

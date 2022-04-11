@@ -12,9 +12,8 @@ public enum PageName {
 
   MEMBER_SEARCH("member/memberSearch"),
 
-  WELCOME_TEXT_HELP("dialog/texthelp"), REMINDER_TEXT_HELP("dialog/texthelp"), MAIL_HELP(
-      "dialog/mailhelp"), MANAGE_TEMPLATE_TEXT_HELP(
-          "dialog/texthelp"), MANAGE_MAIL_HELP("dialog/mailhelp"),
+  WELCOME_TEXT_HELP(), REMINDER_TEXT_HELP(), MANAGE_TEMPLATE_TEXT_HELP(), 
+  MAIL_HELP("dialog/mailhelp"), MANAGE_MAIL_HELP("dialog/mailhelp"),
 
   SEPA_AUTHORIZATION_ADD("document/sepaAuthorizationAdd"), SEPA_AUTHORIZATION_SHOW(
       "document/sepaAuthorizationShow"), WELCOME_LETTER(
@@ -64,6 +63,10 @@ public enum PageName {
 
   @Getter
   private final PageId id;
+
+  PageName() {
+    this.id = new PageId(this.name(), "dialog/texthelp");
+  }
 
   PageName(String fxmlName) {
     this.id = new PageId(this.name(), fxmlName);

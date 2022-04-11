@@ -48,7 +48,7 @@ class AdresbestandTest {
     Member m = new Member();
     m.setMemberNumber(1234);
     Address a = m.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setPostalCode("1234 AA");
     a.setCity("Ons Dorp");
@@ -61,7 +61,7 @@ class AdresbestandTest {
   private ExternalRelationClub club() {
     ExternalRelationClub r = new ExternalRelationClub();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setPostalCode("1234 AA");
     a.setCity("Ons Dorp");
@@ -78,7 +78,7 @@ class AdresbestandTest {
   private ExternalRelation relation() {
     ExternalRelation r = new ExternalRelation();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setPostalCode("1234 AA");
     a.setCity("Ons Dorp");
@@ -95,7 +95,7 @@ class AdresbestandTest {
   private InternalRelation functie() {
     InternalRelation r = new InternalRelation();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setPostalCode("1234 AA");
     a.setCity("Ons Dorp");

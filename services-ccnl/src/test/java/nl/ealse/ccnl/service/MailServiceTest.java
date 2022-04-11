@@ -17,7 +17,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 @ExtendWith(MockitoExtension.class)
 class MailServiceTest {
-  
+
   @Mock
   private JavaMailSender emailSender;
 
@@ -37,10 +37,14 @@ class MailServiceTest {
   void testSaveMail() {
     Member m = new Member();
     m.setMemberNumber(1234);
-    sut.saveMail(m, mailMessage());
+    try {
+      sut.saveMail(m, mailMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     verify(documentService).saveDocument(any(Document.class));
   }
-  
+
   private SimpleMailMessage mailMessage() {
     SimpleMailMessage message = new SimpleMailMessage();
     message.setFrom("info@test.nl");
@@ -48,10 +52,10 @@ class MailServiceTest {
     message.setSubject("Test mail");
     message.setText("The content");
     return message;
-    
-    
+
+
   }
-  
+
   @BeforeEach
   void setup() {
     try {

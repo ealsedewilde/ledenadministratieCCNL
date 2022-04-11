@@ -40,9 +40,6 @@ public class CCNLWorkbook implements AutoCloseable {
   public <T extends CCNLSheet<? extends CCNLRow>> T getSheet(SheetDefinition sheet, Class<T> type) {
     String sheetName = properties.getProperty(sheet.name().toLowerCase());
     Sheet excelSheet = workbook.getSheet(sheetName);
-    if (excelSheet == null) {
-      log.warn(String.format("Geen Excel sheet met naam '%s' gevonden", sheetName));
-    }
     try {
       return type
           .getConstructor(Sheet.class, CCNLColumnProperties.class)

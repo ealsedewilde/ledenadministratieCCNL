@@ -49,7 +49,6 @@ public class ExportArchiveService {
         }
         targetFile.addMember(member);
       }
-      targetFile.close();
     }
   }
 

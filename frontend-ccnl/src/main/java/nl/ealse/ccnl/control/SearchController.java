@@ -1,9 +1,11 @@
 package nl.ealse.ccnl.control;
 
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
 import lombok.Getter;
@@ -12,8 +14,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * Super class for all controllers for searching a relation in the database.
@@ -22,12 +23,12 @@ import org.springframework.context.ApplicationListener;
  * @param <T> - relation type to search
  * @param <E> - event for the selected relation
  */
-public abstract class SearchController<T, E extends EntitySelectionEvent<T>>
-    implements ApplicationListener<MenuChoiceEvent> {
+public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
 
-  private final ApplicationContext springContext;
+  private final ApplicationEventPublisher eventPublisher;
 
-  private final List<MenuChoice> validChoices;
+  @Getter
+  private final Map<String, SearchItem> searchItemValues = new LinkedHashMap<>();
 
   @Getter
   @Setter
@@ -39,9 +40,8 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>>
   @FXML
   private SearchPane<T, E> searchPane;
 
-  protected SearchController(ApplicationContext springContext, MenuChoice... choices) {
-    this.springContext = springContext;
-    this.validChoices = Arrays.asList(choices);
+  protected SearchController(ApplicationEventPublisher eventPublisher) {
+    this.eventPublisher = eventPublisher;
   }
 
   @FXML
@@ -59,16 +59,14 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>>
 
   /**
    * Re-initialize the SearchPane.
-   * @param event fired due to a menu choice 
+   * 
+   * @param event fired due to a menu choice
    */
-  @Override
-  public void onApplicationEvent(MenuChoiceEvent event) {
-    if (validChoices.contains(event.getMenuChoice())) {
-      this.currentMenuChoice = event.getMenuChoice();
-      if (this.searchPane != null) {
-        searchPane.updateHeaderText(currentMenuChoice);
-        searchPane.reset();
-      }
+  protected void prepareSearch(MenuChoiceEvent event) {
+    this.currentMenuChoice = event.getMenuChoice();
+    if (this.searchPane != null) {
+      searchPane.updateHeaderText(currentMenuChoice);
+      searchPane.reset();
     }
   }
 
@@ -81,9 +79,17 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>>
    */
   public abstract List<T> doSearch(SearchItem searchItem, String value);
 
-  public abstract Map<String, SearchItem> searchItemValues();
-
-  public abstract void extraInfo(MouseEvent event);
+  /**
+   * Invoked when question mark column is clicked. (Invoked after selectedMember is set.)
+   * 
+   * @param event fire when a question mark cell in the <code>TableView</code> is clicked
+   */
+  public void extraInfo(MouseEvent event) {
+    event.consume(); // stop further propagation to handleSelected()
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("Extra Info");
+    alert.showAndWait();
+  }
 
   public abstract E newEntitySelectionEvent(MenuChoice currentMenuChoice);
 
@@ -95,14 +101,14 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>>
    */
   public void handleSelected(MouseEvent event) {
     if (event != null) {
-      // event is null when only one search result.
+      // event is null when only one search result is found.
       // In that case selectedEntity is previously injected via setter
       // See: SearchPane
       @SuppressWarnings("unchecked")
       TableRow<T> row = (TableRow<T>) event.getSource();
       selectedEntity = row.getItem();
     }
-    springContext.publishEvent(newEntitySelectionEvent(currentMenuChoice));
+    eventPublisher.publishEvent(newEntitySelectionEvent(currentMenuChoice));
   }
 
 

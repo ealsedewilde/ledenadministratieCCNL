@@ -43,7 +43,7 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
   private void doTest() {
     ExternalClubSelectionEvent event =
         new ExternalClubSelectionEvent(sut, MenuChoice.NEW_EXTERNAL_CLUB, club);
-    sut.onApplicationEvent(event);
+    sut.handleClub(event);
 
     sut.save();
     verify(pageController).showMessage("Club gegevens zijn opgeslagen");
@@ -71,7 +71,7 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
   private ExternalRelationClub club() {
     ExternalRelationClub r = new ExternalRelationClub();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("B");
     a.setCity("Ons Dorp");

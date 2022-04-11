@@ -65,7 +65,7 @@ class InternalRelationDeleteControllerTest extends FXMLBaseTest<InternalRelation
   private InternalRelation internalRelation() {
     InternalRelation r = new InternalRelation();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("B");
     a.setCity("Ons Dorp");

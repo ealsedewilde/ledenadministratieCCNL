@@ -65,7 +65,7 @@ class PartnerDeleteControllerTest extends FXMLBaseTest<PartnerDeleteController> 
   private ExternalRelationPartner externalRelationPartner() {
     ExternalRelationPartner r = new ExternalRelationPartner();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("B");
     a.setCity("Ons Dorp");

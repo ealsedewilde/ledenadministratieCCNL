@@ -46,7 +46,7 @@ class AddDocumentControllerTest extends FXMLBaseTest<AddDocumentController> {
   private void doTest() {
     Member m = member();
     MemberSeLectionEvent event = new MemberSeLectionEvent(sut, MenuChoice.ADD_DOCUMENT, m);
-    sut.onApplicationEvent(event);
+    sut.addDocument(event);
 
     sut.searchDocument();
 

@@ -8,22 +8,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 import nl.ealse.javafx.ImagesMap;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class SettingsController extends SettingsView
-    implements ApplicationListener<MenuChoiceEvent> {
+public class SettingsController extends SettingsView {
 
-  private final ApplicationContext springContext;
+  private final ApplicationEventPublisher eventPublisher;
 
   private final PageController pageController;
 
@@ -35,8 +33,8 @@ public class SettingsController extends SettingsView
   private Stage editStage;
 
   public SettingsController(SettingsService service, PageController pageController,
-      ApplicationContext springContext) {
-    this.springContext = springContext;
+      ApplicationEventPublisher eventPublisher) {
+    this.eventPublisher = eventPublisher;
     this.pageController = pageController;
     this.service = service;
   }
@@ -91,18 +89,16 @@ public class SettingsController extends SettingsView
     TableRow<Setting> row = (TableRow<Setting>) event.getSource();
     Setting setting = row.getItem();
     SettingSelectionEvent se = new SettingSelectionEvent(this, setting);
-    springContext.publishEvent(se);
+    eventPublisher.publishEvent(se);
     if (!editStage.isShowing()) {
       editStage.show();
     }
   }
 
-  @Override
-  public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.SETTINGS == event.getMenuChoice()) {
-      tableView.getItems().clear();
-      tableView.getItems().addAll(service.findByOrderBySettingsGroupAscKeyAsc());
-    }
+  @EventListener(condition = "#event.name('SETTINGS')")
+  public void findSettings(MenuChoiceEvent event) {
+    tableView.getItems().clear();
+    tableView.getItems().addAll(service.findByOrderBySettingsGroupAscKeyAsc());
   }
 
 }

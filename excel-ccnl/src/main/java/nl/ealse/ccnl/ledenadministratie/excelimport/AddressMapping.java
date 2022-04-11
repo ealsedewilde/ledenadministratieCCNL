@@ -1,8 +1,5 @@
 package nl.ealse.ccnl.ledenadministratie.excelimport;
 
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLAdres;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 
@@ -25,96 +22,50 @@ public final class AddressMapping {
     SplitHelper helper = new SplitHelper();
     helper.splitStreet(adres);
 
-    address.setAddress(helper.street.toString().trim());
-    address.setAddressNumber(helper.number);
-    if (helper.appendix.length() > 0) {
-      address.setAddressNumberAppendix(helper.appendix.toString());
+    address.setStreet(helper.street);
+    address.setAddressNumber(helper.number.toString());
+    if (helper.appendix != null) {
+      address.setAddressNumberAppendix(helper.appendix);
     }
 
     return address;
   }
 
   private static class SplitHelper {
-    StringBuilder street = new StringBuilder();
-    String number = null;
-    StringBuilder appendix = new StringBuilder();
-
-    private AddressPart currentPart;
-
-    private final List<AddressPart> parts = new ArrayList<>();
-
+    String street = null;
+    StringBuilder number = new StringBuilder();
+    String appendix = null;
 
     void splitStreet(CCNLAdres adres) {
-      for (char c : adres.getStraat().trim().toCharArray()) {
-        if (Character.isDigit(c)) {
-          handleCaracter(c, PartType.NUMBER);
-        } else if (c == ' ') {
-          handleCaracter(c, PartType.SPACE);
-        } else {
-          handleCaracter(c, PartType.OTHER);
-        }
+      String straat = adres.getStraat().trim();
+      String[] parts = straat.split("[\\s.]+");
+      int px = 0;
+      while (number.length() == 0 && px < parts.length) {
+        extractNumber(parts[px++]);
       }
-      parts.add(currentPart);
-      
-      int mainPartIx = findMainPart();
-      int ix = 0;
-      for (AddressPart part : parts) {
-        if (ix <= mainPartIx) {
-          street.append(part.getContent().toString());
-        } else if (number == null) {
-          if (part.getType() == PartType.NUMBER) {
-            number = part.getContent().toString();
-          } else {
-            street.append(part.getContent().toString());
+      int ix = straat.indexOf(number.toString());
+      if (ix > 0) {
+        street = straat.substring(0, ix);
+        ix = ix + number.length();
+        int l = straat.length();
+        if (l > ix) {
+          appendix = straat.substring(ix);
+        }
+      } else {
+        street = straat.substring(number.length()).trim();
+      }
+    }
+
+    private void extractNumber(String part) {
+      if (Character.isDigit(part.charAt(0))) {
+        for (char ch : part.toCharArray()) {
+          if (Character.isDigit(ch)) {
+            number.append(ch);
           }
-        } else {
-          appendix.append(part.getContent().toString());
         }
-        ix++;
-      }
-    }
-    
-    private void handleCaracter(char c, PartType type) {
-      if (currentPart == null) {
-        currentPart = new AddressPart(type);
-      } else if (currentPart.getType() != type) {
-        parts.add(currentPart);
-        currentPart = new AddressPart(type);
-      }
-      currentPart.getContent().append(c);
-    }
-
-    private int findMainPart() {
-      int maxLength = 0;
-      int maxLengthIx = 0;
-      int ix = 0;
-      for (AddressPart part : parts) {
-        if (part.getType() == PartType.OTHER && part.getContent().length() > maxLength) {
-          maxLength = part.getContent().length();
-          maxLengthIx = ix;
-        }
-        ix++;
-      }
-      return maxLengthIx;
-    }
-
-    @Getter
-    private static class AddressPart {
-
-      private final PartType type;
-
-      private final StringBuilder content = new StringBuilder();
-
-      public AddressPart(PartType type) {
-        this.type = type;
       }
     }
 
-    private enum PartType {
-      NUMBER, SPACE, OTHER
-    }
-
- 
 
   }
 

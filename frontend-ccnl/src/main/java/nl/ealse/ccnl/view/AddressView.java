@@ -10,7 +10,7 @@ import lombok.Setter;
 public class AddressView {
 
   @FXML
-  private TextField address;
+  private TextField street;
 
   @FXML
   private TextField addressNumber;

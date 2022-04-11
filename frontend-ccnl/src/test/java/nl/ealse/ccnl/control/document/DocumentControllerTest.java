@@ -51,7 +51,7 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
   private void doTest() {
     Member m = member();
     MemberSeLectionEvent event = new MemberSeLectionEvent(sut, MenuChoice.VIEW_DOCUMENT, m);
-    sut.onApplicationEvent(event);
+    sut.viewDocument(event);
     verify(pageController).setActivePage(PageName.VIEW_DOCUMENTS);
     sut.selectDocument(mouseEvent);
     sut.printDocument();

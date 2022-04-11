@@ -6,6 +6,8 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.w3c.dom.Element;
 
 class NaamStrategie2Test {
   
@@ -28,7 +30,7 @@ class NaamStrategie2Test {
   private static class TestBooking extends IngBooking {
 
     public TestBooking() {
-      super(null);
+      super(Mockito.mock(Element.class));
     }
     
     @Override

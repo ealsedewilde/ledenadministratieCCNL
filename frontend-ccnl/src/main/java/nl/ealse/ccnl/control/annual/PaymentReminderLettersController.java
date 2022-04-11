@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -23,13 +22,12 @@ import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class PaymentReminderLettersController extends DocumentTemplateController
-    implements ApplicationListener<MenuChoiceEvent> {
+public class PaymentReminderLettersController extends DocumentTemplateController {
 
   private final PageController pageController;
 
@@ -63,17 +61,18 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     this.executor = executor;
   }
 
-  @Override
-  public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.PRODUCE_REMINDER_LETTERS_BT == event.getMenuChoice()) {
-      selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.BANK_TRANSFER);
-      initTemplates(true);
-      headerText.setText("Herinneringsbrief leden met Overboeking");
-    } else if (MenuChoice.PRODUCE_REMINDER_LETTERS_DD == event.getMenuChoice()) {
-      selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.DIRECT_DEBIT);
-      initTemplates(false);
-      headerText.setText("Herinneringsbrief leden met Automatische Incasso");
-    }
+  @EventListener(condition = "#event.name('PRODUCE_REMINDER_LETTERS_BT')")
+  public void remindersBT(MenuChoiceEvent event) {
+    selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.BANK_TRANSFER);
+    initTemplates(true);
+    headerText.setText("Herinneringsbrief leden met Overboeking");
+  }
+
+  @EventListener(condition = "#event.name('PRODUCE_REMINDER_LETTERS_DD')")
+  public void remindersDD(MenuChoiceEvent event) {
+    selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.DIRECT_DEBIT);
+    initTemplates(false);
+    headerText.setText("Herinneringsbrief leden met Automatische Incasso");
   }
 
   private void initTemplates(boolean withSepa) {

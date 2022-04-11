@@ -42,7 +42,7 @@ class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
 
   private void doTest() {
     PartnerSelectionEvent event = new PartnerSelectionEvent(sut, MenuChoice.NEW_PARTNER, partner);
-    sut.onApplicationEvent(event);
+    sut.handlePartner(event);
 
     sut.save();
     verify(pageController).showMessage("Partnergegevens opgeslagen");
@@ -71,7 +71,7 @@ class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
   private ExternalRelationPartner externalRelationPartner() {
     ExternalRelationPartner r = new ExternalRelationPartner();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("B");
     a.setCity("Ons Dorp");

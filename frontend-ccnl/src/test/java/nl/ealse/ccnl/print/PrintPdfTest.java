@@ -23,7 +23,7 @@ class PrintPdfTest {
 
   private static final String PRINTER_NAME = "Brother DCP-L3510CDW series Printer";
 
-  @Disabled
+  @Disabled("Output goes to real printer")
   @Test
   void pdfPrint() {
     try (InputStream pdfStream = getClass().getResourceAsStream("/MachtigingsformulierSEPA.pdf")) {

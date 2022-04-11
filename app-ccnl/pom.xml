@@ -3,7 +3,7 @@
   <parent>
     <groupId>nl.ealse.ccnl</groupId>
     <artifactId>ledenadministratieCCNL</artifactId>
-    <version>00.00.01-SNAPSHOT</version>
+    <version>01.03.01-SNAPSHOT</version>
   </parent>
   <artifactId>app-ccnl</artifactId>
   <packaging>pom</packaging>
@@ -36,6 +36,7 @@
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>frontend-ccnl</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>

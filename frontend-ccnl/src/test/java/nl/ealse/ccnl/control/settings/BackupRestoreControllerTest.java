@@ -47,11 +47,11 @@ class BackupRestoreControllerTest extends FXBase {
     setFileChooser();
 
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_BACKUP_DATABASE);
-    sut.onApplicationEvent(event);
+    sut.backup(event);
     verify(pageController).showMessage("Backup is aangemaakt");
 
     event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_RESTORE_DATABASE);
-    sut.onApplicationEvent(event);
+    sut.restore(event);
     verify(pageController).showMessage("Backup is teruggezet");
   }
 

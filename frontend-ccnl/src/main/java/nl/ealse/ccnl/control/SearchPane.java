@@ -129,7 +129,7 @@ public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> extends V
    */
   public void initialize(SearchController<T, E> controller) {
     this.controller = controller;
-    searchItems = controller.searchItemValues();
+    searchItems = controller.getSearchItemValues();
     searchCriterium.getItems().addAll(searchItems.keySet());
     searchCriterium.getSelectionModel().selectFirst();
 

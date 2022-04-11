@@ -7,7 +7,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.PDFViewer;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -16,11 +15,11 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class DocumentController implements ApplicationListener<MemberSeLectionEvent> {
+public class DocumentController {
 
   private final PageController pageController;
 
@@ -53,15 +52,13 @@ public class DocumentController implements ApplicationListener<MemberSeLectionEv
 
   }
 
-  @Override
-  public void onApplicationEvent(MemberSeLectionEvent event) {
-    if (event.getMenuChoice() == MenuChoice.VIEW_DOCUMENT) {
-      Member member = event.getSelectedEntity();
-      memberNumber.setText("Documenten voor lidnummer: " + member.getMemberNumber().toString());
-      memberName.setText(member.getFullName());
-      fillTableView(member);
-      pageController.setActivePage(PageName.VIEW_DOCUMENTS);
-    }
+  @EventListener(condition = "#event.name('VIEW_DOCUMENT')")
+  public void viewDocument(MemberSeLectionEvent event) {
+    Member member = event.getSelectedEntity();
+    memberNumber.setText("Documenten voor lidnummer: " + member.getMemberNumber().toString());
+    memberName.setText(member.getFullName());
+    fillTableView(member);
+    pageController.setActivePage(PageName.VIEW_DOCUMENTS);
   }
 
   private void fillTableView(Member member) {

@@ -26,53 +26,30 @@ import org.junit.jupiter.api.Test;
 class DataMapperTest  extends FXBase {
 
   private AddressController addressController = new AddressController();
+
   @Test
-  void performTests() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
-      testExplain();
-      try {
-        testFormToModel();
-        testModelToForm();
-      } catch (Exception e) {
-        log.error("Test failure", e);
-        Assertions.fail(e.getMessage());
-      }
-      ar.set(true);
-    }, ar);
-    Assertions.assertTrue(result.get());
-  }
-
-  private void testExplain() {
-    MemberController form = new MemberController(null, null, null, null);
-    injectAddressController(form);
-    Member model = new Member();
-    String ex = DataMapper.explain(form, model);
-    Assertions.assertTrue(ex.contains("[INFO] Property"));
-    System.out.println(ex);
-  }
-
-  private void testFormToModel() throws Exception {
+  void testFormToModel() throws Exception {
     MemberController form = initializedForm();
     Member model = new Member();
     model.setAddress(null);
-    DataMapper.formToModel(form, model);
-    Assertions.assertEquals("Helena Hoeve", model.getAddress().getAddress());
+    ViewModel.viewToModel(form, model);
+    Assertions.assertEquals("Helena Hoeve", model.getAddress().getStreet());
     Assertions.assertEquals(PaymentMethod.BANK_TRANSFER, model.getPaymentMethod());
   }
 
-  private void testModelToForm() throws Exception {
+  @Test
+  void testModelToForm() throws Exception {
     MemberController form = initializedForm();
     Member model = initializedModel();
-    DataMapper.modelToForm(form, model);
-    Assertions.assertEquals("Ida Hoeve", addressController.getAddress().getText());
+    ViewModel.modelToView(form, model);
+    Assertions.assertEquals("Ida Hoeve", addressController.getStreet().getText());
     Assertions.assertEquals(PaymentMethodMapper.DIRECT_DEBIT, form.getPaymentMethod().getValue());
   }
 
   private MemberController initializedForm() {
-    MemberController form = new MemberController(null,  null, null, null);
+    MemberController form = new MemberController(null, null, null);
     injectAddressController(form);
-    addressController.setAddress(new TextField("Helena Hoeve"));
+    addressController.setStreet(new TextField("Helena Hoeve"));
     addressController.setAddressNumber(new TextField("26"));
     addressController.setAddressNumberAppendix(new TextField());
     addressController.setCity(new TextField("Gouda"));
@@ -102,7 +79,7 @@ class DataMapperTest  extends FXBase {
   private Member initializedModel() {
     Member member = new Member();
     Address address = member.getAddress();
-    address.setAddress("Ida Hoeve");
+    address.setStreet("Ida Hoeve");
     address.setAddressNumber("16");
     address.setPostalCode("2804 TV");
     address.setCity("Gouda");

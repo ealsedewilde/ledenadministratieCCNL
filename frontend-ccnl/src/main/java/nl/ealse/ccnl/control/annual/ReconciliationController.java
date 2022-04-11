@@ -21,7 +21,6 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import nl.ealse.ccnl.control.button.ButtonCell;
 import nl.ealse.ccnl.control.button.DeleteButton;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -31,12 +30,12 @@ import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ReconciliationController implements ApplicationListener<MenuChoiceEvent> {
+public class ReconciliationController {
 
   private final PageController pageController;
 
@@ -75,19 +74,17 @@ public class ReconciliationController implements ApplicationListener<MenuChoiceE
     this.executor = executor;
   }
 
-  @Override
+  @EventListener(condition = "#event.name('RECONCILE_PAYMENTS')")
   public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.RECONCILE_PAYMENTS == event.getMenuChoice()) {
-      tableView.getItems().clear();
-      tableView.getItems().addAll(service.allFiles());
-      LocalDate d = LocalDate.now();
-      int year = d.getYear() - 1;
-      d = LocalDate.of(year, 12, 1);
-      referenceDate.setValue(d);
-      referenceDateE.setVisible(false);
-      if (messagesStage.isShowing()) {
-        messagesStage.close();
-      }
+    tableView.getItems().clear();
+    tableView.getItems().addAll(service.allFiles());
+    LocalDate d = LocalDate.now();
+    int year = d.getYear() - 1;
+    d = LocalDate.of(year, 12, 1);
+    referenceDate.setValue(d);
+    referenceDateE.setVisible(false);
+    if (messagesStage.isShowing()) {
+      messagesStage.close();
     }
   }
 

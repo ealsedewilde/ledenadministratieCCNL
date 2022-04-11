@@ -29,7 +29,7 @@ public class PrimaryPageStarter implements ApplicationListener<StageReadyEvent> 
 
   private final FXMLNodeMap fxmlNodeMap;
 
-  @Value("${spring.application.ui.title}")
+  @Value("${fxml.title}")
   private String applicationTitle;
 
   @Value("${fxml.icon}")

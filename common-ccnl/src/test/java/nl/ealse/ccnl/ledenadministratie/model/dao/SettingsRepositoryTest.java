@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
+import nl.ealse.ccnl.ledenadministratie.test.JpaTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

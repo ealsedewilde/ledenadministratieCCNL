@@ -10,8 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.excelimport.ImportService;
@@ -20,13 +18,12 @@ import nl.ealse.ccnl.service.excelimport.ImportType;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Slf4j
-public class ExcelImportController implements ApplicationListener<MenuChoiceEvent> {
+public class ExcelImportController {
 
   @Value("${ccnl.directory.excel:c:/temp}")
   private String excelDirectory;
@@ -133,28 +130,23 @@ public class ExcelImportController implements ApplicationListener<MenuChoiceEven
     pageController.showPermanentMessage("Import wordt uitgevoerd; even geduld a.u.b.");
     AsyncTask asyncTask = new AsyncTask(importService, selection, selectedFile);
     asyncTask.setOnSucceeded(t -> pageController.showMessage("Import succesvol uitgevoerd"));
-    asyncTask.setOnFailed(t -> {
-      log.error("Import niet succesvol", t.getSource().getException());
-      pageController.showErrorMessage("Import niet succesvol");
-    });
+    asyncTask.setOnFailed(t -> pageController.showErrorMessage("Import niet succesvol"));
     executor.execute(asyncTask);
   }
 
-  @Override
+  @EventListener(condition = "#event.name('IMPORT_FROM_EXCEL')")
   public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.IMPORT_FROM_EXCEL == event.getMenuChoice()) {
-      selectedFile = null;
-      fileLabel.setText("");
-      importButton.setDisable(true);
-      importGroup.getToggles().get(2).setSelected(true);
-      selectCount = 0;
-      all.setSelected(false);
-      members.setSelected(false);
-      partners.setSelected(false);
-      clubs.setSelected(false);
-      external.setSelected(false);
-      internal.setSelected(false);
-    }
+    selectedFile = null;
+    fileLabel.setText("");
+    importButton.setDisable(true);
+    importGroup.getToggles().get(2).setSelected(true);
+    selectCount = 0;
+    all.setSelected(false);
+    members.setSelected(false);
+    partners.setSelected(false);
+    clubs.setSelected(false);
+    external.setSelected(false);
+    internal.setSelected(false);
   }
 
   protected static class AsyncTask extends Task<Void> {

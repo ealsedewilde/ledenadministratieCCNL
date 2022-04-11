@@ -8,7 +8,7 @@ class AdrressTest {
   @Test
   void addressNumberTest() {
     Address a = new Address();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("199");
     a.setAddressNumberAppendix("A");
     Assertions.assertEquals("straat 199A", a.getAddressAndNumber());

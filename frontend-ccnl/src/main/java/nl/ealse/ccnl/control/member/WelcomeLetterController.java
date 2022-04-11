@@ -10,7 +10,6 @@ import javax.print.PrintService;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.PDFViewer;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -21,13 +20,12 @@ import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Slf4j
-public class WelcomeLetterController extends DocumentTemplateController
-    implements ApplicationListener<MemberSeLectionEvent> {
+public class WelcomeLetterController extends DocumentTemplateController {
 
   private final PageController pageController;
 
@@ -44,16 +42,15 @@ public class WelcomeLetterController extends DocumentTemplateController
     this.documentService = documentService;
   }
 
-  @Override
+  @EventListener(condition = "#event.name('NEW_MEMBER')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
-    if (MenuChoice.NEW_MEMBER == event.getMenuChoice()) {
-      this.selectedMember = event.getSelectedEntity();
-      initializeTemplates();
-    }
+    this.selectedMember = event.getSelectedEntity();
+    initializeTemplates();
   }
 
   @FXML
   public void showLetterExample() {
+    log.debug("showLetterExample");
     LetterData data = new LetterData(getLetterText().getText());
     data.getMembers().add(selectedMember);
     byte[] pdf = documentService.generatePDF(data);
@@ -79,6 +76,7 @@ public class WelcomeLetterController extends DocumentTemplateController
 
   @FXML
   public void printLetter() {
+    log.debug("printLetter");
     LetterData data = new LetterData(getLetterText().getText());
     data.getMembers().add(selectedMember);
     byte[] pdf = documentService.generatePDF(data);

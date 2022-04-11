@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-  <groupId>nl.ealse.ccnl</groupId>
-  <artifactId>ledenadministratieCCNL</artifactId>
-  <version>00.00.01-SNAPSHOT</version>
+    <groupId>nl.ealse.ccnl</groupId>
+    <artifactId>ledenadministratieCCNL</artifactId>
+    <version>01.03.01-SNAPSHOT</version>
   </parent>
   <artifactId>excel-ccnl</artifactId>
   <name>excel-ccnl</name>
@@ -14,11 +14,12 @@
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>common-ccnl</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-     </dependency>
+    </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>

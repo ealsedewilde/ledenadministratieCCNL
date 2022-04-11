@@ -65,7 +65,7 @@ class ExternalClubDeleteControllerTest extends FXMLBaseTest<ExternalClubDeleteCo
   private ExternalRelationClub club() {
     ExternalRelationClub r = new ExternalRelationClub();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("B");
     a.setCity("Ons Dorp");

@@ -23,7 +23,7 @@ public class InternalRelationService {
     return dao.getAllTitles();
   }
 
-  public List<InternalRelation> searchExternalRelation(SearchItem searchItem, String searchValue) {
+  public List<InternalRelation> searchInternalRelation(SearchItem searchItem, String searchValue) {
     List<InternalRelation> result = new ArrayList<>();
     switch (searchItem) {
       case CITY:

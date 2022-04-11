@@ -21,11 +21,11 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.ImagesMap;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ManageTemplateController implements ApplicationListener<TemplateSelectionEvent> {
+public class ManageTemplateController {
 
   private final ApplicationContext springContext;
 
@@ -88,7 +88,7 @@ public class ManageTemplateController implements ApplicationListener<TemplateSel
 
   }
 
-  @Override
+  @EventListener
   public void onApplicationEvent(TemplateSelectionEvent event) {
     this.selectedTemplate = event.getSelectedEntity();
     this.cancelationMail = selectedTemplate.getTemplateID()

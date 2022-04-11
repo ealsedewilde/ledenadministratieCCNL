@@ -27,7 +27,7 @@ class LetterGeneratorTest {
     m.setLastNamePrefix("van der");
     m.setMemberNumber(1473);
     Address a = new Address();
-    a.setAddress("Helena Hoeve");
+    a.setStreet("Helena Hoeve");
     a.setAddressNumber("26");
     a.setPostalCode("2804 HX");
     a.setCity("Gouda");

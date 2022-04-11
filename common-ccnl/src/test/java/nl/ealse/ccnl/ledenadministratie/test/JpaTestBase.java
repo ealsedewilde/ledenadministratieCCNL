@@ -1,4 +1,4 @@
-package nl.ealse.ccnl.ledenadministratie.model.dao;
+package nl.ealse.ccnl.ledenadministratie.test;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

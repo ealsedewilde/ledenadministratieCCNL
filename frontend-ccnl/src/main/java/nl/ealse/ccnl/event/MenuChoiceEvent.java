@@ -15,4 +15,23 @@ public class MenuChoiceEvent extends ApplicationEvent {
     this.menuChoice = menuChoice;
   }
 
+  /**
+   * Called by a {@link org.springframework.context.event.EventListener#condition()}
+   */
+  public boolean name(String... eventNames) {
+    for (String eventName : eventNames) {
+      if (menuChoice.name().equals(eventName)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Called by a {@link org.springframework.context.event.EventListener#condition()}
+   */
+  public boolean group(String groupName) {
+    return menuChoice.getGroup() != null && menuChoice.getGroup().name().equals(groupName);
+  }
+
 }

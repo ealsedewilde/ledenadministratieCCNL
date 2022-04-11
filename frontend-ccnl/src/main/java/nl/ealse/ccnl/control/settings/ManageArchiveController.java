@@ -4,15 +4,14 @@ import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.ArchiveService;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ManageArchiveController implements ApplicationListener<MenuChoiceEvent> {
+public class ManageArchiveController {
 
   private final PageController pageController;
 
@@ -59,13 +58,11 @@ public class ManageArchiveController implements ApplicationListener<MenuChoiceEv
     return true;
   }
 
-  @Override
+  @EventListener(condition = "#event.name('MANAGE_ARCHIVE')")
   public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.MANAGE_ARCHIVE == event.getMenuChoice()) {
-      referenceYearE.setVisible(false);
-      int year = LocalDate.now().getYear() - 3;
-      referenceYear.setText(Integer.toString(year));
-    }
+    referenceYearE.setVisible(false);
+    int year = LocalDate.now().getYear() - 3;
+    referenceYear.setText(Integer.toString(year));
   }
 
 }

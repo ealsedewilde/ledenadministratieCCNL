@@ -5,7 +5,7 @@
   <parent>
     <groupId>nl.ealse.ccnl</groupId>
     <artifactId>ledenadministratieCCNL</artifactId>
-    <version>00.00.01-SNAPSHOT</version>
+    <version>01.03.01-SNAPSHOT</version>
   </parent>
   <artifactId>minimal-jre</artifactId>
   <packaging>jlink</packaging>

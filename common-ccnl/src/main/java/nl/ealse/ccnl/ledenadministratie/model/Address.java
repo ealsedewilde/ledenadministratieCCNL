@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 public class Address {
 
-  @Column(nullable = false)
-  private String address;
+  @Column(name = "address", nullable = false)
+  private String street;
   @Column(nullable = false)
   private String addressNumber;
   private String addressNumberAppendix;
@@ -25,7 +25,7 @@ public class Address {
 
   public String getAddressAndNumber() {
     StringBuilder sb = new StringBuilder();
-    sb.append(address).append(" ");
+    sb.append(street).append(" ");
     sb.append(addressNumber);
     if (addressNumberAppendix != null) {
       sb.append(addressNumberAppendix);

@@ -1,20 +1,18 @@
 package nl.ealse.ccnl.control.internal;
 
 import javafx.fxml.FXML;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationDeleteView;
-import nl.ealse.javafx.mapping.DataMapper;
-import org.springframework.context.ApplicationListener;
+import nl.ealse.javafx.mapping.ViewModel;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class InternalRelationDeleteController extends InternalRelationDeleteView
-    implements ApplicationListener<InternalRelationSelectionEvent> {
+public class InternalRelationDeleteController extends InternalRelationDeleteView {
   private final PageController pageController;
 
   private final InternalRelationService service;
@@ -34,13 +32,11 @@ public class InternalRelationDeleteController extends InternalRelationDeleteView
     pageController.setActivePage(PageName.LOGO);
   }
 
-  @Override
+  @EventListener(condition = "#event.name('DELETE_INTERNAL_RELATION')")
   public void onApplicationEvent(InternalRelationSelectionEvent event) {
-    if (MenuChoice.DELETE_INTERNAL_RELATION == event.getMenuChoice()) {
-      selectedEntity = event.getSelectedEntity();
-      DataMapper.modelToForm(this, event.getSelectedEntity());
-      pageController.setActivePage(PageName.INTERNAL_RELATION_DELETE);
-    }
+    selectedEntity = event.getSelectedEntity();
+    ViewModel.modelToView(this, event.getSelectedEntity());
+    pageController.setActivePage(PageName.INTERNAL_RELATION_DELETE);
   }
 
 }

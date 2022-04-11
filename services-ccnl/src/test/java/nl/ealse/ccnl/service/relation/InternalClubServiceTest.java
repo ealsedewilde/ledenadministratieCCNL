@@ -46,35 +46,35 @@ class InternalClubServiceTest {
   @Test
   void testSearchCity() {
     String searchValue ="foo";
-    sut.searchExternalRelation(SearchItem.CITY, searchValue);
+    sut.searchInternalRelation(SearchItem.CITY, searchValue);
     verify(dao).findInternalRelationsByCity(searchValue);
   }
   
   @Test
   void testSearchName() {
     String searchValue ="foo";
-    sut.searchExternalRelation(SearchItem.NAME, searchValue);
+    sut.searchInternalRelation(SearchItem.NAME, searchValue);
     verify(dao).findInternalRelationsByTitle(searchValue);
   }
   
   @Test
   void testSearchNumber() {
     String searchValue ="1234";
-    sut.searchExternalRelation(SearchItem.NUMBER, searchValue);
+    sut.searchInternalRelation(SearchItem.NUMBER, searchValue);
     verify(dao).findById(any(Integer.class));
   }
   
   @Test
   void testSearchPC() {
     String searchValue ="foo";
-    sut.searchExternalRelation(SearchItem.POSTAL_CODE, searchValue);
+    sut.searchInternalRelation(SearchItem.POSTAL_CODE, searchValue);
     verify(dao).findInternalRelationsByPostalCode(searchValue);
   }
   
   @Test
   void testSearchStreet() {
     String searchValue ="foo";
-    sut.searchExternalRelation(SearchItem.STREET, searchValue);
+    sut.searchInternalRelation(SearchItem.STREET, searchValue);
     verify(dao).findInternalRelationsByAddress(searchValue);
   }
 

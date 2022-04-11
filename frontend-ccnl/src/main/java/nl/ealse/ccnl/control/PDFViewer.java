@@ -210,8 +210,9 @@ public class PDFViewer extends BorderPane {
       if (pages > 1) {
         header.setText(String.format(HEADER_TEXT, pageNum + 1, pages));
       }
-    } catch (Exception e) {
+    } catch (InterruptedException e) {
       log.error("Error getting page", e);
+      Thread.currentThread().interrupt();
       throw new PDFViewerException("Error getting page", e);
     }
 

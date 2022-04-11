@@ -18,7 +18,7 @@ class ExternalOtherSearchControllerTest {
         sut.newEntitySelectionEvent(MenuChoice.AMEND_EXTERNAL_RELATION);
     Assertions.assertNotNull(result);
 
-    Map<String, SearchItem> itemMap = sut.searchItemValues();
+    Map<String, SearchItem> itemMap = sut.getSearchItemValues();
     Assertions.assertEquals(5, itemMap.size());
   }
 

@@ -7,20 +7,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class TemplatesController implements ApplicationListener<MenuChoiceEvent> {
+public class TemplatesController {
 
-  private final ApplicationContext springContext;
+  private final ApplicationEventPublisher eventPublisher;
 
   private final DocumentService documentService;
 
@@ -33,18 +32,17 @@ public class TemplatesController implements ApplicationListener<MenuChoiceEvent>
   @FXML
   private TextArea templateText;
 
-  public TemplatesController(DocumentService documentService, ApplicationContext springContext) {
-    this.springContext = springContext;
+  public TemplatesController(DocumentService documentService,
+      ApplicationEventPublisher eventPublisher) {
+    this.eventPublisher = eventPublisher;
     this.documentService = documentService;
   }
 
-  @Override
+  @EventListener(condition = "#event.name('TEMPLATES_OVERVIEW')")
   public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.TEMPLATES_OVERVIEW == event.getMenuChoice()) {
-      List<DocumentTemplate> templates = documentService.findAllDocumentTemplates();
-      tableView.getItems().clear();
-      tableView.getItems().addAll(templates);
-    }
+    List<DocumentTemplate> templates = documentService.findAllDocumentTemplates();
+    tableView.getItems().clear();
+    tableView.getItems().addAll(templates);
   }
 
   @FXML
@@ -55,7 +53,7 @@ public class TemplatesController implements ApplicationListener<MenuChoiceEvent>
     if (selectedTemplate != null) {
       TemplateSelectionEvent templateEvent =
           new TemplateSelectionEvent(this, selectedTemplate, false);
-      springContext.publishEvent(templateEvent);
+      eventPublisher.publishEvent(templateEvent);
     }
   }
 
@@ -80,7 +78,7 @@ public class TemplatesController implements ApplicationListener<MenuChoiceEvent>
     id.setDocumentTemplateType(type);
     template.setTemplateID(id);
     TemplateSelectionEvent event = new TemplateSelectionEvent(this, template, true);
-    springContext.publishEvent(event);
+    eventPublisher.publishEvent(event);
 
   }
 

@@ -33,7 +33,7 @@ public class AdresStrategie extends BetalingStrategie {
     String ad1 = booking.getAdres();
     if (!ad1.isBlank() && getNummers().isEmpty()) {
       for (Member member : members) {
-        if (ad1.indexOf(member.getAddress().getAddress()) > -1) {
+        if (ad1.indexOf(member.getAddress().getStreet()) > -1) {
           getNummers().add(member.getMemberNumber());
           break;
         }

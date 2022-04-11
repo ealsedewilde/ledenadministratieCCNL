@@ -1,16 +1,9 @@
 package nl.ealse.ccnl.control.excel;
 
-import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_ALL_DATA;
 import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_ARCHIVE;
-import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_CANCELLED_MEMBERS;
-import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_NEW_MEMBERS;
-import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_OVERDUE_MEMBERS;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import javafx.concurrent.Task;
-import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -21,15 +14,14 @@ import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Lazy(false) // Because no FXML
-@Slf4j
-public class ExcelExportController implements ApplicationListener<MenuChoiceEvent> {
+public class ExcelExportController {
 
   @Value("${ccnl.directory.excel:c:/temp}")
   private String excelDirectory;
@@ -44,8 +36,6 @@ public class ExcelExportController implements ApplicationListener<MenuChoiceEven
 
   private ExportArchiveService archiveService;
 
-  private final List<MenuChoice> validChoices;
-
   private WrappedFileChooser fileChooser;
 
   public ExcelExportController(PageController pageController, ApplicationContext springContext,
@@ -53,8 +43,6 @@ public class ExcelExportController implements ApplicationListener<MenuChoiceEven
     this.pageController = pageController;
     this.springContext = springContext;
     this.executor = executor;
-    validChoices = Arrays.asList(REPORT_ALL_DATA, REPORT_ARCHIVE, REPORT_CANCELLED_MEMBERS,
-        REPORT_NEW_MEMBERS, REPORT_OVERDUE_MEMBERS);
   }
 
   private void initialize() {
@@ -64,11 +52,8 @@ public class ExcelExportController implements ApplicationListener<MenuChoiceEven
     fileChooser.setInitialDirectory(new File(excelDirectory));
   }
 
-  @Override
+  @EventListener(condition = "#event.group('REPORTS')")
   public void onApplicationEvent(MenuChoiceEvent event) {
-    if (!validChoices.contains(event.getMenuChoice())) {
-      return;
-    }
     if (fileChooser == null) {
       // There is no fxml associated with this controller; so no @FXML initialize() available!
       initialize();
@@ -80,20 +65,16 @@ public class ExcelExportController implements ApplicationListener<MenuChoiceEven
         AsyncArchiveTask asyncArchiveTask = new AsyncArchiveTask(archiveService, exportFile);
         asyncArchiveTask
             .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-        asyncArchiveTask.setOnFailed(t -> {
-          log.error(t.getSource().getException().getMessage());
-          pageController.showErrorMessage("Schrijven MS Excel-werkblad is mislukt");
-        });
+        asyncArchiveTask.setOnFailed(
+            t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
         executor.execute(asyncArchiveTask);
       } else {
         AsyncExportTask asyncExportTask =
             new AsyncExportTask(event.getMenuChoice(), service, exportFile);
         asyncExportTask
             .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-        asyncExportTask.setOnFailed(t -> {
-          log.error(t.getSource().getException().getMessage());
-          pageController.showErrorMessage("Schrijven MS Excel-werkblad is mislukt");
-        });
+        asyncExportTask.setOnFailed(
+            t -> pageController.showErrorMessage("Schrijven MS Excel-werkblad is mislukt"));
         executor.execute(asyncExportTask);
       }
     }

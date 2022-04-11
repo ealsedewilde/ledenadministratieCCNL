@@ -19,7 +19,7 @@ public interface InternalRelationRepository extends JpaRepository<InternalRelati
   @Query("Select m.title from InternalRelation m")
   List<String> getAllTitles();
 
-  @Query("SELECT M FROM InternalRelation M WHERE LOWER(M.address.address) LIKE LOWER(concat(?1, '%'))")
+  @Query("SELECT M FROM InternalRelation M WHERE LOWER(M.address.street) LIKE LOWER(concat(?1, '%'))")
   List<InternalRelation> findInternalRelationsByAddress(String searchValue);
 
   @Query("SELECT M FROM InternalRelation M WHERE LOWER(M.address.city) LIKE LOWER(concat(?1, '%'))")

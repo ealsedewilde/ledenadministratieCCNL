@@ -16,7 +16,6 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
@@ -40,10 +39,9 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
    
     pageController = mock(PageController.class);
     service = mock(MemberService.class);
-    MemberNumberFactory numberFactory = mock(MemberNumberFactory.class);
     documentService = mock(DocumentService.class);
     controller =
-        new MemberController(pageController, service, numberFactory, documentService);
+        new MemberController(pageController, service, documentService);
     final AtomicBoolean ar = new AtomicBoolean();
     m = getMember();
     AtomicBoolean result = runFX(() -> {
@@ -62,7 +60,7 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     document.setOwner(m);
     when(documentService.findSepaAuthorization(m)).thenReturn(Optional.of(document));
     MemberSeLectionEvent event = new MemberSeLectionEvent(controller, MenuChoice.AMEND_MEMBER, m);
-    controller.onApplicationEvent(event);
+    controller.amendMember(event);
     fillIbanNumber();
     controller.nextPage();
     controller.nextPage();
@@ -78,7 +76,7 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     controller.deletePDF();
     controller.closePDF();
     event = new MemberSeLectionEvent(controller, MenuChoice.NEW_MEMBER, m);
-    controller.onApplicationEvent(event);
+    controller.newMember(event);
 
   }
 
@@ -109,7 +107,7 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     //m.setInitials("T.");
     //m.setLastName("Tester");
     Address a = m.getAddress();
-    a.setAddress("Straat");
+    a.setStreet("Straat");
     a.setAddressNumber("1");
     a.setPostalCode("1234 AA");
     a.setCity("Plaats");

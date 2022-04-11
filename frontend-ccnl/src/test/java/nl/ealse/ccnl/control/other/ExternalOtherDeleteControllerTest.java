@@ -65,7 +65,7 @@ class ExternalOtherDeleteControllerTest extends FXMLBaseTest<ExternalOtherDelete
   private ExternalRelationOther externalRelationOther() {
     ExternalRelationOther r = new ExternalRelationOther();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("B");
     a.setCity("Ons Dorp");

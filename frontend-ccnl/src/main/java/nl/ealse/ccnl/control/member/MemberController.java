@@ -19,20 +19,18 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
 import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberView;
-import nl.ealse.javafx.mapping.DataMapper;
+import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MemberController extends MemberView
-    implements ApplicationListener<MemberSeLectionEvent> {
+public class MemberController extends MemberView {
 
   private final PageController pageController;
 
@@ -41,8 +39,6 @@ public class MemberController extends MemberView
   private final DocumentService documentService;
 
   private final MemberValidation memberValidation;
-
-  private final MemberNumberFactory numberFactory;
 
   private Member model;
 
@@ -80,7 +76,7 @@ public class MemberController extends MemberView
 
   @FXML
   private SaveButton saveButton;
-  
+
   // Helper to detect changes in the iban owner
   private String savedName;
 
@@ -91,11 +87,10 @@ public class MemberController extends MemberView
   private final List<SaveButton> saveButtonList = new ArrayList<>();
 
   public MemberController(PageController pageController, MemberService service,
-      MemberNumberFactory numberFactory, DocumentService documentService) {
+      DocumentService documentService) {
     this.pageController = pageController;
     this.service = service;
     this.documentService = documentService;
-    this.numberFactory = numberFactory;
     this.memberValidation = new MemberValidation(this);
   }
 
@@ -113,44 +108,53 @@ public class MemberController extends MemberView
    * Initializes the Model. For a new Member the event was fired by {@link MenuController} For an
    * existing Member the {@link SearchController} fires the event.
    */
-  @Override
-  public void onApplicationEvent(MemberSeLectionEvent event) {
-    if (event.getMenuChoice() == MenuChoice.NEW_MEMBER
-        || event.getMenuChoice() == MenuChoice.AMEND_MEMBER) {
-      this.currentMenuChoice = event.getMenuChoice();
-      pageController.loadPage(PageName.MEMBER_ADDRESS);
-      addressController.getHeaderText().setText(getHeaderText());
-      pageController.loadPage(PageName.MEMBER_FINANCIAL);
-      pageController.loadPage(PageName.MEMBER_EXTRA);
-      String s = getHeaderText();
-      headerTextList.forEach(ht -> ht.setText(s));
-      this.selectedMember = event.getSelectedEntity();
-      this.model = new Member();
-      if (event.getMenuChoice() == MenuChoice.AMEND_MEMBER) {
-        pageController.setActivePage(PageName.MEMBER_PERSONAL);
-        Optional<Document> optSepaAuthorization =
-            documentService.findSepaAuthorization(selectedMember);
-        if (optSepaAuthorization.isPresent()) {
-          pageController.loadPage(PageName.SEPA_AUTHORIZATION_SHOW);
-          sepaAuthorization = optSepaAuthorization.get();
-        } else {
-          sepaAuthorization = null;
-        }
-      } else {
-        selectedMember.setMemberNumber(numberFactory.getNewNumber());
-        sepaAuthorization = null;
-      }
-      getIbanNumber().textProperty()
-          .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
-      reset();
-    }
+  @EventListener(condition = "#event.name('NEW_MEMBER')")
+  public void newMember(MemberSeLectionEvent event) {
+    handleEvent(event);
+    selectedMember.setMemberNumber(service.getFreeNumber());
+    sepaAuthorization = null;
+    reset();
   }
+
+  /**
+   * Initializes the Model. For a new Member the event was fired by {@link MenuController} For an
+   * existing Member the {@link SearchController} fires the event.
+   */
+  @EventListener(condition = "#event.name('AMEND_MEMBER')")
+  public void amendMember(MemberSeLectionEvent event) {
+    handleEvent(event);
+    pageController.setActivePage(PageName.MEMBER_PERSONAL);
+    Optional<Document> optSepaAuthorization = documentService.findSepaAuthorization(selectedMember);
+    if (optSepaAuthorization.isPresent()) {
+      pageController.loadPage(PageName.SEPA_AUTHORIZATION_SHOW);
+      sepaAuthorization = optSepaAuthorization.get();
+    } else {
+      sepaAuthorization = null;
+    }
+    reset();
+  }
+
+  public void handleEvent(MemberSeLectionEvent event) {
+    this.currentMenuChoice = event.getMenuChoice();
+    pageController.loadPage(PageName.MEMBER_ADDRESS);
+    addressController.getHeaderText().setText(getHeaderText());
+    pageController.loadPage(PageName.MEMBER_FINANCIAL);
+    pageController.loadPage(PageName.MEMBER_EXTRA);
+    String s = getHeaderText();
+    headerTextList.forEach(ht -> ht.setText(s));
+    this.selectedMember = event.getSelectedEntity();
+    this.model = new Member();
+    getIbanNumber().textProperty()
+    .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
+  }
+
+
 
   @FXML
   public void reset() {
     // the selectedMember remains unchanged, so we can repeatedly call reset().
-    DataMapper.modelToForm(this, selectedMember);
-    DataMapper.formToModel(this, model);
+    ViewModel.modelToView(this, selectedMember);
+    ViewModel.viewToModel(this, model);
     initializeInitialsType();
     savedName = getIbanOwnerName().getText();
 
@@ -205,10 +209,10 @@ public class MemberController extends MemberView
     addressController.enrich();
     updateIbanOwnerName();
     if (savedName == null || savedName.equals(formatMemberName())) {
-      // The iban owner is implicit 
+      // The iban owner is implicit
       getIbanOwnerName().setText(null);
     }
-    DataMapper.formToModel(this, model);
+    ViewModel.viewToModel(this, model);
 
     if (model.getAddress().isAddressInvalid() && !model.getAddress().getAddressAndNumber()
         .equals(selectedMember.getAddress().getAddressAndNumber())) {
@@ -221,7 +225,7 @@ public class MemberController extends MemberView
 
     if (currentMenuChoice == MenuChoice.NEW_MEMBER) {
       // next page
-      DataMapper.formToModel(this, selectedMember);
+      ViewModel.viewToModel(this, selectedMember);
       pageController.setActivePage(PageName.WELCOME_LETTER);
     } else {
       pageController.setActivePage(PageName.LOGO);
@@ -305,7 +309,7 @@ public class MemberController extends MemberView
   public void secondPage() {
     currentPage = PageName.MEMBER_ADDRESS;
     pageController.setActivePage(currentPage);
-    addressController.getAddress().requestFocus();
+    addressController.getStreet().requestFocus();
     memberValidation.validate();
   }
 
@@ -362,15 +366,16 @@ public class MemberController extends MemberView
         savedName = memberName;
       }
     } else {
-      //There is no iban owner yet
+      // There is no iban owner yet
       getIbanOwnerName().setText(memberName);
       savedName = memberName;
     }
   }
-  
+
   /**
-   * Return the full name of teh member as filled in the user interface.
-   * Return null when nothing is filled in the user interface
+   * Return the full name of teh member as filled in the user interface. Return null when nothing is
+   * filled in the user interface
+   * 
    * @return the full name of the member or null
    */
   private String formatMemberName() {
@@ -387,8 +392,8 @@ public class MemberController extends MemberView
     }
     return null;
   }
-  
-  
+
+
   private boolean hasContent(String text) {
     return text != null && !text.isBlank();
   }

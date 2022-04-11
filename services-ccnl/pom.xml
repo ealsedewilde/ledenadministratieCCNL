@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-  <groupId>nl.ealse.ccnl</groupId>
-  <artifactId>ledenadministratieCCNL</artifactId>
-  <version>00.00.01-SNAPSHOT</version>
+    <groupId>nl.ealse.ccnl</groupId>
+    <artifactId>ledenadministratieCCNL</artifactId>
+    <version>01.03.01-SNAPSHOT</version>
   </parent>
   <artifactId>services-ccnl</artifactId>
   <name>services-ccnl</name>
@@ -18,14 +18,17 @@
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>excel-ccnl</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>output-ccnl</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>annual-ccnl</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>

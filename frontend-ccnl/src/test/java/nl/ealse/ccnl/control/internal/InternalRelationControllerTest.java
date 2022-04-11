@@ -44,7 +44,7 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
   private void doTest() {
     InternalRelationSelectionEvent event =
         new InternalRelationSelectionEvent(sut, MenuChoice.NEW_INTERNAL_RELATION, rel);
-    sut.onApplicationEvent(event);
+    sut.handleRelation(event);
 
     sut.save();
     verify(pageController).showMessage("Functiegegevens opgeslagen");
@@ -74,7 +74,7 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
   private InternalRelation internalRelation() {
     InternalRelation r = new InternalRelation();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("B");
     a.setCity("Ons Dorp");

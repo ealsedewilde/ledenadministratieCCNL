@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.AnnualRolloverService;
@@ -20,13 +19,13 @@ import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Slf4j
-public class AnnualRolloverController implements ApplicationListener<MenuChoiceEvent> {
+public class AnnualRolloverController {
 
   private static final DateTimeFormatter formatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss");
@@ -139,13 +138,11 @@ public class AnnualRolloverController implements ApplicationListener<MenuChoiceE
     executor.execute(asyncTask);
   }
 
-  @Override
+  @EventListener(condition = "#event.name('ANNUAL_ROLLOVER')")
   public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.ANNUAL_ROLLOVER == event.getMenuChoice()) {
-      backupButton.setDisable(false);
-      rolloverButton.setDisable(true);
-      exportButton.setDisable(true);
-     }
+    backupButton.setDisable(false);
+    rolloverButton.setDisable(true);
+    exportButton.setDisable(true);
   }
 
   protected static class AsyncRolloverStep1 extends Task<String> {

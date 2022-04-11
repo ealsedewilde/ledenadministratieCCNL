@@ -18,13 +18,13 @@ class NaamStrategieTest extends FilterTestBase {
     m.setMemberNumber(1507);
     m.setLastName("Test2");
     m.getAddress().setPostalCode("1234 AA");
-    m.getAddress().setAddress("Straat");
+    m.getAddress().setStreet("Straat");
     members.add(m);
     m = new Member();
     m.setMemberNumber(1599);
     m.setLastName("Getest2");
     m.getAddress().setPostalCode("1999 AA");
-    m.getAddress().setAddress("Straat");
+    m.getAddress().setStreet("Straat");
     members.add(m);
 
     Iterator<IngBooking> itr = init();
@@ -42,7 +42,7 @@ class NaamStrategieTest extends FilterTestBase {
     m.setMemberNumber(1600);
     m.setLastName("Test2");
     m.getAddress().setPostalCode("1999 AA");
-    m.getAddress().setAddress("Straat");
+    m.getAddress().setStreet("Straat");
     members.add(m);
     b.setLidnummer(0);
     sut.bepaalLidnummer(b);

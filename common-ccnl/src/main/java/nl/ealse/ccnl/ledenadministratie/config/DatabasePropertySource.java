@@ -1,4 +1,4 @@
-package nl.ealse.ccnl;
+package nl.ealse.ccnl.ledenadministratie.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,6 +31,7 @@ import org.springframework.core.io.Resource;
  */
 @Slf4j
 public class DatabasePropertySource extends PropertySource<Properties> {
+  private static final String  PROP_DS_URL = "spring.datasource.url";
 
   public DatabasePropertySource(ConfigurableEnvironment environment) {
     super("databaseProperties", new Properties());
@@ -51,7 +52,7 @@ public class DatabasePropertySource extends PropertySource<Properties> {
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     executorService.execute(() -> {
       String userName = environment.getProperty("spring.datasource.username");
-      String url = environment.getProperty("spring.datasource.url");
+      String url = environment.getProperty(PROP_DS_URL);
       String driverClassName = environment.getProperty("spring.datasource.driverClassName");
       DataSource ds = DataSourceBuilder.create().username(userName).url(url)
           .driverClassName(driverClassName).build();
@@ -72,8 +73,8 @@ public class DatabasePropertySource extends PropertySource<Properties> {
     DatabaseLocation dbl = new DatabaseLocation();
     Optional<String> dbUrl = dbl.getDataBaseUrl();
     if (dbUrl.isPresent()) {
-      log.warn("spring.datasource.url"+ dbUrl.get());
-      getSource().put("spring.datasource.url", dbUrl.get());
+      log.warn(PROP_DS_URL+ dbUrl.get());
+      getSource().put(PROP_DS_URL, dbUrl.get());
     }
   }
 

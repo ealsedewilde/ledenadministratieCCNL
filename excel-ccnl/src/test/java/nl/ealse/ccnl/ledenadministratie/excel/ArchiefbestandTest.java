@@ -49,7 +49,7 @@ class ArchiefbestandTest {
     id.setArchiveYear(2019);
     id.setMemberNumber(1234);
     Address a = m.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setPostalCode("1234 AA");
     a.setCity("Ons Dorp");

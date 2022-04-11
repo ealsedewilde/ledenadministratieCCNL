@@ -6,7 +6,6 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.service.DocumentService;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +17,6 @@ public class MemberLetterHandler {
     this.documentService = documentService;
   }
 
-  @Async
   public void addLetterToMembers(FOContent foContent, List<Member> members) {
     for (Member member : members) {
       StringBuilder sb = new StringBuilder();

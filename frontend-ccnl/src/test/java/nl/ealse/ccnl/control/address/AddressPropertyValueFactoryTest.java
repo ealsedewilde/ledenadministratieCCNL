@@ -20,7 +20,7 @@ class AddressPropertyValueFactoryTest {
     CellDataFeatures<InternalRelation, String> param = mock(CellDataFeatures.class);
     InternalRelation rel = new InternalRelation();
     Address a = rel.getAddress();
-    a.setAddress("Straat");
+    a.setStreet("Straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("-II");
     a.setCity("Ons Dorp");

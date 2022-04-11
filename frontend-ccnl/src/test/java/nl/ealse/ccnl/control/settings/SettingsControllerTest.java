@@ -50,7 +50,7 @@ class SettingsControllerTest extends FXMLBaseTest<SettingsController> {
 
   private void doTest() {
     MenuChoiceEvent event = new MenuChoiceEvent(this, MenuChoice.SETTINGS);
-    sut.onApplicationEvent(event);
+    sut.findSettings(event);
 
     sut.editSetting(mouseEvent);
     verify(context).publishEvent(any(SettingSelectionEvent.class));

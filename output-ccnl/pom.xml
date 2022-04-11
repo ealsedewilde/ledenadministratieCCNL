@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-  <groupId>nl.ealse.ccnl</groupId>
-  <artifactId>ledenadministratieCCNL</artifactId>
-  <version>00.00.01-SNAPSHOT</version>
+    <groupId>nl.ealse.ccnl</groupId>
+    <artifactId>ledenadministratieCCNL</artifactId>
+    <version>01.03.01-SNAPSHOT</version>
   </parent>
   <artifactId>output-ccnl</artifactId>
   <name>output-ccnl</name>
@@ -14,6 +14,7 @@
     <dependency>
       <groupId>nl.ealse.ccnl</groupId>
       <artifactId>common-ccnl</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -24,36 +25,35 @@
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
     </dependency>
-    <!-- dependencies for pdf documents -->
+    
+    <!-- avoid duouble and obselete/conflicting fop dependencies -->
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
-      <artifactId>fop</artifactId>
-    </dependency>
-    <!-- batik deps from fop-core -->
+      <artifactId>fop-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+     </dependency>
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
-      <artifactId>batik-anim</artifactId>
-    </dependency>
+      <artifactId>fop-events</artifactId>
+     </dependency>
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
-      <artifactId>batik-awt-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.xmlgraphics</groupId>
-      <artifactId>batik-bridge</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.xmlgraphics</groupId>
-      <artifactId>batik-extension</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.xmlgraphics</groupId>
-      <artifactId>batik-gvt</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.xmlgraphics</groupId>
-      <artifactId>batik-transcoder</artifactId>
-    </dependency>
+      <artifactId>fop-util</artifactId>
+     </dependency>
+
   </dependencies>
 
 </project>

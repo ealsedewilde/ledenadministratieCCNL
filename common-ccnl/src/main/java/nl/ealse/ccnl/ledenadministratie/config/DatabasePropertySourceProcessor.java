@@ -1,4 +1,4 @@
-package nl.ealse.ccnl;
+package nl.ealse.ccnl.ledenadministratie.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;

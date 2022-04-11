@@ -38,7 +38,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
   // Start search queries
 
-  @Query("SELECT M FROM Member M WHERE LOWER(M.address.address) LIKE LOWER(concat(?1, '%'))")
+  @Query("SELECT M FROM Member M WHERE LOWER(M.address.street) LIKE LOWER(concat(?1, '%'))")
   List<Member> findMembersByAddress(String searchValue);
 
   @Query("SELECT M FROM Member M WHERE LOWER(M.address.city) LIKE LOWER(concat(?1, '%'))")

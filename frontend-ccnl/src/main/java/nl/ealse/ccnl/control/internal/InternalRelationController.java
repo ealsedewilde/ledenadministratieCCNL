@@ -15,13 +15,12 @@ import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationView;
-import nl.ealse.javafx.mapping.DataMapper;
-import org.springframework.context.ApplicationListener;
+import nl.ealse.javafx.mapping.ViewModel;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class InternalRelationController extends InternalRelationView
-    implements ApplicationListener<InternalRelationSelectionEvent> {
+public class InternalRelationController extends InternalRelationView {
   private final PageController pageController;
 
   private final InternalRelationValidation internalRelationValidation;
@@ -41,7 +40,7 @@ public class InternalRelationController extends InternalRelationView
 
   @FXML
   private SaveButton saveButton;
-  
+
   @Getter
   @FXML
   private AddressController addressController;
@@ -62,26 +61,24 @@ public class InternalRelationController extends InternalRelationView
         .forEach(sb -> sb.setDisable(getTitle().getItems().isEmpty() || !valid)));
   }
 
-  @Override
-  public void onApplicationEvent(InternalRelationSelectionEvent event) {
-    if (event.getMenuChoice() == MenuChoice.NEW_INTERNAL_RELATION
-        || event.getMenuChoice() == MenuChoice.AMEND_INTERNAL_RELATION) {
-      this.currentMenuChoice = event.getMenuChoice();
-      pageController.loadPage(PageName.INTERNAL_RELATION_ADDRESS);
-      addressController.getHeaderText().setText(getHeaderText());
-      this.selectedInternalRelation = event.getSelectedEntity();
-      this.model = new InternalRelation();
-      if (event.getMenuChoice() == MenuChoice.NEW_INTERNAL_RELATION) {
-        initializeTitles();
-      } else {
-        getTitle().getItems().clear();
-        Arrays.stream(RelationNumberValue.values())
-            .forEach(rn -> getTitle().getItems().add(rn.getLabel()));
-        getTitle().setDisable(true);
-        getTitleE().setVisible(false);
-      }
-      reset();
+  @EventListener(
+      condition = "#event.name('NEW_INTERNAL_RELATION','AMEND_INTERNAL_RELATION')")
+  public void handleRelation(InternalRelationSelectionEvent event) {
+    this.currentMenuChoice = event.getMenuChoice();
+    pageController.loadPage(PageName.INTERNAL_RELATION_ADDRESS);
+    addressController.getHeaderText().setText(getHeaderText());
+    this.selectedInternalRelation = event.getSelectedEntity();
+    this.model = new InternalRelation();
+    if (event.getMenuChoice() == MenuChoice.NEW_INTERNAL_RELATION) {
+      initializeTitles();
+    } else {
+      getTitle().getItems().clear();
+      Arrays.stream(RelationNumberValue.values())
+          .forEach(rn -> getTitle().getItems().add(rn.getLabel()));
+      getTitle().setDisable(true);
+      getTitleE().setVisible(false);
     }
+    reset();
   }
 
   private void initializeTitles() {
@@ -103,8 +100,8 @@ public class InternalRelationController extends InternalRelationView
 
   @FXML
   public void reset() {
-    DataMapper.modelToForm(this, selectedInternalRelation);
-    DataMapper.formToModel(this, model);
+    ViewModel.modelToView(this, selectedInternalRelation);
+    ViewModel.viewToModel(this, model);
     if (currentMenuChoice == MenuChoice.NEW_INTERNAL_RELATION && !getTitle().getItems().isEmpty()) {
       getTitle().getSelectionModel().selectFirst();
     }
@@ -117,7 +114,7 @@ public class InternalRelationController extends InternalRelationView
   @FXML
   public void save() {
     addressController.enrich();
-    DataMapper.formToModel(this, model);
+    ViewModel.viewToModel(this, model);
     RelationNumberValue rn = RelationNumberValue.fromLabel(model.getTitle());
     model.setRelationNumber(rn.getRelationNumber());
     internalRelationService.persistInternalRelation(model);
@@ -151,7 +148,7 @@ public class InternalRelationController extends InternalRelationView
     currentPage = PageName.INTERNAL_RELATION_ADDRESS;
     pageController.setActivePage(currentPage);
     this.headerText.setText(getHeaderText());
-    addressController.getAddress().requestFocus();
+    addressController.getStreet().requestFocus();
     internalRelationValidation.validate();
   }
 

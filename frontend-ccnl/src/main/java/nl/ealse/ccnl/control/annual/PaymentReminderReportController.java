@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import javafx.concurrent.Task;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.excelexport.ExportService;
@@ -12,14 +11,14 @@ import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Lazy(false) // Because no FXML
-public class PaymentReminderReportController implements ApplicationListener<MenuChoiceEvent> {
+public class PaymentReminderReportController {
 
   @Value("${ccnl.directory.excel:c:/temp}")
   private String reportDirectory;
@@ -41,24 +40,21 @@ public class PaymentReminderReportController implements ApplicationListener<Menu
     this.executor = executor;
   }
 
-  @Override
+  @EventListener(condition = "#event.name('PRODUCE_REMINDER_REPORT')")
   public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.PRODUCE_REMINDER_REPORT == event.getMenuChoice()) {
-      if (fileChooser == null) {
-        initialize();
-      }
-      File reportFile = fileChooser.showSaveDialog();
-      if (reportFile != null) {
-        pageController.showPermanentMessage("Herinneringen overzicht wordt aangemaakt");
-        ReminderTask reminderTask = new ReminderTask(exportService, reportFile);
-        reminderTask.setOnSucceeded(t -> 
-        pageController.showMessage("Herinneringen overzicht is aangemaakt"));
-        reminderTask.setOnFailed(t -> 
-        pageController.showErrorMessage(t.getSource().getException().getMessage()));
-        executor.execute(reminderTask);
-      }
+    if (fileChooser == null) {
+      initialize();
     }
-
+    File reportFile = fileChooser.showSaveDialog();
+    if (reportFile != null) {
+      pageController.showPermanentMessage("Herinneringen overzicht wordt aangemaakt");
+      ReminderTask reminderTask = new ReminderTask(exportService, reportFile);
+      reminderTask
+          .setOnSucceeded(t -> pageController.showMessage("Herinneringen overzicht is aangemaakt"));
+      reminderTask.setOnFailed(
+          t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+      executor.execute(reminderTask);
+    }
   }
 
   private void initialize() {
@@ -66,12 +62,12 @@ public class PaymentReminderReportController implements ApplicationListener<Menu
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
     fileChooser.setInitialDirectory(new File(reportDirectory));
   }
-  
+
   protected static class ReminderTask extends Task<Void> {
 
     private final ExportService exportService;
     private final File reportFile;
-    
+
     ReminderTask(ExportService exportService, File reportFile) {
       this.exportService = exportService;
       this.reportFile = reportFile;
@@ -86,7 +82,7 @@ public class PaymentReminderReportController implements ApplicationListener<Menu
       }
       return null;
     }
-    
+
   }
 
 }

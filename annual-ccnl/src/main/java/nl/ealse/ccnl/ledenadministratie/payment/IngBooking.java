@@ -4,7 +4,7 @@ import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -22,51 +22,37 @@ import org.w3c.dom.NodeList;
 @Slf4j
 public class IngBooking implements Comparable<IngBooking> {
 
-  private static final Map<String, XPathExpression> EXPRESSIONS = new HashMap<>();
-
   private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
   private static final DateTimeFormatter DF_KEY = DateTimeFormatter.ofPattern("yyyyMMdd");
 
   private static final TransformerFactory TF = TransformerFactory.newInstance();
+  private static final XPathConfig xpathConfig = new XPathConfig();
 
   static {
-    TF.setAttribute("http://javax.xml.XMLConstants/property/accessExternalDTD", "");
-    TF.setAttribute("http://javax.xml.XMLConstants/property/accessExternalStylesheet", "");
-
-    XPath xpath = XPathUtil.newIngXPath();
-    try {
-      EXPRESSIONS.put("bedrag", xpath.compile("ing:Amt"));
-      EXPRESSIONS.put("debet", xpath.compile("ing:CdtDbtInd"));
-      EXPRESSIONS.put("boekdatum", xpath.compile("ing:BookgDt/ing:Dt"));
-      EXPRESSIONS.put("d.naam",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Cdtr/ing:Nm"));
-      EXPRESSIONS.put("c.naam",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Dbtr/ing:Nm"));
-      EXPRESSIONS.put("d.rekening",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:CdtrAcct/ing:Id/ing:IBAN"));
-      EXPRESSIONS.put("c.rekening",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:DbtrAcct/ing:Id/ing:IBAN"));
-      EXPRESSIONS.put("d.adres",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Cdtr/ing:PstlAdr/ing:AdrLine"));
-      EXPRESSIONS.put("c.adres",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Dbtr/ing:PstlAdr/ing:AdrLine"));
-      EXPRESSIONS.put("omschrijving",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RmtInf/ing:Ustrd"));
-      EXPRESSIONS.put("stornoInfo",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:Refs/ing:EndToEndId"));
-      EXPRESSIONS.put("cancelReason",
-          xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RtrInf/ing:Rsn/ing:Cd"));
-      EXPRESSIONS.put("bookingType", xpath.compile("ing:BkTxCd/ing:Domn/ing:Fmly/ing:Cd"));
-    } catch (XPathExpressionException e) {
-      log.error("", e);
-      throw new ExceptionInInitializerError(e);
-    }
+    TF.setAttribute(javax.xml.XMLConstants.ACCESS_EXTERNAL_DTD, "");
+    TF.setAttribute(javax.xml.XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
   }
 
+  /**
+   * The ban transaction that is wrapper by this class.
+   */
   private final Element element;
 
+  /**
+   * Expression used to extract data from the <code>element</code>.
+   */
+  private Map<Token, XPathExpression> expressions;
+
+  /**
+   * This booking is a membership fee.
+   * This is determined during the reconciliation process.
+   */
   private boolean contributie = true;
 
+  /**
+   * Member number,
+   * This number is determined during the reconciliation process.
+   */
   private int lidnummer;
 
   private Double bedrag;
@@ -82,31 +68,39 @@ public class IngBooking implements Comparable<IngBooking> {
 
   private LocalDate boekdatum;
 
+  /**
+   * Unique key for this booking
+   * It consists of the booking dat (yyMMdd + member number.
+   */
   private int key;
 
   public IngBooking(Element element) {
     this.element = element;
+    this.expressions = xpathConfig.getCreditExpressions();
+    if (isDebet()) {
+      this.expressions = xpathConfig.getDebitExpressions();
+    }
+  }
+
+  private boolean isDebet() {
+    if (debet == null) {
+      debet = "DBIT".equals(getValue(Token.DEBET));
+    }
+    return debet;
   }
 
   public Double getBedrag() {
     if (bedrag == null) {
-      bedrag = Double.parseDouble(getValue("bedrag"));
+      bedrag = Double.parseDouble(getValue(Token.BEDRAG));
       bedrag = isDebet() ? bedrag * -1 : bedrag;
     }
     return bedrag;
   }
 
-  public boolean isDebet() {
-    if (debet == null) {
-      debet = "DBIT".equals(getValue("debet"));
-    }
-    return debet;
-  }
-
   public LocalDate getBoekdatum() {
     if (boekdatum == null) {
       try {
-        String datum = getValue("boekdatum");
+        String datum = getValue(Token.BOEKDATUM);
         boekdatum = LocalDate.parse(datum, DF);
       } catch (DateTimeParseException e) {
         throw new PaymentException(e);
@@ -117,24 +111,15 @@ public class IngBooking implements Comparable<IngBooking> {
 
   public String getNaam() {
     if (naam == null || naam.length() == 0) {
-      if (isDebet()) {
-        naam = getValue("d.naam");
-      } else {
-        naam = getValue("c.naam");
-      }
+      naam = getValue(Token.NAAM);
     }
     return naam;
   }
 
   public String getAdres() {
     if (adres == null) {
-      final NodeList result;
-      if (isDebet()) {
-        result = getNodeList("d.adres");
-      } else {
-        result = getNodeList("c.adres");
-      }
-      if (result.getLength() > 1) {
+      final NodeList result = getNodeList(Token.ADRES);
+      if (result.getLength() > 0) {
         adres = result.item(0).getTextContent();
       } else {
         adres = "";
@@ -145,12 +130,7 @@ public class IngBooking implements Comparable<IngBooking> {
 
   public String getPostcode() {
     if (postcode == null) {
-      final NodeList result;
-      if (isDebet()) {
-        result = getNodeList("d.adres");
-      } else {
-        result = getNodeList("c.adres");
-      }
+      final NodeList result = getNodeList(Token.ADRES);
       if (result.getLength() > 1) {
         postcode = result.item(1).getTextContent().replaceAll("\\s", "").substring(0, 6);
       } else {
@@ -162,32 +142,28 @@ public class IngBooking implements Comparable<IngBooking> {
 
   public String getTegenRekening() {
     if (tegenRekening == null) {
-      if (isDebet()) {
-        tegenRekening = getValue("d.rekening");
-      } else {
-        tegenRekening = getValue("c.rekening");
-      }
+      tegenRekening = getValue(Token.TEGEN_REKENING);
     }
     return tegenRekening;
   }
 
   public String getOmschrijving() {
     if (omschrijving == null) {
-      omschrijving = getValue("omschrijving");
+      omschrijving = getValue(Token.OMSCHRIJVING);
     }
     return omschrijving;
   }
 
   public String getStorneringInfo() {
     if (stornoInfo == null) {
-      stornoInfo = getValue("stornoInfo");
+      stornoInfo = getValue(Token.STORNO_INFO);
     }
     return stornoInfo;
   }
 
   public BookingType getTypebooking() {
     if (bookingType == null) {
-      String type = getValue("bookingType");
+      String type = getValue(Token.BOOKING_TYPE);
       bookingType = BookingType.valueOf(type);
     }
     return bookingType;
@@ -195,23 +171,24 @@ public class IngBooking implements Comparable<IngBooking> {
 
   public CancelReason getStornoReden() {
     if (cancelReason == null) {
-      String reden = getValue("cancelReason");
+      String reden = getValue(Token.CANCEL_REASON);
       cancelReason = CancelReason.valueOf(reden);
     }
     return cancelReason;
   }
 
-  private String getValue(String key) {
+  private String getValue(Token key) {
     try {
-      return EXPRESSIONS.get(key).evaluate(element);
+      XPathExpression exp = expressions.get(key);
+      return exp.evaluate(element);
     } catch (XPathExpressionException e) {
       throw new PaymentException(e);
     }
   }
 
-  private NodeList getNodeList(String key) {
+  private NodeList getNodeList(Token key) {
     try {
-      return (NodeList) EXPRESSIONS.get(key).evaluate(element, XPathConstants.NODESET);
+      return (NodeList) expressions.get(key).evaluate(element, XPathConstants.NODESET);
     } catch (XPathExpressionException e) {
       throw new PaymentException(e);
     }
@@ -279,5 +256,66 @@ public class IngBooking implements Comparable<IngBooking> {
   public int compareTo(IngBooking o) {
     return this.getKey() - o.getKey();
   }
+
+  private enum Token {
+    BOOKING_TYPE, BEDRAG, BOEKDATUM, DEBET, NAAM, POSTCODE, ADRES, TEGEN_REKENING, OMSCHRIJVING, STORNO_INFO, CANCEL_REASON
+  }
+  
+  private static final class XPathConfig {
+    private final Map<Token, XPathExpression> debitExpressions = new EnumMap<>(Token.class);
+    private final Map<Token, XPathExpression> creditExpressions = new EnumMap<>(Token.class);
+    
+    private XPathConfig() {
+      init();
+    }
+
+    public void init() {
+      XPath xpath = XPathUtil.newIngXPath();
+
+      try {
+        debitExpressions.put(Token.DEBET, xpath.compile("ing:CdtDbtInd"));
+        debitExpressions.put(Token.BEDRAG, xpath.compile("ing:Amt"));
+        debitExpressions.put(Token.BOEKDATUM, xpath.compile("ing:BookgDt/ing:Dt"));
+        debitExpressions.put(Token.OMSCHRIJVING,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RmtInf/ing:Ustrd"));
+        debitExpressions.put(Token.STORNO_INFO,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:Refs/ing:EndToEndId"));
+        debitExpressions.put(Token.CANCEL_REASON,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RtrInf/ing:Rsn/ing:Cd"));
+        debitExpressions.put(Token.BOOKING_TYPE,
+            xpath.compile("ing:BkTxCd/ing:Domn/ing:Fmly/ing:Cd"));
+
+        creditExpressions.putAll(debitExpressions);
+
+        debitExpressions.put(Token.NAAM,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Cdtr/ing:Nm"));
+        creditExpressions.put(Token.NAAM,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Dbtr/ing:Nm"));
+        debitExpressions.put(Token.TEGEN_REKENING,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:CdtrAcct/ing:Id/ing:IBAN"));
+        creditExpressions.put(Token.TEGEN_REKENING,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:DbtrAcct/ing:Id/ing:IBAN"));
+        debitExpressions.put(Token.ADRES,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Cdtr/ing:PstlAdr/ing:AdrLine"));
+        creditExpressions.put(Token.ADRES,
+            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Dbtr/ing:PstlAdr/ing:AdrLine"));
+
+      } catch (XPathExpressionException e) {
+        log.error("Invalid XPath", e);
+        throw new ExceptionInInitializerError(e);
+      }
+    }
+    
+    public Map<Token, XPathExpression> getDebitExpressions() {
+      return debitExpressions;
+    }
+    
+    public Map<Token, XPathExpression> getCreditExpressions() {
+      return creditExpressions;
+    }
+    
+  }
+  
+  
 
 }

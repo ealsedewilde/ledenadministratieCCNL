@@ -16,7 +16,6 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import lombok.Getter;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -28,12 +27,12 @@ import nl.ealse.ccnl.service.SepaDirectDebitService.MappingResult;
 import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class SepaDirectDebitsController implements ApplicationListener<MenuChoiceEvent> {
+public class SepaDirectDebitsController {
   private final PageController pageController;
 
   private final SepaDirectDebitService service;
@@ -74,15 +73,13 @@ public class SepaDirectDebitsController implements ApplicationListener<MenuChoic
     this.executor = executor;
   }
 
-  @Override
+  @EventListener(condition = "#event.name('PRODUCE_DIRECT_DEBITS_FILE')")
   public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.PRODUCE_DIRECT_DEBITS_FILE == event.getMenuChoice()) {
-      generateButton.setDisable(true);
-      selectedFile = null;
-      tableView.getItems().clear();
-      tableView.getItems().addAll(service.getProperties());
-      errorMessageLabel.setVisible(false);
-    }
+    generateButton.setDisable(true);
+    selectedFile = null;
+    tableView.getItems().clear();
+    tableView.getItems().addAll(service.getProperties());
+    errorMessageLabel.setVisible(false);
   }
 
   @FXML

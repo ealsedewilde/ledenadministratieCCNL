@@ -88,8 +88,8 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderL
   private void doTest() {
     MenuChoiceEvent btEvent = new MenuChoiceEvent(this, MenuChoice.PRODUCE_REMINDER_LETTERS_BT);
     MenuChoiceEvent ddEvent = new MenuChoiceEvent(this, MenuChoice.PRODUCE_REMINDER_LETTERS_DD);
-    sut.onApplicationEvent(btEvent);
-    sut.onApplicationEvent(ddEvent);
+    sut.remindersBT(btEvent);
+    sut.remindersDD(ddEvent);
 
     sut.showLetterExample();
     verify(documentService).generatePDF(any(LetterData.class));

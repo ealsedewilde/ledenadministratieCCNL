@@ -1,2 +1,2 @@
 @echo off
-start runtime\bin\javaw.exe -jar app\LedenadministratieApp.jar
+start LedenadministratieCCNL\runtime\bin\javaw.exe -jar LedenadministratieCCNL\app\LedenadministratieApp.jar

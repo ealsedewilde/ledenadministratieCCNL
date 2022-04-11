@@ -17,7 +17,7 @@ class PartnerSearchControllerTest {
     PartnerSelectionEvent result = sut.newEntitySelectionEvent(MenuChoice.AMEND_PARTNER);
     Assertions.assertNotNull(result);
 
-    Map<String, SearchItem> itemMap = sut.searchItemValues();
+    Map<String, SearchItem> itemMap = sut.getSearchItemValues();
     Assertions.assertEquals(5, itemMap.size());
   }
 

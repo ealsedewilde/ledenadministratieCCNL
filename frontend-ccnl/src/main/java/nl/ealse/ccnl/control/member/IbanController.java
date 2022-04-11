@@ -5,15 +5,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import org.apache.commons.validator.routines.IBANValidator;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class IbanController implements ApplicationListener<MemberSeLectionEvent> {
+public class IbanController {
 
   private final SepaAuthorizarionController parentController;
 
@@ -61,15 +60,13 @@ public class IbanController implements ApplicationListener<MemberSeLectionEvent>
 
   }
 
-  @Override
+  @EventListener(condition = "#event.name('PAYMENT_AUTHORIZATION')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
-    if (event.getMenuChoice() == MenuChoice.PAYMENT_AUTHORIZATION) {
-      this.selectedMember = event.getSelectedEntity();
-      memberInfo.setText(String.format("Lid %d (%s)", selectedMember.getMemberNumber(),
-          selectedMember.getFullName()));
-      ibanNumberE.setText(null);
-      ibanNumberE.setVisible(false);
-    }
+    this.selectedMember = event.getSelectedEntity();
+    memberInfo.setText(String.format("Lid %d (%s)", selectedMember.getMemberNumber(),
+        selectedMember.getFullName()));
+    ibanNumberE.setText(null);
+    ibanNumberE.setVisible(false);
   }
 
   private static class IbanNumberListener implements ChangeListener<String> {

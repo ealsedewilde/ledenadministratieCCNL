@@ -17,8 +17,8 @@ public class AddressValidation extends CompositeValidator {
    */
   public void initializeValidation(Consumer<Boolean> vc) {
     setCallback(vc);
-    if (addressController.getAddress() != null) {
-      required(addressController.getAddress(), addressController.getAddressE());
+    if (addressController.getStreet() != null) {
+      required(addressController.getStreet(), addressController.getStreetE());
       AddressNumberValidator addressNumberValidator = new AddressNumberValidator(
           addressController.getAddressNumber(), addressController.getAddressNumberE());
       addValidator(addressController.getAddressNumber(), addressNumberValidator);
@@ -37,11 +37,11 @@ public class AddressValidation extends CompositeValidator {
    */
   @Override
   protected void resetErrorMessages() {
-    if (addressController.getAddress() != null) {
-      addressController.getAddressE().setVisible(false);
+    if (addressController.getStreet() != null) {
+      addressController.getStreetE().setVisible(false);
       addressController.getAddressNumberE().setVisible(false);
       addressController.getCityE().setVisible(false);
-      String address = addressController.getAddress().getText();
+      String address = addressController.getStreet().getText();
       if (address == null || address.isEmpty()) {
         // assume the page is in its initial state.
         addressController.getPostalCodeE().setVisible(false);

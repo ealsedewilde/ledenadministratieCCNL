@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.PDFViewer;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -28,12 +27,12 @@ import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Slf4j
-public class SepaAuthorizarionController implements ApplicationListener<MemberSeLectionEvent> {
+public class SepaAuthorizarionController {
 
   @Value("${ccnl.directory.sepa:c:/temp}")
   private String sepaDirectory;
@@ -52,13 +51,13 @@ public class SepaAuthorizarionController implements ApplicationListener<MemberSe
   private File selectedFile;
 
   private WrappedFileChooser fileChooser;
-  
+
   @Getter
   private Stage ibanNumberStage;
 
 
-  public SepaAuthorizarionController(PageController pageController,
-      DocumentService documentService, MemberService service) {
+  public SepaAuthorizarionController(PageController pageController, DocumentService documentService,
+      MemberService service) {
     this.pageController = pageController;
     this.documentService = documentService;
     this.service = service;
@@ -68,7 +67,7 @@ public class SepaAuthorizarionController implements ApplicationListener<MemberSe
   public void initialize() {
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), PDF, PNG);
     fileChooser.setInitialDirectory(new File(sepaDirectory));
-    
+
     ibanNumberStage = new Stage();
     ibanNumberStage.initModality(Modality.APPLICATION_MODAL);
     ibanNumberStage.setTitle("IBAN-nummer toevoegen");
@@ -80,17 +79,14 @@ public class SepaAuthorizarionController implements ApplicationListener<MemberSe
 
   }
 
-  @Override
+  @EventListener(condition = "#event.name('PAYMENT_AUTHORIZATION')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
-    if (event.getMenuChoice() == MenuChoice.PAYMENT_AUTHORIZATION) {
-      this.selectedMember = event.getSelectedEntity();
-      if (selectedMember.getIbanNumber() == null) {
-         ibanNumberStage.show();
-      } else {
-        selectSepaAuthorization();
-      }
+    this.selectedMember = event.getSelectedEntity();
+    if (selectedMember.getIbanNumber() == null) {
+      ibanNumberStage.show();
+    } else {
+      selectSepaAuthorization();
     }
-
   }
 
   public void selectSepaAuthorization() {
@@ -120,7 +116,7 @@ public class SepaAuthorizarionController implements ApplicationListener<MemberSe
     documentService.saveDocument(document);
     pageController.showMessage("SEPA-machtiging opgeslagen bij lid");
     pdfViewer.close();
-    
+
     selectedMember.setPaymentMethod(PaymentMethod.DIRECT_DEBIT);
     service.persistMember(selectedMember);
   }

@@ -2,18 +2,16 @@ package nl.ealse.ccnl.control.partner;
 
 import javafx.fxml.FXML;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class PartnerController extends ExternalRelationController<ExternalRelationPartner>
-    implements ApplicationListener<PartnerSelectionEvent> {
+public class PartnerController extends ExternalRelationController<ExternalRelationPartner> {
   private final PageController pageController;
 
   private PageName currentPage;
@@ -24,16 +22,13 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
     this.pageController = pageController;
   }
 
-  @Override
-  public void onApplicationEvent(PartnerSelectionEvent event) {
-    if (event.getMenuChoice() == MenuChoice.NEW_PARTNER
-        || event.getMenuChoice() == MenuChoice.AMEND_PARTNER) {
-      pageController.loadPage(PageName.PARTNER_ADDRESS);
-      this.selectedExternalRelation = event.getSelectedEntity();
-      this.model = new ExternalRelationPartner();
-      this.currentMenuChoice = event.getMenuChoice();
-      reset();
-    }
+  @EventListener(condition = "#event.name('NEW_PARTNER','AMEND_PARTNER')")
+  public void handlePartner(PartnerSelectionEvent event) {
+    pageController.loadPage(PageName.PARTNER_ADDRESS);
+    this.selectedExternalRelation = event.getSelectedEntity();
+    this.model = new ExternalRelationPartner();
+    this.currentMenuChoice = event.getMenuChoice();
+    reset();
   }
 
   @FXML
@@ -62,7 +57,7 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
     currentPage = PageName.PARTNER_ADDRESS;
     pageController.setActivePage(currentPage);
     this.headerText.setText(getHeaderText());
-    getAddressController().getAddress().requestFocus();
+    getAddressController().getStreet().requestFocus();
     externalRelationValidation.validate();
   }
 

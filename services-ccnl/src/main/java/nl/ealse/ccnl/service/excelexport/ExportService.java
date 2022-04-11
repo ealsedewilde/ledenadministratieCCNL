@@ -109,7 +109,6 @@ public class ExportService {
       List<Member> lastYearMembers =
           memberRepository.findMemberByMemberStatus(MembershipStatus.LAST_YEAR_MEMBERSHIP);
       lastYearMembers.forEach(targetFile::addMember);
-      targetFile.close();
     }
   }
 
@@ -119,7 +118,6 @@ public class ExportService {
       LocalDate refDate = LocalDate.now();
       refDate = refDate.withDayOfYear(1);
       memberRepository.findNewMembers(refDate).forEach(targetFile::addMember);
-      targetFile.close();
     }
   }
 
@@ -129,7 +127,6 @@ public class ExportService {
       List<Member> lastYearMembers =
           memberRepository.findMemberByMemberStatus(MembershipStatus.LAST_YEAR_MEMBERSHIP);
       lastYearMembers.forEach(targetFile::addMember);
-      targetFile.close();
     }
   }
 
@@ -139,7 +136,6 @@ public class ExportService {
       List<Member> lastYearMembers =
           memberRepository.findMemberByMemberStatus(MembershipStatus.OVERDUE);
       lastYearMembers.forEach(targetFile::addMember);
-      targetFile.close();
     }
   }
 
@@ -149,7 +145,6 @@ public class ExportService {
       EnumSet<PaymentMethod> paymentMethods = EnumSet.of(PaymentMethod.BANK_TRANSFER, PaymentMethod.DIRECT_DEBIT);
       List<Member> selectedMembers = memberRepository.findMembersCurrentYearNotPaid(paymentMethods);
       selectedMembers.forEach(targetFile::addMember);
-      targetFile.close();
     }
   }
 

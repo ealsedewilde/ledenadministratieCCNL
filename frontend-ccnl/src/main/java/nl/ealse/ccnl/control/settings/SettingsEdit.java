@@ -4,12 +4,11 @@ import javafx.fxml.FXML;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class SettingsEdit extends SettingsView
-    implements ApplicationListener<SettingSelectionEvent> {
+public class SettingsEdit extends SettingsView {
 
   @Getter
   private final SettingsController controller;
@@ -49,7 +48,7 @@ public class SettingsEdit extends SettingsView
     getValueE().setVisible(false);
   }
 
-  @Override
+  @EventListener
   public void onApplicationEvent(SettingSelectionEvent event) {
     selectedSettings = event.getSelectedEntity();
     reset();

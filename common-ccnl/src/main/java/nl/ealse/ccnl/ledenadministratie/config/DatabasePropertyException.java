@@ -1,4 +1,4 @@
-package nl.ealse.ccnl;
+package nl.ealse.ccnl.ledenadministratie.config;
 
 @SuppressWarnings("serial")
 public class DatabasePropertyException extends RuntimeException {

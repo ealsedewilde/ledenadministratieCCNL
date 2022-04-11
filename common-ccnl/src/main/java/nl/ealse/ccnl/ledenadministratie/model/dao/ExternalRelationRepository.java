@@ -10,7 +10,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface ExternalRelationRepository<T extends ExternalRelation>
     extends JpaRepository<T, Integer> {
 
-  @Query("SELECT M FROM #{#entityName} M WHERE LOWER(M.address.address) LIKE LOWER(concat(?1, '%'))")
+  @Query("SELECT M FROM #{#entityName} M WHERE LOWER(M.address.street) LIKE LOWER(concat(?1, '%'))")
   List<T> findExternalRelationsByAddress(String searchValue);
 
   @Query("SELECT M FROM #{#entityName} M WHERE LOWER(M.address.city) LIKE LOWER(concat(?1, '%'))")

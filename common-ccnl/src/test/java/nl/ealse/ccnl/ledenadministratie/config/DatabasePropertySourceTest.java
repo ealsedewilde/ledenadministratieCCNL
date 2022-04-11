@@ -1,4 +1,4 @@
-package nl.ealse.ccnl;
+package nl.ealse.ccnl.ledenadministratie.config;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

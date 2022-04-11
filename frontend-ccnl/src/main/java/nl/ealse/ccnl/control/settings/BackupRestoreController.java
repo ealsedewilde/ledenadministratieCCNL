@@ -4,8 +4,6 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.concurrent.Task;
-import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.BackupRestoreService;
@@ -13,15 +11,14 @@ import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Lazy(false) // Because no FXML
-@Slf4j
-public class BackupRestoreController implements ApplicationListener<MenuChoiceEvent> {
+public class BackupRestoreController {
 
   private static final DateTimeFormatter formatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss");
@@ -48,16 +45,8 @@ public class BackupRestoreController implements ApplicationListener<MenuChoiceEv
     this.executor = executor;
   }
 
-  @Override
-  public void onApplicationEvent(MenuChoiceEvent event) {
-    if (MenuChoice.MANAGE_BACKUP_DATABASE == event.getMenuChoice()) {
-      backupDatabase();
-    } else if (MenuChoice.MANAGE_RESTORE_DATABASE == event.getMenuChoice()) {
-      restoreDatabase();
-    }
-  }
-
-  private void backupDatabase() {
+  @EventListener(condition = "#event.name('MANAGE_BACKUP_DATABASE')")
+  public void backup(MenuChoiceEvent event) {
     if (fileChooser == null) {
       initialize();
     }
@@ -68,15 +57,13 @@ public class BackupRestoreController implements ApplicationListener<MenuChoiceEv
       pageController.showPermanentMessage("Backup wordt aangemaakt; even geduld a.u.b.");
       AsyncTask asyncTask = new AsyncTask(backupFile, service, true);
       asyncTask.setOnSucceeded(t -> pageController.showMessage("Backup is aangemaakt"));
-      asyncTask.setOnFailed(t -> {
-        log.error(t.getSource().getException().getMessage());
-        pageController.showErrorMessage("Aanmaken backup is mislukt");
-      });
+      asyncTask.setOnFailed(t -> pageController.showErrorMessage("Aanmaken backup is mislukt"));
       executor.execute(asyncTask);
     }
   }
 
-  private void restoreDatabase() {
+  @EventListener(condition = "#event.name('MANAGE_RESTORE_DATABASE')")
+  public void restore(MenuChoiceEvent event) {
     if (fileChooser == null) {
       initialize();
     }
@@ -86,10 +73,8 @@ public class BackupRestoreController implements ApplicationListener<MenuChoiceEv
       pageController.showPermanentMessage("Backup wordt teruggezet; even geduld a.u.b.");
       AsyncTask asyncTask = new AsyncTask(backupFile, service, false);
       asyncTask.setOnSucceeded(t -> pageController.showMessage("Backup is teruggezet"));
-      asyncTask.setOnFailed(t -> {
-        log.error(t.getSource().getException().getMessage());
-        pageController.showErrorMessage("Terugzetten backup is mislukt");
-      });
+      asyncTask
+          .setOnFailed(t -> pageController.showErrorMessage("Terugzetten backup is mislukt"));
       executor.execute(asyncTask);
     }
   }

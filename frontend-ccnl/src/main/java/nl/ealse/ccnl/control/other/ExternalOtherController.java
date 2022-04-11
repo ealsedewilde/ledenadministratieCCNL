@@ -2,18 +2,16 @@ package nl.ealse.ccnl.control.other;
 
 import javafx.fxml.FXML;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ExternalOtherController extends ExternalRelationController<ExternalRelationOther>
-    implements ApplicationListener<ExternalOtherSelectionEvent> {
+public class ExternalOtherController extends ExternalRelationController<ExternalRelationOther> {
   private final PageController pageController;
 
   private PageName currentPage;
@@ -24,16 +22,13 @@ public class ExternalOtherController extends ExternalRelationController<External
     this.pageController = pageController;
   }
 
-  @Override
-  public void onApplicationEvent(ExternalOtherSelectionEvent event) {
-    if (event.getMenuChoice() == MenuChoice.NEW_EXTERNAL_RELATION
-        || event.getMenuChoice() == MenuChoice.AMEND_EXTERNAL_RELATION) {
-      pageController.loadPage(PageName.EXTERNAL_RELATION_ADDRESS);
-      this.currentMenuChoice = event.getMenuChoice();
-      this.selectedExternalRelation = event.getSelectedEntity();
-      this.model = new ExternalRelationOther();
-      reset();
-    }
+  @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION','AMEND_EXTERNAL_RELATION')")
+  public void handleRelation(ExternalOtherSelectionEvent event) {
+    pageController.loadPage(PageName.EXTERNAL_RELATION_ADDRESS);
+    this.currentMenuChoice = event.getMenuChoice();
+    this.selectedExternalRelation = event.getSelectedEntity();
+    this.model = new ExternalRelationOther();
+    reset();
   }
 
   @FXML
@@ -62,7 +57,7 @@ public class ExternalOtherController extends ExternalRelationController<External
     currentPage = PageName.EXTERNAL_RELATION_ADDRESS;
     pageController.setActivePage(currentPage);
     this.headerText.setText(getHeaderText());
-    getAddressController().getAddress().requestFocus();
+    getAddressController().getStreet().requestFocus();
     externalRelationValidation.validate();
   }
 

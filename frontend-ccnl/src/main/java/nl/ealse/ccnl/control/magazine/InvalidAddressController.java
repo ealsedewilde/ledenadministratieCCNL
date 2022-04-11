@@ -3,20 +3,18 @@ package nl.ealse.ccnl.control.magazine;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.AddressView;
-import nl.ealse.javafx.mapping.DataMapper;
-import org.springframework.context.ApplicationListener;
+import nl.ealse.javafx.mapping.ViewModel;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class InvalidAddressController extends AddressView
-    implements ApplicationListener<MemberSeLectionEvent> {
+public class InvalidAddressController extends AddressView {
 
   private final PageController pageController;
 
@@ -36,16 +34,13 @@ public class InvalidAddressController extends AddressView
     this.service = service;
   }
 
-  @Override
+  @EventListener(condition = "#event.name('MAGAZINE_INVALID_ADDRESS')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
-    if (MenuChoice.MAGAZINE_INVALID_ADDRESS == event.getMenuChoice()) {
-      selectedMember = event.getSelectedEntity();
-      memberNumber.setText("Adres voor lidnummer: " + selectedMember.getMemberNumber().toString());
-      memberName.setText(selectedMember.getFullName());
-      pageController.setActivePage(PageName.MAGAZINE_INVALID_ADDRESS);
-      DataMapper.modelToForm(this, selectedMember);
-    }
-
+    selectedMember = event.getSelectedEntity();
+    memberNumber.setText("Adres voor lidnummer: " + selectedMember.getMemberNumber().toString());
+    memberName.setText(selectedMember.getFullName());
+    pageController.setActivePage(PageName.MAGAZINE_INVALID_ADDRESS);
+    ViewModel.modelToView(this, selectedMember);
   }
 
   @FXML

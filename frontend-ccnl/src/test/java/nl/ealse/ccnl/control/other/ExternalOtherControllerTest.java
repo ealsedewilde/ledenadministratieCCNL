@@ -43,7 +43,7 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
   private void doTest() {
     ExternalOtherSelectionEvent event =
         new ExternalOtherSelectionEvent(sut, MenuChoice.NEW_EXTERNAL_RELATION, relation);
-    sut.onApplicationEvent(event);
+    sut.handleRelation(event);
 
     sut.save();
     verify(pageController).showMessage("Externe relatie opgeslagen");
@@ -72,7 +72,7 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
   private ExternalRelationOther externalRelationOther() {
     ExternalRelationOther r = new ExternalRelationOther();
     Address a = r.getAddress();
-    a.setAddress("straat");
+    a.setStreet("straat");
     a.setAddressNumber("99");
     a.setAddressNumberAppendix("B");
     a.setCity("Ons Dorp");
