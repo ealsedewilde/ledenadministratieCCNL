@@ -1,14 +1,12 @@
 package nl.ealse.javafx.mapping;
 
 import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.address.AddressController;
 import nl.ealse.ccnl.control.member.MemberController;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
@@ -22,7 +20,6 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-@Slf4j
 class DataMapperTest  extends FXBase {
 
   private AddressController addressController = new AddressController();

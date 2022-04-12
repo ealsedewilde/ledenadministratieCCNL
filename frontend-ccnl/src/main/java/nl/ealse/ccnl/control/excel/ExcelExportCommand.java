@@ -13,47 +13,39 @@ import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Lazy(false) // Because no FXML
-public class ExcelExportController {
+public class ExcelExportCommand {
 
   @Value("${ccnl.directory.excel:c:/temp}")
   private String excelDirectory;
 
   private final PageController pageController;
 
-  private final ApplicationContext springContext;
-
   private final TaskExecutor executor;
 
-  private ExportService service;
+  private final ExportService service;
 
-  private ExportArchiveService archiveService;
+  private final ExportArchiveService archiveService;
 
   private WrappedFileChooser fileChooser;
 
-  public ExcelExportController(PageController pageController, ApplicationContext springContext,
-      TaskExecutor executor) {
+  public ExcelExportCommand(PageController pageController,
+      TaskExecutor executor, ExportArchiveService archiveService, ExportService service) {
     this.pageController = pageController;
-    this.springContext = springContext;
+    this.archiveService = archiveService;
+    this.service = service;
     this.executor = executor;
   }
 
   private void initialize() {
-    service = springContext.getBean(ExportService.class);
-    archiveService = springContext.getBean(ExportArchiveService.class);
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
     fileChooser.setInitialDirectory(new File(excelDirectory));
   }
 
-  @EventListener(condition = "#event.group('REPORTS')")
-  public void onApplicationEvent(MenuChoiceEvent event) {
+  public void executeCommand(MenuChoiceEvent event) {
     if (fileChooser == null) {
       // There is no fxml associated with this controller; so no @FXML initialize() available!
       initialize();

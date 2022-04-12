@@ -3,7 +3,7 @@
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
   <jar>app\LedenadministratieApp.jar</jar>
-  <outfile>C:\apps\test\LedenadministratieCCNL\LedenadministratieCCNL.exe</outfile>
+  <outfile>C:\apps\launch4j\LedenadministratieCCNL\LedenadministratieCCNL.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\workspaces\github\ledenadministratieCCNL\app-ccnl\src\resources\citroen.ico</icon>
+  <icon>C:\apps\launch4j\LedenadministratieCCNL\citroen.ico</icon>
   <singleInstance>
     <mutexName>LedenadministratieCCNL</mutexName>
     <windowTitle>Ledenadministratie CCNL</windowTitle>

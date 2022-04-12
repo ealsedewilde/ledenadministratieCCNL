@@ -10,15 +10,12 @@ import nl.ealse.ccnl.service.BackupRestoreService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Lazy(false) // Because no FXML
-public class BackupRestoreController {
+public class BackupRestoreCommand {
 
   private static final DateTimeFormatter formatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss");
@@ -30,23 +27,20 @@ public class BackupRestoreController {
 
   private final PageController pageController;
 
-  private final ApplicationContext springContext;
-
   private final TaskExecutor executor;
 
-  private BackupRestoreService service;
+  private final BackupRestoreService service;
 
   private WrappedFileChooser fileChooser;
 
-  public BackupRestoreController(PageController pageController, ApplicationContext springContext,
+  public BackupRestoreCommand(PageController pageController, BackupRestoreService service,
       TaskExecutor executor) {
     this.pageController = pageController;
-    this.springContext = springContext;
+    this.service = service;
     this.executor = executor;
   }
 
-  @EventListener(condition = "#event.name('MANAGE_BACKUP_DATABASE')")
-  public void backup(MenuChoiceEvent event) {
+  public void executeCommand() {
     if (fileChooser == null) {
       initialize();
     }
@@ -80,7 +74,6 @@ public class BackupRestoreController {
   }
 
   private void initialize() {
-    service = springContext.getBean(BackupRestoreService.class);
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.ZIP);
     fileChooser.setInitialDirectory(new File(dbDirectory));
   }
