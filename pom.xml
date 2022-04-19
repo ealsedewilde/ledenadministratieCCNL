@@ -16,7 +16,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>17</java.version>
+    <java.version>11</java.version>
     <javafx.version>11.0.2</javafx.version>
     <poi.version>5.2.2</poi.version>
     <fop.version>2.7</fop.version>
