@@ -67,7 +67,7 @@
               <noHeaderFiles>true</noHeaderFiles>
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
-              <verbose>true</verbose>
+              <verbose>false</verbose>
             </configuration>
           </execution>
         </executions>
