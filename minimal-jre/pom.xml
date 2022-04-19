@@ -13,6 +13,22 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+                <includeGroupIds>org.openjfx</includeGroupIds>
+               <outputDirectory>${project.build.directory}/mods</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-jlink-plugin</artifactId>
         <version>3.1.0</version>
         <extensions>true</extensions>
@@ -26,6 +42,8 @@
             <configuration>
               <modulePaths>
                 <modulePath>${JAVA_HOME}/jmods</modulePath>
+                <modulePath>${project.build.directory}/mods</modulePath>
+                <!--<modulePath>../frontend-ccnl/target/mods</modulePath>-->
               </modulePaths>
               <addModules>
                 <addModule>java.desktop</addModule>
@@ -39,16 +57,35 @@
                 <addModule>jdk.unsupported</addModule>
                 <addModule>jdk.xml.dom</addModule>
                 <addModule>jdk.charsets</addModule>
+                <addModule>javafx.base</addModule>
+                <addModule>javafx.controls</addModule>
+                <addModule>javafx.fxml</addModule>
+                <addModule>javafx.graphics</addModule>
+                <addModule>javafx.swing</addModule>
               </addModules>
               <compress>2</compress>
               <noHeaderFiles>true</noHeaderFiles>
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
-              <verbose>false</verbose>
+              <verbose>true</verbose>
             </configuration>
           </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-swing</artifactId>
+    </dependency>
+  </dependencies>
 </project>
