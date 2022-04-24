@@ -29,10 +29,8 @@ import nl.ealse.ccnl.control.exception.PDFViewerException;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.javafx.ImagesMap;
-import org.icepdf.core.exceptions.PDFException;
-import org.icepdf.core.exceptions.PDFSecurityException;
-import org.icepdf.core.pobjects.Page;
-import org.icepdf.core.util.GraphicsRenderingHints;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
 /**
  * Simple PDF-view with paging capability.
@@ -43,9 +41,6 @@ import org.icepdf.core.util.GraphicsRenderingHints;
 public class PDFViewer extends BorderPane {
 
   private static final String HEADER_TEXT = "Pagina %d van %d";
-
-  private static final float SCALE = 1.0f;
-  private static final float ROTATION = 0f;
 
   private Scene scene;
 
@@ -65,7 +60,7 @@ public class PDFViewer extends BorderPane {
 
   private Button nextButton;
 
-  private org.icepdf.core.pobjects.Document document;
+  private PDDocument document;
 
   private int pageNum;
 
@@ -87,10 +82,9 @@ public class PDFViewer extends BorderPane {
    */
   public void showPDF(byte[] pdf, Member member) {
     this.pdf = pdf;
-    document = new org.icepdf.core.pobjects.Document();
     try {
-      document.setByteArray(pdf, 0, pdf.length, null);
-      pages = document.getNumberOfPages();
+      document = PDDocument.load(pdf);
+      pages = document.getPages().getCount();
       if (pages == 1) {
         initializeSinglePage();
       } else {
@@ -99,7 +93,7 @@ public class PDFViewer extends BorderPane {
       pdfStage.show();
       pageNum = 0;
       showPage(member);
-    } catch (PDFException | PDFSecurityException | IOException e) {
+    } catch(IOException e) {
       log.error("Error rendering PDF", e);
       throw new PDFViewerException("Error rendering PDF", e);
     }
@@ -202,15 +196,15 @@ public class PDFViewer extends BorderPane {
 
   private void showPage() {
     try {
-      BufferedImage bufferedImage = (BufferedImage) document.getPageImage(pageNum,
-          GraphicsRenderingHints.PRINT, Page.BOUNDARY_CROPBOX, ROTATION, SCALE);
+      PDFRenderer renderer = new PDFRenderer(document);
+      BufferedImage bufferedImage = renderer.renderImage(pageNum);
       Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
       ImageView imageView = new ImageView(fxImage);
       this.setCenter(imageView);
       if (pages > 1) {
         header.setText(String.format(HEADER_TEXT, pageNum + 1, pages));
       }
-    } catch (InterruptedException e) {
+    } catch (IOException e) {
       log.error("Error getting page", e);
       Thread.currentThread().interrupt();
       throw new PDFViewerException("Error getting page", e);

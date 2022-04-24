@@ -78,7 +78,7 @@ When using forms data has to be mapped between the model (JPA entities) and the 
 My business layer is behind a number of Spring services. Some of these services provide batch functionality. Such a batch function only take a few seconds at most, so no need for progress bars. However at the begin of a batch process I want to display a 'batch started message' and at the end a message of either 'successful' or 'error'. When I try to run the batch process in the FX-application thread but then the start message is never shown. When I use Java-FX concurrency to asynchronously run the batch process in another thread then the start message is displayed. I use the Spring `TaskExecutor` to provide the threads for the asynchronous `javafx.concurrent.Task`. 
 
 ## A PDF-viewer
-My application needs a way to show multi page PDF's. To my surprise there is no JavaFX framework for that. It is suggested to use pdf.js of Firefox in the webclient. That worked in my IDE, but from within a jar the whole JVM crashes without any notion why. Also pdf.js is extremely slow. I then came across IcePDF. It consists of a core component that renders PDF-pages and a Swing viewer for it. I use a `org.icepdf.core.pobjects.Document` of the IcePDF core component to render a `java.awt.image.BufferedImage` per PDF-page.
+My application needs a way to show multi page PDF's. To my surprise there is no JavaFX framework for that. It is suggested to use pdf.js of Firefox in the webclient. That worked in my IDE, but from within a jar the whole JVM crashes without any notion why. Also pdf.js is extremely slow.  Apache PDFBox `PDFRenderer` is capable of rendering a `java.awt.image.BufferedImage` per PDF-page.
 With `SwingFXUtils.toFXImage(bufferedImage, null)` I convert it to a `javafx.scene.image.Image`. That image is than used in a simple PDFViewer that I wrote. This approach delivers fine looking PDF's with an excellent performance.
 
 ## Printing
@@ -106,7 +106,7 @@ In the end I managed to get my modules error free and I got the application runn
 My modular application was still relying on several non modular jars. This means that I still was unable to run JLINK without tricks. So I reverted Java modularity, but preserving the cleaned classpath.
 
 # Deployment
-My goal is to run my application with a minimal JRE. Via trail and error I was able to determine the jmods needed in this minimal JRE.
+My goal is to run my application with a minimal JRE. Via trail and error I was able to determine the jmods needed in this minimal JRE. I added the required JavaFX modules to it.
 
 I want to package my application in a single jar which includes all dependencies.
 There are several strategies to construct such a jar:

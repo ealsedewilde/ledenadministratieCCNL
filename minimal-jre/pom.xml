@@ -43,7 +43,6 @@
               <modulePaths>
                 <modulePath>${JAVA_HOME}/jmods</modulePath>
                 <modulePath>${project.build.directory}/mods</modulePath>
-                <!--<modulePath>../frontend-ccnl/target/mods</modulePath>-->
               </modulePaths>
               <addModules>
                 <addModule>java.desktop</addModule>
