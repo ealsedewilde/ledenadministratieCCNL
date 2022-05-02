@@ -30,7 +30,7 @@ public class AddressListController {
   private static final String FILE_NAME = "adressen_clubblad_%s.xlsx";
   private static final String CARD_FILE_NAME = "adressen_lidmaatschap_%d.xlsx";
 
-  private static final String SETTING_GROUP = "magazine";
+  private static final String SETTING_GROUP = "ccnl.magazine";
   private static final String SETTING_KEY = "number";
 
   @Value("${ccnl.directory.magazine:c:/temp}")
