@@ -11,3 +11,5 @@ INSERT INTO "PUBLIC"."SETTING" VALUES('db', 'Database Backup-/Restore directory'
 INSERT INTO "PUBLIC"."SETTING" VALUES('sepa', 'Basis directory voor SEPA formulieren', 'ccnl.directory', 'C:/Users/SKIKK/OneDrive/prive/CCNL_prive/ledenadministratie', 'ccnl.directory.sepa');               
 INSERT INTO "PUBLIC"."SETTING" VALUES('excel', 'Directory voor Excel import en export', 'ccnl.directory', 'C:/temp', 'ccnl.directory.excel'); 
 INSERT INTO "PUBLIC"."SETTING" VALUES('magazine', 'Directory voor adresbestanden van het clubblad', 'ccnl.directory', 'C:/temp', 'ccnl.directory.magazine');  
+INSERT INTO "PUBLIC"."SETTING" VALUES('incasso', 'Contributie bij automatische incasso', 'ccnl.contributie', '27,50', 'ccnl.contributie.incasso'); 
+INSERT INTO "PUBLIC"."SETTING" VALUES('overboeken', 'Contributie bij overboeken door lid', 'ccnl.contributie', '30,00', 'ccnl.contributie.overboeken');

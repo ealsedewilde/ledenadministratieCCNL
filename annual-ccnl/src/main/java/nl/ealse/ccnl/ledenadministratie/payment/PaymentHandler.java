@@ -25,19 +25,23 @@ public class PaymentHandler {
   private static final BigDecimal DD_PROFIT = BigDecimal.valueOf(2.5);
 
   private final MemberRepository dao;
+  private final MemberShipFee memberShipFee;
   private final IncassoProperties incassoProperties;
 
-  public PaymentHandler(MemberRepository dao, IncassoProperties incassoProperties) {
+  public PaymentHandler(MemberRepository dao, IncassoProperties incassoProperties,
+      MemberShipFee memberShipFee) {
     this.dao = dao;
+    this.memberShipFee = memberShipFee;
     this.incassoProperties = incassoProperties;
   }
 
   public List<String> handlePayments(List<PaymentFile> paymentFiles, LocalDate referenceDate,
       boolean includeDD) {
     List<Member> members = dao.findMemberByMemberStatus(MembershipStatus.ACTIVE);
+    
     ReconciliationContext rc =
         ReconciliationContext.newInstance(members, incassoProperties, includeDD);
-    FilterChain filterChain = new FilterChain(members, referenceDate);
+    FilterChain filterChain = new FilterChain(members, referenceDate, memberShipFee);
 
     final List<IngBooking> bookingList = new ArrayList<>();
 
@@ -47,7 +51,8 @@ public class PaymentHandler {
       if (filterChain.filter(booking)) {
         bookingList.add(booking);
       } else {
-        String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", booking.getNaam(), booking.getOmschrijving());
+        String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", booking.getNaam(),
+            booking.getOmschrijving());
         log.warn(msg);
         rc.getMessages().add(msg);
       }
@@ -66,7 +71,8 @@ public class PaymentHandler {
     bookingList.forEach(booking -> {
       MemberContext mc = rc.getMemberContext(booking.getLidnummer());
       BigDecimal amount = BigDecimal.valueOf(booking.getBedrag());
-      Transaction t = new Transaction(amount, booking.getBoekdatum(), booking.getTypebooking() ,getPaymentInfo(booking));
+      Transaction t = new Transaction(amount, booking.getBoekdatum(), booking.getTypebooking(),
+          getPaymentInfo(booking));
       mc.getTransactions().add(t);
     });
 
@@ -83,10 +89,10 @@ public class PaymentHandler {
           String msg = "Betaling ontvangen voor inactief lid " + m.getMemberNumber();
           rc.getMessages().add(msg);
         } else if (mc.getTotalAmount().compareTo(refAmount) > 0) {
-            String amountString = AmountFormatter.format(mc.getTotalAmount());
-            String msg =
-                String.format("Lid %d heeft totaal %s betaald", m.getMemberNumber(), amountString);
-            rc.getMessages().add(msg);
+          String amountString = AmountFormatter.format(mc.getTotalAmount());
+          String msg =
+              String.format("Lid %d heeft totaal %s betaald", m.getMemberNumber(), amountString);
+          rc.getMessages().add(msg);
         }
         dao.save(m);
       }

@@ -36,10 +36,11 @@ class PaymentHandlerTest {
     memberRepository = mock(MemberRepository.class);
     Optional<Member> om = Optional.of(member());
     when(memberRepository.findById(any(int.class))).thenReturn(om);
-    sut = new PaymentHandler(memberRepository, incassoProperties);
+    MemberShipFee fee = new MemberShipFee("27,50", "30,00");
+    sut = new PaymentHandler(memberRepository, incassoProperties, fee);
     List<PaymentFile> files = new ArrayList<>();
     files.add(paymentFile());
-    sut.handlePayments(files, LocalDate.of(02020, 12, 5), true);
+    sut.handlePayments(files, LocalDate.of(2020, 12, 5), true);
     verify(memberRepository, atLeastOnce()).save(any(Member.class));
   }
   

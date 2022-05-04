@@ -27,7 +27,7 @@ class SettingsRepositoryTest extends JpaTestBase {
   @Test
   void settingsTest() {
     List<Setting> settings = dao.findByOrderBySettingsGroupAscKeyAsc();
-    Assertions.assertEquals(13, settings.size());
+    Assertions.assertEquals(15, settings.size());
   }
 
   @Test
