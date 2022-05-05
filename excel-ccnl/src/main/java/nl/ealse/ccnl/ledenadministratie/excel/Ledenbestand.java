@@ -37,12 +37,12 @@ public class Ledenbestand extends CCNLBestand {
     list.forEach(c -> addCell(c.heading(), getProperties().getKolomnummer(c)));
   }
 
+  /**
+   * Add member regardless to status of the address.
+   * @param member
+   */
   public void addMember(Member member) {
     MemberExport.addMember(this, member);
-  }
-
-  public void addInvalidAddressMember(Member member) {
-    MemberExport.addInvalidAddressMember(this, member);
   }
 
   public void addClubHeading() {

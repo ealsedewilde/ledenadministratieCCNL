@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -27,8 +28,10 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class AddressListController {
 
-  private static final String FILE_NAME = "adressen_clubblad_%s.xlsx";
+  private static final String MAGAZINE_FILE_NAME = "adressen_clubblad_%s.xlsx";
   private static final String CARD_FILE_NAME = "adressen_lidmaatschap_%d.xlsx";
+  private static final String MEMBER_FILE_NUMBER = "ledenlijst_op_nummer_%d.xlsx";
+  private static final String MEMBER_FILE_NAME = "ledenlijst_op_naam_%d.xlsx";
 
   private static final String SETTING_GROUP = "ccnl.magazine";
   private static final String SETTING_KEY = "number";
@@ -74,23 +77,44 @@ public class AddressListController {
 
   @EventListener(condition = "#event.name('CARD_ADDRESS_LIST')")
   public void cardList(MenuChoiceEvent event) {
-    fileChooser.setInitialFileName(String.format(CARD_FILE_NAME, LocalDate.now().getYear()));
+    AsyncCardAddressListTask asyncTask =
+        new AsyncCardAddressListTask(magazineService);
+    generateFile(String.format(CARD_FILE_NAME, LocalDate.now().getYear()), asyncTask);
+  }
+
+  @EventListener(condition = "#event.name('MEMBER_LIST_BY_NUMBER')")
+  public void memberListByNumber(MenuChoiceEvent event) {
+    MemberListTask asyncTask =
+        new MemberListTask(magazineService, false);
+    generateFile(String.format(MEMBER_FILE_NUMBER, LocalDate.now().getYear()), asyncTask);
+  }
+
+  @EventListener(condition = "#event.name('MEMBER_LIST_BY_NAME')")
+  public void memberListByName(MenuChoiceEvent event) {
+    MemberListTask asyncTask =
+        new MemberListTask(magazineService, true);
+    generateFile(String.format(MEMBER_FILE_NAME, LocalDate.now().getYear()), asyncTask);
+  }
+  
+  private void generateFile(String fileName, FileTask task) {
+    if (fileChooser == null) {
+      initialize();
+    }
+    fileChooser.setInitialFileName(fileName);
     File addressFile = fileChooser.showSaveDialog();
     if (addressFile != null) {
+      task.setAddressFile(addressFile);
       pageController.showPermanentMessage("Bestand wordt aangemaakt; even geduld a.u.b.");
-      AsyncCardAddressListTask asyncTask =
-          new AsyncCardAddressListTask(magazineService, addressFile);
-      asyncTask
+      task
           .setOnSucceeded(evt -> pageController.showMessage(evt.getSource().getValue().toString()));
-      asyncTask.setOnFailed(
+      task.setOnFailed(
           evt -> pageController.showErrorMessage(evt.getSource().getException().getMessage()));
-      executor.execute(asyncTask);
+      executor.execute(task);
       pageController.setActivePage(PageName.LOGO);
     }
   }
 
-  @FXML
-  public void initialize() {
+  private void initialize() {
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
     fileChooser.setInitialDirectory(new File(magazineDirectory));
   }
@@ -100,18 +124,8 @@ public class AddressListController {
    */
   public void generateAddressList() {
     if (valid()) {
-      fileChooser.setInitialFileName(String.format(FILE_NAME, magazineNumber.getText()));
-      File addressFile = fileChooser.showSaveDialog();
-      if (addressFile != null) {
-        pageController.showPermanentMessage("Bestand wordt aangemaakt; even geduld a.u.b.");
-        AsyncAddressListTask asyncTask = new AsyncAddressListTask(this, addressFile);
-        asyncTask.setOnSucceeded(
-            evt -> pageController.showMessage(evt.getSource().getValue().toString()));
-        asyncTask.setOnFailed(
-            evt -> pageController.showErrorMessage(evt.getSource().getException().getMessage()));
-        executor.execute(asyncTask);
-        pageController.setActivePage(PageName.LOGO);
-      }
+      AsyncAddressListTask asyncTask = new AsyncAddressListTask(this);
+      generateFile(String.format(MAGAZINE_FILE_NAME, magazineNumber.getText()),asyncTask);
     }
   }
 
@@ -126,13 +140,11 @@ public class AddressListController {
     return false;
   }
 
-  protected static class AsyncAddressListTask extends Task<String> {
+  protected static class AsyncAddressListTask extends FileTask {
     private final AddressListController controller;
-    private final File addressFile;
 
-    AsyncAddressListTask(AddressListController controller, File addressFile) {
+    AsyncAddressListTask(AddressListController controller) {
       this.controller = controller;
-      this.addressFile = addressFile;
     }
 
     @Override
@@ -164,14 +176,12 @@ public class AddressListController {
     }
   }
 
-  protected static class AsyncCardAddressListTask extends Task<String> {
+  protected static class AsyncCardAddressListTask extends FileTask {
     private final ExportAddressService magazineService;
-    private final File addressFile;
 
-    AsyncCardAddressListTask(ExportAddressService magazineService, File addressFile) {
+    AsyncCardAddressListTask(ExportAddressService magazineService) {
       this.magazineService = magazineService;
-      this.addressFile = addressFile;
-    }
+     }
 
     @Override
     protected String call() throws Exception {
@@ -185,5 +195,37 @@ public class AddressListController {
     }
 
   }
+
+  protected static class MemberListTask extends FileTask {
+    private final ExportAddressService magazineService;
+    private final boolean byName;
+    
+    MemberListTask(ExportAddressService magazineService, boolean byName) {
+      this.magazineService = magazineService;
+      this.byName = byName;
+     }
+
+    @Override
+    protected String call() throws Exception {
+      try {
+        if (byName) {
+          magazineService.generateMemberListFileByName(addressFile);
+        } else {
+          magazineService.generateMemberListFileByNumber(addressFile);
+        }
+        return "Bestand is aangemaakt";
+      } catch (IOException e) {
+        log.error("error creating Excel file", e);
+        throw new AsyncTaskException("Bestand aanmaken is mislukt");
+      }
+    }
+
+  }
+
+  protected static abstract class FileTask extends Task<String> {
+    @Setter
+    protected File addressFile;
+  }
+
 
 }

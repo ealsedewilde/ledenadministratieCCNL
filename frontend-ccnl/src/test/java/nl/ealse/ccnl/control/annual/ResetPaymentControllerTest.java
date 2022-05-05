@@ -15,7 +15,7 @@ class ResetPaymentControllerTest {
   @Test
   void testController() {
     ResetPaymentCommand sut = new ResetPaymentCommand(pageController, service);
-    sut.executeCommand();
+    sut.executeCommand(null);
     verify(pageController).showMessage("Betaalgegevens zijn gewist");
   }
 

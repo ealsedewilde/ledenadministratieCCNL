@@ -9,7 +9,7 @@ import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 public class ArchivedMemberExport {
 
   public void addMember(CCNLBestand targetFile, ArchivedMember member) {
-    MemberBaseExport.addMember(targetFile, member.getMember(), true);
+    MemberBaseExport.addMember(targetFile, member.getMember());
     targetFile.addCell(member.getId().getMemberNumber(),
         targetFile.getProperties().getKolomnummer(LidColumnDefinition.LIDNUMMER));
   }

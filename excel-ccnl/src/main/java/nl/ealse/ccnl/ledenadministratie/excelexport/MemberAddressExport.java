@@ -9,15 +9,9 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 public class MemberAddressExport {
 
   public void addMember(CCNLBestand targetFile, Member member) {
-    addMember(targetFile, member, true);
-  }
-
-  public void addMember(CCNLBestand targetFile, Member member, boolean valid) {
-    if (member.getAddress().isAddressInvalid() != valid) {
-      MemberBaseAddressExport.addMember(targetFile, member, valid);
-      targetFile.addCell(member.getMemberNumber(),
-          targetFile.getProperties().getKolomnummer(LidColumnDefinition.LIDNUMMER));
-    }
+    MemberBaseAddressExport.addMember(targetFile, member);
+    targetFile.addCell(member.getMemberNumber(),
+        targetFile.getProperties().getKolomnummer(LidColumnDefinition.LIDNUMMER));
   }
 
 }

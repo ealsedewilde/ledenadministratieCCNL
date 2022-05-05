@@ -139,9 +139,18 @@ public class MenuController {
   }
 
   public void cardAddressList() {
-    pageController.loadPage(PageName.MAGAZINE_ADDRESS_LIST);
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.CARD_ADDRESS_LIST));
+  }
+
+  public void memberListByNumber() {
+    pageController.setActivePage(PageName.LOGO);
+    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MEMBER_LIST_BY_NUMBER));
+  }
+
+  public void memberListByName() {
+    pageController.setActivePage(PageName.LOGO);
+    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MEMBER_LIST_BY_NAME));
   }
 
   public void magazineInvalidAddress() {

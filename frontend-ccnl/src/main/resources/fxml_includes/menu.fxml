@@ -54,8 +54,18 @@
           text="Adressenbestand aanmaken" />
         <MenuItem onAction="#cardAddressList" mnemonicParsing="false"
           text="Adressen lidmaatschapskaart" />
-        <MenuItem onAction="#magazineInvalidAddress" mnemonicParsing="false"
+       <MenuItem onAction="#magazineInvalidAddress" mnemonicParsing="false"
           text="Retouren registreren" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Ledenlijst">
+      <items>
+        <MenuItem onAction="#memberListByNumber" mnemonicParsing="false"
+          text="Ledenlijst op lidnummer" />
+      </items>
+      <items>
+        <MenuItem onAction="#memberListByName" mnemonicParsing="false"
+          text="Ledenlijst op achternaam" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Correspondentie">

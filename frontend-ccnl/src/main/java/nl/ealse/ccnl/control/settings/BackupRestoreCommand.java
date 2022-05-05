@@ -40,7 +40,8 @@ public class BackupRestoreCommand {
     this.executor = executor;
   }
 
-  public void executeCommand() {
+  @EventListener(condition = "#event.name('MANAGE_BACKUP_DATABASE')")
+  public void backup(MenuChoiceEvent event) {
     if (fileChooser == null) {
       initialize();
     }

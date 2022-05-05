@@ -35,7 +35,7 @@ class PaymentReminderReportControllerTest  extends FXBase {
       reportDirectory();
       doInitialize();
       setFileChooser();
-      sut.executeCommand();
+      sut.executeCommand(null);
       verify(pageController).showMessage("Herinneringen overzicht is aangemaakt");
       ar.set(true);
     }, ar);

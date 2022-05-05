@@ -5,10 +5,12 @@ import java.io.IOException;
 import javafx.concurrent.Task;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
@@ -33,7 +35,8 @@ public class PaymentReminderReportCommand {
     this.executor = executor;
   }
 
-  public void executeCommand() {
+  @EventListener(condition = "#event.name('PRODUCE_REMINDER_REPORT')")
+  public void executeCommand(MenuChoiceEvent event) {
     if (fileChooser == null) {
       initialize();
     }

@@ -90,6 +90,28 @@ public class ExportAddressService {
     try (Adresbestand targetFile = new Adresbestand(addressFile, properties)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
+      activeMembers.forEach((member) -> {
+        if (!member.getAddress().isAddressInvalid()) {
+          targetFile.addMember(member);
+        }
+        });
+      return targetFile;
+    }
+  }
+
+  public Adresbestand generateMemberListFileByNumber(File addressFile) throws IOException {
+    try (Adresbestand targetFile = new Adresbestand(addressFile, properties)) {
+
+      List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
+      activeMembers.forEach(targetFile::addMember);
+      return targetFile;
+    }
+  }
+
+  public Adresbestand generateMemberListFileByName(File addressFile) throws IOException {
+    try (Adresbestand targetFile = new Adresbestand(addressFile, properties)) {
+
+      List<Member> activeMembers = memberRepository.findMembersByStatusesOrderByName(statuses);
       activeMembers.forEach(targetFile::addMember);
       return targetFile;
     }

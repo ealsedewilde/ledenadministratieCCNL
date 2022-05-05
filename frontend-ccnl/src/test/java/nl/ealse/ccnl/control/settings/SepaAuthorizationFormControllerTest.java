@@ -40,7 +40,7 @@ class SepaAuthorizationFormControllerTest extends FXBase {
   private void doTest() {
     doInitialize();
     setFileChooser();
-    sut.executeCommand();
+    sut.executeCommand(null);
     verify(pageController).showMessage("Formulier is opgeslagen");
   }
 

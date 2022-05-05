@@ -10,29 +10,23 @@ import nl.ealse.ccnl.ledenadministratie.model.MemberBase;
 @UtilityClass
 public class MemberBaseAddressExport {
 
-  public void addMember(CCNLBestand targetFile, MemberBase member) {
-    addMember(targetFile, member, true);
-  }
-
-  void addMember(CCNLBestand targetFile, MemberBase member, boolean valid) {
-    if (member.getAddress().isAddressInvalid() != valid) {
-      CCNLColumnProperties properties = targetFile.getProperties();
-      targetFile.addRow();
-      targetFile.addCell(member.getInitials(),
-          properties.getKolomnummer(LidColumnDefinition.VOORLETTERS));
-      targetFile.addCell(member.getLastNamePrefix(),
-          properties.getKolomnummer(LidColumnDefinition.TUSSENVOEGSEL));
-      targetFile.addCell(member.getLastName(),
-          properties.getKolomnummer(LidColumnDefinition.ACHTERNAAM));
-      targetFile.addCell(member.getAddress().getAddressAndNumber(),
-          properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
-      targetFile.addCell(member.getAddress().getPostalCode(),
-          properties.getKolomnummer(AdresColumnDefinition.POSTCODE));
-      targetFile.addCell(member.getAddress().getCity(),
-          properties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
-      targetFile.addCell(member.getAddress().getCountry(),
-          properties.getKolomnummer(AdresColumnDefinition.LAND));
-    }
+  void addMember(CCNLBestand targetFile, MemberBase member) {
+    CCNLColumnProperties properties = targetFile.getProperties();
+    targetFile.addRow();
+    targetFile.addCell(member.getInitials(),
+        properties.getKolomnummer(LidColumnDefinition.VOORLETTERS));
+    targetFile.addCell(member.getLastNamePrefix(),
+        properties.getKolomnummer(LidColumnDefinition.TUSSENVOEGSEL));
+    targetFile.addCell(member.getLastName(),
+        properties.getKolomnummer(LidColumnDefinition.ACHTERNAAM));
+    targetFile.addCell(member.getAddress().getAddressAndNumber(),
+        properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
+    targetFile.addCell(member.getAddress().getPostalCode(),
+        properties.getKolomnummer(AdresColumnDefinition.POSTCODE));
+    targetFile.addCell(member.getAddress().getCity(),
+        properties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
+    targetFile.addCell(member.getAddress().getCountry(),
+        properties.getKolomnummer(AdresColumnDefinition.LAND));
   }
 
 }

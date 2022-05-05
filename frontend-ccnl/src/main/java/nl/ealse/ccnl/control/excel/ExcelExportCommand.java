@@ -13,6 +13,7 @@ import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
@@ -45,6 +46,7 @@ public class ExcelExportCommand {
     fileChooser.setInitialDirectory(new File(excelDirectory));
   }
 
+  @EventListener(condition = "#event.group('REPORTS')")
   public void executeCommand(MenuChoiceEvent event) {
     if (fileChooser == null) {
       // There is no fxml associated with this controller; so no @FXML initialize() available!

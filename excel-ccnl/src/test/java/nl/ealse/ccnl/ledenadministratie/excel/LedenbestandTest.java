@@ -30,7 +30,6 @@ class LedenbestandTest {
       sut = new Ledenbestand(f, ccnlColumnProperties);
       sut.addMemberHeading();
       sut.addMember(member());
-      sut.addInvalidAddressMember(member());
       
       sut.addClubHeading();
       sut.addClub(club());
