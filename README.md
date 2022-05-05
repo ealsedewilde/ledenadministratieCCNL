@@ -39,7 +39,7 @@ public class MyJavaFXApplication extends SpringJavaFXBase {
 ```
 
 Spring Boot has one big disadvantage: the startup takes some time. Starting the application in my IDE took about 9 seconds.
-I've chosen for lazy `lazy-initialization`. This helps gaining a few seconds.
+I've chosen for lazy `lazy-initialization`. This helps gaining a few seconds, since only a handful of components is needed to start the application.
 
 ## Database
 I've made it easy on myself and have just chosen an embedded H2-database. Embedding the database also has the disadvantage that startup takes time. I've chosen `BootstrapMode.LAZY` to reduce the time to initialize SpringBoot JPA. Starting the application in my IDE was reduced to about 5 seconds.
@@ -66,8 +66,7 @@ It is the `MenuController` that handles menu choices. When applicable it sends i
 The MenuController then has to activate the applicable controller. This can be every controller in the application.
 I use eventing to decouple the MenuController from all other controllers. I use Spring's `@EventListener` with a `condition` to target the correct controller or command.  Some events are grouped. Such an event is than first handled on a group event condition and after that forwarded to the correct detail event condition. For example a number of events require a selected Member. So the event group MEMBER-SEARCH triggers the Member search process and with the result of the search, the correct detail event is triggered. 
 
-Eventing works as long as the listening Spring component is loaded. Since I have chosen lazy loading of Spring components this is a point of attention. When a controller is attached to a fxml then loading the fxml is done before firing the event. The fxml loading will instantiate the Spring Controller attached to it so it can respond to the event.
-But there are also menu choices that just execute a command, so without a fxml link. I use one eagerly instantiated bean that listens to  events groups that are command related. This bean will call the Spriing ApplicationContext to istantiate the needed command and then forwards the event. Autowiring can't be used in this eagerly loaded bean otherwise eager loading would cascade to other Spring components. So I use `applicationContext.getBean(Bean.class)` instead.
+The `@EventListener` eventing works even if the Spring component is not yet loaded. 
 
 The application uses forms that span multiple pages. (Registering all properties for a new member is spread across four pages.) All the pages of a form are linked to the same controller. This has the advantage that the form is controlled as a whole, but the disadvantage is that the initialization of the controller is per page.
 
@@ -106,7 +105,7 @@ In the end I managed to get my modules error free and I got the application runn
 My modular application was still relying on several non modular jars. This means that I still was unable to run JLINK without tricks. So I reverted Java modularity, but preserving the cleaned classpath.
 
 # Deployment
-My goal is to run my application with a minimal JRE. Via trail and error I was able to determine the jmods needed in this minimal JRE. I added the required JavaFX modules to it.
+My goal is to run my application with a minimal JRE. Via trail and error I was able to determine the jmods needed in this minimal JRE. I added the required JavaFX modules to it. (I first had JavaFx in the application jar, but in Java 17 this gives a warning. By adding the JavaFx modules to the minimal JRE, the warning is avoided.) 
 
 I want to package my application in a single jar which includes all dependencies.
 There are several strategies to construct such a jar:
