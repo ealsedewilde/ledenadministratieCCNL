@@ -26,7 +26,7 @@
       </columnConstraints>
       <children>
         <Label text="Straat" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-        <TextField fx:id="address" minWidth="450" disable="true" GridPane.rowIndex="0"
+        <TextField fx:id="street" minWidth="450" disable="true" GridPane.rowIndex="0"
           GridPane.columnIndex="1" />
         <Label text="Huisnummer" GridPane.rowIndex="1" GridPane.columnIndex="0" />
         <TextField fx:id="addressNumber" maxWidth="80" disable="true"
