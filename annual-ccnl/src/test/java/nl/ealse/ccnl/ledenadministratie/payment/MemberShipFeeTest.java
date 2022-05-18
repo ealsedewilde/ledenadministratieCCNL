@@ -10,7 +10,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertySource;
 
-public class MemberShipFeeTest {
+class MemberShipFeeTest {
   
   SpringApplication springApplication;
   

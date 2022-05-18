@@ -175,8 +175,7 @@ public class CCNLLid extends CCNLAdres implements Comparable<CCNLLid> {
   }
 
   public boolean equals(Object o) {
-    if (o instanceof CCNLLid) {
-      CCNLLid lid = (CCNLLid) o;
+    if (o instanceof CCNLLid lid) {
       return lidNummer == lid.lidNummer;
     }
     return false;

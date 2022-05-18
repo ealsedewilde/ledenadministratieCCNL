@@ -42,8 +42,8 @@ public class InternalRelationImport {
     if (processType == ProcessType.REPLACE) {
       for (Number nr : existingNumbers) {
         Integer id;
-        if (nr instanceof Integer) {
-          id = (Integer) nr;
+        if (nr instanceof Integer i) {
+          id = i;
         } else {
           id = Integer.valueOf(nr.intValue());
         }

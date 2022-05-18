@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -38,7 +37,7 @@ public class MemberService {
     return members.stream()
         .filter(member -> member.getDocuments().stream()
             .filter(doc -> doc.getDocumentType() == DocumentType.SEPA_AUTHORIZATION).count() == 0)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   public List<Member> searchMember(SearchItem searchItem, String searchValue) {

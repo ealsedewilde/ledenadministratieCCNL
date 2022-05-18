@@ -62,7 +62,7 @@ public class ExportService {
       targetFile.addMemberHeading();
       List<Member> activeMembers = memberRepository.findMembersByStatuses(
           EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP));
-      activeMembers.forEach((member) -> {
+      activeMembers.forEach(member -> {
         if (!member.getAddress().isAddressInvalid()) {
           targetFile.addMember(member);
         }
@@ -95,7 +95,7 @@ public class ExportService {
       targetFile.addSheet(SheetDefinition.RETOUR);
       targetFile.addMemberHeading();
       memberRepository.findMemberByMemberStatus(MembershipStatus.ACTIVE)
-          .forEach((member) -> {
+          .forEach(member -> {
             if (member.getAddress().isAddressInvalid()) {
               targetFile.addMember(member);
             }

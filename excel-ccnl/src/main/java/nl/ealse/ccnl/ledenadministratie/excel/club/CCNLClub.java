@@ -69,8 +69,8 @@ public class CCNLClub extends CCNLAdres implements Comparable<CCNLClub> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof CCNLClub) {
-      return compareTo((CCNLClub) obj) == 0;
+    if (obj instanceof CCNLClub club) {
+      return compareTo(club) == 0;
     }
     return false;
   }

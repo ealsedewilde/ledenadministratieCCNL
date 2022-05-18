@@ -81,8 +81,8 @@ public class CCNLPartner extends CCNLAdres implements Comparable<CCNLPartner> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof CCNLPartner) {
-      return compareTo((CCNLPartner) obj) == 0;
+    if (obj instanceof CCNLPartner partner) {
+      return compareTo(partner) == 0;
     }
     return false;
   }

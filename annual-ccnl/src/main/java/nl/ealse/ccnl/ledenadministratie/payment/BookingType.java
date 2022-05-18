@@ -3,9 +3,9 @@ package nl.ealse.ccnl.ledenadministratie.payment;
 public enum BookingType {
 
   ICDT, RCDT, IRCT("Terugbetaling"), RRCT, RDDT("Incasso"), CCRD("Pinbetaling"), IDDT("Stornering");
-
-  private String omschrijving;
-
+  
+  private final String omschrijving;
+  
   BookingType() {
     this.omschrijving = "Overboeking";
   }

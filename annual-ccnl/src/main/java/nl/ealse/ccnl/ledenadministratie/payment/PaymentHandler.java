@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -46,7 +45,7 @@ public class PaymentHandler {
     final List<IngBooking> bookingList = new ArrayList<>();
 
     List<PaymentFileIterable> paymentFileIterables =
-        paymentFiles.stream().map(PaymentFileIterable::new).collect(Collectors.toList());
+        paymentFiles.stream().map(PaymentFileIterable::new).toList();
     paymentFileIterables.forEach(pf -> pf.forEach(booking -> {
       if (filterChain.filter(booking)) {
         bookingList.add(booking);

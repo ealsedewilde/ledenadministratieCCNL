@@ -82,8 +82,8 @@ public class CCNLIntern extends CCNLAdres implements Comparable<CCNLIntern> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof CCNLIntern) {
-      return compareTo((CCNLIntern) obj) == 0;
+    if (obj instanceof CCNLIntern intern) {
+      return compareTo(intern) == 0;
     }
     return false;
   }

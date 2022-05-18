@@ -35,8 +35,11 @@ public class FOGenerator {
   private static final String CONTENT_START = "<fo:page-sequence";
   private static final String CONTENT_END = "</fo:page-sequence>";
 
-  private static final String NEW_LINE =
-      "<fo:block line-height=\"0pt\" linefeed-treatment=\"preserve\"\n white-space-treatment=\"preserve\" white-space-collapse=\"false\"/>";
+  private static final String NEW_LINE = """
+      <fo:block line-height="0pt" linefeed-treatment="preserve"
+          white-space-treatment="preserve" white-space-collapse="false"/>
+      """;
+
   private static final String EMPTY_LINE = "<fo:block white-space-treatment=\"preserve\"/>";
 
   private static final String NEW_PARAGRAPH = "<fo:block space-after=\"4mm\">";
@@ -47,21 +50,30 @@ public class FOGenerator {
       "<fo:block space-after=\"4mm\" linefeed-treatment=\"preserve\" white-space-treatment=\"preserve\">";
   private static final String BLOCK_END = "</fo:block>";
 
-  private static final String BASIC_LINK = "<fo:basic-link external-destination=\"url(%s)\">\n"
-      + "          <fo:inline color=\"#0563C1\" text-decoration=\"underline\">\n"
-      + "            %s</fo:inline>\n" + "        </fo:basic-link>";
+  private static final String BASIC_LINK = """
+      <fo:basic-link external-destination="url(%s)">
+          <fo:inline color="#0563C1" text-decoration="underline">
+              %s
+          </fo:inline>
+      </fo:basic-link>
+      """;
 
-  private static final String LIST_START =
-      "<fo:list-block provisional-distance-between-starts=\"0.25in\"\n"
-          + "        start-indent=\"0.25in\" text-indent=\"0in\">";
+  private static final String LIST_START = """
+      <fo:list-block provisional-distance-between-starts="0.25in"
+          start-indent="0.25in" text-indent="0in">
+      """;
 
   private static final String LIST_END = "</fo:list-block>";
 
-  private static final String LIST_ITEM = "<fo:list-item>\n" + "          <fo:list-item-label>\n"
-      + "            <fo:block>%s</fo:block>\n" + "          </fo:list-item-label>\n"
-      + "          <fo:list-item-body start-indent=\"body-start()\">\n"
-      + "            <fo:block>%s</fo:block>\n" + "          </fo:list-item-body>\n"
-      + "        </fo:list-item>";
+  private static final String LIST_ITEM = """
+      <fo:list-item>
+          <fo:list-item-label>
+              <fo:block>%s</fo:block>
+          </fo:list-item-label>
+          <fo:list-item-body start-indent="body-start()">
+              <fo:block>%s</fo:block>
+          </fo:list-item-body>
+      </fo:list-item>""";
 
   private final Resource template = new ClassPathResource("letterTemplate.fo");
 

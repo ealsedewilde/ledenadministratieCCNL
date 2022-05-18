@@ -240,8 +240,7 @@ public class IngBooking implements Comparable<IngBooking> {
 
   @Override
   public boolean equals(Object o) {
-    if (o instanceof IngBooking) {
-      IngBooking b = (IngBooking) o;
+    if (o instanceof IngBooking b) {
       return this.getKey() == b.getKey();
     }
     return false;

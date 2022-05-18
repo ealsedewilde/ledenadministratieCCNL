@@ -90,7 +90,7 @@ public class ExportAddressService {
     try (Adresbestand targetFile = new Adresbestand(addressFile, properties)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
-      activeMembers.forEach((member) -> {
+      activeMembers.forEach(member -> {
         if (!member.getAddress().isAddressInvalid()) {
           targetFile.addMember(member);
         }
