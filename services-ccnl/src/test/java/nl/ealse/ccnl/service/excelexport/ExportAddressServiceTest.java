@@ -54,6 +54,12 @@ class ExportAddressServiceTest {
       File magazineFile = new File(tempDir, "magazine.xlsx");
       sut.generateMagazineAddressFile(magazineFile);
       Assertions.assertTrue(magazineFile.exists());
+      File onNumberFile = new File(tempDir, "onNumberFile.xlsx");
+      sut.generateMemberListFileByNumber(onNumberFile);
+      Assertions.assertTrue(onNumberFile.exists());
+      File onNameFile = new File(tempDir, "onNameFile.xlsx");
+      sut.generateMemberListFileByName(onNameFile);
+      Assertions.assertTrue(onNameFile.exists());
 
     } catch (IOException e) {
       // TODO Auto-generated catch block
