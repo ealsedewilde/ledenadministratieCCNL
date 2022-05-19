@@ -89,6 +89,7 @@ class DocumentServiceTest {
     verify(dao).save(any(Document.class));
   }
   
+  @Test
   void findDocumentTemplateTest() {
     DocumentTemplateID id = new DocumentTemplateID();
     List<DocumentTemplate> templates = new ArrayList<>();
