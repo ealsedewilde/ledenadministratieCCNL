@@ -72,7 +72,7 @@ public class IngBooking implements Comparable<IngBooking> {
    * Unique key for this booking
    * It consists of the booking dat (yyMMdd + member number.
    */
-  private int key;
+  private String key;
 
   public IngBooking(Element element) {
     this.element = element;
@@ -230,10 +230,10 @@ public class IngBooking implements Comparable<IngBooking> {
     }
   }
 
-  private int getKey() {
-    if (key == 0) {
+  private String getKey() {
+    if (key == null) {
       String h = getBoekdatum().format(DF_KEY);
-      key = Integer.parseInt(h) * 1000 + lidnummer;
+      key = h + lidnummer;
     }
     return key;
   }
@@ -241,19 +241,19 @@ public class IngBooking implements Comparable<IngBooking> {
   @Override
   public boolean equals(Object o) {
     if (o instanceof IngBooking b) {
-      return this.getKey() == b.getKey();
+      return this.getKey().equals(b.getKey());
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    return getKey();
+    return getKey().hashCode();
   }
 
   @Override
   public int compareTo(IngBooking o) {
-    return this.getKey() - o.getKey();
+    return this.getKey().compareTo(o.getKey());
   }
 
   private enum Token {

@@ -6,6 +6,6 @@ import org.junit.platform.suite.api.Suite;
 // Mixing suites and separate tests doesn't work
 @Suite
 @SelectPackages({"nl.ealse.ccnl.ledenadministratie.model.dao"})
-class JpaSuiteTest {
+class JpaTestSuite {
 
 }

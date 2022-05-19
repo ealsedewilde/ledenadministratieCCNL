@@ -35,7 +35,9 @@ public class DatabaseLocation extends Properties {
         dbProperties.load(is);
         String dbLocation = dbProperties.getProperty("db.locatie");
         if (dbLocation != null) {
-          if (new File(dbLocation).isAbsolute()) {
+          if (dbLocation.startsWith("jdbc:h2:mem")) {
+            databaseUrl = dbLocation;
+          } else if (new File(dbLocation).isAbsolute()) {
             databaseUrl = "jdbc:h2:" + dbLocation;
           } else if (dbLocation.startsWith("/")) {
             databaseUrl = "jdbc:h2:.." + dbLocation;

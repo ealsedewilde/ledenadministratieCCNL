@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02"
   xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02 camt.053.001.02.xsd">
   <BkToCstmrStmt>
@@ -237,6 +236,84 @@
             <RltdDts>
               <TxDtTm>2020-02-03T09:37:00</TxDtTm>
             </RltdDts>
+          </TxDtls>
+        </NtryDtls>
+      </Ntry>
+      <Ntry>
+        <NtryRef>032022062501417152000000001</NtryRef>
+        <Amt Ccy="EUR">27.50</Amt>
+        <CdtDbtInd>DBIT</CdtDbtInd>
+        <RvslInd>true</RvslInd>
+        <Sts>BOOK</Sts>
+        <BookgDt>
+          <Dt>2022-03-03</Dt>
+        </BookgDt>
+        <ValDt>
+          <Dt>2022-02-25</Dt>
+        </ValDt>
+        <AcctSvcrRef>3100363109017</AcctSvcrRef>
+        <BkTxCd>
+          <Domn>
+            <Cd>PMNT</Cd>
+            <Fmly>
+              <Cd>IDDT</Cd>
+              <SubFmlyCd>UPDD</SubFmlyCd>
+            </Fmly>
+          </Domn>
+          <Prtry>
+            <Cd>01215</Cd>
+            <Issr>ING Group</Issr>
+          </Prtry>
+        </BkTxCd>
+        <NtryDtls>
+          <TxDtls>
+            <Refs>
+              <PmtInfId>CCNL-lidmaatschap-2022-2023</PmtInfId>
+              <EndToEndId>lid 9999</EndToEndId>
+              <MndtId>JAARLIJKS-CCNL-9999</MndtId>
+            </Refs>
+            <RltdPties>
+              <Cdtr>
+                <Nm>T. Storno</Nm>
+                <Id>
+                  <OrgId>
+                    <Othr>
+                      <Id>NL65ZZZ403419230000</Id>
+                      <SchmeNm>
+                        <Cd>SEPA</Cd>
+                      </SchmeNm>
+                    </Othr>
+                  </OrgId>
+                </Id>
+              </Cdtr>
+              <CdtrAcct>
+                <Id>
+                  <IBAN>NL16INGB0001565797</IBAN>
+                </Id>
+                <Tp>
+                  <Prtry>General</Prtry>
+                </Tp>
+                <Ccy>EUR</Ccy>
+              </CdtrAcct>
+            </RltdPties>
+            <RltdAgts>
+              <CdtrAgt>
+                <FinInstnId>
+                  <BIC>INGBNL2A</BIC>
+                </FinInstnId>
+              </CdtrAgt>
+            </RltdAgts>
+            <RmtInf>
+              <Ustrd>lidmaatschap 2022-2023</Ustrd>
+            </RmtInf>
+            <RltdDts>
+              <TxDtTm>2022-03-03T03:36:55</TxDtTm>
+            </RltdDts>
+            <RtrInf>
+              <Rsn>
+                <Cd>AC06</Cd>
+              </Rsn>
+            </RtrInf>
           </TxDtls>
         </NtryDtls>
       </Ntry>

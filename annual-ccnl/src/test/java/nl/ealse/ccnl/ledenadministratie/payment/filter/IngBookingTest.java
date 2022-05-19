@@ -12,18 +12,28 @@ class IngBookingTest extends FilterTestBase {
   void testBooking() {
     Iterator<IngBooking> itr = init();
     IngBooking bk = itr.next();
+    bk.setLidnummer(9999);
     String s = bk.toString();
     int ix = s.indexOf("<NtryRef>032020034543595411000000002</NtryRef>");
     Assertions.assertTrue(ix > -1);
-    boolean b = bk.equals(bk);
-    Assertions.assertTrue(b);
-    boolean ok = bk.equals(bk);
-    Assertions.assertTrue(ok);
-    bk.hashCode();
-    Assertions.assertEquals(0, bk.compareTo(bk));
     
-    CancelReason cr = CancelReason.valueOf("SL01");
-    Assertions.assertEquals(CancelReason.SL01, cr);
+    IngBooking bk2 = itr.next();
+    bk2.setLidnummer(9999);
+    int r = bk.compareTo(bk2);
+    Assertions.assertEquals(0, r);
+    Assertions.assertEquals(true, bk.equals(bk2));
+    
+    IngBooking storno = itr.next();
+    
+    
+    String postcode = storno.getPostcode();
+    Assertions.assertEquals("", postcode);
+    
+    String info = storno.getStorneringInfo();
+    Assertions.assertEquals("lid 9999", info);
+
+    CancelReason cr = storno.getStornoReden();
+    Assertions.assertEquals(CancelReason.AC06, cr);
   }
 
 }

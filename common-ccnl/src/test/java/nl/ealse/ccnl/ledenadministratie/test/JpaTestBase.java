@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 @EnableJpaRepositories("nl.ealse.ccnl.ledenadministratie.model.dao")
 @EntityScan("nl.ealse.ccnl.ledenadministratie.model")
 @ComponentScan("nl.ealse.ccnl.ledenadministratie.util")
-@ContextConfiguration(classes = JpaSuiteTest.class)
+@ContextConfiguration(classes = JpaTestSuite.class)
 public abstract class JpaTestBase {
 
 }

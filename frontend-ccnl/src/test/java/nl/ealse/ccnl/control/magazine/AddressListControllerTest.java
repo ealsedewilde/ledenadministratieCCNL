@@ -70,6 +70,14 @@ class AddressListControllerTest extends FXMLBaseTest<AddressListController> {
     event = new MenuChoiceEvent(sut, MenuChoice.CARD_ADDRESS_LIST);
     sut.cardList(event);
     verify(pageController, times(2)).showMessage("Bestand is aangemaakt");
+
+    event = new MenuChoiceEvent(sut, MenuChoice.MEMBER_LIST_BY_NAME);
+    sut.memberListByName(event);
+    verify(pageController, times(3)).showMessage("Bestand is aangemaakt");
+
+    event = new MenuChoiceEvent(sut, MenuChoice.MEMBER_LIST_BY_NUMBER);
+    sut.memberListByNumber(event);
+    verify(pageController, times(4)).showMessage("Bestand is aangemaakt");
   }
 
   private void prepare() {

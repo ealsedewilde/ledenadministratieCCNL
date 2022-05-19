@@ -45,7 +45,7 @@ class SettingsRepositoryTest extends JpaTestBase {
   @BeforeEach
   public void init() {
     // em.getTransaction().begin();
-    Resource initSql = new ClassPathResource("init.sql");
+    Resource initSql = new ClassPathResource("settings.sql");
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(initSql.getInputStream()))) {
       String line = reader.readLine();
