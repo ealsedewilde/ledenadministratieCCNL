@@ -4,7 +4,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
@@ -21,6 +23,10 @@ import org.springframework.core.io.Resource;
 
 @ExtendWith(MockitoExtension.class)
 class ReconciliationServiceTest {
+  
+  private static final Set<MembershipStatus> STATUSES =
+      EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
+
   
   @Mock
   private PaymentFileRepository dao;
@@ -46,7 +52,8 @@ class ReconciliationServiceTest {
   @Test
   void resetPaymentStatusTest() {
     List<Member> members = new ArrayList<>();
-    when(memberDao.findMemberByMemberStatus(MembershipStatus.ACTIVE)).thenReturn(members);
+    members.add(new Member());
+    when(memberDao.findMembersByStatuses(STATUSES)).thenReturn(members);
     sut.resetPaymentStatus();
     verify(dao).deleteAll();
   }
