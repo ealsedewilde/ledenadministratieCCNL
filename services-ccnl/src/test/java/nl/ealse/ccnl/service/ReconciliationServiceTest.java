@@ -43,6 +43,7 @@ class ReconciliationServiceTest {
     }
   }
   
+  @Test
   void resetPaymentStatusTest() {
     List<Member> members = new ArrayList<>();
     when(memberDao.findMemberByMemberStatus(MembershipStatus.ACTIVE)).thenReturn(members);
