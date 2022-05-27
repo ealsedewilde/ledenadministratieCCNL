@@ -37,31 +37,42 @@ public class BackupRestoreService {
   }
 
   @Transactional
-  public void restoreDatabase(File backupName) {
+  public boolean restoreDatabase(File backupName) {
     try (ZipFile backup = new ZipFile(backupName)) {
-      ZipEntry entry = backup.entries().nextElement();
-      BufferedReader reader =
-          new BufferedReader(new InputStreamReader(backup.getInputStream(entry)));
-      String line = reader.readLine();
-      StringJoiner sj = new StringJoiner(" ");
-      while (line != null) {
-        line = line.trim();
-        if (!line.startsWith("--")) {
-          sj.add(line);
-          if (line.endsWith(";")) {
-            executeCommand(sj.toString());
-            sj = new StringJoiner(" ");
-          }
+      if (backup.size() == 1) {
+        ZipEntry entry = backup.entries().nextElement();
+        if ("script.sql".equals(entry.getName())) {
+          executeRestore(backup, entry);
+          return true;
         }
-        line = reader.readLine();
       }
-
+      return false;
     } catch (IOException e) {
       log.error("Errror restoring database", e);
       throw new ServiceException("Errror restoring database", e);
     }
 
   }
+
+  private void executeRestore(ZipFile backup, ZipEntry entry) throws IOException {
+    BufferedReader reader =
+        new BufferedReader(new InputStreamReader(backup.getInputStream(entry)));
+    String line = reader.readLine();
+    StringJoiner sj = new StringJoiner(" ");
+    while (line != null) {
+      line = line.trim();
+      if (!line.startsWith("--")) {
+        sj.add(line);
+        if (line.endsWith(";")) {
+          executeCommand(sj.toString());
+          sj = new StringJoiner(" ");
+        }
+      }
+      line = reader.readLine();
+    }
+  }
+
+
 
   private void executeCommand(String command) {
     if (!command.startsWith("--")) {

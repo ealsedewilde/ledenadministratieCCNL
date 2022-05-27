@@ -50,7 +50,7 @@ public class BackupRestoreCommand {
     File backupFile = fileChooser.showSaveDialog();
     if (backupFile != null) {
       pageController.showPermanentMessage("Backup wordt aangemaakt; even geduld a.u.b.");
-      AsyncTask asyncTask = new AsyncTask(backupFile, service, true);
+      BackupTask asyncTask = new BackupTask(backupFile, service);
       asyncTask.setOnSucceeded(t -> pageController.showMessage("Backup is aangemaakt"));
       asyncTask.setOnFailed(t -> pageController.showErrorMessage("Aanmaken backup is mislukt"));
       executor.execute(asyncTask);
@@ -66,10 +66,15 @@ public class BackupRestoreCommand {
     File backupFile = fileChooser.showOpenDialog();
     if (backupFile != null) {
       pageController.showPermanentMessage("Backup wordt teruggezet; even geduld a.u.b.");
-      AsyncTask asyncTask = new AsyncTask(backupFile, service, false);
-      asyncTask.setOnSucceeded(t -> pageController.showMessage("Backup is teruggezet"));
-      asyncTask
-          .setOnFailed(t -> pageController.showErrorMessage("Terugzetten backup is mislukt"));
+      RestoreTask asyncTask = new RestoreTask(backupFile, service);
+      asyncTask.setOnSucceeded(t -> {
+        if (asyncTask.getValue().booleanValue()) {
+          pageController.showMessage("Backup is teruggezet");
+        } else {
+          pageController.showErrorMessage("Onjuist bestand; Terugzetten backup is mislukt");
+        }
+      });
+      asyncTask.setOnFailed(t -> pageController.showErrorMessage("Terugzetten backup is mislukt"));
       executor.execute(asyncTask);
     }
   }
@@ -79,26 +84,36 @@ public class BackupRestoreCommand {
     fileChooser.setInitialDirectory(new File(dbDirectory));
   }
 
-  protected static class AsyncTask extends Task<Void> {
+  protected static class BackupTask extends Task<Void> {
 
     private final BackupRestoreService service;
     private final File backupFile;
-    private final boolean backup;
 
-    AsyncTask(File backupFile, BackupRestoreService service, boolean backup) {
+   BackupTask(File backupFile, BackupRestoreService service) {
       this.backupFile = backupFile;
       this.service = service;
-      this.backup = backup;
     }
 
     @Override
     protected Void call() throws Exception {
-      if (backup) {
-        service.backupDatabase(backupFile);
-        return null;
-      }
-      service.restoreDatabase(backupFile);
+      service.backupDatabase(backupFile);
       return null;
+   }
+
+  }
+  protected static class RestoreTask extends Task<Boolean> {
+
+    private final BackupRestoreService service;
+    private final File backupFile;
+
+    RestoreTask(File backupFile, BackupRestoreService service) {
+      this.backupFile = backupFile;
+      this.service = service;
+    }
+
+    @Override
+    protected Boolean call() throws Exception {
+      return service.restoreDatabase(backupFile);
     }
 
   }

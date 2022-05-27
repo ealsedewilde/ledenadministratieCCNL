@@ -24,22 +24,36 @@ class BackupRestoreControllerTest extends FXBase {
   private static PageController pageController;
   private static BackupRestoreService service;
   private static WrappedFileChooser fileChooser;
-  private static TaskExecutor executor = new TestExecutor<BackupRestoreCommand.AsyncTask>();
+  private static TaskExecutor backupExecutor = new TestExecutor<BackupRestoreCommand.BackupTask>();
+  private static TaskExecutor restoreExecutor = new TestExecutor<BackupRestoreCommand.RestoreTask>();
+  private static File zip = new File("dummy.zip");
+;
 
   private BackupRestoreCommand sut;
 
   @Test
-  void testController() {
-    sut = new BackupRestoreCommand(pageController, service, executor);
+  void testBackupController() {
+    sut = new BackupRestoreCommand(pageController, service, backupExecutor);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      doTest();
+      backup();
       ar.set(true);
     }, ar);
     Assertions.assertTrue(result.get());
   }
 
-  private void doTest() {
+  @Test
+  void testRestoreController() {
+    sut = new BackupRestoreCommand(pageController, service, restoreExecutor);
+    final AtomicBoolean ar = new AtomicBoolean();
+    AtomicBoolean result = runFX(() -> {
+      restore();
+      ar.set(true);
+    }, ar);
+    Assertions.assertTrue(result.get());
+  }
+
+  private void backup() {
     dbDirectory();
     doInitialize();
     setFileChooser();
@@ -47,20 +61,32 @@ class BackupRestoreControllerTest extends FXBase {
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_BACKUP_DATABASE);
     sut.backup(event);
     verify(pageController).showMessage("Backup is aangemaakt");
+  }
 
-    event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_RESTORE_DATABASE);
+  private void restore() {
+    dbDirectory();
+    doInitialize();
+    setFileChooser();
+
+    MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_RESTORE_DATABASE);
+    
+    when(service.restoreDatabase(zip)).thenReturn(Boolean.TRUE);
     sut.restore(event);
     verify(pageController).showMessage("Backup is teruggezet");
-  }
+
+    when(service.restoreDatabase(zip)).thenReturn(Boolean.FALSE);
+    sut.restore(event);
+    verify(pageController).showErrorMessage("Onjuist bestand; Terugzetten backup is mislukt");
+   }
 
   @BeforeAll
   static void setup() {
-   
     fileChooser = mock(WrappedFileChooser.class);
-    when(fileChooser.showSaveDialog()).thenReturn(new File("dummy.zip"));
-    when(fileChooser.showOpenDialog()).thenReturn(new File("dummy.zip"));
+    when(fileChooser.showSaveDialog()).thenReturn(zip);
+    when(fileChooser.showOpenDialog()).thenReturn(zip);
     pageController = mock(PageController.class);
     service = mock(BackupRestoreService.class);
+    when(service.restoreDatabase(zip)).thenReturn(Boolean.FALSE);
   }
 
   private void dbDirectory() {
