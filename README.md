@@ -64,7 +64,7 @@ It is the `PageController` that handles the loading of pages and showing the cor
 
 It is the `MenuController` that handles menu choices. When applicable it sends information to the PageController on what page to show (and when applicable on what page to preload.)
 The MenuController then has to activate the applicable controller. This can be every controller in the application.
-I use eventing to decouple the MenuController from all other controllers. I use Spring's `@EventListener` with a `condition` to target the correct controller or command.  Some events are grouped. Such an event is than first handled on a group event condition and after that forwarded to the correct detail event condition. For example a number of events require a selected Member. So the event group MEMBER-SEARCH triggers the Member search process and with the result of the search, the correct detail event is triggered. 
+I use eventing to decouple the MenuController from all other controllers. I use Spring's `@EventListener` with a SPEL `condition` on the event to target the correct controller or command.  Some events are grouped. Such an event is than first handled on a group event condition and after that forwarded to the correct detail event condition. For example a number of events require a selected Member. So the event group MEMBER-SEARCH triggers the Member search process and with the result of the search, the correct detail event is triggered. 
 
 The `@EventListener` eventing works even if the Spring component is not yet loaded. 
 

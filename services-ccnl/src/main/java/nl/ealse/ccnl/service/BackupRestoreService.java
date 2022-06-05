@@ -1,11 +1,8 @@
 package nl.ealse.ccnl.service;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.persistence.EntityManager;
@@ -18,7 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class BackupRestoreService {
 
-  private static final String BACKUP_SQL = "SCRIPT SIMPLE NOPASSWORDS DROP TO '%s' COMPRESSION ZIP";
+  /**
+   * A block size large enough to hold a complete PDF.
+   * This takes away the need of an intermediate SYSTEM_LOB_STREAM table 
+   */
+  private static final String BACKUP_SQL = "SCRIPT SIMPLE NOPASSWORDS DROP BLOCKZIZE 524288 TO '%s' COMPRESSION ZIP";
+  private static final String RESTORE_SQL = "RUNSCRIPT FROM '%s' COMPRESSION ZIP";
+
 
   private final EntityManager em;
 
@@ -38,11 +41,22 @@ public class BackupRestoreService {
 
   @Transactional
   public boolean restoreDatabase(File backupName) {
+    boolean valid = restoreFileValid(backupName);
+    if (valid) {
+      String queryString = String.format(RESTORE_SQL, backupName.getAbsolutePath());
+      Query q = em.createNativeQuery(queryString);
+      int result = q.executeUpdate();
+      log.info("Restore count: "+result);
+     
+    }
+    return valid;
+  }
+  
+  public boolean restoreFileValid(File backupName) {
     try (ZipFile backup = new ZipFile(backupName)) {
       if (backup.size() == 1) {
         ZipEntry entry = backup.entries().nextElement();
         if ("script.sql".equals(entry.getName())) {
-          executeRestore(backup, entry);
           return true;
         }
       }
@@ -50,35 +64,6 @@ public class BackupRestoreService {
     } catch (IOException e) {
       log.error("Errror restoring database", e);
       throw new ServiceException("Errror restoring database", e);
-    }
-
-  }
-
-  private void executeRestore(ZipFile backup, ZipEntry entry) throws IOException {
-    BufferedReader reader =
-        new BufferedReader(new InputStreamReader(backup.getInputStream(entry)));
-    String line = reader.readLine();
-    StringJoiner sj = new StringJoiner(" ");
-    while (line != null) {
-      line = line.trim();
-      if (!line.startsWith("--")) {
-        sj.add(line);
-        if (line.endsWith(";")) {
-          executeCommand(sj.toString());
-          sj = new StringJoiner(" ");
-        }
-      }
-      line = reader.readLine();
-    }
-  }
-
-
-
-  private void executeCommand(String command) {
-    if (!command.startsWith("--")) {
-      log.info(command);
-      Query q2 = em.createNativeQuery(command);
-      q2.executeUpdate();
     }
 
   }
