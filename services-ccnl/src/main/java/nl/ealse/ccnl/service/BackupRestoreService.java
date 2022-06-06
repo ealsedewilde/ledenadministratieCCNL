@@ -19,7 +19,7 @@ public class BackupRestoreService {
    * A block size large enough to hold a complete PDF.
    * This takes away the need of an intermediate SYSTEM_LOB_STREAM table 
    */
-  private static final String BACKUP_SQL = "SCRIPT SIMPLE NOPASSWORDS DROP BLOCKZIZE 524288 TO '%s' COMPRESSION ZIP";
+  private static final String BACKUP_SQL = "SCRIPT SIMPLE NOPASSWORDS DROP BLOCKSIZE 524288 TO '%s' COMPRESSION ZIP";
   private static final String RESTORE_SQL = "RUNSCRIPT FROM '%s' COMPRESSION ZIP";
 
 
@@ -34,9 +34,14 @@ public class BackupRestoreService {
   public void backupDatabase(File backupName) {
     String queryString = String.format(BACKUP_SQL, backupName.getAbsolutePath());
     Query q = em.createNativeQuery(queryString);
-    @SuppressWarnings("unchecked")
-    List<String> result = q.getResultList();
-    result.forEach(log::info);
+    try {
+      @SuppressWarnings("unchecked")
+      List<String> result = q.getResultList();
+      result.forEach(log::info);
+    } catch(Exception e) {
+      log.error("Backup failed", e);
+      throw e;
+    }
   }
 
   @Transactional
@@ -45,8 +50,13 @@ public class BackupRestoreService {
     if (valid) {
       String queryString = String.format(RESTORE_SQL, backupName.getAbsolutePath());
       Query q = em.createNativeQuery(queryString);
-      int result = q.executeUpdate();
-      log.info("Restore count: "+result);
+      try {
+        int result = q.executeUpdate();
+        log.info("Restore count: "+result);
+      } catch(Exception e) {
+        log.error("Restore failed", e);
+        throw e;
+      }
      
     }
     return valid;
