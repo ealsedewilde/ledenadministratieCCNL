@@ -122,7 +122,7 @@ public class CCNLLid extends CCNLAdres implements Comparable<CCNLLid> {
 
   private boolean checkBoolean(String cellWaarde, LidColumnDefinition.Property trueValueProperty) {
     String waarde = getProperties().getProperty(trueValueProperty.name().toLowerCase());
-    String[] waarden = waarde.split("[;]");
+    String[] waarden = waarde.split(";");
     for (String w : waarden) {
       if (w.equalsIgnoreCase(cellWaarde)) {
         return true;

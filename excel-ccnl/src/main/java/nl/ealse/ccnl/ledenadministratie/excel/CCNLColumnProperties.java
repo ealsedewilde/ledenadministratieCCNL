@@ -71,7 +71,7 @@ public class CCNLColumnProperties {
   }
 
   private String getFirstValue(String waarde) {
-    String s = waarde.split("[;]")[0];
+    String s = waarde.split(";")[0];
     if (LEEG.equals(s)) {
       return null;
     }

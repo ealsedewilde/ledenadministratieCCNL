@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
+import nl.ealse.ccnl.ledenadministratie.excel.base.SheetNotFoundException;
 import nl.ealse.ccnl.ledenadministratie.excelimport.ImportHandler;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationClubRepository;
@@ -50,7 +51,7 @@ class ImportServiceTest {
     try {
       sut.importFromExcel(r.getFile(), selection);
       verify(memberRepository, times(16)).save(any(Member.class));
-    } catch (IOException e) {
+    } catch (IOException | SheetNotFoundException e) {
       Assertions.fail(e.getMessage());
     }
   }

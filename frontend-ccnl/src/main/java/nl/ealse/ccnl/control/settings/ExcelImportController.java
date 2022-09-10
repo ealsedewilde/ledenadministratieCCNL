@@ -130,7 +130,7 @@ public class ExcelImportController {
     pageController.showPermanentMessage("Import wordt uitgevoerd; even geduld a.u.b.");
     AsyncTask asyncTask = new AsyncTask(importService, selection, selectedFile);
     asyncTask.setOnSucceeded(t -> pageController.showMessage("Import succesvol uitgevoerd"));
-    asyncTask.setOnFailed(t -> pageController.showErrorMessage("Import niet succesvol"));
+    asyncTask.setOnFailed(t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
     executor.execute(asyncTask);
   }
 

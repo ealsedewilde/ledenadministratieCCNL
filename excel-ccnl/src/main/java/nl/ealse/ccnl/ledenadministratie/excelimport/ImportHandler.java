@@ -2,6 +2,7 @@ package nl.ealse.ccnl.ledenadministratie.excelimport;
 
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLWorkbook;
 import nl.ealse.ccnl.ledenadministratie.excel.base.SheetDefinition;
+import nl.ealse.ccnl.ledenadministratie.excel.base.SheetNotFoundException;
 import nl.ealse.ccnl.ledenadministratie.excel.club.CCNLClubSheet;
 import nl.ealse.ccnl.ledenadministratie.excel.intern.CCNLInternSheet;
 import nl.ealse.ccnl.ledenadministratie.excel.lid.CCNLLidSheet;
@@ -35,27 +36,57 @@ public class ImportHandler {
   }
 
   @Transactional
-  public void importMembersFromExcel(CCNLWorkbook workbook, ProcessType importType) {
-    CCNLLidSheet leden = workbook.getSheet(SheetDefinition.LEDEN, CCNLLidSheet.class);
-
+  public void importMembersFromExcel(CCNLWorkbook workbook, ProcessType importType) throws SheetNotFoundException {
+    final MemberImport importHandler = new MemberImport(memberRepository, importType);
+    boolean sheetFound = handleLedenSheet(workbook, SheetDefinition.LEDEN, importHandler);
     // The sequence of following actions is important.
     // If a member exists on multiple Excel-sheets then the
     // most relevant state must be handled last to reflect the correct state.
-    final MemberImport importHandler = new MemberImport(memberRepository, importType);
-    leden.forEach(importHandler::importMember);
-    leden = workbook.getSheet(SheetDefinition.OPZEGGEN_VOLGEND_JAAR, CCNLLidSheet.class);
-    leden.forEach(importHandler::lastYearMembership);
-    leden = workbook.getSheet(SheetDefinition.OPZEGGERS, CCNLLidSheet.class);
-    leden.forEach(importHandler::inactiveMembership);
-    leden = workbook.getSheet(SheetDefinition.NIET_BETAALD, CCNLLidSheet.class);
-    leden.forEach(importHandler::overDueMembership);
-    leden = workbook.getSheet(SheetDefinition.RETOUR, CCNLLidSheet.class);
-    leden.forEach(importHandler::addressInvalid);
-    importHandler.finalizeImport();
+    sheetFound = handleLedenSheet(workbook, SheetDefinition.OPZEGGEN_VOLGEND_JAAR, importHandler) || sheetFound;
+    sheetFound = handleLedenSheet(workbook, SheetDefinition.OPZEGGERS, importHandler) || sheetFound;
+    sheetFound = handleLedenSheet(workbook, SheetDefinition.NIET_BETAALD, importHandler) || sheetFound;
+    sheetFound = handleLedenSheet(workbook, SheetDefinition.RETOUR, importHandler) || sheetFound;
+    
+    if (sheetFound) {
+      importHandler.finalizeImport();
+    } else {
+      throw new SheetNotFoundException("In het Excel bestand geen tabbladnaam gevonden m.b.t. leden");
+    }
+  }
+
+  private boolean handleLedenSheet(CCNLWorkbook workbook, SheetDefinition def,
+      MemberImport importHandler) {
+    try {
+      CCNLLidSheet leden = workbook.getSheet(def, CCNLLidSheet.class);
+      switch (def) {
+        case LEDEN:
+          leden.forEach(importHandler::importMember);
+          break;
+        case OPZEGGEN_VOLGEND_JAAR:
+          leden.forEach(importHandler::lastYearMembership);
+          break;
+        case OPZEGGERS:
+          leden.forEach(importHandler::inactiveMembership);
+          break;
+        case NIET_BETAALD:
+          leden.forEach(importHandler::overDueMembership);
+          break;
+        case RETOUR:
+          leden.forEach(importHandler::addressInvalid);
+          break;
+        default:
+          break;
+      }
+      return true;
+    } catch (SheetNotFoundException e) {
+      return false;
+    }
+
   }
 
   @Transactional
-  public void importPartnersFromExcel(CCNLWorkbook workbook, ProcessType importType) {
+  public void importPartnersFromExcel(CCNLWorkbook workbook, ProcessType importType)
+      throws SheetNotFoundException {
     CCNLPartnerSheet partners = workbook.getSheet(SheetDefinition.RELATIES, CCNLPartnerSheet.class);
     final CommercialPartnerImport importHandler =
         new CommercialPartnerImport(partnerRepository, importType);
@@ -68,15 +99,17 @@ public class ImportHandler {
   }
 
   @Transactional
-  public void importClubsFromExcel(CCNLWorkbook workbook, ProcessType importType) {
-    CCNLClubSheet clubs =  workbook.getSheet(SheetDefinition.CLUBS, CCNLClubSheet.class);
+  public void importClubsFromExcel(CCNLWorkbook workbook, ProcessType importType)
+      throws SheetNotFoundException {
+    CCNLClubSheet clubs = workbook.getSheet(SheetDefinition.CLUBS, CCNLClubSheet.class);
     final ExternalClubImport importHandler = new ExternalClubImport(clubRepository, importType);
     clubs.forEach(importHandler::importExternalRelation);
     importHandler.finalizeImport();
   }
 
   @Transactional
-  public void importExternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType) {
+  public void importExternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType)
+      throws SheetNotFoundException {
     CCNLPartnerSheet partners = workbook.getSheet(SheetDefinition.RELATIES, CCNLPartnerSheet.class);
     final OtherExternalRelationImport importHandler =
         new OtherExternalRelationImport(otherRepository, importType);
@@ -89,7 +122,8 @@ public class ImportHandler {
   }
 
   @Transactional
-  public void importInternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType) {
+  public void importInternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType)
+      throws SheetNotFoundException {
     CCNLInternSheet functies = workbook.getSheet(SheetDefinition.INTERN, CCNLInternSheet.class);
     InternalRelationImport importHandler =
         new InternalRelationImport(internalRepository, importType);

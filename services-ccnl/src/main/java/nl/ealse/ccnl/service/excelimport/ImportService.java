@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLWorkbook;
+import nl.ealse.ccnl.ledenadministratie.excel.base.SheetNotFoundException;
 import nl.ealse.ccnl.ledenadministratie.excelimport.ImportHandler;
 import nl.ealse.ccnl.ledenadministratie.excelimport.ProcessType;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ImportService {
     this.properties = properties;
   }
 
-  public void importFromExcel(File execelFile, ImportSelection selection) {
+  public void importFromExcel(File execelFile, ImportSelection selection) throws SheetNotFoundException {
     CCNLWorkbook workbook = new CCNLWorkbook(execelFile, properties);
     ProcessType importType = selection.getImportType().getProcessType();
     if (selection.isMembers()) {

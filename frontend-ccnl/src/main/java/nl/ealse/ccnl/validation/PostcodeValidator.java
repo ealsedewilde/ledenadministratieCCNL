@@ -5,7 +5,7 @@ import javafx.scene.control.TextField;
 
 public class PostcodeValidator extends AbstractValidator {
 
-  private static final String DUTCH_POSTALCODE_PATTERN = "^[1-9][0-9]{3}\\s*[A-Z]{2}$";
+  private static final String DUTCH_POSTALCODE_PATTERN = "^[1-9]\\d{3}\\s*[A-Z]{2}$";
 
   private final TextField countryField;
 

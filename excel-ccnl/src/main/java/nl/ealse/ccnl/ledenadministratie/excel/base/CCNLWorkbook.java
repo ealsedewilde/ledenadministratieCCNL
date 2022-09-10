@@ -37,9 +37,12 @@ public class CCNLWorkbook implements AutoCloseable {
     return workbook;
   }
 
-  public <T extends CCNLSheet<? extends CCNLRow>> T getSheet(SheetDefinition sheet, Class<T> type) {
+  public <T extends CCNLSheet<? extends CCNLRow>> T getSheet(SheetDefinition sheet, Class<T> type) throws SheetNotFoundException {
     String sheetName = properties.getProperty(sheet.name().toLowerCase());
     Sheet excelSheet = workbook.getSheet(sheetName);
+    if (excelSheet  == null) {
+      throw new SheetNotFoundException(String.format("Excel tabblad '%s' niet gevonden in Excel bestand",  sheetName));
+    }
     try {
       return type
           .getConstructor(Sheet.class, CCNLColumnProperties.class)

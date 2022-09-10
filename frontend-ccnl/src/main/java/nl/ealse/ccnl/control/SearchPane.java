@@ -154,7 +154,7 @@ public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> extends V
     }
     if (searchValue == null || searchValue.isBlank()) {
       errors.add("Vul het zoekgegeven.");
-    } else if (SearchItem.NUMBER == searchItem && !searchValue.matches("^[1-9][0-9]{0,3}")) {
+    } else if (SearchItem.NUMBER == searchItem && !searchValue.matches("^[1-9]\\d{0,3}")) {
       errors.add("Zoekgegeven moet een nummer zijn van maximaal 4 cijfers.");
     }
 
