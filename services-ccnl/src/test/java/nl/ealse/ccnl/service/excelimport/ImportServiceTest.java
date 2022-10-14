@@ -56,6 +56,22 @@ class ImportServiceTest {
     }
   }
 
+  @Test
+  void testInvalidImport() {
+    initExcelProperties();
+    sut = new ImportService(importHandler, excelProperties);
+    
+    Resource r = new ClassPathResource("lidimport.xlsx");
+    ImportSelection selection = new ImportSelection(true, true, true, true, true, ImportType.ADD);
+    
+    try {
+      sut.importFromExcel(r.getFile(), selection);
+      verify(memberRepository, times(16)).save(any(Member.class));
+    } catch (IOException | SheetNotFoundException e) {
+      Assertions.fail(e.getMessage());
+    }
+  }
+  
   @BeforeAll
   static void setup() {
     commercialPartnerRepository = mock(ExternalRelationPartnerRepository.class);
