@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.service;
 
 import java.util.List;
+import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -11,6 +12,7 @@ import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,6 +36,13 @@ public class MailService {
 
   @Value("${ccnl.mail.from}")
   private String from;
+  
+  @Value("${spring.mail.properties.mail.smtp.auth}")
+  private String mailSmtpAuth;
+  
+  @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+  private String starttlsEnable;
+
 
   public MailService(JavaMailSender emailSender, DocumentService documentService) {
     log.info("Service created");
@@ -85,6 +94,13 @@ public class MailService {
       documentService.saveDocument(document);
 
     }
+  }
+  
+  @PostConstruct
+  private void initialize() {
+    JavaMailSenderImpl impl = (JavaMailSenderImpl) emailSender;
+    impl.getJavaMailProperties().put("mail.smtp.auth", mailSmtpAuth);
+    impl.getJavaMailProperties().put("mail.smtp.starttls.enable", starttlsEnable);
   }
 
 
