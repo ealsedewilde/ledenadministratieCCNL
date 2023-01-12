@@ -96,11 +96,19 @@ public class MailService {
     }
   }
   
+  /**
+   * Spring default behavior is to read spring.mail.properties from an the application.properties file.
+   * In this application however these properties are defined in the database 
+   * and loaded via the Spring environment.
+   * So we need to explicitly add them to the configuration.
+   */
   @PostConstruct
-  private void initialize() {
-    JavaMailSenderImpl impl = (JavaMailSenderImpl) emailSender;
-    impl.getJavaMailProperties().put("mail.smtp.auth", mailSmtpAuth);
-    impl.getJavaMailProperties().put("mail.smtp.starttls.enable", starttlsEnable);
+  private void initializeStarttls() {
+    if (Boolean.parseBoolean(starttlsEnable)) {
+      JavaMailSenderImpl impl = (JavaMailSenderImpl) emailSender;
+      impl.getJavaMailProperties().put("mail.smtp.auth", mailSmtpAuth);
+      impl.getJavaMailProperties().put("mail.smtp.starttls.enable", starttlsEnable);
+    }
   }
 
 

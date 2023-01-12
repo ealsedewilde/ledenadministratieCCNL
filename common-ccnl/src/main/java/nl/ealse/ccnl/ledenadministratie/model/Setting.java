@@ -18,6 +18,7 @@ public class Setting {
   @Column(name = "settings_key", nullable = false)
   private String key;
 
+  @Column(name = "settings_group", nullable = false)
   private String settingsGroup;
 
   @Column(name = "settings_value", nullable = false)
