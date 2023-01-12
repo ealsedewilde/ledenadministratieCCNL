@@ -53,9 +53,10 @@
                 <addModule>java.scripting</addModule>
                 <addModule>java.sql</addModule>
                 <addModule>java.xml</addModule>
+                <addModule>jdk.charsets</addModule>
+                <addModule>jdk.crypto.ec</addModule>
                 <addModule>jdk.unsupported</addModule>
                 <addModule>jdk.xml.dom</addModule>
-                <addModule>jdk.charsets</addModule>
                 <addModule>javafx.base</addModule>
                 <addModule>javafx.controls</addModule>
                 <addModule>javafx.fxml</addModule>
