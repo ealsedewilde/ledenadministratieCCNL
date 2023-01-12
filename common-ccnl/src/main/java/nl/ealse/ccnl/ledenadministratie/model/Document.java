@@ -23,7 +23,7 @@ public class Document {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "documentSeq")
-  @SequenceGenerator(name = "documentSeq", sequenceName = "DOCUMENT_SEQUENCE", allocationSize = 10)
+  @SequenceGenerator(name = "documentSeq", sequenceName = "DOCUMENT_SEQ", allocationSize = 10)
   private int id;
 
   @ManyToOne(fetch = FetchType.EAGER)
