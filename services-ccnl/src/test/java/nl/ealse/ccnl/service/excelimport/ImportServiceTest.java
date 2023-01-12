@@ -2,6 +2,7 @@ package nl.ealse.ccnl.service.excelimport;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.io.IOException;
@@ -42,12 +43,14 @@ class ImportServiceTest {
 
   @Test
   void testImport() {
+    reset(memberRepository);
     initExcelProperties();
     sut = new ImportService(importHandler, excelProperties);
-    
+
     Resource r = new ClassPathResource("leden.xlsx");
-    ImportSelection selection = new ImportSelection(true, true, true, true, true, ImportType.REPLACE);
-    
+    ImportSelection selection =
+        new ImportSelection(true, true, true, true, true, ImportType.REPLACE);
+
     try {
       sut.importFromExcel(r.getFile(), selection);
       verify(memberRepository, times(16)).save(any(Member.class));
@@ -58,20 +61,19 @@ class ImportServiceTest {
 
   @Test
   void testInvalidImport() {
-    initExcelProperties();
-    sut = new ImportService(importHandler, excelProperties);
-    
-    Resource r = new ClassPathResource("lidimport.xlsx");
-    ImportSelection selection = new ImportSelection(true, true, true, true, true, ImportType.ADD);
-    
-    try {
+    Exception thrown = Assertions.assertThrows(SheetNotFoundException.class, () -> {
+      initExcelProperties();
+      sut = new ImportService(importHandler, excelProperties);
+
+      Resource r = new ClassPathResource("lidimport.xlsx");
+      ImportSelection selection = new ImportSelection(true, true, true, true, true, ImportType.ADD);
+
       sut.importFromExcel(r.getFile(), selection);
       verify(memberRepository, times(16)).save(any(Member.class));
-    } catch (IOException | SheetNotFoundException e) {
-      Assertions.fail(e.getMessage());
-    }
+    });
+    Assertions.assertEquals("Excel tabblad 'Rel.&Advert.' niet gevonden in Excel bestand", thrown.getMessage());
   }
-  
+
   @BeforeAll
   static void setup() {
     commercialPartnerRepository = mock(ExternalRelationPartnerRepository.class);
