@@ -2,7 +2,7 @@ package nl.ealse.ccnl.ledenadministratie.dd;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import nl.ealse.ccnl.ledenadministratie.dd.model.Document;
 import nl.ealse.ccnl.ledenadministratie.dd.model.PaymentInstructionInformation4;
 import org.junit.jupiter.api.Assertions;

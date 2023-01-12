@@ -1,12 +1,12 @@
 package nl.ealse.ccnl.ledenadministratie.model;
 
 import java.time.LocalDate;
-import javax.persistence.Basic;
-import javax.persistence.Embedded;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Lob;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Lob;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 
 @MappedSuperclass

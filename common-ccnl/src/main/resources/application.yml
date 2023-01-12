@@ -15,10 +15,10 @@ spring:
     open-in-view: true
 #    show-sql: true
 #    properties:
-#      javax.persistence.schema-generation.scripts.action: drop-and-create
-#      javax.persistence.schema-generation.scripts.create-target: c:/temp/create.sql
-#      javax.persistence.schema-generation.scripts.drop-target: c:/temp/drop.sql
-#      javax.persistence.schema-generation.scripts.create-source: metadata
+#      jakarta.persistence.schema-generation.scripts.action: drop-and-create
+#      jakarta.persistence.schema-generation.scripts.create-target: c:/temp/create.sql
+#      jakarta.persistence.schema-generation.scripts.drop-target: c:/temp/drop.sql
+#      jakarta.persistence.schema-generation.scripts.create-source: metadata
 #      hibernate:
 #        format_sql: true
 #  h2:

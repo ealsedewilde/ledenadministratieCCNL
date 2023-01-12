@@ -3,8 +3,8 @@ package nl.ealse.ccnl.ledenadministratie.dd;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 import org.springframework.stereotype.Component;
 

@@ -15,7 +15,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jaxb2-maven-plugin</artifactId>
-        <version>2.5.0</version>
         <executions>
           <execution>
             <id>xjc</id>
@@ -48,8 +47,8 @@
       <artifactId>commons-validator</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.sun.activation</groupId>
-      <artifactId>jakarta.activation</artifactId>
+    <groupId>jakarta.activation</groupId>
+    <artifactId>jakarta.activation-api</artifactId>
     </dependency>
 
   </dependencies>

@@ -3,7 +3,7 @@ package nl.ealse.ccnl.ledenadministratie.dd;
 import static org.mockito.Mockito.mock;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import nl.ealse.ccnl.ledenadministratie.dd.model.PaymentInstructionInformation4;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

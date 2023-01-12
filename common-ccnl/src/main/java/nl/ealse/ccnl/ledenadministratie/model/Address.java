@@ -1,7 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.Data;
 
 @Embeddable

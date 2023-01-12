@@ -1,7 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.dd;
 
 import static org.mockito.Mockito.mock;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import nl.ealse.ccnl.ledenadministratie.dd.model.DirectDebitTransactionInformation9;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
