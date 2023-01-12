@@ -14,6 +14,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
 import lombok.Data;
 
 @Entity
@@ -21,7 +22,8 @@ import lombok.Data;
 public class Document {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "documentSeq")
+  @SequenceGenerator(name = "documentSeq", sequenceName = "DOCUMENT_SEQUENCE", allocationSize = 10)
   private int id;
 
   @ManyToOne(fetch = FetchType.EAGER)

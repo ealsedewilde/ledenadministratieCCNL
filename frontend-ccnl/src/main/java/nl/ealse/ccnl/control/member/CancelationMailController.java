@@ -89,7 +89,7 @@ public class CancelationMailController extends DocumentTemplateController {
     SimpleMailMessage mailMessage =
         mailService.sendMail(toMailAddress.getText(), mailSubject, mailContent);
     mailService.saveMail(selectedMember, mailMessage);
-    pageController.showMessage("Email is verzonden");
+    pageController.showMessage("Email is verzonden naar: " + toMailAddress.getText());
     pageController.setActivePage(PageName.LOGO);
   }
 
