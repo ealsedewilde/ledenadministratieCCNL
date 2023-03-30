@@ -10,15 +10,11 @@ import lombok.experimental.UtilityClass;
 public class AmountFormatter {
   
   private static DecimalFormat nf;
-  private static DecimalFormat df;
-
   
   static {
     nf = (DecimalFormat) NumberFormat.getCurrencyInstance();
     nf.getDecimalFormatSymbols().setDecimalSeparator(',');
     nf.getDecimalFormatSymbols().setCurrencySymbol("€");
-    df = new DecimalFormat("###.00");
-    df.getDecimalFormatSymbols().setDecimalSeparator(',');
   }
   
   public String format(double d) {
@@ -29,8 +25,22 @@ public class AmountFormatter {
     return nf.format(amount.doubleValue());
   }
   
+  /**
+   * The String amount from the database seems somestimes have
+   * a problem with the decimal separator when using a DecimalFormat.
+   * @param amount
+   * @return
+   * @throws ParseException
+   */
   public double parse(String amount) throws ParseException {
-      return df.parse(amount).doubleValue();
+    StringBuilder sb = new StringBuilder();
+    for (char c : amount.toCharArray()) {
+      if (Character.isDigit(c)) {
+        sb.append(c);
+      }
+    }
+    double d = Double.parseDouble(sb.toString());
+    return d / 100.0;
   }
 
 
