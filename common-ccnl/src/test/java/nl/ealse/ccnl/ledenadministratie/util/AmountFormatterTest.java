@@ -16,7 +16,7 @@ class AmountFormatterTest {
   @Test
   void testParse() {
     try {
-      double result = AmountFormatter.parse("27,50");
+      double result = AmountFormatter.parse("€ 27,50");
       Assertions.assertEquals(27.5, result);
     } catch (ParseException e) {
       Assertions.fail(e.getMessage());

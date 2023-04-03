@@ -37,10 +37,13 @@ public class AmountFormatter {
     for (char c : amount.toCharArray()) {
       if (Character.isDigit(c)) {
         sb.append(c);
+        continue;
+      }
+      if (c == ',' || c == '.') {
+        sb.append('.');
       }
     }
-    double d = Double.parseDouble(sb.toString());
-    return d / 100.0;
+     return Double.parseDouble(sb.toString());
   }
 
 

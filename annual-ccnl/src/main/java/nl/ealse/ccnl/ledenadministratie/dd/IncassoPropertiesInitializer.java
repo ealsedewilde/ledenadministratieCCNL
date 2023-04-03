@@ -24,6 +24,8 @@ public class IncassoPropertiesInitializer {
   public DirectDebitConfig initializeConfig() {
     DirectDebitConfig config = new DirectDebitConfig();
     DDConfigStringEntry e = new DDConfigStringEntry();
+    int year = LocalDate.now().getYear();
+
     e.setValue("jaarlijks-CCNL-%s");
     e.setDescription(
         "Uniek kenmerk van de machtiging; %s markeert de plek voor lidmaatschapnummer");
@@ -35,7 +37,7 @@ public class IncassoPropertiesInitializer {
     config.setAuthorizationType(e);
 
     e = new DDConfigStringEntry();
-    e.setValue("lidmaatschap 2020-2021");
+    e.setValue(String.format("lidmaatschap %d-%d", year, year + 1));
     e.setDescription("Kenmerk op afschrift lid");
     config.setDirectDebitDescription(e);
 
@@ -60,7 +62,7 @@ public class IncassoPropertiesInitializer {
     config.setClubName(e);
 
     e = new DDConfigStringEntry();
-    e.setValue("CCNL-lidmaatschap-2020-2021");
+    e.setValue(String.format("CCNL-lidmaatschap-%d-%d", year, year + 1));
     e.setDescription("Unieke identificatie in het incassobestand");
     // Zie ook https://www.ing.nl/zakelijk/betalen/geld-ontvangen/INCASSO/handleidingen/index.html
     config.setMessageId(e);
