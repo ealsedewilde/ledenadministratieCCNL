@@ -35,7 +35,7 @@ public class OmschrijvingStrategie implements LidnummerStrategie {
 
     private void bepaalNummer(int ix) {
       StringBuilder sb = new StringBuilder();
-      while (!Character.isDigit(tekens[ix])) {
+      while (ix < tekens.length && !Character.isDigit(tekens[ix])) {
         ix++;
       }
       while (ix < tekens.length && Character.isDigit(tekens[ix])) {
