@@ -21,8 +21,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class PaymentHandler {
 
-  private static final BigDecimal DD_PROFIT = BigDecimal.valueOf(2.5);
-
   private final MemberRepository dao;
   private final MemberShipFee memberShipFee;
   private final IncassoProperties incassoProperties;
@@ -37,10 +35,10 @@ public class PaymentHandler {
   public List<String> handlePayments(List<PaymentFile> paymentFiles, LocalDate referenceDate,
       boolean includeDD) {
     List<Member> members = dao.findMemberByMemberStatus(MembershipStatus.ACTIVE);
-    
-    ReconciliationContext rc =
+
+    final ReconciliationContext rc =
         ReconciliationContext.newInstance(members, incassoProperties, includeDD);
-    FilterChain filterChain = new FilterChain(members, referenceDate, memberShipFee);
+    final FilterChain filterChain = new FilterChain(members, referenceDate, memberShipFee);
 
     final List<IngBooking> bookingList = new ArrayList<>();
 
@@ -48,12 +46,15 @@ public class PaymentHandler {
         paymentFiles.stream().map(PaymentFileIterable::new).toList();
     paymentFileIterables.forEach(pf -> pf.forEach(booking -> {
       if (filterChain.filter(booking)) {
-        bookingList.add(booking);
-      } else {
-        String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", booking.getNaam(),
-            booking.getOmschrijving());
-        log.warn(msg);
-        rc.getMessages().add(msg);
+        if (booking.getLidnummer() == 0) {
+          String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", booking.getNaam(),
+              booking.getOmschrijving());
+          log.warn(msg);
+          rc.getMessages().add(msg);
+        } else {
+          log.info("boeking voor lid: " + booking.getLidnummer());
+          bookingList.add(booking);
+        }
       }
     }));
     processPaymentInfo(bookingList, rc);
@@ -75,7 +76,7 @@ public class PaymentHandler {
       mc.getTransactions().add(t);
     });
 
-    BigDecimal refAmount = incassoProperties.getIncassoBedrag().add(DD_PROFIT);
+    BigDecimal refAmount = BigDecimal.valueOf(memberShipFee.getOverboeken());
     rc.getContexts().values().forEach(mc -> {
       Optional<Member> member = dao.findById(mc.getNumber());
       if (member.isPresent()) {
