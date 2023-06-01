@@ -19,7 +19,7 @@
     </VBox>
     <GridPane prefWidth="Infinity">
       <columnConstraints>
-        <ColumnConstraints minWidth="150.0" />
+        <ColumnConstraints minWidth="170.0" />
         <ColumnConstraints percentWidth="80.0" />
       </columnConstraints>
       <children>
@@ -38,28 +38,31 @@
         <Label fx:id="ibanOwnerNameL" text="IBAN t.n.v." GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <TextField fx:id="ibanOwnerName" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-        <Label text="Betaalwijze" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-        <ChoiceBox fx:id="paymentMethod" GridPane.columnIndex="1" GridPane.rowIndex="5" onAction="#checkPaymentMethod"/>
+        <Label text="BIC code (buitenlandse bank)" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <TextField fx:id="bicCode" maxWidth="146" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
-        <Label text="Heeft betaald" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-        <CheckBox fx:id="currentYearPaid" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+        <Label text="Betaalwijze" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <ChoiceBox fx:id="paymentMethod" GridPane.columnIndex="1" GridPane.rowIndex="6" onAction="#checkPaymentMethod"/>
 
-        <Label text="Betaaldatum" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <Label text="Heeft betaald" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <CheckBox fx:id="currentYearPaid" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+        <Label text="Betaaldatum" GridPane.columnIndex="0" GridPane.rowIndex="8" />
         <DatePicker fx:id="paymentDate" maxWidth="146" GridPane.columnIndex="1"
-          GridPane.rowIndex="7" />
+          GridPane.rowIndex="8" />
 
-        <Label text="Pas ontvangen" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-        <CheckBox fx:id="membercardIssued" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+        <Label text="Pas ontvangen" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+        <CheckBox fx:id="membercardIssued" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 
         <Label text="Betaal info" GridPane.valignment="TOP" GridPane.columnIndex="0"
-          GridPane.rowIndex="9" />
+          GridPane.rowIndex="10" />
         <TextArea fx:id="paymentInfo" prefHeight="100.0" prefWidth="400.0"
-          GridPane.columnIndex="1" GridPane.rowIndex="9" />
+          GridPane.columnIndex="1" GridPane.rowIndex="10" />
 
-        <Label fx:id="sepaLabel" text="Sepa Machtiging" GridPane.columnIndex="0" GridPane.rowIndex="10" />
-        <SearchButton fx:id="sepaButton" text="Machtiging tonen" onAction="#showSepaAuthorization" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+        <Label fx:id="sepaLabel" text="Sepa Machtiging" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+        <SearchButton fx:id="sepaButton" text="Machtiging tonen" onAction="#showSepaAuthorization" GridPane.columnIndex="1" GridPane.rowIndex="11" />
 
-        <HBox GridPane.columnIndex="1" GridPane.rowIndex="11" spacing="20">
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="12" spacing="20">
           <children>
             <NextPageButton onAction="#nextPage" />
             <PreviousPageButton onAction="#previousPage" />

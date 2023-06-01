@@ -30,6 +30,7 @@ public class MemberBase implements AddressOwner {
   private MembershipStatus memberStatus = MembershipStatus.ACTIVE;
 
   private String ibanNumber;
+  private String bicCode;
   private String ibanOwner;
   private LocalDate directDebitMandate;
 

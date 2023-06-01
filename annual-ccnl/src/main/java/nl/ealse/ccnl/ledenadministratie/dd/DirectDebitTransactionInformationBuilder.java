@@ -63,7 +63,7 @@ public class DirectDebitTransactionInformationBuilder {
    * @return builder
    * @throws InvalidIbanException
    */
-  public DirectDebitTransactionInformationBuilder metDibiteurIBAN(String iban)
+  public DirectDebitTransactionInformationBuilder metDibiteurIBAN(String iban, String bicCode)
       throws InvalidIbanException {
     if (!IBAN_CHECK.isValid(iban)) {
       throw new InvalidIbanException(String.format("IBAN is ongeldig '%s'", iban));
@@ -77,7 +77,11 @@ public class DirectDebitTransactionInformationBuilder {
         new BranchAndFinancialInstitutionIdentification4();
     FinancialInstitutionIdentification7 finId = new FinancialInstitutionIdentification7();
     bic.setFinInstnId(finId);
-    finId.setBIC(BicResolver.getBicCode(iban));
+    if (bicCode != null && !bicCode.isBlank()) {
+      finId.setBIC(bicCode);
+    } else {
+      finId.setBIC(BicResolver.getBicCode(iban));
+    }
     transactie.setDbtrAgt(bic);
     return this;
   }

@@ -71,6 +71,9 @@ public class MemberView {
   private Label ibanNumberE;
 
   @FXML
+  private TextField bicCode;
+
+  @FXML
   @Mapping(propertyMapper = PaymentMethodMapper.class)
   private ChoiceBox<String> paymentMethod;
 

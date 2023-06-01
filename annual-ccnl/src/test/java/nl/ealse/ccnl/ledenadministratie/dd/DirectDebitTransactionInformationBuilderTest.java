@@ -17,7 +17,7 @@ class DirectDebitTransactionInformationBuilderTest {
     initIncassoProperties();
     sut = new DirectDebitTransactionInformationBuilder(incassoProperties);
     try {
-      sut.metDibiteurIBAN("NL54ASNB0709093276");
+      sut.metDibiteurIBAN("NL54ASNB0709093276", null);
       sut.metDibiteurNaam("Tester");
       sut.metLidnummer(1234);
       DirectDebitTransactionInformation9 result = sut.build();
