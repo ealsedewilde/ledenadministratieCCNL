@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import lombok.Getter;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.SearchController;
@@ -145,7 +149,7 @@ public class MemberController extends MemberView {
     this.selectedMember = event.getSelectedEntity();
     this.model = new Member();
     getIbanNumber().textProperty()
-    .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
+        .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
   }
 
 
@@ -341,15 +345,18 @@ public class MemberController extends MemberView {
   }
 
   private void formatIbanOwnerName(String ibanNumber) {
+    ObservableList<Node> children = getFinancialPane().getChildren();
     if (hasContent(ibanNumber)) {
       updateIbanOwnerName();
-      getIbanOwnerNameL().setVisible(true);
-      getIbanOwnerName().setVisible(true);
+      if (!children.contains(getIbanOwnerName())) {
+        children.addAll(getIbanOwnerNameL(), getIbanOwnerName(),
+            getBicCodeL(), getBicCode());
+      }
     } else {
       savedName = null;
       getIbanOwnerName().setText(null);
-      getIbanOwnerNameL().setVisible(false);
-      getIbanOwnerName().setVisible(false);
+      getFinancialPane().getChildren().removeAll(getIbanOwnerNameL(), getIbanOwnerName(),
+          getBicCodeL(), getBicCode());
     }
   }
 
@@ -373,7 +380,7 @@ public class MemberController extends MemberView {
   }
 
   /**
-   * Return the full name of teh member as filled in the user interface. Return null when nothing is
+   * Return the full name of the member as filled in the user interface. Return null when nothing is
    * filled in the user interface
    * 
    * @return the full name of the member or null

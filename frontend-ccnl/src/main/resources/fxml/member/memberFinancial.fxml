@@ -17,7 +17,7 @@
         <Hyperlink text="Extra informatie" onMouseClicked="#fourthPage" />
       </children>
     </VBox>
-    <GridPane prefWidth="Infinity">
+    <GridPane prefWidth="Infinity" fx:id="financialPane">
       <columnConstraints>
         <ColumnConstraints minWidth="170.0" />
         <ColumnConstraints percentWidth="80.0" />
@@ -38,7 +38,7 @@
         <Label fx:id="ibanOwnerNameL" text="IBAN t.n.v." GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <TextField fx:id="ibanOwnerName" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-        <Label text="BIC code (buitenlandse bank)" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <Label fx:id="bicCodeL" text="BIC code (buitenlandse bank)" GridPane.columnIndex="0" GridPane.rowIndex="5" />
         <TextField fx:id="bicCode" maxWidth="146" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
         <Label text="Betaalwijze" GridPane.columnIndex="0" GridPane.rowIndex="6" />

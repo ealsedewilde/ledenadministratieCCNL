@@ -10,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.button.SearchButton;
@@ -24,6 +25,10 @@ public class MemberView {
 
   @FXML
   private Label memberNumber;
+  
+  @FXML
+  @Mapping(ignore = true)
+  private GridPane financialPane;
 
   @FXML
   private TextField initials;
@@ -69,6 +74,10 @@ public class MemberView {
   @FXML
   @Mapping(ignore = true)
   private Label ibanNumberE;
+
+  @FXML
+  @Mapping(ignore = true)
+  private Label bicCodeL;
 
   @FXML
   private TextField bicCode;
