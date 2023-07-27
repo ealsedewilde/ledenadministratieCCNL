@@ -78,7 +78,7 @@ public class DirectDebitTransactionInformationBuilder {
     FinancialInstitutionIdentification7 finId = new FinancialInstitutionIdentification7();
     bic.setFinInstnId(finId);
     if (bicCode != null && !bicCode.isBlank()) {
-      finId.setBIC(bicCode);
+      finId.setBIC(bicCode.trim());
     } else {
       finId.setBIC(BicResolver.getBicCode(iban));
     }
@@ -122,6 +122,7 @@ public class DirectDebitTransactionInformationBuilder {
 
   /**
    * Object object opvragen.
+   * 
    * @return gebouwde object
    */
   public DirectDebitTransactionInformation9 build() {

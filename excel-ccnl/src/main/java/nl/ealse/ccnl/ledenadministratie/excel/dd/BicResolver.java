@@ -1,5 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.excel.dd;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 /**
- * Opvragen BIC-codes voor Nederlandse banken
+ * Opvragen BIC-codes voor Nederlandse banken.
  * 
  * @author Ealse
  *
@@ -26,6 +28,7 @@ import org.springframework.core.io.Resource;
 public class BicResolver {
 
   private static final String FILE_NAME = "BIC-lijst-NL.xlsx";
+  private static final File BIC_LIST_FILE = new File(FILE_NAME);
 
   private Map<String, String> bicMap = new HashMap<>();
 
@@ -34,9 +37,9 @@ public class BicResolver {
   }
 
   /**
-   * 
+   * BIC-code bij IBAN-nummer opvragen.
    * @param ibanNummer
-   * @return
+   * @return BIC-code
    */
   public String getBicCode(String ibanNummer) {
     String bankcode = ibanNummer.substring(4, 8);
@@ -48,18 +51,22 @@ public class BicResolver {
   }
 
   private void init() {
-    Resource bicLijst = new ClassPathResource(FILE_NAME);
     Workbook workbook = null;
-    try (InputStream is = bicLijst.getInputStream()) {
+    try (InputStream is = getBicListInputStream()) {
       workbook = new XSSFWorkbook(is);
       Sheet sheet = workbook.getSheetAt(0);
 
       Iterator<Row> itr = sheet.rowIterator();
-      itr.next();
-      itr.next();
       for (Row row = itr.next(); itr.hasNext(); row = itr.next()) {
         Cell bankCell = row.getCell(0);
-        Cell bicCodeCell = row.getCell(1);
+        if ("BIC".equals(bankCell.getStringCellValue())) {
+          break;
+        }
+      }
+      
+      for (Row row = itr.next(); itr.hasNext(); row = itr.next()) {
+        Cell bankCell = row.getCell(1);
+        Cell bicCodeCell = row.getCell(0);
         bicMap.put(bankCell.getStringCellValue(), bicCodeCell.getStringCellValue());
       }
     } catch (IOException e) {
@@ -68,6 +75,16 @@ public class BicResolver {
     } finally {
       closeWorkbook(workbook);
     }
+  }
+
+  private InputStream getBicListInputStream() throws IOException {
+    if (BIC_LIST_FILE.exists()) {
+      log.info("Gebruikt BIC-code bestand: " + BIC_LIST_FILE.getAbsolutePath());
+      return new FileInputStream(BIC_LIST_FILE);
+    }
+    Resource bicLijst = new ClassPathResource(FILE_NAME);
+    log.info("Gebruikt intern BIC-code bestand"); 
+    return bicLijst.getInputStream();
   }
 
   private void closeWorkbook(Workbook workbook) {

@@ -99,8 +99,9 @@ public class SepaIncassoDocumentGenerator {
       throw new IllegalArgumentException(msg);
     }
     try {
-      return builder.metDibiteurIBAN(iban.trim(), member.getBicCode().trim()).metDibiteurNaam(member.getIbanOwnerName())
-          .metLidnummer(member.getMemberNumber()).build();
+      return builder.metDibiteurIBAN(iban.trim(), member.getBicCode())
+          .metDibiteurNaam(member.getIbanOwnerName()).metLidnummer(member.getMemberNumber())
+          .build();
     } catch (InvalidIbanException e) {
       String msg = "Geen geldige IBAN bij lid: " + member.getMemberNumber();
       messages.add(msg);
