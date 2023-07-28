@@ -36,12 +36,6 @@ public class MailService {
 
   @Value("${ccnl.mail.from}")
   private String from;
-  
-  @Value("${spring.mail.properties.mail.smtp.auth}")
-  private String mailSmtpAuth;
-  
-  @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
-  private String starttlsEnable;
 
 
   public MailService(JavaMailSender emailSender, DocumentService documentService) {
@@ -54,7 +48,7 @@ public class MailService {
    * Send an email.
    * @param to - for the email
    * @param subject - of the email
-   * @param text - content of the meail
+   * @param text - content of the mail
    * @return the email ad was sent
    */
   public SimpleMailMessage sendMail(String to, String subject, String text) {
@@ -95,21 +89,5 @@ public class MailService {
 
     }
   }
-  
-  /**
-   * Spring default behavior is to read spring.mail.properties from an the application.properties file.
-   * In this application however these properties are defined in the database 
-   * and loaded via the Spring environment.
-   * So we need to explicitly add them to the configuration.
-   */
-  @PostConstruct
-  private void initializeStarttls() {
-    if (Boolean.parseBoolean(starttlsEnable)) {
-      JavaMailSenderImpl impl = (JavaMailSenderImpl) emailSender;
-      impl.getJavaMailProperties().put("mail.smtp.auth", mailSmtpAuth);
-      impl.getJavaMailProperties().put("mail.smtp.starttls.enable", starttlsEnable);
-    }
-  }
-
 
 }
