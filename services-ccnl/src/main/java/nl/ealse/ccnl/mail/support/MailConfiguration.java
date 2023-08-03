@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
  * Provide the standard JavaMailSender.
  * The default Spring configuration doesn't work in our case.
  * The required properties come from the database instead of a file.
- * From some reason Spring Boot can't handle that properly.
+ * For some reason Spring Boot can't handle this situation properly.
  */
 @Configuration
 public class MailConfiguration {
@@ -27,12 +27,16 @@ public class MailConfiguration {
   @Value("${spring.mail.password}")
   private String password;
   
-  @Value("${spring.mail.properties.mail.smtp.auth}")
+  @Value("${spring.mail.properties.mail.smtp.auth:false}")
   private String mailSmtpAuth;
   
-  @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+  @Value("${spring.mail.properties.mail.smtp.starttls.enable:false}")
   private String starttlsEnable;
   
+  /**
+   * Provide the standard JavaMailSender.
+   * @return standard JavaMailSender.
+   */
   @Bean
   public JavaMailSender javaMailSender() {
     JavaMailSenderImpl bean = new JavaMailSenderImpl();
