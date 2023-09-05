@@ -26,7 +26,7 @@ public class InternalRelationDeleteController extends InternalRelationDeleteView
   }
 
   @FXML
-  public void delete() {
+  void delete() {
     service.deleteInternalRelation(selectedEntity);
     pageController.showMessage("Gegevens zijn verwijderd");
     pageController.setActivePage(PageName.LOGO);

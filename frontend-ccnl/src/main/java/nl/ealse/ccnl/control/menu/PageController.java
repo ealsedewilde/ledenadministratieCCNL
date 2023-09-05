@@ -50,7 +50,7 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     logo.setImage(ImagesMap.get("CCNLLogo.png"));
   }
 

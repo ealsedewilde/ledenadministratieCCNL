@@ -46,7 +46,7 @@ public class TemplatesController {
   }
 
   @FXML
-  public void selectTemplate(Event event) {
+  void selectTemplate(Event event) {
     @SuppressWarnings("unchecked")
     TableRow<DocumentTemplate> row = (TableRow<DocumentTemplate>) event.getSource();
     DocumentTemplate selectedTemplate = row.getItem();
@@ -58,17 +58,17 @@ public class TemplatesController {
   }
 
   @FXML
-  public void newWelcomeLetterTemplate() {
+  void newWelcomeLetterTemplate() {
     fireNewTemplateEvent(DocumentTemplateType.WELCOME_LETTER);
   }
 
   @FXML
-  public void newReminderLetterTemplate() {
+  void newReminderLetterTemplate() {
     fireNewTemplateEvent(DocumentTemplateType.PAYMENT_REMINDER);
   }
 
   @FXML
-  public void newCancelationMailTemplate() {
+  void newCancelationMailTemplate() {
     fireNewTemplateEvent(DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL);
   }
 

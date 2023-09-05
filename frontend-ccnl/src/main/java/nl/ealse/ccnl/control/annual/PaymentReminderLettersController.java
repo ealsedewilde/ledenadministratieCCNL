@@ -85,7 +85,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   // Begin Letter related method
 
   @FXML
-  public void showLetterExample() {
+  void showLetterExample() {
     if (overdueExists()) {
       Member selectedMember = selectedMembers.get(0);
       LetterData data = new LetterData(getLetterText().getText());
@@ -96,7 +96,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   }
 
   @FXML
-  public void saveLettersToFile() {
+  void saveLettersToFile() {
     if (overdueExists()) {
       File file = getFileChooser().showSaveDialog();
       if (file != null) {
@@ -113,7 +113,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   }
 
   @FXML
-  public void printLetters() {
+  void printLetters() {
     if (overdueExists()) {
       pageController.showPermanentMessage("Printen wordt voorbereid; even geduld a.u.b.");
       PdfToPrint pdfToPrint = new PdfToPrint(this, getLetterText().getText());
@@ -129,7 +129,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   // End Letter related method
 
   @FXML
-  public void printPDF() {
+  void printPDF() {
     try {
       PrintUtil.print(pdfViewer.getPdf());
     } catch (PrintException e) {

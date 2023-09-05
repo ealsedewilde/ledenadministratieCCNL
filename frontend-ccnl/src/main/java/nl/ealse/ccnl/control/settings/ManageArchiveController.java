@@ -29,7 +29,7 @@ public class ManageArchiveController {
   }
 
   @FXML
-  public void delete() {
+  void delete() {
     String s = referenceYear.getText();
     try {
       int year = Integer.parseInt(s);

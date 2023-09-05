@@ -40,7 +40,7 @@ public class SettingsController extends SettingsView {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     editStage = new Stage();
     editStage.initModality(Modality.APPLICATION_MODAL);
     editStage.setTitle("Setting wijzigen");
@@ -52,7 +52,7 @@ public class SettingsController extends SettingsView {
   }
 
   @FXML
-  public void save() {
+  void save() {
     if (valid()) {
       Setting setting = new Setting();
       setting.setKey(getKey().getText());
@@ -83,7 +83,7 @@ public class SettingsController extends SettingsView {
   }
 
   @FXML
-  public void editSetting(MouseEvent event) {
+  void editSetting(MouseEvent event) {
     event.consume();
     @SuppressWarnings("unchecked")
     TableRow<Setting> row = (TableRow<Setting>) event.getSource();

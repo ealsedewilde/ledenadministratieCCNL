@@ -36,12 +36,12 @@ public class MemberCancelController extends MemberCancelView {
 
 
   @FXML
-  public void initialize() {
+  void initialize() {
     super.initializeView();
   }
 
   @FXML
-  public void save() {
+  void save() {
     MembershipStatus status = membershipStatusMapper.getPropertyFromJavaFx(getMemberStatus());
     selectedMember.setMemberStatus(status);
     service.persistMember(selectedMember);

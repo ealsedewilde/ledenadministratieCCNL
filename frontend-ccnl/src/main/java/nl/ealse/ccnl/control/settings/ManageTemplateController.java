@@ -75,7 +75,7 @@ public class ManageTemplateController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     this.dialog = new Stage();
     this.dialog.setResizable(false);
     this.dialog.setTitle("Invul hulp");
@@ -130,14 +130,14 @@ public class ManageTemplateController {
   }
 
   @FXML
-  public void textHelp() {
+  void textHelp() {
     if (!dialog.isShowing()) {
       dialog.show();
     }
   }
 
   @FXML
-  public void save() {
+  void save() {
     if (isNew && templateId.getText() == null) {
       templateIdE.setText("Template naam invullen a.u.b.");
       templateIdE.setVisible(true);
@@ -161,14 +161,14 @@ public class ManageTemplateController {
   }
 
   @FXML
-  public void delete() {
+  void delete() {
     documentService.deleteDocumentTemplate(selectedTemplate);
     pageController.showMessage("Document template is verwijderd");
     close();
   }
 
   @FXML
-  public void close() {
+  void close() {
     if (dialog.isShowing()) {
       dialog.close();
     }

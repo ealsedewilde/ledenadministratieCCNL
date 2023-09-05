@@ -112,7 +112,7 @@ public abstract class DocumentTemplateController {
 
 
   @FXML
-  public void selectText() {
+  void selectText() {
     int ix = textSelection.getSelectionModel().getSelectedIndex();
     if (ix > -1) {
       DocumentTemplate template = templates.get(ix);
@@ -125,14 +125,14 @@ public abstract class DocumentTemplateController {
 
 
   @FXML
-  public void textHelp() {
+  void textHelp() {
     if (!dialog.isShowing()) {
       dialog.show();
     }
   }
 
   @FXML
-  public void saveText() {
+  void saveText() {
     String name = textId.getText();
     if (name == null || name.isBlank()) {
       textIdE.setVisible(true);

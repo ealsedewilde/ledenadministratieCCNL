@@ -37,7 +37,7 @@ public class IbanController {
   }
 
   @FXML
-  public void save() {
+  void save() {
     String iban = ibanNumber.getText().toUpperCase();
     if (ibanValidator.isValid(iban)) {
       ibanNumberE.setVisible(false);

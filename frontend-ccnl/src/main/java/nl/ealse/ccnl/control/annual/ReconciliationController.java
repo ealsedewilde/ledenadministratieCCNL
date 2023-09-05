@@ -89,7 +89,7 @@ public class ReconciliationController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     service = springContext.getBean(ReconciliationService.class);
     buttonColumn.setCellFactory(
         t -> new ButtonCell<PaymentFile, String>(new DeleteButton(), this::deleteFile));

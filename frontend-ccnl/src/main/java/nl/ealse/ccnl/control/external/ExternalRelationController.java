@@ -55,14 +55,14 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     saveButtonList.add(saveButton);
     externalRelationValidation
         .initializeValidation(valid -> saveButtonList.forEach(button -> button.setDisable(!valid)));
   }
 
   @FXML
-  public void reset() {
+  protected void reset() {
     if (selectedExternalRelation.getRelationNumber() == null) {
       selectedExternalRelation.setRelationNumber(externalRelationService.getFreeNumber());
     }

@@ -49,7 +49,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   }
 
   @FXML
-  public void showLetterExample() {
+  void showLetterExample() {
     log.debug("showLetterExample");
     LetterData data = new LetterData(getLetterText().getText());
     data.getMembers().add(selectedMember);
@@ -58,7 +58,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   }
 
   @FXML
-  public void saveletter() {
+  void saveletter() {
     getFileChooser().setInitialFileName("WelkomLid " + selectedMember.getMemberNumber() + ".docx");
     File file = getFileChooser().showSaveDialog();
     if (file != null) {
@@ -75,7 +75,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   }
 
   @FXML
-  public void printLetter() {
+  void printLetter() {
     log.debug("printLetter");
     LetterData data = new LetterData(getLetterText().getText());
     data.getMembers().add(selectedMember);
@@ -110,7 +110,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   }
 
   @FXML
-  public void printPDF() {
+  void printPDF() {
     try {
       Optional<PrintService> ps = PrintUtil.print(pdfViewer.getPdf());
       if (ps.isPresent()) {
@@ -133,7 +133,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   }
 
   @FXML
-  public void closePDF() {
+  void closePDF() {
     pdfViewer.close();
   }
 

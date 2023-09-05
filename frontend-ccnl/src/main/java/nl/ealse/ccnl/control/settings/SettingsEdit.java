@@ -21,7 +21,7 @@ public class SettingsEdit extends SettingsView {
   }
 
   @FXML
-  public void update() {
+  void update() {
     if (valid()) {
       String oldId = selectedSettings.getId();
       selectedSettings.setKey(getKey().getText());
@@ -33,12 +33,12 @@ public class SettingsEdit extends SettingsView {
   }
 
   @FXML
-  public void delete() {
+  void delete() {
     controller.delete(selectedSettings);
   }
 
   @FXML
-  public void reset() {
+  void reset() {
     getKey().setText(selectedSettings.getKey());
     getValue().setText(selectedSettings.getValue());
     getGroup().setText(selectedSettings.getSettingsGroup());

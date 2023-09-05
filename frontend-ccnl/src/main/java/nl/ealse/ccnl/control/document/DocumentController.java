@@ -45,7 +45,7 @@ public class DocumentController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     if (pdfViewer == null) {
       pageController.loadPage(PageName.VIEW_DOCUMENT_SHOW);
     }
@@ -68,7 +68,7 @@ public class DocumentController {
   }
 
   @FXML
-  public void selectDocument(MouseEvent event) {
+  void selectDocument(MouseEvent event) {
     @SuppressWarnings("unchecked")
     TableRow<Document> row = (TableRow<Document>) event.getSource();
     selectedDocument = row.getItem();
@@ -81,7 +81,7 @@ public class DocumentController {
   }
 
   @FXML
-  public void printDocument() {
+  void printDocument() {
     try {
       PrintUtil.print(pdfViewer.getPdf());
     } catch (PrintException e) {
@@ -90,7 +90,7 @@ public class DocumentController {
   }
 
   @FXML
-  public void deleteDocument() {
+  void deleteDocument() {
     documentService.deleteDocument(selectedDocument);
     pdfViewer.close();
     fillTableView(selectedDocument.getOwner());
@@ -98,7 +98,7 @@ public class DocumentController {
   }
 
   @FXML
-  public void closeDocument() {
+  void closeDocument() {
     pdfViewer.close();
   }
 

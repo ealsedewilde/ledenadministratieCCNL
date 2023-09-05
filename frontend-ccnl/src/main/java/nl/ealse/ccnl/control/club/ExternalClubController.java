@@ -32,20 +32,21 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
   }
 
   @FXML
-  public void nextPage() {
+  void nextPage() {
     if (currentPage == PageName.EXTERNAL_CLUB_PERSONAL) {
       secondPage();
     }
   }
 
   @FXML
-  public void previousPage() {
+  void previousPage() {
     if (currentPage == PageName.EXTERNAL_CLUB_ADDRESS) {
       firstPage();
     }
   }
 
-  public void firstPage() {
+  @FXML
+  protected void firstPage() {
     currentPage = PageName.EXTERNAL_CLUB_PERSONAL;
     pageController.setActivePage(currentPage);
     headerText.setText(getHeaderText());
@@ -53,7 +54,8 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
     externalRelationValidation.validate();
   }
 
-  public void secondPage() {
+  @FXML
+  void secondPage() {
     currentPage = PageName.EXTERNAL_CLUB_ADDRESS;
     pageController.setActivePage(currentPage);
     headerText.setText(getHeaderText());

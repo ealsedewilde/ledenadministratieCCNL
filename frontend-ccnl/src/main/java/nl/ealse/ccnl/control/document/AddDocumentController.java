@@ -78,7 +78,7 @@ public class AddDocumentController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     for (DocumentType type : DocumentType.values()) {
       if (!"N/A".equals(type.getDescription())) {
         documentType.getItems().add(type.getDescription());
@@ -89,7 +89,7 @@ public class AddDocumentController {
   }
 
   @FXML
-  public void searchDocument() {
+  void searchDocument() {
     File file = fileChooser.showOpenDialog();
     if (file != null) {
       selectedFile = file;

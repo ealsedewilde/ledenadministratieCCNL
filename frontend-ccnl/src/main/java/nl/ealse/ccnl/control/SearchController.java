@@ -53,7 +53,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
    * Reset the search page to its initial state.
    */
   @FXML
-  public void reset() {
+  void reset() {
     searchPane.reset();
   }
 

@@ -8,7 +8,11 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
+import javafx.fxml.FXML;
 
+/**
+ * Controller for all menu bar choices.
+ */
 @Controller
 public class MenuController {
 
@@ -22,30 +26,33 @@ public class MenuController {
   }
 
   // Member controls
-
-  public void newMember() {
+  @FXML
+  void newMember() {
     pageController.setActivePage(PageName.MEMBER_PERSONAL);
     // pre load page so the related controller receives the event.
     pageController.loadPage(PageName.WELCOME_LETTER);
     eventPublisher.publishEvent(new MemberSeLectionEvent(this, MenuChoice.NEW_MEMBER));
   }
-
-  public void amendMember() {
+  
+  @FXML
+  void amendMember() {
     pageController.setActivePage(PageName.MEMBER_SEARCH);
     pageController.loadPage(PageName.MEMBER_PERSONAL);
     eventPublisher
         .publishEvent(new MenuChoiceEvent(this, MenuChoice.AMEND_MEMBER));
   }
-
-  public void cancelMembership() {
+  
+  @FXML
+  void cancelMembership() {
     pageController.setActivePage(PageName.MEMBER_SEARCH);
     pageController.loadPage(PageName.MEMBER_CANCEL);
     pageController.loadPage(PageName.MEMBER_CANCEL_MAIL);
     eventPublisher.publishEvent(
         new MenuChoiceEvent(this, MenuChoice.CANCEL_MEMBERSHIP));
   }
-
-  public void paymentAuthorization() {
+  
+  @FXML
+  void paymentAuthorization() {
     pageController.setActivePage(PageName.MEMBER_SEARCH);
     pageController.loadPage(PageName.SEPA_AUTHORIZATION_ADD);
     eventPublisher.publishEvent(
@@ -53,37 +60,42 @@ public class MenuController {
   }
 
   // Partner controls
-  public void newPartner() {
+  @FXML  
+  void newPartner() {
     pageController.setActivePage(PageName.PARTNER_PERSONAL);
     eventPublisher.publishEvent(new PartnerSelectionEvent(this, MenuChoice.NEW_PARTNER));
   }
 
-  public void amendPartner() {
+  @FXML void amendPartner() {
     pageController.setActivePage(PageName.PARTNER_SEARCH);
     pageController.loadPage(PageName.PARTNER_PERSONAL);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.AMEND_PARTNER));
   }
 
-  public void deletePartner() {
+  @FXML 
+  void deletePartner() {
     pageController.setActivePage(PageName.PARTNER_SEARCH);
     pageController.loadPage(PageName.PARTNER_DELETE);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.DELETE_PARTNER));
   }
 
   // Club controls
-  public void newExternalClub() {
+  @FXML 
+  void newExternalClub() {
     pageController.setActivePage(PageName.EXTERNAL_CLUB_PERSONAL);
     eventPublisher.publishEvent(new ExternalClubSelectionEvent(this, MenuChoice.NEW_EXTERNAL_CLUB));
   }
 
-  public void amendExternalClub() {
+  @FXML 
+  void amendExternalClub() {
     pageController.setActivePage(PageName.EXTERNAL_CLUB_SEARCH);
     pageController.loadPage(PageName.EXTERNAL_CLUB_PERSONAL);
     eventPublisher.publishEvent(
         new MenuChoiceEvent(this, MenuChoice.AMEND_EXTERNAL_CLUB));
   }
 
-  public void deleteExternalClub() {
+  @FXML 
+  void deleteExternalClub() {
     pageController.setActivePage(PageName.EXTERNAL_CLUB_SEARCH);
     pageController.loadPage(PageName.EXTERNAL_CLUB_DELETE);
     eventPublisher.publishEvent(
@@ -91,20 +103,23 @@ public class MenuController {
   }
 
   // External Relation controls
-  public void newExternalRelation() {
+  @FXML 
+  void newExternalRelation() {
     pageController.setActivePage(PageName.EXTERNAL_RELATION_PERSONAL);
     eventPublisher
         .publishEvent(new ExternalOtherSelectionEvent(this, MenuChoice.NEW_EXTERNAL_RELATION));
   }
 
-  public void amendExternalRelation() {
+  @FXML 
+  void amendExternalRelation() {
     pageController.setActivePage(PageName.EXTERNAL_RELATION_SEARCH);
     pageController.loadPage(PageName.EXTERNAL_RELATION_PERSONAL);
     eventPublisher.publishEvent(
         new MenuChoiceEvent(this, MenuChoice.AMEND_EXTERNAL_RELATION));
   }
 
-  public void deleteExternalRelation() {
+  @FXML 
+  void deleteExternalRelation() {
     pageController.setActivePage(PageName.EXTERNAL_RELATION_SEARCH);
     pageController.loadPage(PageName.EXTERNAL_RELATION_DELETE);
     eventPublisher.publishEvent(
@@ -112,20 +127,23 @@ public class MenuController {
   }
 
   // Internal Relation controls
-  public void newInternalRelation() {
+  @FXML 
+  void newInternalRelation() {
     pageController.setActivePage(PageName.INTERNAL_RELATION_PERSONAL);
     eventPublisher
         .publishEvent(new InternalRelationSelectionEvent(this, MenuChoice.NEW_INTERNAL_RELATION));
   }
 
-  public void amendInternalRelation() {
+  @FXML 
+  void amendInternalRelation() {
     pageController.setActivePage(PageName.INTERNAL_RELATION_SEARCH);
     pageController.loadPage(PageName.INTERNAL_RELATION_PERSONAL);
     eventPublisher.publishEvent(
         new MenuChoiceEvent(this, MenuChoice.AMEND_INTERNAL_RELATION));
   }
 
-  public void deleteInternalRelation() {
+  @FXML 
+  void deleteInternalRelation() {
     pageController.setActivePage(PageName.INTERNAL_RELATION_SEARCH);
     pageController.loadPage(PageName.INTERNAL_RELATION_DELETE);
     eventPublisher.publishEvent(
@@ -133,27 +151,32 @@ public class MenuController {
   }
 
   // Magazine controls
-  public void magazineAddressList() {
+  @FXML 
+  void magazineAddressList() {
     pageController.setActivePage(PageName.MAGAZINE_ADDRESS_LIST);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MAGAZINE_ADDRESS_LIST));
   }
 
-  public void cardAddressList() {
+  @FXML 
+  void cardAddressList() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.CARD_ADDRESS_LIST));
   }
 
-  public void memberListByNumber() {
+  @FXML 
+  void memberListByNumber() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MEMBER_LIST_BY_NUMBER));
   }
 
-  public void memberListByName() {
+  @FXML 
+  void memberListByName() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MEMBER_LIST_BY_NAME));
   }
 
-  public void magazineInvalidAddress() {
+  @FXML 
+  void magazineInvalidAddress() {
     pageController.setActivePage(PageName.MEMBER_SEARCH);
     pageController.loadPage(PageName.MAGAZINE_INVALID_ADDRESS);
     eventPublisher.publishEvent(
@@ -161,7 +184,8 @@ public class MenuController {
   }
 
   // Correspondence controls
-  public void addDocument() {
+  @FXML 
+  void addDocument() {
     pageController.setActivePage(PageName.MEMBER_SEARCH);
     pageController.loadPage(PageName.ADD_DOCUMENT);
     eventPublisher
@@ -169,7 +193,8 @@ public class MenuController {
 
   }
 
-  public void viewDocument() {
+  @FXML 
+  void viewDocument() {
     pageController.setActivePage(PageName.MEMBER_SEARCH);
     pageController.loadPage(PageName.VIEW_DOCUMENTS);
     eventPublisher.publishEvent(
@@ -178,105 +203,124 @@ public class MenuController {
   }
 
   // Report controls
-  public void excelAll() {
+  @FXML 
+  void excelAll() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher
         .publishEvent(new MenuChoiceEvent(this, MenuChoice.REPORT_ALL_DATA));
   }
 
-  public void excelNew() {
+  @FXML 
+  void excelNew() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher
         .publishEvent(new MenuChoiceEvent(this, MenuChoice.REPORT_NEW_MEMBERS));
   }
 
-  public void excelCancelation() {
+  @FXML 
+  void excelCancelation() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(
         new MenuChoiceEvent(this, MenuChoice.REPORT_CANCELLED_MEMBERS));
   }
 
-  public void excelOverdue() {
+  @FXML 
+  void excelOverdue() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(
         new MenuChoiceEvent(this, MenuChoice.REPORT_OVERDUE_MEMBERS));
   }
 
-  public void excelArchive() {
+  @FXML 
+  void excelArchive() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher
         .publishEvent(new MenuChoiceEvent(this, MenuChoice.REPORT_ARCHIVE));
   }
 
   // Yearly controls
-  public void resetPayments() {
+  @FXML 
+  void resetPayments() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.RESET_PAYMENTS));
   }
 
-  public void directDebits() {
+  @FXML 
+  void directDebits() {
     pageController.setActivePage(PageName.DIRECT_DEBITS);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.PRODUCE_DIRECT_DEBITS_FILE));
   }
 
-  public void reconcilePayments() {
+  @FXML 
+  void reconcilePayments() {
     pageController.setActivePage(PageName.RECONCILE_PAYMENTS);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.RECONCILE_PAYMENTS));
   }
 
-  public void reminderReport() {
+  @FXML 
+  void reminderReport() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.PRODUCE_REMINDER_REPORT));
   }
 
-  public void makeReminderLettersDD() {
+  @FXML 
+  void makeReminderLettersDD() {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.PRODUCE_REMINDER_LETTERS_DD));
   }
 
-  public void makeReminderLettersBT() {
+  @FXML 
+  void makeReminderLettersBT() {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.PRODUCE_REMINDER_LETTERS_BT));
   }
 
-  public void yearly() {
+  @FXML 
+  void yearly() {
     pageController.setActivePage(PageName.ANNUAL_ROLLOVER);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.ANNUAL_ROLLOVER));
   }
 
   // Maintenance controls
-  public void manageSepaAuthorizationForm() {
+  @FXML 
+  void manageSepaAuthorizationForm() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MANAGE_SEPA_FORM));
   }
 
-  public void manageDocumentTemplates() {
+  @FXML 
+  void manageDocumentTemplates() {
     pageController.setActivePage(PageName.TEMPLATES_OVERVIEW);
     pageController.loadPage(PageName.MANAGE_TEMPLATE);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.TEMPLATES_OVERVIEW));
   }
 
-  public void backupDatabase() {
+  @FXML 
+  void backupDatabase() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MANAGE_BACKUP_DATABASE));
   }
 
-  public void restoreDatabase() {
+  @FXML 
+  void restoreDatabase() {
     pageController.setActivePage(PageName.LOGO);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MANAGE_RESTORE_DATABASE));
   }
 
-  public void importFromExcel() {
+  @FXML 
+  void importFromExcel() {
     pageController.setActivePage(PageName.EXCEL_IMPORT);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.IMPORT_FROM_EXCEL));
   }
 
-  public void settings() {
+  @FXML 
+  void settings() {
     pageController.setActivePage(PageName.SETTINGS);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.SETTINGS));
   }
 
-  public void manageArchive() {
+  @FXML 
+  void manageArchive() {
     pageController.setActivePage(PageName.MANAGE_ARCHIVE);
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MANAGE_ARCHIVE));
   }

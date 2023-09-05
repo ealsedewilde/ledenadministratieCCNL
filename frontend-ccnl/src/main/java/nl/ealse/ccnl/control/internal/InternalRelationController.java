@@ -55,7 +55,7 @@ public class InternalRelationController extends InternalRelationView {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     saveButtonList.add(saveButton);
     internalRelationValidation.initializeValidation(valid -> saveButtonList
         .forEach(sb -> sb.setDisable(getTitle().getItems().isEmpty() || !valid)));
@@ -99,7 +99,7 @@ public class InternalRelationController extends InternalRelationView {
   }
 
   @FXML
-  public void reset() {
+  void reset() {
     ViewModel.modelToView(this, selectedInternalRelation);
     ViewModel.viewToModel(this, model);
     if (currentMenuChoice == MenuChoice.NEW_INTERNAL_RELATION && !getTitle().getItems().isEmpty()) {
@@ -112,7 +112,7 @@ public class InternalRelationController extends InternalRelationView {
   }
 
   @FXML
-  public void save() {
+  void save() {
     addressController.enrich();
     ViewModel.viewToModel(this, model);
     RelationNumberValue rn = RelationNumberValue.fromLabel(model.getTitle());
@@ -123,20 +123,21 @@ public class InternalRelationController extends InternalRelationView {
   }
 
   @FXML
-  public void nextPage() {
+  void nextPage() {
     if (currentPage == PageName.INTERNAL_RELATION_PERSONAL) {
       secondPage();
     }
   }
 
   @FXML
-  public void previousPage() {
+  void previousPage() {
     if (currentPage == PageName.INTERNAL_RELATION_ADDRESS) {
       firstPage();
     }
   }
 
-  public void firstPage() {
+  @FXML
+  void firstPage() {
     currentPage = PageName.INTERNAL_RELATION_PERSONAL;
     pageController.setActivePage(currentPage);
     this.headerText.setText(getHeaderText());
@@ -144,7 +145,8 @@ public class InternalRelationController extends InternalRelationView {
     internalRelationValidation.validate();
   }
 
-  public void secondPage() {
+  @FXML
+  void secondPage() {
     currentPage = PageName.INTERNAL_RELATION_ADDRESS;
     pageController.setActivePage(currentPage);
     this.headerText.setText(getHeaderText());

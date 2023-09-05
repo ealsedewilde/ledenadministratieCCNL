@@ -72,13 +72,13 @@ public class ExcelImportController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
     fileChooser.setInitialDirectory(new File(excelDirectory));
   }
 
   @FXML
-  public void selectFile() {
+  void selectFile() {
     selectedFile = fileChooser.showOpenDialog();
     if (selectedFile != null) {
       fileLabel.setText(selectedFile.getAbsolutePath());
@@ -88,7 +88,7 @@ public class ExcelImportController {
   }
 
   @FXML
-  public void importAllTabs(ActionEvent event) {
+  void importAllTabs(ActionEvent event) {
     CheckBox src = (CheckBox) event.getSource();
     if (src.isSelected()) {
       selectCount = 5;
@@ -104,7 +104,7 @@ public class ExcelImportController {
   }
 
   @FXML
-  public void importTab(ActionEvent event) {
+  void importTab(ActionEvent event) {
     CheckBox src = (CheckBox) event.getSource();
     if (src.isSelected()) {
       selectCount++;
@@ -116,7 +116,7 @@ public class ExcelImportController {
   }
 
   @FXML
-  public void importFile() {
+  void importFile() {
     ImportType type = ImportType.REPLACE;
     for (Toggle t : importGroup.getToggles()) {
       if (t.isSelected()) {

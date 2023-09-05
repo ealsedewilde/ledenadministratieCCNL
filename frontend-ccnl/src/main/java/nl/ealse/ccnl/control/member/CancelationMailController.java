@@ -80,7 +80,7 @@ public class CancelationMailController extends DocumentTemplateController {
   }
 
   @FXML
-  public void sendMail() {
+  void sendMail() {
     if (saveMailAddress.isSelected()) {
       selectedMember.setEmail(toMailAddress.getText());
       memberService.persistMember(selectedMember);
@@ -94,7 +94,7 @@ public class CancelationMailController extends DocumentTemplateController {
   }
 
   @FXML
-  public void noMail() {
+  void noMail() {
     pageController.showMessage("Geen Email verzonden");
     pageController.setActivePage(PageName.LOGO);
   }

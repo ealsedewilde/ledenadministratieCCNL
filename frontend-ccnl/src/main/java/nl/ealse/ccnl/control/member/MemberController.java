@@ -155,7 +155,7 @@ public class MemberController extends MemberView {
 
 
   @FXML
-  public void reset() {
+  void reset() {
     // the selectedMember remains unchanged, so we can repeatedly call reset().
     ViewModel.modelToView(this, selectedMember);
     ViewModel.viewToModel(this, model);
@@ -187,7 +187,8 @@ public class MemberController extends MemberView {
   /**
    * Check on the financial page.
    */
-  public void checkPaymentMethod() {
+  @FXML
+  void checkPaymentMethod() {
     if (PaymentMethodMapper.NOT_APPLICABLE.equals(getPaymentMethod().getValue())) {
       // there is no payment obligation
       getIbanNumber().setDisable(true);
@@ -203,12 +204,12 @@ public class MemberController extends MemberView {
   }
 
   @FXML
-  public void showSepaAuthorization() {
+  void showSepaAuthorization() {
     pdfViewer.showPDF(sepaAuthorization);
   }
 
   @FXML
-  public void save() {
+  void save() {
     enrich();
     addressController.enrich();
     updateIbanOwnerName();
@@ -237,7 +238,7 @@ public class MemberController extends MemberView {
   }
 
   @FXML
-  public void deletePDF() {
+  void deletePDF() {
     documentService.deleteDocument(sepaAuthorization);
     pageController.showMessage("SEPA-machtiging is verwijderd");
     pdfViewer.close();
@@ -252,7 +253,7 @@ public class MemberController extends MemberView {
   }
 
   @FXML
-  public void printPDF() {
+  void printPDF() {
     try {
       PrintUtil.print(pdfViewer.getPdf());
     } catch (PrintException e) {
@@ -261,7 +262,7 @@ public class MemberController extends MemberView {
   }
 
   @FXML
-  public void closePDF() {
+  void closePDF() {
     pdfViewer.close();
   }
 
@@ -270,7 +271,7 @@ public class MemberController extends MemberView {
    */
 
   @FXML
-  public void nextPage() {
+  void nextPage() {
     switch (currentPage) {
       case MEMBER_PERSONAL:
         secondPage();
@@ -286,7 +287,7 @@ public class MemberController extends MemberView {
   }
 
   @FXML
-  public void previousPage() {
+  void previousPage() {
     switch (currentPage) {
       case MEMBER_ADDRESS:
         firstPage();
@@ -303,21 +304,24 @@ public class MemberController extends MemberView {
 
   }
 
-  public void firstPage() {
+  @FXML
+  void firstPage() {
     currentPage = PageName.MEMBER_PERSONAL;
     pageController.setActivePage(currentPage);
     getInitials().requestFocus();
     memberValidation.validate();
   }
 
-  public void secondPage() {
+  @FXML
+  void secondPage() {
     currentPage = PageName.MEMBER_ADDRESS;
     pageController.setActivePage(currentPage);
     addressController.getStreet().requestFocus();
     memberValidation.validate();
   }
 
-  public void thirdPage() {
+  @FXML
+  void thirdPage() {
     formatIbanOwnerName(getIbanNumber().getText());
     currentPage = PageName.MEMBER_FINANCIAL;
     pageController.setActivePage(currentPage);
@@ -326,7 +330,8 @@ public class MemberController extends MemberView {
     checkPaymentMethod();
   }
 
-  public void fourthPage() {
+  @FXML
+  void fourthPage() {
     currentPage = PageName.MEMBER_EXTRA;
     pageController.setActivePage(currentPage);
     getMemberInfo().requestFocus();

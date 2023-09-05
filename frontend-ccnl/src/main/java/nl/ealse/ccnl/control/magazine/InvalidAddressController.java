@@ -44,7 +44,7 @@ public class InvalidAddressController extends AddressView {
   }
 
   @FXML
-  public void addressInvalid() {
+  void addressInvalid() {
     selectedMember.getAddress().setAddressInvalid(true);
     selectedMember.setMemberInfo(memberInfo.getText());
     service.persistMember(selectedMember);
@@ -53,7 +53,7 @@ public class InvalidAddressController extends AddressView {
   }
 
   @FXML
-  public void cancel() {
+  void cancel() {
     pageController.setActivePage(PageName.LOGO);
   }
 

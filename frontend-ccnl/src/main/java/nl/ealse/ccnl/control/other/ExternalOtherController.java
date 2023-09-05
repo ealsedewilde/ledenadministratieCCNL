@@ -32,20 +32,21 @@ public class ExternalOtherController extends ExternalRelationController<External
   }
 
   @FXML
-  public void nextPage() {
+  void nextPage() {
     if (currentPage == PageName.EXTERNAL_RELATION_PERSONAL) {
       secondPage();
     }
   }
 
   @FXML
-  public void previousPage() {
+  void previousPage() {
     if (currentPage == PageName.EXTERNAL_RELATION_ADDRESS) {
       firstPage();
     }
   }
 
-  public void firstPage() {
+  @FXML
+  protected void firstPage() {
     currentPage = PageName.EXTERNAL_RELATION_PERSONAL;
     pageController.setActivePage(currentPage);
     this.headerText.setText(getHeaderText());
@@ -53,7 +54,8 @@ public class ExternalOtherController extends ExternalRelationController<External
     externalRelationValidation.validate();
   }
 
-  public void secondPage() {
+  @FXML
+  void secondPage() {
     currentPage = PageName.EXTERNAL_RELATION_ADDRESS;
     pageController.setActivePage(currentPage);
     this.headerText.setText(getHeaderText());

@@ -64,7 +64,7 @@ public class SepaAuthorizarionController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), PDF, PNG);
     fileChooser.setInitialDirectory(new File(sepaDirectory));
 
@@ -97,7 +97,7 @@ public class SepaAuthorizarionController {
   }
 
   @FXML
-  public void printSepaPDF() {
+  void printSepaPDF() {
     try {
       PrintUtil.print(pdfViewer.getPdf());
     } catch (PrintException e) {
@@ -106,7 +106,7 @@ public class SepaAuthorizarionController {
   }
 
   @FXML
-  public void addSepaPDF() {
+  void addSepaPDF() {
     Document document = new Document();
     document.setPdf(toByteArray(selectedFile));
     document.setDocumentName(selectedFile.getName());
@@ -122,7 +122,7 @@ public class SepaAuthorizarionController {
   }
 
   @FXML
-  public void closePDFViewer() {
+  void closePDFViewer() {
     pdfViewer.close();
   }
 

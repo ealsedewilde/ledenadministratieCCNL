@@ -77,7 +77,7 @@ public class AnnualRolloverController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.ZIP);
     fileChooser.setInitialDirectory(new File(dbDirectory));
   }
@@ -86,7 +86,7 @@ public class AnnualRolloverController {
    * Step 1 of the rollover process.
    */
   @FXML
-  public void backupDatabase() {
+  void backupDatabase() {
     if (fileChooser == null) {
       initialize();
     }
@@ -110,7 +110,7 @@ public class AnnualRolloverController {
    * Step 2 of the rollover process.
    */
   @FXML
-  public void annualRollover() {
+  void annualRollover() {
     pageController.showPermanentMessage("Jaarovergang wordt uitgevoerd; even geduld a.u.b.");
     AsyncRolloverStep2 asyncTask = new AsyncRolloverStep2(this);
     asyncTask
@@ -126,7 +126,7 @@ public class AnnualRolloverController {
    * Step 3 of the rollover process.
    */
   @FXML
-  public void exportToExcel() {
+  void exportToExcel() {
     pageController.showPermanentMessage("Excel export wordt aangemaakt; even geduld a.u.b.");
     AsyncRolloverStep3 asyncTask = new AsyncRolloverStep3(this);
     asyncTask.setOnSucceeded(evt -> {

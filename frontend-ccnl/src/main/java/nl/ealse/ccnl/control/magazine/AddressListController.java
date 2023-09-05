@@ -118,7 +118,7 @@ public class AddressListController {
   /**
    * Generate the address file with the selected magazineNumber.
    */
-  public void generateAddressList() {
+  public  void generateAddressList() {
     if (valid()) {
       AsyncAddressListTask asyncTask = new AsyncAddressListTask(this);
       generateFile(String.format(MAGAZINE_FILE_NAME, magazineNumber.getText()), asyncTask);
