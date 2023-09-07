@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -77,19 +77,19 @@ public class AddressListController {
 
   @EventListener(condition = "#event.name('CARD_ADDRESS_LIST')")
   public void cardList(MenuChoiceEvent event) {
-    AsyncCardAddressListTask asyncTask = new AsyncCardAddressListTask(magazineService);
+    AsyncCardAddressListTask asyncTask = new AsyncCardAddressListTask(pageController, magazineService);
     generateFile(String.format(CARD_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
 
   @EventListener(condition = "#event.name('MEMBER_LIST_BY_NUMBER')")
   public void memberListByNumber(MenuChoiceEvent event) {
-    MemberListTask asyncTask = new MemberListTask(magazineService, false);
+    MemberListTask asyncTask = new MemberListTask(pageController, magazineService, false);
     generateFile(String.format(MEMBER_FILE_NUMBER, LocalDate.now().getYear()), asyncTask);
   }
 
   @EventListener(condition = "#event.name('MEMBER_LIST_BY_NAME')")
   public void memberListByName(MenuChoiceEvent event) {
-    MemberListTask asyncTask = new MemberListTask(magazineService, true);
+    MemberListTask asyncTask = new MemberListTask(pageController, magazineService, true);
     generateFile(String.format(MEMBER_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
 
@@ -102,9 +102,6 @@ public class AddressListController {
     if (addressFile != null) {
       task.setAddressFile(addressFile);
       pageController.showPermanentMessage("Bestand wordt aangemaakt; even geduld a.u.b.");
-      task.setOnSucceeded(evt -> pageController.showMessage(evt.getSource().getValue().toString()));
-      task.setOnFailed(
-          evt -> pageController.showErrorMessage(evt.getSource().getException().getMessage()));
       executor.execute(task);
       pageController.setActivePage(PageName.LOGO);
     }
@@ -118,7 +115,7 @@ public class AddressListController {
   /**
    * Generate the address file with the selected magazineNumber.
    */
-  public  void generateAddressList() {
+  public void generateAddressList() {
     if (valid()) {
       AsyncAddressListTask asyncTask = new AsyncAddressListTask(this);
       generateFile(String.format(MAGAZINE_FILE_NAME, magazineNumber.getText()), asyncTask);
@@ -136,12 +133,16 @@ public class AddressListController {
     return false;
   }
 
-  protected abstract static class FileTask extends Task<String> {
+  protected abstract static class FileTask extends HandledTask {
     @Setter
     protected File addressFile;
 
+    public FileTask(PageController pageController) {
+      super(pageController);
+    }
+
     @Override
-    protected String call() throws Exception {
+    protected String call() {
       try {
         executeTask();
         return "Bestand is aangemaakt";
@@ -159,6 +160,7 @@ public class AddressListController {
     private final AddressListController controller;
 
     AsyncAddressListTask(AddressListController controller) {
+      super(controller.pageController);
       this.controller = controller;
     }
 
@@ -188,7 +190,8 @@ public class AddressListController {
   protected static class AsyncCardAddressListTask extends FileTask {
     private final ExportAddressService magazineService;
 
-    AsyncCardAddressListTask(ExportAddressService magazineService) {
+    AsyncCardAddressListTask(PageController pageController, ExportAddressService magazineService) {
+      super(pageController);
       this.magazineService = magazineService;
     }
 
@@ -203,7 +206,9 @@ public class AddressListController {
     private final ExportAddressService magazineService;
     private final boolean byName;
 
-    MemberListTask(ExportAddressService magazineService, boolean byName) {
+    MemberListTask(PageController pageController, ExportAddressService magazineService,
+        boolean byName) {
+      super(pageController);
       this.magazineService = magazineService;
       this.byName = byName;
     }

@@ -10,6 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.HandledTask;
+import nl.ealse.ccnl.control.annual.AnnualRolloverController;
+import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.excelimport.ImportService;
@@ -23,6 +27,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Slf4j
 public class ExcelImportController {
 
   @Value("${ccnl.directory.excel:c:/temp}")
@@ -128,9 +133,7 @@ public class ExcelImportController {
     ImportSelection selection = new ImportSelection(members.isSelected(), partners.isSelected(),
         clubs.isSelected(), external.isSelected(), internal.isSelected(), type);
     pageController.showPermanentMessage("Import wordt uitgevoerd; even geduld a.u.b.");
-    AsyncTask asyncTask = new AsyncTask(importService, selection, selectedFile);
-    asyncTask.setOnSucceeded(t -> pageController.showMessage("Import succesvol uitgevoerd"));
-    asyncTask.setOnFailed(t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+    AsyncTask asyncTask = new AsyncTask(this, selection);
     executor.execute(asyncTask);
   }
 
@@ -149,22 +152,29 @@ public class ExcelImportController {
     internal.setSelected(false);
   }
 
-  protected static class AsyncTask extends Task<Void> {
+  protected static class AsyncTask extends HandledTask {
 
     private final ImportService importService;
     private final ImportSelection selection;
     private final File selectedFile;
 
-    AsyncTask(ImportService importService, ImportSelection selection, File selectedFile) {
-      this.importService = importService;
+    AsyncTask(ExcelImportController controller, ImportSelection selection) {
+      super(controller.pageController);
+      this.importService = controller.importService;
       this.selection = selection;
-      this.selectedFile = selectedFile;
+      this.selectedFile = controller.selectedFile;
     }
 
     @Override
-    protected Void call() throws Exception {
-      importService.importFromExcel(selectedFile, selection);
-      return null;
+    protected String call() {
+      try { 
+        importService.importFromExcel(selectedFile, selection);
+        return "Import succesvol uitgevoerd";
+      } catch (Exception e) {
+        log.error("Import failed", e);
+        throw new AsyncTaskException("Import is mislukt");
+      }
+
     }
 
   }

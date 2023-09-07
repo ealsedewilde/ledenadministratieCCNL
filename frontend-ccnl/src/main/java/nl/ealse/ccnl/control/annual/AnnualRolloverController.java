@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -23,6 +23,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Controller for the annual rollover the the new club year.
+ */
 @Controller
 @Slf4j
 public class AnnualRolloverController {
@@ -96,10 +99,6 @@ public class AnnualRolloverController {
     if (backupFile != null) {
       pageController.showPermanentMessage("Backup wordt aangemaakt; even geduld a.u.b.");
       AsyncRolloverStep1 asyncTask = new AsyncRolloverStep1(this, backupFile);
-      asyncTask
-          .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-      asyncTask.setOnFailed(
-          evt -> pageController.showErrorMessage(evt.getSource().getException().getMessage()));
       executor.execute(asyncTask);
       backupButton.setDisable(true);
       rolloverButton.setDisable(false);
@@ -113,10 +112,6 @@ public class AnnualRolloverController {
   void annualRollover() {
     pageController.showPermanentMessage("Jaarovergang wordt uitgevoerd; even geduld a.u.b.");
     AsyncRolloverStep2 asyncTask = new AsyncRolloverStep2(this);
-    asyncTask
-        .setOnSucceeded(evt -> pageController.showMessage(evt.getSource().getValue().toString()));
-    asyncTask.setOnFailed(
-        evt -> pageController.showErrorMessage(evt.getSource().getException().getMessage()));
     executor.execute(asyncTask);
     rolloverButton.setDisable(true);
     exportButton.setDisable(false);
@@ -129,12 +124,6 @@ public class AnnualRolloverController {
   void exportToExcel() {
     pageController.showPermanentMessage("Excel export wordt aangemaakt; even geduld a.u.b.");
     AsyncRolloverStep3 asyncTask = new AsyncRolloverStep3(this);
-    asyncTask.setOnSucceeded(evt -> {
-      pageController.showMessage(evt.getSource().getValue().toString());
-      step4.setText("Stap 4: Controleer handmatig de Excel exportbestanden in map " + parent);
-    });
-    asyncTask.setOnFailed(
-        evt -> pageController.showErrorMessage(evt.getSource().getException().getMessage()));
     executor.execute(asyncTask);
   }
 
@@ -145,11 +134,12 @@ public class AnnualRolloverController {
     exportButton.setDisable(true);
   }
 
-  protected static class AsyncRolloverStep1 extends Task<String> {
+  protected static class AsyncRolloverStep1 extends HandledTask {
     private final AnnualRolloverController controller;
     private final File backupFile;
 
     AsyncRolloverStep1(AnnualRolloverController controller, File backupFile) {
+      super(controller.pageController);
       this.controller = controller;
       this.backupFile = backupFile;
     }
@@ -169,10 +159,11 @@ public class AnnualRolloverController {
     }
   }
 
-  protected static class AsyncRolloverStep2 extends Task<String> {
+  protected static class AsyncRolloverStep2 extends HandledTask {
     private final AnnualRolloverController controller;
 
     AsyncRolloverStep2(AnnualRolloverController controller) {
+      super(controller.pageController);
       this.controller = controller;
     }
 
@@ -184,10 +175,11 @@ public class AnnualRolloverController {
 
   }
 
-  protected static class AsyncRolloverStep3 extends Task<String> {
+  protected static class AsyncRolloverStep3 extends HandledTask {
     private final AnnualRolloverController controller;
 
     AsyncRolloverStep3(AnnualRolloverController controller) {
+      super(controller.pageController);
       this.controller = controller;
     }
 

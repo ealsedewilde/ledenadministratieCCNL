@@ -1,9 +1,7 @@
 package nl.ealse.ccnl.control.annual;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,7 +12,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -31,7 +30,11 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Controller for genereting DirectDebits file.
+ */
 @Controller
+@Slf4j
 public class SepaDirectDebitsController {
   private final PageController pageController;
 
@@ -43,7 +46,9 @@ public class SepaDirectDebitsController {
 
   private WrappedFileChooser fileChooser;
 
-  private Stage dialog;
+  private Stage settingsStage;
+
+  private Stage messagesStage;
 
   @FXML
   private Label errorMessageLabel;
@@ -51,9 +56,11 @@ public class SepaDirectDebitsController {
   @FXML
   private Button generateButton;
 
+  // property of directDebitsSettings popup window
   @FXML
   private TableView<FlatProperty> tableView;
 
+  // property of directDebitMessages popup window
   @FXML
   private ListView<String> directDebitMessages;
 
@@ -62,9 +69,6 @@ public class SepaDirectDebitsController {
 
   @FXML
   private TableColumn<FlatProperty, String> descriptionColumn;
-
-  private Stage messagesStage;
-
 
   public SepaDirectDebitsController(SepaDirectDebitService service, PageController pageController,
       TaskExecutor executor) {
@@ -77,26 +81,24 @@ public class SepaDirectDebitsController {
   public void onApplicationEvent(MenuChoiceEvent event) {
     generateButton.setDisable(true);
     selectedFile = null;
-    tableView.getItems().clear();
-    tableView.getItems().addAll(service.getProperties());
     errorMessageLabel.setVisible(false);
   }
 
   @FXML
-  public void initialize() {
-    if (dialog == null) {
+  void initialize() {
+    if (settingsStage == null) {
       fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XML);
       fileChooser.setInitialDirectory(service.getDirectDebitsDirectory());
 
-      dialog = new Stage();
-      dialog.setResizable(false);
-      dialog.setTitle("Incasso instellingen");
-      dialog.getIcons().add(ImagesMap.get("info.png"));
+      settingsStage = new Stage();
+      settingsStage.setResizable(false);
+      settingsStage.setTitle("Incasso instellingen");
+      settingsStage.getIcons().add(ImagesMap.get("info.png"));
 
-      dialog.initOwner(pageController.getPrimaryStage());
+      settingsStage.initOwner(pageController.getPrimaryStage());
       Parent parent = pageController.loadPage(PageName.DIRECT_DEBITS_SETTINGS);
       Scene dialogScene = new Scene(parent, 1000, 600);
-      dialog.setScene(dialogScene);
+      settingsStage.setScene(dialogScene);
 
       valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
       valueColumn.setOnEditCommit(t -> {
@@ -119,18 +121,22 @@ public class SepaDirectDebitsController {
       Scene messagesScene = new Scene(parent, 600, 400);
       messagesStage.setScene(messagesScene);
     }
-
   }
 
   @FXML
-  public void manageSettings() {
-    if (!dialog.isShowing()) {
-      dialog.show();
+  void manageSettings() {
+    tableView.getItems().clear();
+    tableView.getItems().addAll(service.getProperties());
+    if (!settingsStage.isShowing()) {
+      settingsStage.show();
     }
   }
 
   @FXML
-  public void selectFile() {
+  void selectFile() {
+    if (settingsStage.isShowing()) {
+      settingsStage.close();
+    }
     selectedFile = fileChooser.showSaveDialog();
     if (selectedFile != null) {
       generateButton.setDisable(false);
@@ -138,27 +144,21 @@ public class SepaDirectDebitsController {
   }
 
   @FXML
-  public void generateDirectDebits() {
+  void generateDirectDebits() {
+    if (messagesStage.isShowing()) {
+      messagesStage.close();
+    }
+    directDebitMessages.getItems().clear();
+
     pageController.showPermanentMessage("Incassobestand wordt aangemaakt; even geduld a.u.b.");
-    DirectDebitTask directDebitTask = new DirectDebitTask(service, selectedFile);
-    directDebitTask.setOnFailed(
-        t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
-    directDebitTask.setOnSucceeded(t -> {
-      List<String> messages = directDebitTask.getMessages();
-      if (!messages.isEmpty()) {
-        directDebitMessages.getItems().clear();
-        directDebitMessages.getItems().addAll(messages);
-        messagesStage.show();
-      }
-      pageController.showMessage("Incassobestand is aangemaakt");
-    });
+    DirectDebitTask directDebitTask = new DirectDebitTask(this);
     executor.execute(directDebitTask);
     pageController.setActivePage(PageName.LOGO);
   }
 
   @FXML
   public void closeSettings() {
-    dialog.close();
+    settingsStage.close();
   }
 
   protected void saveProperty(FlatProperty newValue) {
@@ -176,26 +176,36 @@ public class SepaDirectDebitsController {
     }
   }
 
-  protected static class DirectDebitTask extends Task<Void> {
-    @Getter
-    private List<String> messages = new ArrayList<>();
+  /**
+   * Generate DirectDebits file.
+   */
+  protected static class DirectDebitTask extends HandledTask {
+
+    private final SepaDirectDebitsController controller;
 
     private final SepaDirectDebitService service;
     private final File selectedFile;
 
-    DirectDebitTask(SepaDirectDebitService service, File selectedFile) {
-      this.service = service;
-      this.selectedFile = selectedFile;
+    DirectDebitTask(SepaDirectDebitsController controller) {
+      super(controller.pageController);
+      this.controller = controller;
+      this.service = controller.service;
+      this.selectedFile = controller.selectedFile;
     }
 
     @Override
-    protected Void call() {
+    protected String call() {
       try {
-        service.generateSepaDirectDebitFile(selectedFile);
+        List<String> messages = service.generateSepaDirectDebitFile(selectedFile);
+        if (messages != null && !messages.isEmpty()) {
+          controller.directDebitMessages.getItems().addAll(messages);
+          controller.messagesStage.show();
+        }
+        return "Incassobestand is aangemaakt";
       } catch (IncassoException e) {
+        log.error("Failed to create file", e);
         throw new AsyncTaskException("Aanmaken incassobestand is mislukt");
       }
-      return null;
     }
 
   }

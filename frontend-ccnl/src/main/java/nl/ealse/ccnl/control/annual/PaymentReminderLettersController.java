@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
+import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -102,10 +102,6 @@ public class PaymentReminderLettersController extends DocumentTemplateController
       if (file != null) {
         pageController.showPermanentMessage("Brieven worden aangemaakt; even geduld a.u.b.");
         PdfToFile pdfToFile = new PdfToFile(this, getLetterText().getText(), file);
-        pdfToFile
-            .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-        pdfToFile.setOnFailed(
-            t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
         executor.execute(pdfToFile);
         pageController.setActivePage(PageName.LOGO);
       }
@@ -117,10 +113,6 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     if (overdueExists()) {
       pageController.showPermanentMessage("Printen wordt voorbereid; even geduld a.u.b.");
       PdfToPrint pdfToPrint = new PdfToPrint(this, getLetterText().getText());
-      pdfToPrint
-          .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-      pdfToPrint.setOnFailed(
-          t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
       executor.execute(pdfToPrint);
       pageController.setActivePage(PageName.LOGO);
     }
@@ -152,12 +144,13 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     return true;
   }
 
-  private abstract static class AsyncGenerator extends Task<String> {
+  private abstract static class AsyncGenerator extends HandledTask {
 
     private final PaymentReminderLettersController controller;
     private final String template;
 
     AsyncGenerator(PaymentReminderLettersController controller, String template) {
+      super(controller.pageController);
       this.controller = controller;
       this.template = template;
     }

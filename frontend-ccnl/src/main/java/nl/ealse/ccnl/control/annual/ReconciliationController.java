@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -18,9 +17,11 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.button.ButtonCell;
 import nl.ealse.ccnl.control.button.DeleteButton;
+import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -35,6 +36,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Slf4j
 public class ReconciliationController {
 
   private final PageController pageController;
@@ -50,6 +52,7 @@ public class ReconciliationController {
   @FXML
   private TableView<PaymentFile> tableView;
 
+  // Property of reconciliationMessages popup window
   @FXML
   private ListView<String> reconcileMessages;
 
@@ -106,7 +109,8 @@ public class ReconciliationController {
     }
   }
 
-  public void selectFile() {
+  @FXML
+  void selectFile() {
     File selectedFile = fileChooser.showOpenDialog();
     if (selectedFile != null) {
       try {
@@ -122,7 +126,8 @@ public class ReconciliationController {
     }
   }
 
-  public void deleteFile(ActionEvent e) {
+  @FXML
+  void deleteFile(ActionEvent e) {
     Button b = (Button) e.getSource();
     @SuppressWarnings("unchecked")
     TableCell<PaymentFile, String> cell = (TableCell<PaymentFile, String>) b.getParent();
@@ -133,48 +138,54 @@ public class ReconciliationController {
   }
 
   @FXML
-  public void reconcilePayments() {
+  void reconcilePayments() {
+    if (messagesStage.isShowing()) {
+      messagesStage.close();
+    }
+    reconcileMessages.getItems().clear();
+    
     LocalDate dateValue = referenceDate.getValue();
     if (dateValue == null) {
       referenceDateE.setVisible(true);
     } else {
       referenceDateE.setVisible(false);
       pageController.showPermanentMessage("Betalingen worden verwerkt; even geduld a.u.b.");
-      ReconcileTask reconcileTask = new ReconcileTask(service, dateValue, includeDD.isSelected());
-      reconcileTask.setOnSucceeded(t -> {
-        List<String> messages = reconcileTask.getMessages();
-        if (!messages.isEmpty()) {
-          reconcileMessages.getItems().clear();
-          reconcileMessages.getItems().addAll(messages);
-          messagesStage.show();
-        }
-        pageController.showMessage("Betalingen zijn verwerkt");
-      });
-      reconcileTask.setOnFailed(
-          t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+      ReconcileTask reconcileTask = new ReconcileTask(this, dateValue, includeDD.isSelected());
       executor.execute(reconcileTask);
     }
   }
 
-  protected static class ReconcileTask extends Task<Void> {
-    @Getter
-    private List<String> messages;
+  /**
+   * Asynchronous reconciliation.
+   */
+  protected static class ReconcileTask extends HandledTask {
 
-    private final ReconciliationService service;
+    private final ReconciliationController controller;
     private final LocalDate referenceDate;
     private final boolean includeDD;
 
-    ReconcileTask(ReconciliationService service, LocalDate referenceDate, boolean includeDD) {
-      this.service = service;
+    ReconcileTask(ReconciliationController controller, LocalDate referenceDate, boolean includeDD) {
+      super(controller.pageController);
+      this.controller = controller;
       this.referenceDate = referenceDate;
       this.includeDD = includeDD;
     }
 
 
     @Override
-    protected Void call() {
-      messages = service.reconcilePayments(referenceDate, includeDD);
-      return null;
+    protected String call() {
+      try {
+        List<String> messages = controller.service.reconcilePayments(referenceDate, includeDD);
+        if (messages != null && !messages.isEmpty()) {
+          controller.reconcileMessages.getItems().addAll(messages);
+          controller.messagesStage.show();
+        }
+        return "Betalingen zijn verwerkt";
+      } catch (Exception e) {
+        log.error("Failed to reconcile", e);
+        throw new AsyncTaskException("Verwerking betalingen is mislukt");
+      }
+
     }
 
   }

@@ -138,7 +138,7 @@ public class MemberController extends MemberView {
     reset();
   }
 
-  public void handleEvent(MemberSeLectionEvent event) {
+  private void handleEvent(MemberSeLectionEvent event) {
     this.currentMenuChoice = event.getMenuChoice();
     pageController.loadPage(PageName.MEMBER_ADDRESS);
     addressController.getHeaderText().setText(getHeaderText());

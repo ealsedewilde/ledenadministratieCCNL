@@ -3,7 +3,9 @@ package nl.ealse.ccnl.control.settings;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javafx.concurrent.Task;
+import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.HandledTask;
+import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.BackupRestoreService;
@@ -15,6 +17,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Slf4j
 public class BackupRestoreCommand {
 
   private static final DateTimeFormatter formatter =
@@ -50,9 +53,7 @@ public class BackupRestoreCommand {
     File backupFile = fileChooser.showSaveDialog();
     if (backupFile != null) {
       pageController.showPermanentMessage("Backup wordt aangemaakt; even geduld a.u.b.");
-      BackupTask asyncTask = new BackupTask(backupFile, service);
-      asyncTask.setOnSucceeded(t -> pageController.showMessage("Backup is aangemaakt"));
-      asyncTask.setOnFailed(t -> pageController.showErrorMessage("Aanmaken backup is mislukt"));
+      BackupTask asyncTask = new BackupTask(this, backupFile);
       executor.execute(asyncTask);
     }
   }
@@ -66,15 +67,7 @@ public class BackupRestoreCommand {
     File backupFile = fileChooser.showOpenDialog();
     if (backupFile != null) {
       pageController.showPermanentMessage("Backup wordt teruggezet; even geduld a.u.b.");
-      RestoreTask asyncTask = new RestoreTask(backupFile, service);
-      asyncTask.setOnSucceeded(t -> {
-        if (asyncTask.getValue().booleanValue()) {
-          pageController.showMessage("Backup is teruggezet");
-        } else {
-          pageController.showErrorMessage("Onjuist bestand; Terugzetten backup is mislukt");
-        }
-      });
-      asyncTask.setOnFailed(t -> pageController.showErrorMessage("Terugzetten backup is mislukt"));
+      RestoreTask asyncTask = new RestoreTask(this, backupFile);
       executor.execute(asyncTask);
     }
   }
@@ -84,36 +77,51 @@ public class BackupRestoreCommand {
     fileChooser.setInitialDirectory(new File(dbDirectory));
   }
 
-  protected static class BackupTask extends Task<Void> {
+  protected static class BackupTask extends HandledTask {
 
     private final BackupRestoreService service;
     private final File backupFile;
 
-   BackupTask(File backupFile, BackupRestoreService service) {
+    BackupTask(BackupRestoreCommand command, File backupFile) {
+      super(command.pageController);
       this.backupFile = backupFile;
-      this.service = service;
+      this.service = command.service;
     }
 
     @Override
-    protected Void call() throws Exception {
-      service.backupDatabase(backupFile);
-      return null;
-   }
+    protected String call() {
+      try {
+        service.backupDatabase(backupFile);
+        return "Backup is aangemaakt";
+      } catch (Exception e) {
+        log.error("Creating backup failed, e");
+        throw new AsyncTaskException("Aanmaken backup is mislukt");
+      }
+    }
 
   }
-  protected static class RestoreTask extends Task<Boolean> {
+  protected static class RestoreTask extends HandledTask {
 
     private final BackupRestoreService service;
     private final File backupFile;
 
-    RestoreTask(File backupFile, BackupRestoreService service) {
+    RestoreTask(BackupRestoreCommand command, File backupFile) {
+      super(command.pageController);
       this.backupFile = backupFile;
-      this.service = service;
+      this.service = command.service;
     }
 
     @Override
-    protected Boolean call() throws Exception {
-      return service.restoreDatabase(backupFile);
+    protected String call() {
+      try {
+        if (service.restoreDatabase(backupFile)) {
+          return "Backup is teruggezet";
+        } 
+      } catch (Exception e) {
+        log.error("Restoring backup failed, e");
+        throw new AsyncTaskException("Terugzetten backup is mislukt");
+      }
+      throw new AsyncTaskException("Onjuist bestand; Terugzetten backup is mislukt");
     }
 
   }

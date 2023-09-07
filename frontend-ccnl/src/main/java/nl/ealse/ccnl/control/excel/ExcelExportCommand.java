@@ -3,7 +3,8 @@ package nl.ealse.ccnl.control.excel;
 import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_ARCHIVE;
 import java.io.File;
 import java.io.IOException;
-import javafx.concurrent.Task;
+import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -18,6 +19,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Slf4j
 public class ExcelExportCommand {
 
   @Value("${ccnl.directory.excel:c:/temp}")
@@ -33,8 +35,8 @@ public class ExcelExportCommand {
 
   private WrappedFileChooser fileChooser;
 
-  public ExcelExportCommand(PageController pageController,
-      TaskExecutor executor, ExportArchiveService archiveService, ExportService service) {
+  public ExcelExportCommand(PageController pageController, TaskExecutor executor,
+      ExportArchiveService archiveService, ExportService service) {
     this.pageController = pageController;
     this.archiveService = archiveService;
     this.service = service;
@@ -56,50 +58,50 @@ public class ExcelExportCommand {
     if (exportFile != null) {
       pageController.showPermanentMessage("MS Excel-werkblad wordt aangemaakt; even geduld a.u.b.");
       if (event.getMenuChoice() == REPORT_ARCHIVE) {
-        AsyncArchiveTask asyncArchiveTask = new AsyncArchiveTask(archiveService, exportFile);
-        asyncArchiveTask
-            .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-        asyncArchiveTask.setOnFailed(
-            t -> pageController.showErrorMessage(t.getSource().getException().getMessage()));
+        AsyncArchiveTask asyncArchiveTask =
+            new AsyncArchiveTask(this, exportFile);
         executor.execute(asyncArchiveTask);
       } else {
         AsyncExportTask asyncExportTask =
-            new AsyncExportTask(event.getMenuChoice(), service, exportFile);
-        asyncExportTask
-            .setOnSucceeded(t -> pageController.showMessage(t.getSource().getValue().toString()));
-        asyncExportTask.setOnFailed(
-            t -> pageController.showErrorMessage("Schrijven MS Excel-werkblad is mislukt"));
+            new AsyncExportTask(this, event.getMenuChoice(), exportFile);
         executor.execute(asyncExportTask);
       }
     }
   }
 
-  protected static class AsyncArchiveTask extends Task<String> {
+  protected static class AsyncArchiveTask extends HandledTask {
     private final ExportArchiveService archiveService;
     private final File exportFile;
 
-    AsyncArchiveTask(ExportArchiveService archiveService, File exportFile) {
-      this.archiveService = archiveService;
+    AsyncArchiveTask(ExcelExportCommand command, File exportFile) {
+      super(command.pageController);
+      this.archiveService = command.archiveService;
       this.exportFile = exportFile;
     }
 
 
     @Override
-    protected String call() throws Exception {
-      archiveService.export(exportFile);
-      return "MS Excel-werkblad voor archief is aangemaakt";
+    protected String call() {
+      try {
+        archiveService.export(exportFile);
+        return "MS Excel-werkblad voor archief is aangemaakt";
+      } catch (IOException e) {
+        log.error("Failed to create Excel", e);
+        throw new AsyncTaskException("Aanmaken MS Excel-werkblad is mislukt");
+      }
     }
 
   }
 
-  protected static class AsyncExportTask extends Task<String> {
+  protected static class AsyncExportTask extends HandledTask {
     private final ExportService service;
     private final File exportFile;
     private final MenuChoice menuChoice;
 
-    AsyncExportTask(MenuChoice menuChoice, ExportService service, File exportFile) {
+    AsyncExportTask(ExcelExportCommand command, MenuChoice menuChoice, File exportFile) {
+      super(command.pageController);
       this.menuChoice = menuChoice;
-      this.service = service;
+      this.service = command.service;
       this.exportFile = exportFile;
     }
 
