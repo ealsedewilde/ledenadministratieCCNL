@@ -91,7 +91,7 @@ public class ManageTemplateController {
   @EventListener
   public void onApplicationEvent(TemplateSelectionEvent event) {
     pageController.setActivePage(PageName.MANAGE_TEMPLATE);
-    this.selectedTemplate = event.getSelectedEntity();
+    this.selectedTemplate = event.getSelectedTemplate();
     this.cancelationMail = selectedTemplate.getTemplateID()
         .getDocumentTemplateType() == DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL;
     this.isNew = event.isNewTemplate();

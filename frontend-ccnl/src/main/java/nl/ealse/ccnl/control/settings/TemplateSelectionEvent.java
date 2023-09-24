@@ -1,19 +1,26 @@
 package nl.ealse.ccnl.control.settings;
 
 import lombok.Getter;
-import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
+import org.springframework.context.ApplicationEvent;
 
 @SuppressWarnings("serial")
-public class TemplateSelectionEvent extends EntitySelectionEvent<DocumentTemplate> {
+public class TemplateSelectionEvent extends ApplicationEvent {
 
   @Getter
   private final boolean newTemplate;
+  
+  @Getter
+  private final DocumentTemplate selectedTemplate;
 
   public TemplateSelectionEvent(Object source, DocumentTemplate template, boolean newTemplate) {
-    super(source, MenuChoice.TEMPLATES_OVERVIEW, template);
+    super(source);
+    this.selectedTemplate = template;
     this.newTemplate = newTemplate;
+  }
+  
+  public boolean name(String... eventNames) {
+    return false;
   }
 
 }

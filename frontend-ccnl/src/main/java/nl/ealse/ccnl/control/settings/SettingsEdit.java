@@ -50,7 +50,7 @@ public class SettingsEdit extends SettingsView {
 
   @EventListener
   public void onApplicationEvent(SettingSelectionEvent event) {
-    selectedSettings = event.getSelectedEntity();
+    selectedSettings = event.getSelectedSetting();
     reset();
   }
 
