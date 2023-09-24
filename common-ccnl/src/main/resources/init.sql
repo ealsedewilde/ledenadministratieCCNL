@@ -188,7 +188,7 @@ INSERT INTO "PUBLIC"."SETTING" VALUES('mail.smtp.starttls.enable', '', 'spring.m
 INSERT INTO "PUBLIC"."SETTING" VALUES('mail.smtp.auth', '', 'spring.mail.properties', 'true', 'spring.mail.properties.mail.smtp.auth');       
 INSERT INTO "PUBLIC"."SETTING" VALUES('number', 'Volgnummer clubblad', 'ccnl.magazine', '366', 'ccnl.magazine.number');       
 INSERT INTO "PUBLIC"."SETTING" VALUES('db', 'Database Backup-/Restore directory', 'ccnl.directory', 'C:/temp', 'ccnl.directory.db');          
-INSERT INTO "PUBLIC"."SETTING" VALUES('sepa', 'Basis directory voor SEPA formulieren', 'ccnl.directory', 'C:/Users/SKIKK/OneDrive/prive/CCNL_prive/ledenadministratie', 'ccnl.directory.sepa');               
+INSERT INTO "PUBLIC"."SETTING" VALUES('sepa', 'Basis directory voor SEPA formulieren', 'ccnl.directory', 'C:/temp/ledenadministratie', 'ccnl.directory.sepa');               
 INSERT INTO "PUBLIC"."SETTING" VALUES('excel', 'Directory voor Excel import en export', 'ccnl.directory', 'C:/temp', 'ccnl.directory.excel'); 
 INSERT INTO "PUBLIC"."SETTING" VALUES('magazine', 'Directory voor adresbestanden van het clubblad', 'ccnl.directory', 'C:/temp', 'ccnl.directory.magazine');  
 INSERT INTO "PUBLIC"."SETTING" VALUES('incasso', 'Contributie bij automatische incasso', 'ccnl.contributie', '27,50', 'ccnl.contributie.incasso');            
