@@ -97,6 +97,7 @@ public class SettingsController extends SettingsView {
 
   @EventListener(condition = "#event.name('SETTINGS')")
   public void findSettings(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.SETTINGS);
     tableView.getItems().clear();
     tableView.getItems().addAll(service.findByOrderBySettingsGroupAscKeyAsc());
   }

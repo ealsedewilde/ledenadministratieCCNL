@@ -36,10 +36,10 @@ public class InvalidAddressController extends AddressView {
 
   @EventListener(condition = "#event.name('MAGAZINE_INVALID_ADDRESS')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
+    pageController.setActivePage(PageName.MAGAZINE_INVALID_ADDRESS);
     selectedMember = event.getSelectedEntity();
     memberNumber.setText("Adres voor lidnummer: " + selectedMember.getMemberNumber().toString());
     memberName.setText(selectedMember.getFullName());
-    pageController.setActivePage(PageName.MAGAZINE_INVALID_ADDRESS);
     ViewModel.modelToView(this, selectedMember);
   }
 
@@ -49,12 +49,12 @@ public class InvalidAddressController extends AddressView {
     selectedMember.setMemberInfo(memberInfo.getText());
     service.persistMember(selectedMember);
     pageController.showMessage("Wijziging opgeslagen");
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
   @FXML
   void cancel() {
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
 }

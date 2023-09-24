@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationController> {
 
-  private static PageController pageController;
   private static InternalRelationService internalRelationService;
 
 
@@ -30,11 +29,10 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
 
   @Test
   void testController() {
-    sut = new InternalRelationController(pageController, internalRelationService);
+    sut = new InternalRelationController(getPageController(), internalRelationService);
     rel = internalRelation();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      prepare();
       doTest();
       ar.set(true);
     }, ar);
@@ -47,27 +45,15 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
     sut.handleRelation(event);
 
     sut.save();
-    verify(pageController).showMessage("Functiegegevens opgeslagen");
+    verify(getPageController()).showMessage("Functiegegevens opgeslagen");
 
     sut.nextPage();
     sut.previousPage();
 
   }
 
-  private void prepare() {
-    try {
-      getPage(sut, PageName.INTERNAL_RELATION_PERSONAL);
-      Parent p = getPage(sut, PageName.INTERNAL_RELATION_ADDRESS);
-      when(pageController.loadPage(PageName.INTERNAL_RELATION_ADDRESS)).thenReturn(p);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
-  }
-
   @BeforeAll
   static void setup() {
-   
-    pageController = mock(PageController.class);
     internalRelationService = mock(InternalRelationService.class);
   }
 

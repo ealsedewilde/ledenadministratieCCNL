@@ -13,7 +13,7 @@ class PartnerSearchControllerTest {
 
   @Test
   void testController() {
-    sut = new PartnerSearchController(null, null);
+    sut = new PartnerSearchController(null, null, null);
     PartnerSelectionEvent result = sut.newEntitySelectionEvent(MenuChoice.AMEND_PARTNER);
     Assertions.assertNotNull(result);
 

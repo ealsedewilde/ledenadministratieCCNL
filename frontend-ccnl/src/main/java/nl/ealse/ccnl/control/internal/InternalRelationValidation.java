@@ -13,8 +13,8 @@ public class InternalRelationValidation extends AddressValidation {
 
   @Override
   public void initializeValidation(Consumer<Boolean> vc) {
-    if (controller.getAddressController() != null) {
-      setAddressController(controller.getAddressController());
+    if (controller.getStreet() != null) {
+      setAddressController(controller);
       super.initializeValidation(vc);
     } else if (controller.getContactName() != null) {
       required(controller.getContactName(), controller.getContactNameE());

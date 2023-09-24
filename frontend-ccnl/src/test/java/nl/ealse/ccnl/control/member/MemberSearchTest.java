@@ -14,6 +14,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -31,6 +32,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
 
   private static ApplicationContext springContext;
   private static MemberService service;
+  private static PageController pageController;
   private static Member m;
 
   private static SearchItem si = SearchItem.NUMBER;
@@ -43,7 +45,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
 
   @Test
   void testSearch() {
-    sut = new MemberSearchController(springContext, service);
+    sut = new MemberSearchController(springContext, service, pageController);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -86,6 +88,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
   static void setup() {
     springContext = mock(ApplicationContext.class);
     service = mock(MemberService.class);
+    pageController = mock(PageController.class);
     m = member();
     List<Member> members = new ArrayList<>();
     members.add(m);

@@ -13,7 +13,7 @@ class ExternalClubSearchControllerTest {
 
   @Test
   void testController() {
-    sut = new ExternalClubSearchController(null, null);
+    sut = new ExternalClubSearchController(null, null, null);
 
     ExternalClubSelectionEvent result = sut.newEntitySelectionEvent(MenuChoice.AMEND_EXTERNAL_CLUB);
     Assertions.assertNotNull(result);

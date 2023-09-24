@@ -15,25 +15,24 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
+import nl.ealse.javafx.FXMLNodeMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
 
-  private static PageController pageController;
   private static CommercialPartnerService service;
 
-  private PartnerController sut;
+  private static PartnerController sut;
   private ExternalRelationPartner partner;
-
+ 
   @Test
   void testController() {
-    sut = new PartnerController(pageController, service);
+    sut = new PartnerController(getPageController(), service);
     partner = externalRelationPartner();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      prepare();
       doTest();
       ar.set(true);
     }, ar);
@@ -45,7 +44,7 @@ class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
     sut.handlePartner(event);
 
     sut.save();
-    verify(pageController).showMessage("Partnergegevens opgeslagen");
+    verify(getPageController()).showMessage("Partnergegevens opgeslagen");
 
     sut.nextPage();
     sut.previousPage();
@@ -53,20 +52,8 @@ class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
 
   @BeforeAll
   static void setup() {
-   
-    pageController = mock(PageController.class);
-    service = mock(CommercialPartnerService.class);
+     service = mock(CommercialPartnerService.class);
   };
-
-  private void prepare() {
-    try {
-      getPage(sut, PageName.PARTNER_PERSONAL);
-      Parent p = getPage(sut, PageName.PARTNER_ADDRESS);
-      when(pageController.loadPage(PageName.PARTNER_ADDRESS)).thenReturn(p);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
-  }
 
   private ExternalRelationPartner externalRelationPartner() {
     ExternalRelationPartner r = new ExternalRelationPartner();

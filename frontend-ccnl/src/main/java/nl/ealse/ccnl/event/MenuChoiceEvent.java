@@ -4,6 +4,9 @@ import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import org.springframework.context.ApplicationEvent;
 
+/**
+ * Super type of all events that are used in the application flow.
+ */
 @SuppressWarnings("serial")
 public class MenuChoiceEvent extends ApplicationEvent {
 
@@ -16,7 +19,7 @@ public class MenuChoiceEvent extends ApplicationEvent {
   }
 
   /**
-   * Called by a {@link org.springframework.context.event.EventListener#condition()}
+   * Called by a {@link org.springframework.context.event.EventListener#condition()}.
    */
   public boolean name(String... eventNames) {
     for (String eventName : eventNames) {
@@ -28,10 +31,17 @@ public class MenuChoiceEvent extends ApplicationEvent {
   }
 
   /**
-   * Called by a {@link org.springframework.context.event.EventListener#condition()}
+   * Called by a {@link org.springframework.context.event.EventListener#condition()}.
    */
   public boolean group(String groupName) {
     return menuChoice.getGroup() != null && menuChoice.getGroup().name().equals(groupName);
+  }
+
+  /**
+   * Called by a {@link org.springframework.context.event.EventListener#condition()}.
+   */
+  public boolean command() {
+    return menuChoice.isCommand();
   }
 
 }

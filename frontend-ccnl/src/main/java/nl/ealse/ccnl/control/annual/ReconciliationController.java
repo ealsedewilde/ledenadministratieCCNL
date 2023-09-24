@@ -79,6 +79,7 @@ public class ReconciliationController {
 
   @EventListener(condition = "#event.name('RECONCILE_PAYMENTS')")
   public void onApplicationEvent(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.RECONCILE_PAYMENTS);
     tableView.getItems().clear();
     tableView.getItems().addAll(service.allFiles());
     LocalDate d = LocalDate.now();

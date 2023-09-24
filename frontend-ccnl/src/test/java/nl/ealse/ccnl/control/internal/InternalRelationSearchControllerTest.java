@@ -13,7 +13,7 @@ class InternalRelationSearchControllerTest {
 
   @Test
   void testController() {
-    sut = new InternalRelationSearchController(null, null);
+    sut = new InternalRelationSearchController(null, null, null);
 
     InternalRelationSelectionEvent result =
         sut.newEntitySelectionEvent(MenuChoice.AMEND_INTERNAL_RELATION);

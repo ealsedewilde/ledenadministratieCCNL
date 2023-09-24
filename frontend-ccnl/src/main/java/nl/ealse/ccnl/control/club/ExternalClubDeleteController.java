@@ -21,9 +21,9 @@ public class ExternalClubDeleteController
 
   @EventListener(condition = "#event.name('DELETE_EXTERNAL_CLUB')")
   public void onApplicationEvent(ExternalClubSelectionEvent event) {
+    getPageController().setActivePage(PageName.EXTERNAL_CLUB_DELETE);
     setSelectedEntity(event.getSelectedEntity());
     ViewModel.modelToView(this, event.getSelectedEntity());
-    getPageController().setActivePage(PageName.EXTERNAL_CLUB_DELETE);
   }
 
 }

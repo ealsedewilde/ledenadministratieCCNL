@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
 
-  private static PageController pageController;
   private static ExternalClubService service;
 
   private ExternalClubController sut;
@@ -29,11 +28,10 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
 
   @Test
   void testController() {
-    sut = new ExternalClubController(pageController, service);
+    sut = new ExternalClubController(getPageController(), service);
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      prepare();
       doTest();
       ar.set(true);
     }, ar);
@@ -41,12 +39,12 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
   }
 
   private void doTest() {
-    ExternalClubSelectionEvent event =
+     ExternalClubSelectionEvent event =
         new ExternalClubSelectionEvent(sut, MenuChoice.NEW_EXTERNAL_CLUB, club);
     sut.handleClub(event);
 
     sut.save();
-    verify(pageController).showMessage("Club gegevens zijn opgeslagen");
+    verify(getPageController()).showMessage("Club gegevens zijn opgeslagen");
 
     sut.nextPage();
     sut.previousPage();
@@ -54,19 +52,8 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
 
   @BeforeAll
   static void setup() {
-    pageController = mock(PageController.class);
     service = mock(ExternalClubService.class);
   };
-
-  private void prepare() {
-    try {
-      getPage(sut, PageName.EXTERNAL_CLUB_PERSONAL);
-      Parent p = getPage(sut, PageName.EXTERNAL_CLUB_ADDRESS);
-      when(pageController.loadPage(PageName.EXTERNAL_CLUB_ADDRESS)).thenReturn(p);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
-  }
 
   private ExternalRelationClub club() {
     ExternalRelationClub r = new ExternalRelationClub();

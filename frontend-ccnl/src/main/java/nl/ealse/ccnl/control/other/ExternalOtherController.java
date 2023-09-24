@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.other;
 
 import javafx.fxml.FXML;
+import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -13,55 +14,41 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ExternalOtherController extends ExternalRelationController<ExternalRelationOther> {
   private final PageController pageController;
-
-  private PageName currentPage;
+  
+  @Getter
+  private ExternalOtherFormpages formPages;
 
   public ExternalOtherController(PageController pageController,
       ExternalRelationService<ExternalRelationOther> externalRelationService) {
     super(pageController, externalRelationService);
     this.pageController = pageController;
+    bindFxml();
+  }
+
+  private void bindFxml() {
+    pageController.loadForm(PageName.EXTERNAL_RELATION_FORM, this);
+    formPages = new ExternalOtherFormpages(this);
+    System.out.println("QWERTY " + getRelationName() + " street " + getStreet() + " menu " + getFormMenu());
   }
 
   @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION','AMEND_EXTERNAL_RELATION')")
   public void handleRelation(ExternalOtherSelectionEvent event) {
-    pageController.loadPage(PageName.EXTERNAL_RELATION_ADDRESS);
+    pageController.setActivePage(PageName.EXTERNAL_RELATION_FORM);
+    formPages.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
     this.selectedExternalRelation = event.getSelectedEntity();
     this.model = new ExternalRelationOther();
+    headerText.setText(getHeaderText());
     reset();
   }
 
   @FXML
   void nextPage() {
-    if (currentPage == PageName.EXTERNAL_RELATION_PERSONAL) {
-      secondPage();
-    }
-  }
+    formPages.setActiveFormPage(formPages.getCurrentPage() + 1);  }
 
   @FXML
   void previousPage() {
-    if (currentPage == PageName.EXTERNAL_RELATION_ADDRESS) {
-      firstPage();
-    }
-  }
-
-  @FXML
-  protected void firstPage() {
-    currentPage = PageName.EXTERNAL_RELATION_PERSONAL;
-    pageController.setActivePage(currentPage);
-    this.headerText.setText(getHeaderText());
-    getRelationName().requestFocus();
-    externalRelationValidation.validate();
-  }
-
-  @FXML
-  void secondPage() {
-    currentPage = PageName.EXTERNAL_RELATION_ADDRESS;
-    pageController.setActivePage(currentPage);
-    this.headerText.setText(getHeaderText());
-    getAddressController().getStreet().requestFocus();
-    externalRelationValidation.validate();
-  }
+    formPages.setActiveFormPage(formPages.getCurrentPage() - 1);  }
 
   protected String getHeaderText() {
     switch (currentMenuChoice) {

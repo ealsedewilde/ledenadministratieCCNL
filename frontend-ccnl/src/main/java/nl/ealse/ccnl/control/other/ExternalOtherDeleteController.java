@@ -22,9 +22,9 @@ public class ExternalOtherDeleteController
 
   @EventListener(condition = "#event.name('DELETE_EXTERNAL_RELATION')")
   public void onApplicationEvent(ExternalOtherSelectionEvent event) {
+    getPageController().setActivePage(PageName.EXTERNAL_RELATION_DELETE);
     setSelectedEntity(event.getSelectedEntity());
     ViewModel.modelToView(this, event.getSelectedEntity());
-    getPageController().setActivePage(PageName.EXTERNAL_RELATION_DELETE);
   }
 
 }

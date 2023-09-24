@@ -67,6 +67,10 @@ class PrimaryPageStarterTest extends FXBase {
       Field f = sut.getClass().getDeclaredField("applicationIcon");
       f.setAccessible(true);
       f.set(sut, "Citroen.png");
+      Field d = FXMLNodeMap.class.getDeclaredField("fxmlDirectory");
+      d.setAccessible(true);
+      d.set(fxmlNodeMap, "fxml/");
+
     } catch (Exception e) {
       e.printStackTrace();
     }

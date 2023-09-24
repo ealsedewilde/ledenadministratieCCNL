@@ -7,6 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
@@ -21,6 +23,8 @@ public class TemplatesController {
 
   private final ApplicationEventPublisher eventPublisher;
 
+  private final PageController pageController;
+
   private final DocumentService documentService;
 
   @FXML
@@ -33,13 +37,15 @@ public class TemplatesController {
   private TextArea templateText;
 
   public TemplatesController(DocumentService documentService,
-      ApplicationEventPublisher eventPublisher) {
+      ApplicationEventPublisher eventPublisher, PageController pageController) {
     this.eventPublisher = eventPublisher;
+    this.pageController = pageController;
     this.documentService = documentService;
   }
 
   @EventListener(condition = "#event.name('TEMPLATES_OVERVIEW')")
   public void onApplicationEvent(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.TEMPLATES_OVERVIEW);
     List<DocumentTemplate> templates = documentService.findAllDocumentTemplates();
     tableView.getItems().clear();
     tableView.getItems().addAll(templates);

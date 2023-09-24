@@ -93,7 +93,7 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest<SepaDirectDebitsContro
       when(pageController.loadPage(PageName.DIRECT_DEBITS_SETTINGS)).thenReturn(p);
       Parent m = getPage(sut, PageName.DIRECT_DEBITS_MESSAGES);
       when(pageController.loadPage(PageName.DIRECT_DEBITS_MESSAGES)).thenReturn(m);
-      setDialog(false, "dialog");
+      setDialog(false, "settingsStage");
       setDialog(false, "messagesStage");
       sut.initialize();
     } catch (FXMLMissingException e) {

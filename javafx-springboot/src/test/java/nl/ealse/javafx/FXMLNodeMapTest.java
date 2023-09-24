@@ -20,7 +20,7 @@ class FXMLNodeMapTest {
   @Test
   void getPage() {
      try {
-      Parent p = sut.get(new PageId("LOGO", "logo"));
+      Parent p = sut.get(new PageId("LOGO", "logo"), null);
       Assertions.assertTrue(p instanceof VBox);
     } catch (FXMLMissingException e) {
       e.printStackTrace();
@@ -30,13 +30,13 @@ class FXMLNodeMapTest {
   @Test
   void pageNotFound() {
     Assertions.assertThrows(FXMLMissingException.class,
-        () -> sut.get(new PageId("DUMMY", "dummy")));
+        () -> sut.get(new PageId("DUMMY", "dummy"), null));
   }
 
   @Test
   void pageInError() {
     PageId id = new PageId("EMPTY", "empty");
-    Assertions.assertThrows(FXMLLoadException.class, () -> sut.get(id));
+    Assertions.assertThrows(FXMLLoadException.class, () -> sut.get(id, null));
   }
   
   @BeforeAll

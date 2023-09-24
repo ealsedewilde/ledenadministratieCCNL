@@ -71,6 +71,7 @@ public class CancelationMailController extends DocumentTemplateController {
 
   @EventListener(condition = "#event.name('CANCEL_MEMBERSHIP')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
+    pageController.loadPage(PageName.MEMBER_CANCEL_MAIL);
     selectedMember = event.getSelectedEntity();
     toMailAddress.setText(selectedMember.getEmail());
     saveMailAddress.setSelected(false);
@@ -90,13 +91,13 @@ public class CancelationMailController extends DocumentTemplateController {
         mailService.sendMail(toMailAddress.getText(), mailSubject, mailContent);
     mailService.saveMail(selectedMember, mailMessage);
     pageController.showMessage("Email is verzonden naar: " + toMailAddress.getText());
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
   @FXML
   void noMail() {
     pageController.showMessage("Geen Email verzonden");
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
   /**

@@ -1,7 +1,7 @@
 package nl.ealse.javafx;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class FXMLNodeMap {
-  
+
   @Value("${fxml.dir}")
   private String fxmlDirectory;
 
@@ -39,59 +39,79 @@ public class FXMLNodeMap {
    */
   private static final Map<String, Parent> FXML_PAGES = new HashMap<>();
 
+  private static FXMLNodeMap INSTANCE;
+
   private final ApplicationContext springContext; // NOSONAR
 
   public FXMLNodeMap(ApplicationContext springContext) {
     this.springContext = springContext;
+    INSTANCE = this;
+  }
+
+  /**
+   * Get the page for fxml with fx:root.
+   * <p>
+   * Used by non Spring components.
+   * </p?
+   * 
+   * @param id - unique id of the page
+   * @param root - the root object for the fxml
+   * @param controller - the controller object fxml binding.
+   * @return Parent of the page
+   * @throws FXMLMissingException - when page not found
+   */
+
+  public static Parent getPage(PageId id, Object root, Object controller)
+      throws FXMLMissingException {
+    return INSTANCE.get(id, root, controller);
   }
 
   /**
    * Lookup an initialized FXML page.
    * 
+   * @param id - unique id of the page
+   * @param controller - the controller object fxml binding.
+   * @return Parent of the page
    * @throws FXMLMissingException - when page not found
    */
-  public Parent get(PageId id) throws FXMLMissingException {
+  public Parent get(PageId id, Object controller) throws FXMLMissingException {
+    return get(id, null, controller);
+  }
+
+  private Parent get(PageId id, Object root, Object controller) throws FXMLMissingException {
     Parent page = FXML_PAGES.get(id.getPagekey());
     if (page == null) {
-      page = getFXML(id);
-      if (page == null) {
-        log.error("Unknown page " + id.getFxmlName());
-        throw new FXMLMissingException("Unknown page", id.getFxmlName());
-      }
+      page = getFXML(id, root, controller);
     }
     return page;
   }
 
   /**
-   * Manage the FXML caching.
+   * Loading of the FXML from the classpath.
    * 
    * @param id - of the page to retrieve
+   * @param root - optional root object for the fxml
    * @return
+   * @throws FXMLMissingException 
    */
-  private Parent getFXML(PageId id) {
+  private Parent getFXML(PageId id, Object root, Object controller) throws FXMLMissingException {
     Resource r = new ClassPathResource(fxmlDirectory + id.getFxmlName());
     try {
-      return processPath(id.getPagekey(), r.getURL());
-    } catch (IOException e) {
-      return null;
-    }
-  }
-
-  /**
-   * Actually loading of the FXML.
-   * 
-   * @param fxmlPath - file path of the page to load
-   * @return
-   */
-  private Parent processPath(String key, URL fxmlPath) {
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader(fxmlPath);
-      // Take Spring managed bean as the fx:controller
-      fxmlLoader.setControllerFactory(springContext::getBean);
+      FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
+      fxmlLoader.setRoot(root);
+      if (controller == null) {
+        // Take Spring managed bean as the fx:controller
+        fxmlLoader.setControllerFactory(springContext::getBean);
+      } else {
+        fxmlLoader.setController(controller);
+      }
       log.info(fxmlLoader.getLocation().toString());
       Parent page = fxmlLoader.load();
-      FXML_PAGES.put(key, page);
+      FXML_PAGES.put(id.getPagekey(), page);
       return page;
+    } catch (FileNotFoundException e) {
+      log.error("Unknown page " + id.getFxmlName());
+      throw new FXMLMissingException("Unknown page", id.getFxmlName());
     } catch (IOException e) {
       log.error("error loading fxml", e);
       throw new FXMLLoadException("error loading fxml", e);

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.AnnualRolloverService;
 import nl.ealse.ccnl.service.BackupRestoreService;
@@ -129,6 +130,7 @@ public class AnnualRolloverController {
 
   @EventListener(condition = "#event.name('ANNUAL_ROLLOVER')")
   public void onApplicationEvent(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.ANNUAL_ROLLOVER);
     backupButton.setDisable(false);
     rolloverButton.setDisable(true);
     exportButton.setDisable(true);

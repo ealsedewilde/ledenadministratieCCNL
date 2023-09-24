@@ -4,15 +4,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane xmlns="http://javafx.com/javafx/8" fx:controller="nl.ealse.ccnl.control.address.AddressController"
-  xmlns:fx="http://javafx.com/fxml/1" prefWidth="Infinity">
+<fx:root type="javafx.scene.layout.GridPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+	prefWidth="Infinity" styleClass="page">
   <columnConstraints>
     <ColumnConstraints minWidth="150" />
     <ColumnConstraints percentWidth="80.0" />
   </columnConstraints>
 
-  <Label fx:id="headerText" text="dummy" styleClass="header" GridPane.rowIndex="0"
-    GridPane.columnIndex="0" GridPane.columnSpan="2" />
   <HBox spacing="30" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2">
     <children>
       <Label text="Adresgegevens" underline="true" styleClass="subHeader"/>
@@ -65,4 +63,4 @@
 
   <Label text="Land" GridPane.columnIndex="0" GridPane.rowIndex="7" />
   <TextField fx:id="country" maxWidth="80" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-</GridPane>
+</fx:root>

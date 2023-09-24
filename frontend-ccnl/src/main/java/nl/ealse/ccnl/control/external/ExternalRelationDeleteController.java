@@ -32,7 +32,7 @@ public abstract class ExternalRelationDeleteController<T extends ExternalRelatio
   public void delete() {
     service.deleteExternalRelation(selectedEntity);
     pageController.showMessage("Gegevens zijn verwijderd");
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
 }

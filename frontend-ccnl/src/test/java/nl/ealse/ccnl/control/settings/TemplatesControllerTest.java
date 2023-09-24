@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.event.Event;
 import javafx.scene.control.TableRow;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
@@ -29,6 +30,7 @@ class TemplatesControllerTest extends FXMLBaseTest<TemplatesController> {
 
   private static ApplicationContext context;
   private static DocumentService service;
+  private static PageController pageController;
   private static Event ev;
   
   private static DocumentTemplate template;
@@ -37,7 +39,7 @@ class TemplatesControllerTest extends FXMLBaseTest<TemplatesController> {
 
   @Test
   void testController() {
-    sut = new TemplatesController(service, context);
+    sut = new TemplatesController(service, context, pageController);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -77,6 +79,7 @@ class TemplatesControllerTest extends FXMLBaseTest<TemplatesController> {
    
     context = mock(ApplicationContext.class);
     service = mock(DocumentService.class);
+    pageController = mock(PageController.class);
     List<DocumentTemplate> templates = new ArrayList<>();
     template = template();
     templates.add(template);

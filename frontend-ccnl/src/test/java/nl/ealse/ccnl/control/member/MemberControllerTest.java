@@ -8,18 +8,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.scene.Parent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.form.FormPane;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -27,30 +24,35 @@ import org.springframework.core.io.Resource;
 
 class MemberControllerTest extends FXMLBaseTest<MemberController> {
 
-  private PageController pageController;
   private DocumentService documentService;
   private MemberService service;
 
   private MemberController controller;
+  private TestFormPages formPages;
   private Member m;
 
   @Test
   void testController() {
-   
-    pageController = mock(PageController.class);
+
     service = mock(MemberService.class);
     documentService = mock(DocumentService.class);
-    controller =
-        new MemberController(pageController, service, documentService);
+    controller = new MemberController(getPageController(), service, documentService);
     final AtomicBoolean ar = new AtomicBoolean();
     m = getMember();
     AtomicBoolean result = runFX(() -> {
       prepare();
       doTest();
+      testFormPages();
       ar.set(true);
     }, ar);
     Assertions.assertTrue(result.get());
 
+  }
+  
+   void testFormPages() {
+   formPages = new TestFormPages(controller);
+    FormPane[] formPanes = formPages.getFormPages();
+    Assertions.assertNotNull(formPanes[3]);
   }
 
   private void doTest() {
@@ -81,31 +83,14 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
   }
 
   private void prepare() {
-    try {
-      Parent p = getPage(controller, PageName.MEMBER_PERSONAL);
-      when(pageController.loadPage(PageName.MEMBER_PERSONAL)).thenReturn(p);
-      Parent a = getPage(controller, PageName.MEMBER_ADDRESS);
-      when(pageController.loadPage(PageName.MEMBER_ADDRESS)).thenReturn(a);
-      Parent f = getPage(controller, PageName.MEMBER_FINANCIAL);
-      when(pageController.loadPage(PageName.MEMBER_FINANCIAL)).thenReturn(f);
-      Parent e = getPage(controller, PageName.MEMBER_EXTRA);
-      when(pageController.loadPage(PageName.MEMBER_EXTRA)).thenReturn(e);
-
-      Parent s = getPage(controller, PageName.SEPA_AUTHORIZATION_SHOW);
-      when(pageController.loadPage(PageName.SEPA_AUTHORIZATION_SHOW)).thenReturn(s);
-
-      when(documentService.findSepaAuthorization(m)).thenReturn(Optional.empty());
-      Assertions.assertNotNull(p);
-    } catch (FXMLMissingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    when(getSpringContext().getBean(MemberController.class)).thenReturn(controller);
+    when(documentService.findSepaAuthorization(m)).thenReturn(Optional.empty());
   }
 
   private Member getMember() {
     Member m = new Member();
-    //m.setInitials("T.");
-    //m.setLastName("Tester");
+    // m.setInitials("T.");
+    // m.setLastName("Tester");
     Address a = m.getAddress();
     a.setStreet("Straat");
     a.setAddressNumber("1");
@@ -135,6 +120,20 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     controller.getLastName().setText("Tester");
     controller.getIbanNumber().setText("foo");
   }
+  
+  
+  private static class TestFormPages extends MemberFormPages {
+
+    public TestFormPages(MemberController controller) {
+      super(controller);
+    }
+    
+    public  FormPane[] getFormPages() {
+      return formPages;
+    }
+    
+  }
+
 
 
 }

@@ -77,7 +77,9 @@ public class AddressListController {
 
   @EventListener(condition = "#event.name('CARD_ADDRESS_LIST')")
   public void cardList(MenuChoiceEvent event) {
-    AsyncCardAddressListTask asyncTask = new AsyncCardAddressListTask(pageController, magazineService);
+    pageController.setActivePage(PageName.MAGAZINE_ADDRESS_LIST);
+    AsyncCardAddressListTask asyncTask =
+        new AsyncCardAddressListTask(pageController, magazineService);
     generateFile(String.format(CARD_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
 
@@ -103,7 +105,7 @@ public class AddressListController {
       task.setAddressFile(addressFile);
       pageController.showPermanentMessage("Bestand wordt aangemaakt; even geduld a.u.b.");
       executor.execute(task);
-      pageController.setActivePage(PageName.LOGO);
+      pageController.activateLogoPage();
     }
   }
 

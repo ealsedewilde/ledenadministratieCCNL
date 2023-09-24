@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> {
 
-  private static PageController pageController;
   private static ExternalOtherService service;
 
   private ExternalOtherController sut;
@@ -29,11 +28,10 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
 
   @Test
   void testController() {
-    sut = new ExternalOtherController(pageController, service);
+    sut = new ExternalOtherController(getPageController(), service);
     relation = externalRelationOther();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      prepare();
       doTest();
       ar.set(true);
     }, ar);
@@ -46,7 +44,7 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
     sut.handleRelation(event);
 
     sut.save();
-    verify(pageController).showMessage("Externe relatie opgeslagen");
+    verify(getPageController()).showMessage("Externe relatie opgeslagen");
 
     sut.nextPage();
     sut.previousPage();
@@ -54,20 +52,8 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
 
   @BeforeAll
   static void setup() {
-   
-    pageController = mock(PageController.class);
     service = mock(ExternalOtherService.class);
   };
-
-  private void prepare() {
-    try {
-      getPage(sut, PageName.EXTERNAL_RELATION_PERSONAL);
-      Parent p = getPage(sut, PageName.EXTERNAL_RELATION_ADDRESS);
-      when(pageController.loadPage(PageName.EXTERNAL_RELATION_ADDRESS)).thenReturn(p);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
-  }
 
   private ExternalRelationOther externalRelationOther() {
     ExternalRelationOther r = new ExternalRelationOther();

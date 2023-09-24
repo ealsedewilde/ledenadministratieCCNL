@@ -13,7 +13,7 @@ class ExternalOtherSearchControllerTest {
 
   @Test
   void testController() {
-    sut = new ExternalOtherSearchController(null, null);
+    sut = new ExternalOtherSearchController(null, null, null);
     ExternalOtherSelectionEvent result =
         sut.newEntitySelectionEvent(MenuChoice.AMEND_EXTERNAL_RELATION);
     Assertions.assertNotNull(result);

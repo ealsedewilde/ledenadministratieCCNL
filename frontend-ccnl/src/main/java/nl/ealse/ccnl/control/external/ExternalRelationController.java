@@ -1,23 +1,25 @@
 package nl.ealse.ccnl.control.external;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import lombok.Getter;
-import nl.ealse.ccnl.control.address.AddressController;
-import nl.ealse.ccnl.control.button.SaveButton;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.form.FormController;
+import nl.ealse.ccnl.form.FormPages;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.view.ExternalRelationView;
-import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.mapping.Mapping;
+import nl.ealse.javafx.mapping.ViewModel;
 
+/**
+ * Super class for all External relations.
+ */
 public abstract class ExternalRelationController<T extends ExternalRelation>
-    extends ExternalRelationView {
+    extends ExternalRelationView implements FormController {
   private final PageController pageController;
 
   protected final ExternalRelationValidation externalRelationValidation;
@@ -30,22 +32,38 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
   @Mapping(ignore = true)
   protected T selectedExternalRelation;
 
+  protected MenuChoice currentMenuChoice;
+
   @FXML
+  @Getter
   @Mapping(ignore = true)
+  private Pane formMenu;
+
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  private Pane formPage;
+
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  private Pane formButtons;
+
+  @FXML
   protected Label headerText;
 
   @FXML
-  @Mapping(ignore = true)
-  private SaveButton saveButton;
-  
   @Getter
+  @Mapping(ignore = true)
+  private Button nextButton;
+
   @FXML
-  private AddressController addressController;
+  @Getter
+  @Mapping(ignore = true)
+  private Button previousButton;
 
-  protected MenuChoice currentMenuChoice;
-
-
-  protected final List<SaveButton> saveButtonList = new ArrayList<>();
+  @FXML
+  private Button saveButton;
 
   protected ExternalRelationController(PageController pageController,
       ExternalRelationService<T> externalRelationService) {
@@ -56,9 +74,8 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
 
   @FXML
   void initialize() {
-    saveButtonList.add(saveButton);
     externalRelationValidation
-        .initializeValidation(valid -> saveButtonList.forEach(button -> button.setDisable(!valid)));
+        .initializeValidation(valid -> saveButton.setDisable(!valid));
   }
 
   @FXML
@@ -68,28 +85,28 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
     }
     ViewModel.modelToView(this, selectedExternalRelation);
     ViewModel.viewToModel(this, model);
-    addressController.getHeaderText().setText(getHeaderText());
     externalRelationValidation.initialize();
-    saveButtonList
-        .forEach(button -> button.setDisable(currentMenuChoice == MenuChoice.NEW_PARTNER));
-    firstPage();
+    externalRelationValidation
+    .initializeValidation(valid -> saveButton.setDisable(!valid));
+    getFormPages().setActiveFormPage(0);
+
   }
 
   @FXML
   public void save() {
     enrich();
-    addressController.enrich();
+    enrichAddress();
     ViewModel.viewToModel(this, model);
     externalRelationService.persistExternalRelation(model);
     pageController.showMessage(getSaveText());
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
   protected abstract String getSaveText();
 
   protected abstract String getHeaderText();
 
-  protected abstract void firstPage();
+  protected abstract FormPages getFormPages();
 
 
 }

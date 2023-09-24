@@ -3,6 +3,8 @@ package nl.ealse.ccnl.control.partner;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
@@ -16,14 +18,19 @@ import org.springframework.stereotype.Controller;
 public class PartnerSearchController
     extends ExternalRelationSearchController<ExternalRelationPartner> {
 
+  private final PageController pageController;
+
   public PartnerSearchController(ApplicationContext springContext,
-      ExternalRelationService<ExternalRelationPartner> partnerService) {
+      ExternalRelationService<ExternalRelationPartner> partnerService,
+      PageController pageController) {
     super(springContext, partnerService);
+    this.pageController = pageController;
     this.initializeSearchItems();
   }
-  
+
   @EventListener(condition = "#event.group('SEARCH_PARTNER')")
   public void searchPartner(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.PARTNER_SEARCH);
     prepareSearch(event);
   }
 
@@ -37,8 +44,7 @@ public class PartnerSearchController
   }
 
   @Override
-  public PartnerSelectionEvent newEntitySelectionEvent(
-      MenuChoice currentMenuChoice) {
+  public PartnerSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
     return new PartnerSelectionEvent(this, currentMenuChoice, getSelectedEntity());
   }
 

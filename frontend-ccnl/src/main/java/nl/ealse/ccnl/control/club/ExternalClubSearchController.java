@@ -3,6 +3,8 @@ package nl.ealse.ccnl.control.club;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
@@ -16,14 +18,19 @@ import org.springframework.stereotype.Controller;
 public class ExternalClubSearchController
     extends ExternalRelationSearchController<ExternalRelationClub> {
 
+  private final PageController pageController;
+
   public ExternalClubSearchController(ApplicationContext springContext,
-      ExternalRelationService<ExternalRelationClub> externalRelationService) {
+      ExternalRelationService<ExternalRelationClub> externalRelationService,
+      PageController pageController) {
     super(springContext, externalRelationService);
+    this.pageController = pageController;
     this.initializeSearchItems();
   }
-  
+
   @EventListener(condition = "#event.group('SEARCH_CLUB')")
   public void searchClub(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.EXTERNAL_CLUB_SEARCH);
     prepareSearch(event);
   }
 

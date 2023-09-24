@@ -25,9 +25,9 @@ public class MemberValidation extends AddressValidation {
           controller.getIbanNumber(), controller.getIbanNumberE());
       addValidator(controller.getPaymentMethod(), ddValidator);
       addValidator(controller.getIbanNumber(), ddValidator);
-    } else if (controller.getAddressController() != null) {
+    } else if (controller.getStreet() != null) {
       // memberAddress.fxml is loaded
-      setAddressController(controller.getAddressController());
+      setAddressController(controller);
       super.initializeValidation(null);
     } else if (controller.getInitials() != null) {
       // memberPersonal.fxml is loaded

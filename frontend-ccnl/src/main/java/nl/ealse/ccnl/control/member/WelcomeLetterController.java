@@ -44,6 +44,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
 
   @EventListener(condition = "#event.name('NEW_MEMBER')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
+    pageController.loadPage(PageName.WELCOME_LETTER);
     this.selectedMember = event.getSelectedEntity();
     initializeTemplates();
   }
@@ -85,7 +86,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
       Optional<PrintService> ps = PrintUtil.print(pdf);
       if (ps.isPresent()) {
         printAttachement(ps);
-        pageController.setActivePage(PageName.LOGO);
+        pageController.activateLogoPage();
       }
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
@@ -116,7 +117,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
       if (ps.isPresent()) {
         printAttachement(ps);
         pdfViewer.close();
-        pageController.setActivePage(PageName.LOGO);
+        pageController.activateLogoPage();
       }
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());

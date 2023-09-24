@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -17,16 +19,20 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class MemberSearchController extends SearchController<Member, MemberSeLectionEvent> {
 
+  private final PageController pageController;
   private final MemberService service;
 
-  public MemberSearchController(ApplicationContext springContext, MemberService service) {
+  public MemberSearchController(ApplicationContext springContext, MemberService service,
+      PageController pageController) {
     super(springContext);
     this.initializeSearchItems();
+    this.pageController = pageController;
     this.service = service;
   }
-  
+
   @EventListener(condition = "#event.group('SEARCH_MEMBER')")
   public void searchMember(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.MEMBER_SEARCH);
     prepareSearch(event);
   }
 

@@ -21,14 +21,10 @@ import nl.ealse.javafx.util.ContentUpdate;
 
 @Getter
 @Setter
-public class MemberView {
+public class MemberView extends AddressView {
 
   @FXML
   private Label memberNumber;
-  
-  @FXML
-  @Mapping(ignore = true)
-  private GridPane financialPane;
 
   @FXML
   private TextField initials;
@@ -44,6 +40,7 @@ public class MemberView {
 
   @FXML
   private TextField lastName;
+  
   @FXML
   @Mapping(ignore = true)
   private Label lastNameE;

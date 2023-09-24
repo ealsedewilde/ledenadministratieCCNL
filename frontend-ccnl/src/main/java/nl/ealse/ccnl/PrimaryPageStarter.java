@@ -12,7 +12,7 @@ import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.PageId;
 import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class PrimaryPageStarter implements ApplicationListener<StageReadyEvent> {
+public class PrimaryPageStarter {
 
   private static final PageId MAIN_FXML = new PageId("main", "main");
 
@@ -42,7 +42,7 @@ public class PrimaryPageStarter implements ApplicationListener<StageReadyEvent> 
   /**
    * initialize the primary scene of the application.
    */
-  @Override
+  @EventListener
   public void onApplicationEvent(StageReadyEvent event) {
     try {
       final Stage stage = event.getStage();
@@ -65,7 +65,7 @@ public class PrimaryPageStarter implements ApplicationListener<StageReadyEvent> 
   private Parent getRoot() {
     Parent root;
     try {
-      root = fxmlNodeMap.get(MAIN_FXML);
+      root = fxmlNodeMap.get(MAIN_FXML, null);
     } catch (FXMLMissingException e) {
       root = new Label(e.getMessage() + e.getPagekey());
       root.setStyle("-fx-text-fill: red; -fx-font-size: 30; -fx-font-weight: bold;");

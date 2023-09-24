@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx"
+	xmlns:fx="http://javafx.com/fxml">
+	<children>
+		<VBox fx:id="formMenu" minWidth="145.0" styleClass="subMenu">
+			<children>
+				<Label text="Menu" styleClass="subHeader"/>
+				<!-- menu links for a page go here -->
+			</children>
+		</VBox>
+		<VBox fx:id="formPage" prefWidth="Infinity">
+			<children>
+				<GridPane prefWidth="Infinity">
+					<columnConstraints>
+						<ColumnConstraints minWidth="150" />
+						<ColumnConstraints percentWidth="80.0" />
+					</columnConstraints>
+					<children>
+						<Label fx:id="headerText" styleClass="header" GridPane.rowIndex="0"
+							GridPane.columnIndex="0" GridPane.columnSpan="2" />
+					</children>
+				</GridPane>
+				<Label/><!-- placeholder: Pages go here -->
+				<GridPane prefWidth="Infinity">
+					<columnConstraints>
+						<ColumnConstraints minWidth="150" />
+						<ColumnConstraints percentWidth="80.0" />
+					</columnConstraints>
+					<children>
+		        <HBox fx:id="formButtons" GridPane.columnIndex="1" GridPane.rowIndex="5" spacing="20">
+		          <children>
+		            <NextPageButton fx:id="nextButton" onAction="#nextPage" />
+		            <PreviousPageButton  fx:id="previousButton" onAction="#previousPage" />
+		            <SaveButton fx:id="saveButton" disable="true" onAction="#save"/>
+		            <UndoButton onAction="#reset" />
+		          </children>
+		        </HBox>
+					</children>
+				</GridPane>
+			</children>
+		</VBox>
+	</children>
+</HBox>
+

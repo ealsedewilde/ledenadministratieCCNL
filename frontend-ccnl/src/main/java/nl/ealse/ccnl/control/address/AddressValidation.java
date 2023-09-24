@@ -5,11 +5,12 @@ import lombok.Setter;
 import nl.ealse.ccnl.validation.AddressNumberValidator;
 import nl.ealse.ccnl.validation.CompositeValidator;
 import nl.ealse.ccnl.validation.PostcodeValidator;
+import nl.ealse.ccnl.view.AddressView;
 
 public class AddressValidation extends CompositeValidator {
 
   @Setter
-  private AddressController addressController;
+  private AddressView addressController;
 
   /**
    * Initialize this validation with the JavaFX controls.

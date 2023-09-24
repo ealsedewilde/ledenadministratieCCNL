@@ -29,14 +29,14 @@ public class InternalRelationDeleteController extends InternalRelationDeleteView
   void delete() {
     service.deleteInternalRelation(selectedEntity);
     pageController.showMessage("Gegevens zijn verwijderd");
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
   @EventListener(condition = "#event.name('DELETE_INTERNAL_RELATION')")
   public void onApplicationEvent(InternalRelationSelectionEvent event) {
+    pageController.setActivePage(PageName.INTERNAL_RELATION_DELETE);
     selectedEntity = event.getSelectedEntity();
     ViewModel.modelToView(this, event.getSelectedEntity());
-    pageController.setActivePage(PageName.INTERNAL_RELATION_DELETE);
   }
 
 }

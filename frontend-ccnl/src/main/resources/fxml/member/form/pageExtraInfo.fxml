@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<fx:root type="javafx.scene.layout.GridPane" xmlns="http://javafx.com/javafx"
+	xmlns:fx="http://javafx.com/fxml" prefWidth="Infinity" styleClass="page">
+	<columnConstraints>
+		<ColumnConstraints minWidth="150" />
+		<ColumnConstraints percentWidth="80.0" />
+	</columnConstraints>
+	<children>
+		<Label styleClass="subHeader" text="Opmerkingen" underline="true" GridPane.columnIndex="0"
+			GridPane.columnSpan="2" GridPane.rowIndex="1" />
+
+		<TextArea fx:id="memberInfo" prefHeight="200.0" prefWidth="400.0"
+			GridPane.columnIndex="1" GridPane.rowIndex="2" />
+	</children>
+</fx:root>

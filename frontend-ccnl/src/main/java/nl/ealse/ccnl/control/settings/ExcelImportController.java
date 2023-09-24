@@ -15,6 +15,7 @@ import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.annual.AnnualRolloverController;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.excelimport.ImportService;
 import nl.ealse.ccnl.service.excelimport.ImportService.ImportSelection;
@@ -139,6 +140,7 @@ public class ExcelImportController {
 
   @EventListener(condition = "#event.name('IMPORT_FROM_EXCEL')")
   public void onApplicationEvent(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.EXCEL_IMPORT);
     selectedFile = null;
     fileLabel.setText("");
     importButton.setDisable(true);

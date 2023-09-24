@@ -21,9 +21,9 @@ public class PartnerDeleteController
 
   @EventListener(condition = "#event.name('DELETE_PARTNER')")
   public void onApplicationEvent(PartnerSelectionEvent event) {
+    getPageController().setActivePage(PageName.PARTNER_DELETE);
     setSelectedEntity(event.getSelectedEntity());
     ViewModel.modelToView(this, event.getSelectedEntity());
-    getPageController().setActivePage(PageName.PARTNER_DELETE);
   }
 
 }

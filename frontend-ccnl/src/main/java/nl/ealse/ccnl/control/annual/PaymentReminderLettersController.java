@@ -63,6 +63,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
 
   @EventListener(condition = "#event.name('PRODUCE_REMINDER_LETTERS_BT')")
   public void remindersBT(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.BANK_TRANSFER);
     initTemplates(true);
     headerText.setText("Herinneringsbrief leden met Overboeking");
@@ -70,6 +71,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
 
   @EventListener(condition = "#event.name('PRODUCE_REMINDER_LETTERS_DD')")
   public void remindersDD(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.DIRECT_DEBIT);
     initTemplates(false);
     headerText.setText("Herinneringsbrief leden met Automatische Incasso");
@@ -103,7 +105,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
         pageController.showPermanentMessage("Brieven worden aangemaakt; even geduld a.u.b.");
         PdfToFile pdfToFile = new PdfToFile(this, getLetterText().getText(), file);
         executor.execute(pdfToFile);
-        pageController.setActivePage(PageName.LOGO);
+        pageController.activateLogoPage();
       }
     }
   }
@@ -114,7 +116,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
       pageController.showPermanentMessage("Printen wordt voorbereid; even geduld a.u.b.");
       PdfToPrint pdfToPrint = new PdfToPrint(this, getLetterText().getText());
       executor.execute(pdfToPrint);
-      pageController.setActivePage(PageName.LOGO);
+      pageController.activateLogoPage();
     }
   }
 
@@ -128,7 +130,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
       pageController.showErrorMessage(e.getMessage());
     }
     pdfViewer.close();
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
   @FXML

@@ -3,28 +3,16 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 <?import nl.ealse.ccnl.control.button.*?>
 
-<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx/8"
-  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.member.MemberController">
-  <children>
-    <VBox minWidth="145.0" styleClass="subMenu">
-      <children>
-        <Label text="Menu" styleClass="subHeader" GridPane.rowIndex="0" />
-        <Hyperlink text="Persoonsgegevens" onMouseClicked="#firstPage" />
-        <Hyperlink text="Adresgegevens" onMouseClicked="#secondPage" />
-        <Label text="Betaalgegevens" />
-        <Hyperlink text="Extra informatie" onMouseClicked="#fourthPage" />
-      </children>
-    </VBox>
-    <GridPane prefWidth="Infinity" fx:id="financialPane">
-      <columnConstraints>
-        <ColumnConstraints minWidth="170.0" />
-        <ColumnConstraints percentWidth="80.0" />
-      </columnConstraints>
-      <children>
-        <Label fx:id="headerText" styleClass="header" GridPane.rowIndex="0"
-          GridPane.columnIndex="0" GridPane.columnSpan="2" />
+<fx:root type="javafx.scene.layout.GridPane" xmlns="http://javafx.com/javafx"
+	xmlns:fx="http://javafx.com/fxml" prefWidth="Infinity" styleClass="page">
+	<columnConstraints>
+		<ColumnConstraints minWidth="150" />
+		<ColumnConstraints percentWidth="80.0" />
+	</columnConstraints>
+	<children>
         <Label text="Betaalgegevens" underline="true" styleClass="subHeader"
           GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" />
 
@@ -61,18 +49,5 @@
 
         <Label fx:id="sepaLabel" text="Sepa Machtiging" GridPane.columnIndex="0" GridPane.rowIndex="11" />
         <SearchButton fx:id="sepaButton" text="Machtiging tonen" onAction="#showSepaAuthorization" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-
-        <HBox GridPane.columnIndex="1" GridPane.rowIndex="12" spacing="20">
-          <children>
-            <NextPageButton onAction="#nextPage" />
-            <PreviousPageButton onAction="#previousPage" />
-            <SaveButton fx:id="saveButton" disable="true" onAction="#save" />
-            <UndoButton onAction="#reset" />
-          </children>
-        </HBox>
-
-      </children>
-    </GridPane>
-  </children>
-</HBox>
-          
+	</children>
+</fx:root>

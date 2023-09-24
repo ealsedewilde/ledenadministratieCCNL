@@ -51,7 +51,7 @@ public class MemberCancelController extends MemberCancelView {
       // next page
       pageController.setActivePage(PageName.MEMBER_CANCEL_MAIL);
     } else {
-      pageController.setActivePage(PageName.LOGO);
+      pageController.activateLogoPage();
     }
   }
 

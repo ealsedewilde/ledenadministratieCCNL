@@ -1,25 +1,24 @@
 package nl.ealse.ccnl.control.member;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import lombok.Getter;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.SearchController;
-import nl.ealse.ccnl.control.address.AddressController;
-import nl.ealse.ccnl.control.button.SaveButton;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.MenuController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.form.FormController;
+import nl.ealse.ccnl.form.FormPages;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
@@ -27,6 +26,7 @@ import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberView;
+import nl.ealse.javafx.mapping.Mapping;
 import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
@@ -34,7 +34,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MemberController extends MemberView {
+public class MemberController extends MemberView implements FormController {
 
   private final PageController pageController;
 
@@ -50,13 +50,7 @@ public class MemberController extends MemberView {
 
   private Document sepaAuthorization;
 
-  private PageName currentPage;
-
   private MenuChoice currentMenuChoice;
-
-  @Getter
-  @FXML
-  private AddressController addressController;
 
   /**
    * 
@@ -64,31 +58,41 @@ public class MemberController extends MemberView {
   @FXML
   private PDFViewer pdfViewer;
 
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  private Pane formMenu;
 
-  /*
-   * The FXML-references below are per current page. So if this controller services a sequence of 4
-   * pages, then there are 4 separate references but three of them are 'hidden'.
-   */
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  private Pane formPage;
+
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  private Pane formButtons;
 
   @FXML
   private Label headerText;
-  /**
-   * Every page attached to this controller has its own 'headerText' Label. This List will contain
-   * all 'headerText' Labels after FXML initialization of every page in this controller
-   */
-  private final List<Label> headerTextList = new ArrayList<>();
 
   @FXML
-  private SaveButton saveButton;
+  @Getter
+  @Mapping(ignore = true)
+  private Button nextButton;
+
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  private Button previousButton;
+
+  @FXML
+  private Button saveButton;
 
   // Helper to detect changes in the iban owner
   private String savedName;
-
-  /**
-   * Every page attached to this controller has its own SaveButton. This List will contain all
-   * SaveButtons after FXML initialization of every page in this controller
-   */
-  private final List<SaveButton> saveButtonList = new ArrayList<>();
+  
+  private MemberFormPages formPages;
 
   public MemberController(PageController pageController, MemberService service,
       DocumentService documentService) {
@@ -96,16 +100,18 @@ public class MemberController extends MemberView {
     this.service = service;
     this.documentService = documentService;
     this.memberValidation = new MemberValidation(this);
+    bindFxml();
+  }
+  
+  private void bindFxml() {
+    Parent form = pageController.loadForm(PageName.MEMBER_FORM, this);
+    formPages = new MemberFormPages(this);
   }
 
   @FXML
   public void initialize() {
     super.initializeView();
-
-    headerTextList.add(headerText);
-    saveButtonList.add(saveButton);
-    memberValidation
-        .initializeValidation(valid -> saveButtonList.forEach(button -> button.setDisable(!valid)));
+    memberValidation.initializeValidation(valid -> saveButton.setDisable(!valid));
   }
 
   /**
@@ -114,6 +120,8 @@ public class MemberController extends MemberView {
    */
   @EventListener(condition = "#event.name('NEW_MEMBER')")
   public void newMember(MemberSeLectionEvent event) {
+    pageController.setActivePage(PageName.MEMBER_FORM);
+    formPages.setActiveFormPage(0);
     handleEvent(event);
     selectedMember.setMemberNumber(service.getFreeNumber());
     sepaAuthorization = null;
@@ -126,8 +134,9 @@ public class MemberController extends MemberView {
    */
   @EventListener(condition = "#event.name('AMEND_MEMBER')")
   public void amendMember(MemberSeLectionEvent event) {
+    pageController.setActivePage(PageName.MEMBER_FORM);
+    formPages.setActiveFormPage(0);
     handleEvent(event);
-    pageController.setActivePage(PageName.MEMBER_PERSONAL);
     Optional<Document> optSepaAuthorization = documentService.findSepaAuthorization(selectedMember);
     if (optSepaAuthorization.isPresent()) {
       pageController.loadPage(PageName.SEPA_AUTHORIZATION_SHOW);
@@ -140,16 +149,11 @@ public class MemberController extends MemberView {
 
   private void handleEvent(MemberSeLectionEvent event) {
     this.currentMenuChoice = event.getMenuChoice();
-    pageController.loadPage(PageName.MEMBER_ADDRESS);
-    addressController.getHeaderText().setText(getHeaderText());
-    pageController.loadPage(PageName.MEMBER_FINANCIAL);
-    pageController.loadPage(PageName.MEMBER_EXTRA);
-    String s = getHeaderText();
-    headerTextList.forEach(ht -> ht.setText(s));
     this.selectedMember = event.getSelectedEntity();
     this.model = new Member();
     getIbanNumber().textProperty()
         .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
+    headerText.setText(getHeaderText());
   }
 
 
@@ -170,8 +174,8 @@ public class MemberController extends MemberView {
       getSepaLabel().setVisible(true);
     }
     memberValidation.initialize();
-    saveButtonList.forEach(button -> button.setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER));
-    firstPage();
+    saveButton.setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER);
+    formPages.setActiveFormPage(0);
   }
 
   private void initializeInitialsType() {
@@ -211,7 +215,7 @@ public class MemberController extends MemberView {
   @FXML
   void save() {
     enrich();
-    addressController.enrich();
+    enrichAddress();
     updateIbanOwnerName();
     if (savedName == null || savedName.equals(formatMemberName())) {
       // The iban owner is implicit
@@ -233,7 +237,7 @@ public class MemberController extends MemberView {
       ViewModel.viewToModel(this, selectedMember);
       pageController.setActivePage(PageName.WELCOME_LETTER);
     } else {
-      pageController.setActivePage(PageName.LOGO);
+      pageController.activateLogoPage();
     }
   }
 
@@ -272,70 +276,12 @@ public class MemberController extends MemberView {
 
   @FXML
   void nextPage() {
-    switch (currentPage) {
-      case MEMBER_PERSONAL:
-        secondPage();
-        break;
-      case MEMBER_ADDRESS:
-        thirdPage();
-        break;
-      case MEMBER_FINANCIAL:
-      default:
-        fourthPage();
-        break;
-    }
+    formPages.setActiveFormPage(formPages.getCurrentPage() + 1);
   }
 
   @FXML
   void previousPage() {
-    switch (currentPage) {
-      case MEMBER_ADDRESS:
-        firstPage();
-        break;
-      case MEMBER_FINANCIAL:
-        secondPage();
-        break;
-      case MEMBER_EXTRA:
-      default:
-        thirdPage();
-        break;
-    }
-    pageController.setActivePage(currentPage);
-
-  }
-
-  @FXML
-  void firstPage() {
-    currentPage = PageName.MEMBER_PERSONAL;
-    pageController.setActivePage(currentPage);
-    getInitials().requestFocus();
-    memberValidation.validate();
-  }
-
-  @FXML
-  void secondPage() {
-    currentPage = PageName.MEMBER_ADDRESS;
-    pageController.setActivePage(currentPage);
-    addressController.getStreet().requestFocus();
-    memberValidation.validate();
-  }
-
-  @FXML
-  void thirdPage() {
-    formatIbanOwnerName(getIbanNumber().getText());
-    currentPage = PageName.MEMBER_FINANCIAL;
-    pageController.setActivePage(currentPage);
-    getIbanNumber().requestFocus();
-    memberValidation.validate();
-    checkPaymentMethod();
-  }
-
-  @FXML
-  void fourthPage() {
-    currentPage = PageName.MEMBER_EXTRA;
-    pageController.setActivePage(currentPage);
-    getMemberInfo().requestFocus();
-    memberValidation.validate();
+    formPages.setActiveFormPage(formPages.getCurrentPage() - 1);
   }
 
   private String getHeaderText() {
@@ -350,17 +296,16 @@ public class MemberController extends MemberView {
   }
 
   private void formatIbanOwnerName(String ibanNumber) {
-    ObservableList<Node> children = getFinancialPane().getChildren();
+    ObservableList<Node> children = formPages.getThirdPage().getChildren();
     if (hasContent(ibanNumber)) {
       updateIbanOwnerName();
       if (!children.contains(getIbanOwnerName())) {
-        children.addAll(getIbanOwnerNameL(), getIbanOwnerName(),
-            getBicCodeL(), getBicCode());
+        children.addAll(getIbanOwnerNameL(), getIbanOwnerName(), getBicCodeL(), getBicCode());
       }
     } else {
       savedName = null;
       getIbanOwnerName().setText(null);
-      getFinancialPane().getChildren().removeAll(getIbanOwnerNameL(), getIbanOwnerName(),
+      formPages.getThirdPage().getChildren().removeAll(getIbanOwnerNameL(), getIbanOwnerName(),
           getBicCodeL(), getBicCode());
     }
   }

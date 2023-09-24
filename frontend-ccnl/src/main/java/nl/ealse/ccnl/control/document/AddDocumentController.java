@@ -66,6 +66,7 @@ public class AddDocumentController {
 
   @EventListener(condition = "#event.name('ADD_DOCUMENT')")
   public void addDocument(MemberSeLectionEvent event) {
+    pageController.setActivePage(PageName.ADD_DOCUMENT);
     this.selectedMember = event.getSelectedEntity();
     memberNumber.setText("Document voor lidnummer: " + selectedMember.getMemberNumber().toString());
     memberName.setText(selectedMember.getFullName());
@@ -73,7 +74,7 @@ public class AddDocumentController {
     documentDescription.setText(null);
     selectedFile = null;
     saveButton.setDisable(true);
-    pageController.setActivePage(PageName.ADD_DOCUMENT);
+    
     fileName.setText(null);
   }
 
@@ -116,7 +117,7 @@ public class AddDocumentController {
       document.setOwner(selectedMember);
       documentService.saveDocument(document);
       pageController.showMessage("Document is toegevoegd");
-      pageController.setActivePage(PageName.LOGO);
+      pageController.activateLogoPage();
 
       saveButton.setDisable(true);
       fileName.setText(null);

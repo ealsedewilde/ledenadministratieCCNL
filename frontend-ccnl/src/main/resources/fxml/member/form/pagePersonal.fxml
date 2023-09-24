@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<fx:root type="javafx.scene.layout.GridPane" xmlns="http://javafx.com/javafx"
+	xmlns:fx="http://javafx.com/fxml" prefWidth="Infinity" styleClass="page">
+	<columnConstraints>
+		<ColumnConstraints minWidth="150" />
+		<ColumnConstraints percentWidth="80.0" />
+	</columnConstraints>
+	<children>
+		<Label text="Persoonsgegevens" underline="true" styleClass="subHeader" GridPane.rowIndex="0"
+			GridPane.columnIndex="0" GridPane.columnSpan="2" />
+
+		<Label text="Lidnummer" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+		<Label fx:id="memberNumber" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+		<VBox GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="2">
+			<RadioButton id="voorletters" mnemonicParsing="false" selected="true">
+				<graphic>
+					<HBox>
+						<Label text="Voorletters" />
+						<Label style="-fx-text-fill: red;" text=" *" />
+					</HBox>
+				</graphic>
+				<toggleGroup>
+					<ToggleGroup fx:id="rbGroup" />
+				</toggleGroup>
+			</RadioButton>
+			<RadioButton id="voornaam" mnemonicParsing="false" toggleGroup="$rbGroup">
+				<graphic>
+					<HBox>
+						<Label text="Voornaam" />
+						<Label style="-fx-text-fill: red;" text=" *" />
+					</HBox>
+				</graphic>
+			</RadioButton>
+		</VBox>
+		<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+			<TextField fx:id="initials" maxWidth="80" />
+			<Label fx:id="initialsE" styleClass="required" visible="false" />
+		</HBox>
+
+		<Label text="Voorvoegsels" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+		<TextField fx:id="lastNamePrefix" maxWidth="80" GridPane.columnIndex="1"
+			GridPane.rowIndex="3" />
+
+		<HBox GridPane.columnIndex="0" GridPane.rowIndex="4" maxHeight="20">
+			<children>
+				<Label text="Achternaam" />
+				<Label styleClass="required" text=" *" />
+			</children>
+		</HBox>
+		<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4" maxHeight="20">
+			<TextField fx:id="lastName" minWidth="450" />
+			<Label fx:id="lastNameE" styleClass="required" visible="false" />
+		</HBox>
+
+		<Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+		<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5" maxHeight="20">
+			<TextField fx:id="email" minWidth="450" />
+			<Label fx:id="emailE" styleClass="required" visible="false" />
+		</HBox>
+
+		<Label text="Telefoon" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+		<TextField fx:id="telephoneNumber" maxWidth="120" GridPane.columnIndex="1"
+			GridPane.rowIndex="6" />
+
+		<Label text="Lidmaatschap status" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+		<ChoiceBox fx:id="memberStatus" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+		<Label text="Lid sinds datum" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+		<DatePicker fx:id="memberSince" maxWidth="120" GridPane.columnIndex="1"
+			GridPane.rowIndex="8" />
+
+		<Label text="Wil geen clubblad" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+		<CheckBox fx:id="noMagazine" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+	</children>
+</fx:root>

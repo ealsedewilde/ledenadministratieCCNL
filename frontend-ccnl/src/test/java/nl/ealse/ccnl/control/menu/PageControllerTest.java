@@ -4,7 +4,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.scene.Parent;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import nl.ealse.ccnl.test.FXBase;
 import nl.ealse.javafx.FXMLMissingException;
@@ -36,10 +38,12 @@ class PageControllerTest extends FXBase {
 
   private void testController() {
     try {
-      fxmlNodeMap.get(MAIN_FXML);
-      Parent p = sut.loadPage(PageName.LOGO);
-      Assertions.assertTrue(p instanceof VBox);
-      sut.setActivePage(PageName.LOGO);
+      ScrollPane m = (ScrollPane) fxmlNodeMap.get(MAIN_FXML, null);
+      VBox content = (VBox) m.getContent();
+      BorderPane p = (BorderPane) content.getChildren().get(1);
+      Node c = p.getCenter();
+      Assertions.assertTrue(c instanceof VBox);
+      sut.activateLogoPage();
       sut.showErrorMessage("error");
       sut.showMessage("message");
       sut.showPermanentMessage("permanent");
@@ -57,7 +61,7 @@ class PageControllerTest extends FXBase {
     sut = new PageController(fxmlNodeMap);
     setFxmlDirectory();
     when(springContext.getBean(PageController.class)).thenReturn(sut);
-    MenuController mc = new MenuController(springContext, sut);
+    MenuController mc = new MenuController(springContext);
     when(springContext.getBean(MenuController.class)).thenReturn(mc);
   }
   

@@ -79,6 +79,7 @@ public class SepaDirectDebitsController {
 
   @EventListener(condition = "#event.name('PRODUCE_DIRECT_DEBITS_FILE')")
   public void onApplicationEvent(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.DIRECT_DEBITS);
     generateButton.setDisable(true);
     selectedFile = null;
     errorMessageLabel.setVisible(false);
@@ -153,7 +154,7 @@ public class SepaDirectDebitsController {
     pageController.showPermanentMessage("Incassobestand wordt aangemaakt; even geduld a.u.b.");
     DirectDebitTask directDebitTask = new DirectDebitTask(this);
     executor.execute(directDebitTask);
-    pageController.setActivePage(PageName.LOGO);
+    pageController.activateLogoPage();
   }
 
   @FXML

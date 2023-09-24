@@ -6,24 +6,13 @@
 <?import javafx.scene.image.*?>
 <?import nl.ealse.ccnl.control.button.*?>
 
-<HBox prefWidth="Infinity" minWidth="800" xmlns="http://javafx.com/javafx/8"
-  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.internal.InternalRelationController">
-  <children>
-    <VBox minWidth="145.0" styleClass="subMenu">
-      <children>
-        <Label text="Menu" styleClass="subHeader" GridPane.rowIndex="0" />
-        <Label text="Functiegegevens" />
-        <Hyperlink text="Adresgegevens" onMouseClicked="#secondPage" />
-      </children>
-    </VBox>
-    <GridPane prefWidth="Infinity">
-      <columnConstraints>
-        <ColumnConstraints minWidth="150" />
-        <ColumnConstraints percentWidth="80.0" />
-      </columnConstraints>
-      <children>
-        <Label fx:id="headerText" styleClass="header" GridPane.rowIndex="0"
-          GridPane.columnIndex="0" GridPane.columnSpan="2" />
+<fx:root type="javafx.scene.layout.GridPane" xmlns="http://javafx.com/javafx"
+	xmlns:fx="http://javafx.com/fxml" prefWidth="Infinity" styleClass="page">
+	<columnConstraints>
+		<ColumnConstraints minWidth="150" />
+		<ColumnConstraints percentWidth="80.0" />
+	</columnConstraints>
+	<children>
         <Label text="Persoonsgegevens" underline="true" styleClass="subHeader"
           GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" />
 
@@ -50,16 +39,6 @@
 
         <Label text="Wil geen clubblad" GridPane.columnIndex="0" GridPane.rowIndex="7" />
         <CheckBox fx:id="noMagazine" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-        
-        <HBox GridPane.columnIndex="1" GridPane.rowIndex="8" spacing="20">
-          <children>
-            <NextPageButton onAction="#nextPage"/>
-            <SaveButton fx:id="saveButton" disable="true" onAction="#save"/>
-            <UndoButton onAction="#reset"/>
-          </children>
-        </HBox>
-      </children>
-    </GridPane>
-  </children>
-</HBox>
-
+	</children>
+</fx:root>
+	

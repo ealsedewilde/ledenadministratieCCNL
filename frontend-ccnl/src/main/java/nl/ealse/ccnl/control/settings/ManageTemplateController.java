@@ -90,6 +90,7 @@ public class ManageTemplateController {
 
   @EventListener
   public void onApplicationEvent(TemplateSelectionEvent event) {
+    pageController.setActivePage(PageName.MANAGE_TEMPLATE);
     this.selectedTemplate = event.getSelectedEntity();
     this.cancelationMail = selectedTemplate.getTemplateID()
         .getDocumentTemplateType() == DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL;
@@ -113,7 +114,6 @@ public class ManageTemplateController {
     }
     headerText.setText(getheaderText());
     templateIdE.setVisible(false);
-    pageController.setActivePage(PageName.MANAGE_TEMPLATE);
   }
 
 
@@ -172,7 +172,6 @@ public class ManageTemplateController {
     if (dialog.isShowing()) {
       dialog.close();
     }
-    pageController.setActivePage(PageName.TEMPLATES_OVERVIEW);
     springContext.publishEvent(new MenuChoiceEvent(this, MenuChoice.TEMPLATES_OVERVIEW));
   }
 

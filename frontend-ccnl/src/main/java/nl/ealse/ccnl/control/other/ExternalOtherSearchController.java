@@ -3,6 +3,8 @@ package nl.ealse.ccnl.control.other;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
@@ -16,14 +18,19 @@ import org.springframework.stereotype.Controller;
 public class ExternalOtherSearchController
     extends ExternalRelationSearchController<ExternalRelationOther> {
 
+  private final PageController pageController;
+
   protected ExternalOtherSearchController(ApplicationContext springContext,
-      ExternalRelationService<ExternalRelationOther> externalOtherService) {
+      ExternalRelationService<ExternalRelationOther> externalOtherService,
+      PageController pageController) {
     super(springContext, externalOtherService);
+    this.pageController = pageController;
     this.initializeSearchItems();
   }
-  
+
   @EventListener(condition = "#event.group('SEARCH_EXTERNAL')")
   public void search(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.EXTERNAL_RELATION_SEARCH);
     prepareSearch(event);
   }
 
@@ -37,8 +44,7 @@ public class ExternalOtherSearchController
   }
 
   @Override
-  public ExternalOtherSelectionEvent newEntitySelectionEvent(
-      MenuChoice currentMenuChoice) {
+  public ExternalOtherSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
     return new ExternalOtherSelectionEvent(this, currentMenuChoice, getSelectedEntity());
   }
 

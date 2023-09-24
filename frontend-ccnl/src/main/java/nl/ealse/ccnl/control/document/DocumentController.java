@@ -54,11 +54,11 @@ public class DocumentController {
 
   @EventListener(condition = "#event.name('VIEW_DOCUMENT')")
   public void viewDocument(MemberSeLectionEvent event) {
+    pageController.setActivePage(PageName.VIEW_DOCUMENTS);
     Member member = event.getSelectedEntity();
     memberNumber.setText("Documenten voor lidnummer: " + member.getMemberNumber().toString());
     memberName.setText(member.getFullName());
     fillTableView(member);
-    pageController.setActivePage(PageName.VIEW_DOCUMENTS);
   }
 
   private void fillTableView(Member member) {

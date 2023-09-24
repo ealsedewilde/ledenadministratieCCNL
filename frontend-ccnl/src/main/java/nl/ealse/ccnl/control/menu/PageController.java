@@ -9,11 +9,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
+import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.FXMLNodeMap;
 import nl.ealse.javafx.ImagesMap;
+import nl.ealse.javafx.PageId;
 import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -27,7 +29,9 @@ import org.springframework.stereotype.Controller;
  * @author ealse
  */
 @Controller
-public class PageController implements ApplicationListener<StageReadyEvent> {
+public class PageController {
+
+  private static final PageId LOGO = new PageId("LOGO", "logo");
 
   private final FXMLNodeMap fxmlNodeMap;
 
@@ -42,7 +46,7 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
 
   @Getter
   private Stage primaryStage;
-  
+
   private PauseTransition delay;
 
   public PageController(FXMLNodeMap fxmlNodeMap) {
@@ -54,9 +58,27 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
     logo.setImage(ImagesMap.get("CCNLLogo.png"));
   }
 
+  public Parent loadForm(PageName pageName, Object controller) {
+    return loadPage(pageName.getId(), controller);
+  }
+
+  public void activateLogoPage() {
+    Parent page = loadPage(LOGO, null);
+    mainPage.setCenter(page);
+  }
+
+  public void setActivePage(PageName pageName) {
+    Parent page = loadPage(pageName.getId(), null);
+    mainPage.setCenter(page);
+  }
+
   public Parent loadPage(PageName pageName) {
+    return loadPage(pageName.getId(), null);
+  }
+
+  private Parent loadPage(PageId pageId, Object controller) {
     try {
-      return fxmlNodeMap.get(pageName.getId());
+      return fxmlNodeMap.get(pageId, controller);
     } catch (FXMLMissingException e) {
       Parent errorLabel = new Label(e.getMessage() + e.getPagekey());
       errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 30; -fx-font-weight: bold;");
@@ -64,11 +86,14 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
     }
   }
 
-  public void setActivePage(PageName pageName) {
-    Parent page = loadPage(pageName);
-    mainPage.setCenter(page);
-  }
-
+  /**
+   * Show a message.
+   * <p>
+   * Use this when starting a async Task.
+   * Replace this message when the asybc Task is finshed.
+   * </p>
+   * @param message
+   */
   public void showPermanentMessage(String message) {
     if (delay != null) {
       delay.stop();
@@ -78,6 +103,10 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
     mainInfo.setText(message);
   }
 
+  /**
+   * Show a message for a period of 5 seconds.
+   * @param message
+   */
   public void showMessage(String message) {
     mainInfo.getStyleClass().clear();
     mainInfo.getStyleClass().add("info");
@@ -87,6 +116,10 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
     delay.play();
   }
 
+  /**
+   * Show an error message for a period of 5 seconds.
+   * @param message
+   */
   public void showErrorMessage(String message) {
     mainInfo.getStyleClass().clear();
     mainInfo.getStyleClass().add("error");
@@ -97,10 +130,26 @@ public class PageController implements ApplicationListener<StageReadyEvent> {
   }
 
   /**
+   * Set the logo page. 
+   * <p>
+   * When menu choice process with a fxml page is fully executed, the logo page
+   * will be shown. However when this is not the case when the process is aborted. In that case the
+   * last fxml page keeps showing. Ìf you then chooce a menu choice process without a fxml page, the
+   * fxml page must be replaced by the logo.
+   * </p>
+   * 
+   * @param event
+   */
+  @EventListener(condition = "#event.command()")
+  public void onApplicationEvent(MenuChoiceEvent event) {
+    activateLogoPage();
+  }
+
+  /**
    * Receive the primary stage. All JavaFX controllers will have a reference to this component. Thus
    * all JavaFX controllers can lookup the primary stage when needed for modal pages.
    */
-  @Override
+  @EventListener
   public void onApplicationEvent(StageReadyEvent event) {
     this.primaryStage = event.getStage();
   }

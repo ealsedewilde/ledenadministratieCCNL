@@ -18,7 +18,6 @@ import org.springframework.context.ApplicationContext;
 class MenuControllerTest {
 
   private static ApplicationContext springContext;
-  private static PageController pageController;
 
   private static MenuController sut;
 
@@ -357,8 +356,7 @@ class MenuControllerTest {
   @BeforeAll
   static void setup() {
     springContext = mock(ApplicationContext.class);
-    pageController = mock(PageController.class);
-    sut = new MenuController(springContext, pageController);
+    sut = new MenuController(springContext);
   }
 
 }
