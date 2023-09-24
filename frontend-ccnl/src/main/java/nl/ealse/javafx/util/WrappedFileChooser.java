@@ -45,7 +45,7 @@ public class WrappedFileChooser {
   }
 
   public void setInitialDirectory(File directory) {
-    if (directory.exists()) {
+    if (directory != null && directory.exists()) {
       fileChooser.setInitialDirectory(directory);
     }
   }
