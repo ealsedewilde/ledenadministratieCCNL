@@ -19,7 +19,7 @@ public class MemberBaseAddressExport {
         properties.getKolomnummer(LidColumnDefinition.TUSSENVOEGSEL));
     targetFile.addCell(member.getLastName(),
         properties.getKolomnummer(LidColumnDefinition.ACHTERNAAM));
-    targetFile.addCell(member.getAddress().getAddressAndNumber(),
+    targetFile.addCell(member.getAddress().getStreetAndNumber(),
         properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
     targetFile.addCell(member.getAddress().getPostalCode(),
         properties.getKolomnummer(AdresColumnDefinition.POSTCODE));

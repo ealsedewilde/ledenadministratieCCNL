@@ -223,8 +223,8 @@ public class MemberController extends MemberView implements FormController {
     }
     ViewModel.viewToModel(this, model);
 
-    if (model.getAddress().isAddressInvalid() && !model.getAddress().getAddressAndNumber()
-        .equals(selectedMember.getAddress().getAddressAndNumber())) {
+    if (model.getAddress().isAddressInvalid() && !model.getAddress().getStreetAndNumber()
+        .equals(selectedMember.getAddress().getStreetAndNumber())) {
       // assume that the invalid address is fixed
       model.getAddress().setAddressInvalid(false);
     }

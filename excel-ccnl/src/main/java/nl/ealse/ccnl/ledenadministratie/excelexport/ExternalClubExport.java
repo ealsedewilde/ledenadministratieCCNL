@@ -22,7 +22,7 @@ public class ExternalClubExport {
         properties.getKolomnummer(ClubColumnDefinition.CLUB_AANHEF));
     targetFile.addCell(club.getContactName(),
         properties.getKolomnummer(ClubColumnDefinition.CLUB_CONTACTPERSOON));
-    targetFile.addCell(club.getAddress().getAddressAndNumber(),
+    targetFile.addCell(club.getAddress().getStreetAndNumber(),
         properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
     targetFile.addCell(club.getAddress().getPostalCode(),
         properties.getKolomnummer(AdresColumnDefinition.POSTCODE));

@@ -11,6 +11,6 @@ class AdrressTest {
     a.setStreet("straat");
     a.setAddressNumber("199");
     a.setAddressNumberAppendix("A");
-    Assertions.assertEquals("straat 199A", a.getAddressAndNumber());
+    Assertions.assertEquals("straat 199A", a.getStreetAndNumber());
   }
 }

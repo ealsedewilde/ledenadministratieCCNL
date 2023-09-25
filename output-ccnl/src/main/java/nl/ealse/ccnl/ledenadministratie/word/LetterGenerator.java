@@ -106,7 +106,7 @@ public class LetterGenerator {
   private void setAddress(Member member) {
     paragraphMap.get(Paragraph.NAME).createRun().setText(member.getFullName());
     Address address = member.getAddress();
-    paragraphMap.get(Paragraph.ADDRESS).createRun().setText(address.getAddressAndNumber());
+    paragraphMap.get(Paragraph.ADDRESS).createRun().setText(address.getStreetAndNumber());
     StringJoiner sj = new StringJoiner("  ");
     sj.add(address.getPostalCode());
     sj.add(address.getCity());

@@ -27,7 +27,7 @@ class AddressPropertyValueFactoryTest {
     a.setPostalCode("1234 AA");
     when(param.getValue()).thenReturn(rel);
 
-    sut.setProperty("addressAndNumber");
+    sut.setProperty("streetAndNumber");
     ObservableValue<String> result = sut.call(param);
     Assertions.assertEquals("Straat 99-II", result.getValue());
 

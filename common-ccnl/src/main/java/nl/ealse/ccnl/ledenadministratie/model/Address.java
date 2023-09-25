@@ -23,7 +23,7 @@ public class Address {
    */
   private boolean addressInvalid;
 
-  public String getAddressAndNumber() {
+  public String getStreetAndNumber() {
     StringBuilder sb = new StringBuilder();
     sb.append(street).append(" ");
     sb.append(addressNumber);

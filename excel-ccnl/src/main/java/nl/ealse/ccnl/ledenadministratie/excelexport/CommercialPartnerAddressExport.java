@@ -22,7 +22,7 @@ public class CommercialPartnerAddressExport {
         properties.getKolomnummer(PartnerColumnDefinition.PARTNER_AANHEF));
     targetFile.addCell(partner.getContactName(),
         properties.getKolomnummer(PartnerColumnDefinition.PARTNER_CONTACTPERSOON));
-    targetFile.addCell(partner.getAddress().getAddressAndNumber(),
+    targetFile.addCell(partner.getAddress().getStreetAndNumber(),
         properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
     targetFile.addCell(partner.getAddress().getPostalCode(),
         properties.getKolomnummer(AdresColumnDefinition.POSTCODE));

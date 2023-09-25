@@ -43,7 +43,7 @@
           </TableColumn>
           <TableColumn text="Adres" prefWidth="260.0">
             <cellValueFactory>
-              <AddressPropertyValueFactory property="addressAndNumber" />
+              <AddressPropertyValueFactory property="streetAndNumber" />
             </cellValueFactory>
           </TableColumn>
           <TableColumn text="Postcode" maxWidth="100.0">

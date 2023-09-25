@@ -24,8 +24,8 @@ public class AddressPropertyValueFactory<T extends AddressOwner>
     if ("city".equals(property)) {
       return new SimpleStringProperty(address.getCity());
 
-    } else if ("addressAndNumber".equals(property)) {
-      return new SimpleStringProperty(address.getAddressAndNumber());
+    } else if ("streetAndNumber".equals(property)) {
+      return new SimpleStringProperty(address.getStreetAndNumber());
     }
     return new SimpleStringProperty(address.getPostalCode());
   }

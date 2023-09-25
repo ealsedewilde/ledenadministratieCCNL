@@ -13,7 +13,7 @@ public class AddressSnippet implements ContentSnippet {
     StringJoiner sj = new StringJoiner("\n");
     Address address = member.getAddress();
     sj.add(String.format(CDATA, member.getFullName()));
-    sj.add(String.format(CDATA, address.getAddressAndNumber()));
+    sj.add(String.format(CDATA, address.getStreetAndNumber()));
     sj.add(address.getPostalCode() + "  " + address.getCity());
     if (address.getCountry() != null) {
       sj.add(address.getCountry());

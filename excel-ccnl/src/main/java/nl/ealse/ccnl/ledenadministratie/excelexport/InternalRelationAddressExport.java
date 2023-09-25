@@ -22,7 +22,7 @@ public class InternalRelationAddressExport {
         properties.getKolomnummer(InternColumnDefinition.INTERN_AANHEF));
     targetFile.addCell(intern.getContactName(),
         properties.getKolomnummer(InternColumnDefinition.INTERN_FUNCTIE));
-    targetFile.addCell(intern.getAddress().getAddressAndNumber(),
+    targetFile.addCell(intern.getAddress().getStreetAndNumber(),
         properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
     targetFile.addCell(intern.getAddress().getPostalCode(),
         properties.getKolomnummer(AdresColumnDefinition.POSTCODE));
