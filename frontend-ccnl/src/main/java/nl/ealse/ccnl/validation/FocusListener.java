@@ -3,6 +3,14 @@ package nl.ealse.ccnl.validation;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
+/**
+ * This listener should avoid an error message as soon as a form page opens.
+ * <p>
+ * When a new form page opens, the first field of that page get focus.
+ * In this situation validation of the field content is suspended until it
+ * looses focus.
+ * </p>
+ */
 public class FocusListener implements ChangeListener<Boolean> {
 
   private final ContentValidator contentValidator;

@@ -7,6 +7,9 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+/**
+ * Super claas that must be extended by a form specific implementation.
+ */
 public abstract class CompositeValidator implements CallbackLauncher {
 
   protected final List<AbstractValidator> validators = new ArrayList<>();
