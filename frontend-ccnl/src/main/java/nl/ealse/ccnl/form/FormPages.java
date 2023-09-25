@@ -40,6 +40,7 @@ public abstract class FormPages<C extends FormController> {
    * @param pageIndex
    */
   public void setActiveFormPage(int pageIndex) {
+    controller.validateForm();
     resetFormMenu();
     controller.getFormMenu().getChildren().set(pageIndex + 1, labels[pageIndex]);
     handleButtons(pageIndex);

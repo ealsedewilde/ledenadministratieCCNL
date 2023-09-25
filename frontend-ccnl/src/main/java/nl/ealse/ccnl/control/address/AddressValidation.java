@@ -1,7 +1,5 @@
 package nl.ealse.ccnl.control.address;
 
-import java.util.function.Consumer;
-import lombok.Setter;
 import nl.ealse.ccnl.validation.AddressNumberValidator;
 import nl.ealse.ccnl.validation.CompositeValidator;
 import nl.ealse.ccnl.validation.PostcodeValidator;
@@ -9,27 +7,27 @@ import nl.ealse.ccnl.view.AddressView;
 
 public class AddressValidation extends CompositeValidator {
 
-  @Setter
-  private AddressView addressController;
+  private final AddressView addressController;
+
+  public AddressValidation(AddressView addressController) {
+    this.addressController = addressController;
+  }
 
   /**
    * Initialize this validation with the JavaFX controls.
-   * @param vc the callback target for the validation result
    */
-  public void initializeValidation(Consumer<Boolean> vc) {
-    setCallback(vc);
-    if (addressController.getStreet() != null) {
-      required(addressController.getStreet(), addressController.getStreetE());
-      AddressNumberValidator addressNumberValidator = new AddressNumberValidator(
-          addressController.getAddressNumber(), addressController.getAddressNumberE());
-      addValidator(addressController.getAddressNumber(), addressNumberValidator);
-      required(addressController.getCity(), addressController.getCityE());
+  public void initialize() {
+    required(addressController.getStreet(), addressController.getStreetE());
+    AddressNumberValidator addressNumberValidator = new AddressNumberValidator(
+        addressController.getAddressNumber(), addressController.getAddressNumberE());
+    addValidator(addressController.getAddressNumber(), addressNumberValidator);
+    required(addressController.getCity(), addressController.getCityE());
 
-      PostcodeValidator postcodeValidator = new PostcodeValidator(addressController.getCountry(),
-          addressController.getPostalCode(), addressController.getPostalCodeE());
-      addValidator(addressController.getCountry(), postcodeValidator);
-      addValidator(addressController.getPostalCode(), postcodeValidator);
-    }
+    PostcodeValidator postcodeValidator = new PostcodeValidator(addressController.getCountry(),
+        addressController.getPostalCode(), addressController.getPostalCodeE());
+    addValidator(addressController.getCountry(), postcodeValidator);
+    addValidator(addressController.getPostalCode(), postcodeValidator);
+    super.initialize();
   }
 
   /**

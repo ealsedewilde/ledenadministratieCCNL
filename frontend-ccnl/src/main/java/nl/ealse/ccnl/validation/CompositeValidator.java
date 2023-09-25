@@ -13,6 +13,11 @@ public abstract class CompositeValidator implements CallbackLauncher {
 
   private Consumer<Boolean> vc;
 
+  /**
+   * Internal method called by validators.
+   * @param validate
+   * @return
+   */
   public boolean isValid(boolean validate) {
     boolean valid = true;
     for (AbstractValidator v : validators) {
@@ -24,17 +29,34 @@ public abstract class CompositeValidator implements CallbackLauncher {
     return valid;
   }
 
+  /**
+   * Shorthand to add a required field validator.
+   * @param requiredField - the form field to validate
+   * @param errorMessagelabel - the error message to show
+   */
   public void required(TextField requiredField, Label errorMessagelabel) {
     RequiredValidator rv = new RequiredValidator(requiredField, errorMessagelabel);
     addValidator(requiredField, rv);
   }
 
+  /**
+   * Add a validators to the list of validators for a form.
+   * @param targetField - the form field to validate
+   * @param validator - the validator for validating the form field.
+   */
   public void addValidator(Control targetField, AbstractValidator validator) {
     validators.add(validator);
     validator.setCallbackLauncher(this);
     targetField.focusedProperty().addListener(new FocusListener(validator));
   }
 
+  /**
+   * Set the Consumer which reacts on the overall state of the form.
+   * <p>
+   * Typically this disables the save button when teh form is invalid.
+   * </p>
+   * @param vc - the callback to execute
+   */
   public void setCallback(Consumer<Boolean> vc) {
     this.vc = vc;
   }
@@ -59,6 +81,9 @@ public abstract class CompositeValidator implements CallbackLauncher {
     }
   }
 
+  /**
+   * Call this method once after all validators are added.
+   */
   public void initialize() {
     validators.forEach(AbstractValidator::initialize);
   }

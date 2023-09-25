@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.internal;
 
-import java.util.function.Consumer;
 import nl.ealse.ccnl.control.address.AddressValidation;
 
 public class InternalRelationValidation extends AddressValidation {
@@ -8,17 +7,13 @@ public class InternalRelationValidation extends AddressValidation {
   private final InternalRelationController controller;
 
   public InternalRelationValidation(InternalRelationController controller) {
+    super(controller);
     this.controller = controller;
   }
 
-  @Override
-  public void initializeValidation(Consumer<Boolean> vc) {
-    if (controller.getStreet() != null) {
-      setAddressController(controller);
-      super.initializeValidation(vc);
-    } else if (controller.getContactName() != null) {
-      required(controller.getContactName(), controller.getContactNameE());
-    }
+  public void initialize() {
+    required(controller.getContactName(), controller.getContactNameE());
+    super.initialize();
   }
 
   @Override

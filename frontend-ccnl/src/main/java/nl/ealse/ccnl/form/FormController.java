@@ -14,5 +14,7 @@ public interface FormController {
   Button getNextButton();
   
   Button getPreviousButton();
+  
+  void validateForm();
 
 }

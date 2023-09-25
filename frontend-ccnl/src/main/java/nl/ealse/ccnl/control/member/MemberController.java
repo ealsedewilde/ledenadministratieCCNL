@@ -42,6 +42,7 @@ public class MemberController extends MemberView implements FormController {
 
   private final DocumentService documentService;
 
+  @Getter
   private final MemberValidation memberValidation;
 
   private Member model;
@@ -104,14 +105,16 @@ public class MemberController extends MemberView implements FormController {
   }
   
   private void bindFxml() {
-    Parent form = pageController.loadForm(PageName.MEMBER_FORM, this);
+    pageController.loadForm(PageName.MEMBER_FORM, this);
     formPages = new MemberFormPages(this);
+    
+    memberValidation.initialize();
+    memberValidation.setCallback(valid -> saveButton.setDisable(!valid));
   }
 
   @FXML
   public void initialize() {
     super.initializeView();
-    memberValidation.initializeValidation(valid -> saveButton.setDisable(!valid));
   }
 
   /**
@@ -353,6 +356,12 @@ public class MemberController extends MemberView implements FormController {
 
   private boolean hasContent(String text) {
     return text != null && !text.isBlank();
+  }
+
+  @Override
+  public void validateForm() {
+    memberValidation.validate();
+    
   }
 
 }

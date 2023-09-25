@@ -81,11 +81,10 @@ public class InternalRelationController extends InternalRelationView implements 
   private void bindFxml() {
     pageController.loadForm(PageName.INTERNAL_RELATION_FORM, this);
     formPages = new InternalRelationFormpages(this);
-  }
+    
+    internalRelationValidation.initialize();
+    internalRelationValidation.setCallback(valid -> saveButton.setDisable(!valid));
 
-  @FXML
-  void initialize() {
-    internalRelationValidation.initializeValidation(valid -> saveButton.setDisable(!valid));
   }
 
   @EventListener(condition = "#event.name('NEW_INTERNAL_RELATION','AMEND_INTERNAL_RELATION')")
@@ -132,8 +131,6 @@ public class InternalRelationController extends InternalRelationView implements 
     if (currentMenuChoice == MenuChoice.NEW_INTERNAL_RELATION && !getTitle().getItems().isEmpty()) {
       getTitle().getSelectionModel().selectFirst();
     }
-    internalRelationValidation.initialize();
-    internalRelationValidation.initializeValidation(valid -> saveButton.setDisable(!valid));
     formPages.setActiveFormPage(0);
   }
 
@@ -205,6 +202,11 @@ public class InternalRelationController extends InternalRelationView implements 
       }
       throw new IllegalArgumentException(label);
     }
+  }
+
+  @Override
+  public void validateForm() {
+    internalRelationValidation.validate();
   }
 
 }

@@ -28,7 +28,8 @@ public class ExternalOtherController extends ExternalRelationController<External
   private void bindFxml() {
     pageController.loadForm(PageName.EXTERNAL_RELATION_FORM, this);
     formPages = new ExternalOtherFormpages(this);
-    System.out.println("QWERTY " + getRelationName() + " street " + getStreet() + " menu " + getFormMenu());
+    
+    initializeValidation();
   }
 
   @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION','AMEND_EXTERNAL_RELATION')")

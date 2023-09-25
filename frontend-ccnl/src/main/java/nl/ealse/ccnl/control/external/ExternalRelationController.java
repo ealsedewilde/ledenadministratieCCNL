@@ -72,10 +72,9 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
     this.externalRelationValidation = new ExternalRelationValidation(this);
   }
 
-  @FXML
-  void initialize() {
-    externalRelationValidation
-        .initializeValidation(valid -> saveButton.setDisable(!valid));
+  protected void initializeValidation() {
+    externalRelationValidation.initialize();
+    externalRelationValidation.setCallback(valid -> saveButton.setDisable(!valid));
   }
 
   @FXML
@@ -85,9 +84,6 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
     }
     ViewModel.modelToView(this, selectedExternalRelation);
     ViewModel.viewToModel(this, model);
-    externalRelationValidation.initialize();
-    externalRelationValidation
-    .initializeValidation(valid -> saveButton.setDisable(!valid));
     getFormPages().setActiveFormPage(0);
 
   }
@@ -108,5 +104,7 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
 
   protected abstract FormPages getFormPages();
 
-
+  public void validateForm() {
+    externalRelationValidation.validate();
+  }
 }

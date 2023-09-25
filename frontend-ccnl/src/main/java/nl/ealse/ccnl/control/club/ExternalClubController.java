@@ -28,6 +28,8 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
   private void bindFxml() {
     pageController.loadForm(PageName.EXTERNAL_CLUB_FORM, this);
     formPages = new ClubFormPages(this);
+    
+    initializeValidation();
   }
 
   @EventListener(condition = "#event.name('NEW_EXTERNAL_CLUB','AMEND_EXTERNAL_CLUB')")

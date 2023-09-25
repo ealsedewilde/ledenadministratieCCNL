@@ -28,6 +28,8 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   private void bindFxml() {
     pageController.loadForm(PageName.PARTNER_FORM, this);
     formPages = new PartnerFormPages(this);
+    
+    initializeValidation();
   }
 
   @EventListener(condition = "#event.name('NEW_PARTNER','AMEND_PARTNER')")
