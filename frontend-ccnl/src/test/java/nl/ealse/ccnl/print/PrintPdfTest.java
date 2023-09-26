@@ -7,6 +7,8 @@ import java.io.InputStream;
 import javax.print.DocFlavor;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +29,7 @@ class PrintPdfTest {
   @Test
   void pdfPrint() {
     try (InputStream pdfStream = getClass().getResourceAsStream("/MachtigingsformulierSEPA.pdf")) {
-      PDDocument document = PDDocument.load(pdfStream);
+      PDDocument document = Loader.loadPDF(new RandomAccessReadBuffer(pdfStream));
       PrintService ps = getprintService();
       PrinterJob job = PrinterJob.getPrinterJob();
       job.setPageable(new PDFPageable(document));

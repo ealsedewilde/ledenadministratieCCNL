@@ -29,6 +29,7 @@ import nl.ealse.ccnl.control.exception.PDFViewerException;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.javafx.ImagesMap;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
@@ -83,7 +84,7 @@ public class PDFViewer extends BorderPane {
   public void showPDF(byte[] pdf, Member member) {
     this.pdf = pdf;
     try {
-      document = PDDocument.load(pdf);
+      document = Loader.loadPDF(pdf);
       pages = document.getPages().getCount();
       if (pages == 1) {
         initializeSinglePage();

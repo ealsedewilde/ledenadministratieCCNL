@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Optional;
 import javax.print.PrintService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
 
@@ -23,7 +24,7 @@ public class DefaultPrintServiceProvider implements PrintServiceProvider {
    */
   @Override
   public Optional<PrintService> print(byte[] pdf) throws PrintException {
-    try (PDDocument document = PDDocument.load(pdf)) {
+    try (PDDocument document = Loader.loadPDF(pdf)) {
       PrinterJob job = PrinterJob.getPrinterJob();
       job.setPageable(new PDFPageable(document));
       if (job.printDialog()) {
@@ -45,7 +46,7 @@ public class DefaultPrintServiceProvider implements PrintServiceProvider {
    */
   @Override
   public void printAttachment(PrintService ps, byte[] attachment) throws PrintException {
-    try (PDDocument document = PDDocument.load(attachment)) {
+    try (PDDocument document = Loader.loadPDF(attachment)) {
       PrinterJob job = PrinterJob.getPrinterJob();
       job.setPageable(new PDFPageable(document));
       job.setPrintService(ps);
