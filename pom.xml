@@ -16,7 +16,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <springboot.version>3.1.4</springboot.version>
-    <java.version>17</java.version>
+    <java.version>21</java.version>
     <javafx.version>21</javafx.version>
     <poi.version>5.2.3</poi.version>
     <fop.version>2.9</fop.version>
