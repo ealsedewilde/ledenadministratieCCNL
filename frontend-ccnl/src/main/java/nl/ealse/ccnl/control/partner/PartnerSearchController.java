@@ -36,7 +36,7 @@ public class PartnerSearchController
 
   private void initializeSearchItems() {
     Map<String, SearchItem> map = getSearchItemValues();
-    map.put("Adverteerder id", SearchItem.values()[0]);
+    map.put("Adverteerder id (85xx)", SearchItem.values()[0]);
     map.put("Naam adverteerder", SearchItem.values()[1]);
     map.put("Straat", SearchItem.values()[2]);
     map.put("Postcode", SearchItem.values()[3]);

@@ -36,7 +36,7 @@ public class ExternalOtherSearchController
 
   private void initializeSearchItems() {
     Map<String, SearchItem> map = getSearchItemValues();
-    map.put("Externe relatie id", SearchItem.values()[0]);
+    map.put("Relatie id (84xx)", SearchItem.values()[0]);
     map.put("Naam externe relatie", SearchItem.values()[1]);
     map.put("Straat", SearchItem.values()[2]);
     map.put("Postcode", SearchItem.values()[3]);
