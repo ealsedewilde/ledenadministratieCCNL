@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.member;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,9 +28,6 @@ import org.springframework.core.io.Resource;
 
 class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionController> {
 
-  private static PageController pageController;
-  private static DocumentService documentService;
-  private static MemberService service;
   private static WrappedFileChooser fileChooser;
   private static IbanController ibanController;
 
@@ -39,13 +37,10 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
 
   @Test
   void testController() {
-    sut = new SepaAuthorizarionController(pageController, documentService, service);
-    setDirectory();
     m = member();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
-      setFileChooser();
       doTest();
       ar.set(true);
     }, ar);
@@ -58,28 +53,22 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
     sut.onApplicationEvent(event);
 
     sut.addSepaPDF();
-    verify(pageController).showMessage("SEPA-machtiging opgeslagen bij lid");
+    verify(getPageController()).showMessage("SEPA-machtiging opgeslagen bij lid");
 
     sut.printSepaPDF();
     sut.closePDFViewer();
   }
 
   private void prepare() {
-    try {
-      PageHelper ph = new PageHelper(pageController, ibanController);
-      ph.configurePage();
-      getPage(sut, PageName.SEPA_AUTHORIZATION_ADD);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    sut = IbanTestHelper.getSepaAuthorizarionController(getPageController());
+    doNothing().when(sut).closePDFViewer();
+    setFile();
+    setFileChooser();
   }
 
   @BeforeAll
   static void setup() {
-    pageController = mock(PageController.class);
     ibanController = mock(IbanController.class);
-    documentService = mock(DocumentService.class);
-    service= mock(MemberService.class);
     fileChooser = mock(WrappedFileChooser.class);
     Resource r = new ClassPathResource("MachtigingsformulierSEPA.pdf");
     try {
@@ -99,9 +88,12 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
     return m;
   }
 
-  private void setDirectory() {
+
+  private void setFile() {
+    ClassPathResource r = new ClassPathResource("welkom.pdf");
     try {
-      FieldUtils.writeField(sut, "sepaDirectory", "C:/temp", true);
+      File f = r.getFile();
+      FieldUtils.writeField(sut, "selectedFile", f, true);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -113,27 +105,5 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-  
-  private static class PageHelper extends FXMLBaseTest<IbanController> {
-    private final PageController pageController;
-    private final IbanController ibanController;
-    
-    private PageHelper(PageController pageController, IbanController ibanController) {
-      this.pageController = pageController;
-      this.ibanController = ibanController;
-    }
-    
-    private void configurePage() {
-      try {
-        Parent d = getPage(ibanController, PageName.ADD_IBAN_NUMBER);
-        when(pageController.loadPage(PageName.ADD_IBAN_NUMBER)).thenReturn(d);
-      } catch (FXMLMissingException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      
-    }
-    
   }
 }

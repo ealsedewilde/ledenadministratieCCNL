@@ -1,10 +1,16 @@
 package nl.ealse.ccnl.control.member;
 
+import jakarta.annotation.PostConstruct;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import org.apache.commons.validator.routines.IBANValidator;
@@ -15,6 +21,7 @@ import org.springframework.stereotype.Controller;
 public class IbanController {
 
   private final SepaAuthorizarionController parentController;
+  private final PageController pageController;
 
   @FXML
   private Label memberInfo;
@@ -26,6 +33,20 @@ public class IbanController {
   private Label ibanNumberE;
 
   private final IBANValidator ibanValidator = new IBANValidator();
+
+  private Member selectedMember;
+
+  public IbanController(SepaAuthorizarionController parentController, PageController pageController) {
+    this.parentController = parentController;
+    this.pageController = pageController;
+  }
+  
+  @PostConstruct
+  void setup() {
+    Parent p = pageController.loadPage(PageName.ADD_IBAN_NUMBER, this);
+    Scene dialogScene = new Scene(p, 1200, 400);
+    parentController.getIbanNumberStage().setScene(dialogScene);
+  }
 
   @FXML
   public void initialize() {
@@ -53,12 +74,6 @@ public class IbanController {
     }
   }
 
-  private Member selectedMember;
-
-  public IbanController(SepaAuthorizarionController parentController) {
-    this.parentController = parentController;
-
-  }
 
   @EventListener(condition = "#event.name('PAYMENT_AUTHORIZATION')")
   public void onApplicationEvent(MemberSeLectionEvent event) {

@@ -26,7 +26,7 @@ public class ExternalOtherController extends ExternalRelationController<External
   }
 
   private void bindFxml() {
-    pageController.loadForm(PageName.EXTERNAL_RELATION_FORM, this);
+    pageController.loadPage(PageName.EXTERNAL_RELATION_FORM, this);
     formPages = new ExternalOtherFormpages(this);
     
     initializeValidation();

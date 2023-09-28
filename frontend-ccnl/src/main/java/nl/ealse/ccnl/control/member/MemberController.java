@@ -105,7 +105,7 @@ public class MemberController extends MemberView implements FormController {
   }
   
   private void bindFxml() {
-    pageController.loadForm(PageName.MEMBER_FORM, this);
+    pageController.loadPage(PageName.MEMBER_FORM, this);
     formPages = new MemberFormPages(this);
     
     memberValidation.initialize();

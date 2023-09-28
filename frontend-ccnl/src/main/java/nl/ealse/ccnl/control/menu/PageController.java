@@ -58,10 +58,6 @@ public class PageController {
     logo.setImage(ImagesMap.get("CCNLLogo.png"));
   }
 
-  public Parent loadForm(PageName pageName, Object controller) {
-    return loadPage(pageName.getId(), controller);
-  }
-
   public void activateLogoPage() {
     Parent page = loadPage(LOGO, null);
     mainPage.setCenter(page);
@@ -70,6 +66,13 @@ public class PageController {
   public void setActivePage(PageName pageName) {
     Parent page = loadPage(pageName.getId(), null);
     mainPage.setCenter(page);
+  }
+
+  // Use this method when loading a page in the @PostConstruct of a Controller
+  // (At that stage, the Controller is not yet available in the Spring ApplicationContext,
+  //  because a lookup via fx:controller in the fxml is not possible.)
+  public Parent loadPage(PageName pageName, Object controller) {
+    return loadPage(pageName.getId(), controller);
   }
 
   public Parent loadPage(PageName pageName) {

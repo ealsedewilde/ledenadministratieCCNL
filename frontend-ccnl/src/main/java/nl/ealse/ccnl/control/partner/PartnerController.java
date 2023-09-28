@@ -26,7 +26,7 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   }
 
   private void bindFxml() {
-    pageController.loadForm(PageName.PARTNER_FORM, this);
+    pageController.loadPage(PageName.PARTNER_FORM, this);
     formPages = new PartnerFormPages(this);
     
     initializeValidation();

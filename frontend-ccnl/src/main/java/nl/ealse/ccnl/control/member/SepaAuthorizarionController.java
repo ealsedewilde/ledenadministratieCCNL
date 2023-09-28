@@ -2,12 +2,12 @@ package nl.ealse.ccnl.control.member;
 
 import static nl.ealse.javafx.util.WrappedFileChooser.FileExtension.PDF;
 import static nl.ealse.javafx.util.WrappedFileChooser.FileExtension.PNG;
+
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -55,27 +55,31 @@ public class SepaAuthorizarionController {
   @Getter
   private Stage ibanNumberStage;
 
-
+  /**
+   * ADD SEPA-authorization PDF to a member.
+   * @param pageController
+   * @param documentService
+   * @param service
+   */
   public SepaAuthorizarionController(PageController pageController, DocumentService documentService,
       MemberService service) {
     this.pageController = pageController;
     this.documentService = documentService;
     this.service = service;
   }
-
-  @FXML
-  void initialize() {
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), PDF, PNG);
-    fileChooser.setInitialDirectory(new File(sepaDirectory));
-
+  
+  @PostConstruct
+  void setup() {
+    pageController.loadPage(PageName.SEPA_AUTHORIZATION_ADD, this);
+    
     ibanNumberStage = new Stage();
     ibanNumberStage.initModality(Modality.APPLICATION_MODAL);
     ibanNumberStage.setTitle("IBAN-nummer toevoegen");
     ibanNumberStage.getIcons().add(ImagesMap.get("Citroen.png"));
     ibanNumberStage.initOwner(pageController.getPrimaryStage());
-    Parent p = pageController.loadPage(PageName.ADD_IBAN_NUMBER);
-    Scene dialogScene = new Scene(p, 1200, 400);
-    ibanNumberStage.setScene(dialogScene);
+    
+    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), PDF, PNG);
+    fileChooser.setInitialDirectory(new File(sepaDirectory));
 
   }
 
@@ -115,7 +119,7 @@ public class SepaAuthorizarionController {
 
     documentService.saveDocument(document);
     pageController.showMessage("SEPA-machtiging opgeslagen bij lid");
-    pdfViewer.close();
+    closePDFViewer();
 
     selectedMember.setPaymentMethod(PaymentMethod.DIRECT_DEBIT);
     service.persistMember(selectedMember);

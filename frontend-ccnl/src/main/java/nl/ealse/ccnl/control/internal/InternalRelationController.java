@@ -79,7 +79,7 @@ public class InternalRelationController extends InternalRelationView implements 
   }
 
   private void bindFxml() {
-    pageController.loadForm(PageName.INTERNAL_RELATION_FORM, this);
+    pageController.loadPage(PageName.INTERNAL_RELATION_FORM, this);
     formPages = new InternalRelationFormpages(this);
     
     internalRelationValidation.initialize();

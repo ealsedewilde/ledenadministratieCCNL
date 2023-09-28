@@ -26,7 +26,7 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
   }
 
   private void bindFxml() {
-    pageController.loadForm(PageName.EXTERNAL_CLUB_FORM, this);
+    pageController.loadPage(PageName.EXTERNAL_CLUB_FORM, this);
     formPages = new ClubFormPages(this);
     
     initializeValidation();
