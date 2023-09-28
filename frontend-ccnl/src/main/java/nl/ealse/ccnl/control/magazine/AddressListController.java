@@ -64,6 +64,7 @@ public class AddressListController {
 
   @EventListener(condition = "#event.name('MAGAZINE_ADDRESS_LIST')")
   public void addressList(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.MAGAZINE_ADDRESS_LIST);
     Optional<Setting> previousNumber = service.getSetting(Optional.of(SETTING_GROUP), SETTING_KEY);
     if (previousNumber.isPresent()) {
       int n = Integer.parseInt(previousNumber.get().getValue());
@@ -77,7 +78,6 @@ public class AddressListController {
 
   @EventListener(condition = "#event.name('CARD_ADDRESS_LIST')")
   public void cardList(MenuChoiceEvent event) {
-    pageController.setActivePage(PageName.MAGAZINE_ADDRESS_LIST);
     AsyncCardAddressListTask asyncTask =
         new AsyncCardAddressListTask(pageController, magazineService);
     generateFile(String.format(CARD_FILE_NAME, LocalDate.now().getYear()), asyncTask);
