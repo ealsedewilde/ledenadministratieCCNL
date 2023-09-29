@@ -85,7 +85,7 @@ public abstract class DocumentTemplateController {
         dialogScene = new Scene(textHelp, 550, 330);
         fileChooser =
             new WrappedFileChooser(pageController.getPrimaryStage(), templateContext.fileType);
-        pageController.loadPage(templateContext.nextPage);
+        pageController.loadPage(templateContext.nextPage, this);
       } else {
         dialogScene = new Scene(textHelp, 550, 100);
       }

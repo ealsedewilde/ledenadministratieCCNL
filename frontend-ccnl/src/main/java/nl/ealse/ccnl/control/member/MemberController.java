@@ -107,6 +107,7 @@ public class MemberController extends MemberView implements FormController {
   private void bindFxml() {
     pageController.loadPage(PageName.MEMBER_FORM, this);
     formPages = new MemberFormPages(this);
+    pageController.loadPage(PageName.SEPA_AUTHORIZATION_SHOW, this);
     
     memberValidation.initialize();
     memberValidation.setCallback(valid -> saveButton.setDisable(!valid));
@@ -142,7 +143,6 @@ public class MemberController extends MemberView implements FormController {
     handleEvent(event);
     Optional<Document> optSepaAuthorization = documentService.findSepaAuthorization(selectedMember);
     if (optSepaAuthorization.isPresent()) {
-      pageController.loadPage(PageName.SEPA_AUTHORIZATION_SHOW);
       sepaAuthorization = optSepaAuthorization.get();
     } else {
       sepaAuthorization = null;

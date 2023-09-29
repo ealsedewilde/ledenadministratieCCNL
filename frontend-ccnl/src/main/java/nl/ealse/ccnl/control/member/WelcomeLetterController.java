@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.member;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,10 +42,14 @@ public class WelcomeLetterController extends DocumentTemplateController {
     this.pageController = pageController;
     this.documentService = documentService;
   }
+  
+  @PostConstruct
+  void setup() {
+    pageController.loadPage(PageName.WELCOME_LETTER, this);
+  }
 
   @EventListener(condition = "#event.name('NEW_MEMBER')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
-    pageController.loadPage(PageName.WELCOME_LETTER);
     this.selectedMember = event.getSelectedEntity();
     initializeTemplates();
   }

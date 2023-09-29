@@ -63,18 +63,39 @@ public class PageController {
     mainPage.setCenter(page);
   }
 
+  /**
+   * Load fxml and show it in the GUI.
+   * @param pageName
+   */
   public void setActivePage(PageName pageName) {
     Parent page = loadPage(pageName.getId(), null);
     mainPage.setCenter(page);
   }
 
-  // Use this method when loading a page in the @PostConstruct of a Controller
-  // (At that stage, the Controller is not yet available in the Spring ApplicationContext,
-  //  because a lookup via fx:controller in the fxml is not possible.)
+  /**
+   * Load fxml without showing it in the GUI.
+   * <p>
+   * The fxml must NOT have a fx:controller attribute!
+   * </p>
+   * @param pageName reference to a fxml file
+   * @param controller to bind to the fxml
+   * @return the loaded fxml
+   */
   public Parent loadPage(PageName pageName, Object controller) {
+    // Use this method when loading a page in the @PostConstruct of a Controller
+    // (At that stage, the Controller is not yet available in the Spring ApplicationContext,
+    //  because a lookup via fx:controller in the fxml is not possible.)
     return loadPage(pageName.getId(), controller);
   }
 
+  /**
+   * Load fxml without showing it in the GUI.
+   * <p>
+   * The fxml must have a fx:controller attribute!
+   * </p>
+   * @param pageName reference to a fxml file
+   * @return the loaded fxml
+   */
   public Parent loadPage(PageName pageName) {
     return loadPage(pageName.getId(), null);
   }
@@ -95,7 +116,6 @@ public class PageController {
    * Use this when starting a async Task.
    * Replace this message when the asybc Task is finshed.
    * </p>
-   * @param message
    */
   public void showPermanentMessage(String message) {
     if (delay != null) {
@@ -108,7 +128,6 @@ public class PageController {
 
   /**
    * Show a message for a period of 5 seconds.
-   * @param message
    */
   public void showMessage(String message) {
     mainInfo.getStyleClass().clear();
@@ -121,7 +140,6 @@ public class PageController {
 
   /**
    * Show an error message for a period of 5 seconds.
-   * @param message
    */
   public void showErrorMessage(String message) {
     mainInfo.getStyleClass().clear();
@@ -140,8 +158,6 @@ public class PageController {
    * last fxml page keeps showing. Ìf you then chooce a menu choice process without a fxml page, the
    * fxml page must be replaced by the logo.
    * </p>
-   * 
-   * @param event
    */
   @EventListener(condition = "#event.command()")
   public void onApplicationEvent(MenuChoiceEvent event) {

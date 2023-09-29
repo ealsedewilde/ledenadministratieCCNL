@@ -10,7 +10,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
   prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" spacing="10"
-  xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.ealse.ccnl.control.member.WelcomeLetterController">
+  xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <PDFViewer fx:id="pdfViewer" windowTitle="Welkomsbrief voor lid: %d (%s)"/>
     <HBox prefHeight="40.0" prefWidth="200.0" spacing="20">

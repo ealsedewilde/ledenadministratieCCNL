@@ -2,6 +2,7 @@ package nl.ealse.ccnl.control.member;
 
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NAME;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NUMBER;
+import jakarta.annotation.PostConstruct;
 import java.util.StringJoiner;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -60,6 +61,11 @@ public class CancelationMailController extends DocumentTemplateController {
     this.memberService = memberService;
     this.mailService = mailService;
   }
+  
+  @PostConstruct
+  void setup() {
+    pageController.loadPage(PageName.MEMBER_CANCEL_MAIL, this);
+  }
 
   @FXML
   @Override
@@ -71,7 +77,6 @@ public class CancelationMailController extends DocumentTemplateController {
 
   @EventListener(condition = "#event.name('CANCEL_MEMBERSHIP')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
-    pageController.loadPage(PageName.MEMBER_CANCEL_MAIL);
     selectedMember = event.getSelectedEntity();
     toMailAddress.setText(selectedMember.getEmail());
     saveMailAddress.setSelected(false);
