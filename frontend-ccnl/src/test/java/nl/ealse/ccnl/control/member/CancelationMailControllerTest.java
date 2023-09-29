@@ -48,6 +48,7 @@ class CancelationMailControllerTest extends FXMLBaseTest<CancelationMailControll
       controller =
           new CancelationMailController(pageController, documentService, mailService, memberService);
       prepare();
+      controller.setup();
       setContent();
       Member m = new Member();
       m.setMemberNumber(4444);
@@ -66,9 +67,9 @@ class CancelationMailControllerTest extends FXMLBaseTest<CancelationMailControll
 
   private void prepare() {
     try {
-      Parent h = getPage(controller, PageName.MAIL_HELP);
+      Parent h = getPageWithFxController(controller, PageName.MAIL_HELP);
       when(pageController.loadPage(PageName.MAIL_HELP)).thenReturn(h);
-      getPage(controller, PageName.MEMBER_CANCEL_MAIL);
+      getPageWithoutFxController(controller, PageName.MEMBER_CANCEL_MAIL);
     } catch (FXMLMissingException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

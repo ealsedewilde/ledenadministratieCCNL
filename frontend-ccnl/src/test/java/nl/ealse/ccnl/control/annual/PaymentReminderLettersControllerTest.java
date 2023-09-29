@@ -103,10 +103,10 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderL
 
   private void prepare() {
     try {
-      Parent p = getPage(sut, PageName.REMINDER_TEXT_HELP);
+      Parent p = getPageWithFxController(sut, PageName.REMINDER_TEXT_HELP);
       when(pageController.loadPage(PageName.REMINDER_TEXT_HELP)).thenReturn(p);
-      getPage(sut, PageName.PAYMENT_REMINDER_LETTERS);
-      getPage(sut, PageName.PAYMENT_REMINDER_LETTER_SHOW);
+      getPageWithFxController(sut, PageName.PAYMENT_REMINDER_LETTERS);
+      getPageWithoutFxController(sut, PageName.PAYMENT_REMINDER_LETTER_SHOW);
       setFileChooser();
     } catch (FXMLMissingException e) {
       // TODO Auto-generated catch block

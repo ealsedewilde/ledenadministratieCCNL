@@ -56,7 +56,7 @@ class ExternalClubDeleteControllerTest extends FXMLBaseTest<ExternalClubDeleteCo
 
   private void prepare() {
     try {
-      getPage(sut, PageName.EXTERNAL_CLUB_DELETE);
+      getPageWithFxController(sut, PageName.EXTERNAL_CLUB_DELETE);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

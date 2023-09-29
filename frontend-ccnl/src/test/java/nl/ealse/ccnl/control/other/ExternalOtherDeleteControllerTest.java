@@ -56,7 +56,7 @@ class ExternalOtherDeleteControllerTest extends FXMLBaseTest<ExternalOtherDelete
 
   private void prepare() {
     try {
-      getPage(sut, PageName.EXTERNAL_RELATION_DELETE);
+      getPageWithFxController(sut, PageName.EXTERNAL_RELATION_DELETE);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

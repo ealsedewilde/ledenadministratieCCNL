@@ -56,7 +56,7 @@ class AddDocumentControllerTest extends FXMLBaseTest<AddDocumentController> {
 
   private void prepare() {
     try {
-      getPage(sut, PageName.ADD_DOCUMENT);
+      getPageWithFxController(sut, PageName.ADD_DOCUMENT);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

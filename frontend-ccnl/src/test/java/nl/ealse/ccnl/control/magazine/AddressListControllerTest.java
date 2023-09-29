@@ -82,7 +82,7 @@ class AddressListControllerTest extends FXMLBaseTest<AddressListController> {
 
   private void prepare() {
     try {
-      getPage(sut, PageName.MAGAZINE_ADDRESS_LIST);
+      getPageWithFxController(sut, PageName.MAGAZINE_ADDRESS_LIST);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

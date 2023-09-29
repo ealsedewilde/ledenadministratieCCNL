@@ -46,7 +46,7 @@ class DocumentTemplateControllerTest extends FXBase {
 
       sut = new Tester(pageController, documentService);
       sut.initialize();
-      verify(pageController).loadPage(PageName.PAYMENT_REMINDER_LETTER_SHOW);
+      verify(pageController).loadPage(PageName.PAYMENT_REMINDER_LETTER_SHOW, sut);
 
       sut.initializeTemplates();
 

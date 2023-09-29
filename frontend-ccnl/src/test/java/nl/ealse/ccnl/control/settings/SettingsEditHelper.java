@@ -28,7 +28,7 @@ public class SettingsEditHelper extends FXMLBaseTest<SettingsEdit> {
       parentController = mock(SettingsController.class);
       settingsEdit = new SettingsEdit(parentController);
       try {
-        page = getPage(settingsEdit, PageName.SETTINGS_EDIT);
+        page = getPageWithFxController(settingsEdit, PageName.SETTINGS_EDIT);
       } catch (FXMLMissingException e) {
         Assertions.fail(e.getMessage());
       }

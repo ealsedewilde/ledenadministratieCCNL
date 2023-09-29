@@ -46,7 +46,7 @@ class InvalidAddressControllerTest extends FXMLBaseTest<InvalidAddressController
 
   private void prepare() {
     try {
-      getPage(sut, PageName.MAGAZINE_INVALID_ADDRESS);
+      getPageWithFxController(sut, PageName.MAGAZINE_INVALID_ADDRESS);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

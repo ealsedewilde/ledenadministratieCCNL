@@ -73,7 +73,7 @@ class SettingsControllerTest extends FXMLBaseTest<SettingsController> {
       SettingsEditHelper seh = SettingsEditHelper.getInstance();
       Parent p = seh.loadSettingsEditPage();
       when(pageController.loadPage(PageName.SETTINGS_EDIT)).thenReturn(p);
-      getPage(sut, PageName.SETTINGS);
+      getPageWithFxController(sut, PageName.SETTINGS);
       TableRow<Setting> row = new TableRow<>();
       row.setItem(setting);
       when(mouseEvent.getSource()).thenReturn(row);

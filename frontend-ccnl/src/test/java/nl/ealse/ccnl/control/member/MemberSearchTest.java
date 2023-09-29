@@ -76,7 +76,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
 
   private void prepare() {
     try {
-      p = (MemberSearch) getPage(sut, PageName.MEMBER_SEARCH);
+      p = (MemberSearch) getPageWithFxController(sut, PageName.MEMBER_SEARCH);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
       e.printStackTrace();

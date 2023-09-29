@@ -55,7 +55,7 @@ class ManageArchiveControllerTest extends FXMLBaseTest<ManageArchiveController> 
 
   private void prepare() {
     try {
-      getPage(sut, PageName.MANAGE_ARCHIVE);
+      getPageWithFxController(sut, PageName.MANAGE_ARCHIVE);
     } catch (FXMLMissingException e) {
       e.printStackTrace();
     }

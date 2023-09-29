@@ -67,7 +67,7 @@ class ExcelImportControllerTest extends FXMLBaseTest<ExcelImportController> {
 
   private void prepare() {
     try {
-      getPage(sut, PageName.EXCEL_IMPORT);
+      getPageWithFxController(sut, PageName.EXCEL_IMPORT);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

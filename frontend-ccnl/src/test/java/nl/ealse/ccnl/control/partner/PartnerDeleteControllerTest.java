@@ -56,7 +56,7 @@ class PartnerDeleteControllerTest extends FXMLBaseTest<PartnerDeleteController> 
 
   private void prepare() {
     try {
-      getPage(sut, PageName.PARTNER_DELETE);
+      getPageWithFxController(sut, PageName.PARTNER_DELETE);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

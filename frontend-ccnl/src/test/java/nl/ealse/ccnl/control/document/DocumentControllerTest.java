@@ -63,8 +63,8 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
 
   private void prepare() {
     try {
-      getPage(sut, PageName.VIEW_DOCUMENTS);
-      Parent p = getPage(sut, PageName.VIEW_DOCUMENT_SHOW);
+      getPageWithFxController(sut, PageName.VIEW_DOCUMENTS);
+      Parent p = getPageWithFxController(sut, PageName.VIEW_DOCUMENT_SHOW);
       when(pageController.loadPage(PageName.VIEW_DOCUMENT_SHOW)).thenReturn(p);
       TableRow<Document> row = new TableRow<>();
       row.setItem(document());

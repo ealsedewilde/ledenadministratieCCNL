@@ -64,7 +64,7 @@ class TemplatesControllerTest extends FXMLBaseTest<TemplatesController> {
 
   private void prepare() {
     try {
-      getPage(sut, PageName.TEMPLATES_OVERVIEW);
+      getPageWithFxController(sut, PageName.TEMPLATES_OVERVIEW);
       TableRow<DocumentTemplate> row = new TableRow<>();
       row.setItem(template);
       ev = mock(Event.class);

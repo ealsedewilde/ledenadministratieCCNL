@@ -56,7 +56,7 @@ class InternalRelationDeleteControllerTest extends FXMLBaseTest<InternalRelation
 
   private void prepare() {
     try {
-      getPage(sut, PageName.INTERNAL_RELATION_DELETE);
+      getPageWithFxController(sut, PageName.INTERNAL_RELATION_DELETE);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

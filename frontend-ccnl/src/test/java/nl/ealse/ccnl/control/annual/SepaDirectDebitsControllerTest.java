@@ -88,10 +88,10 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest<SepaDirectDebitsContro
     try {
       setDialog(true, "settingsStage");
       setDialog(true, "messagesStage");
-      getPage(sut, PageName.DIRECT_DEBITS);
-      Parent p = getPage(sut, PageName.DIRECT_DEBITS_SETTINGS);
+      getPageWithFxController(sut, PageName.DIRECT_DEBITS);
+      Parent p = getPageWithFxController(sut, PageName.DIRECT_DEBITS_SETTINGS);
       when(pageController.loadPage(PageName.DIRECT_DEBITS_SETTINGS)).thenReturn(p);
-      Parent m = getPage(sut, PageName.DIRECT_DEBITS_MESSAGES);
+      Parent m = getPageWithFxController(sut, PageName.DIRECT_DEBITS_MESSAGES);
       when(pageController.loadPage(PageName.DIRECT_DEBITS_MESSAGES)).thenReturn(m);
       setDialog(false, "settingsStage");
       setDialog(false, "messagesStage");

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -13,6 +14,7 @@ import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.FXMLNodeMap;
 import nl.ealse.javafx.PageId;
 import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,7 @@ class PageControllerTest extends FXBase {
   private static FXMLNodeMap fxmlNodeMap;
 
   private PageController sut;
+  
   
   @Test
   void performTests() {
@@ -43,6 +46,7 @@ class PageControllerTest extends FXBase {
       BorderPane p = (BorderPane) content.getChildren().get(1);
       Node c = p.getCenter();
       Assertions.assertTrue(c instanceof VBox);
+      setBorderPane(p);
       sut.activateLogoPage();
       sut.showErrorMessage("error");
       sut.showMessage("message");
@@ -58,22 +62,28 @@ class PageControllerTest extends FXBase {
   void setup() {
     springContext = mock(ApplicationContext.class);
     fxmlNodeMap = new FXMLNodeMap(springContext);
-    sut = new PageController(fxmlNodeMap);
     setFxmlDirectory();
+    sut = new PageController(fxmlNodeMap);
     when(springContext.getBean(PageController.class)).thenReturn(sut);
     MenuController mc = new MenuController(springContext);
     when(springContext.getBean(MenuController.class)).thenReturn(mc);
   }
-  
-  private void setFxmlDirectory() {
+
+  private void setBorderPane(BorderPane pane) {
     try {
-      Field f = fxmlNodeMap.getClass().getDeclaredField("fxmlDirectory");
-      f.setAccessible(true);
-      f.set(fxmlNodeMap, "fxml/");
+      FieldUtils.writeField(sut, "mainPage", pane, true);
+      FieldUtils.writeField(sut, "mainInfo", new Label(), true);
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
 
+  private void setFxmlDirectory() {
+    try {
+      FieldUtils.writeField(fxmlNodeMap, "fxmlDirectory", "fxml/", true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
 

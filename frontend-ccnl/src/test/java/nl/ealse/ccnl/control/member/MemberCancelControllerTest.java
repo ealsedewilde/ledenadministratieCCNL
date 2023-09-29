@@ -47,7 +47,7 @@ class MemberCancelControllerTest extends FXMLBaseTest<MemberCancelController> {
 
   private void prepare() {
     try {
-      getPage(sut, PageName.MEMBER_CANCEL);
+      getPageWithFxController(sut, PageName.MEMBER_CANCEL);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

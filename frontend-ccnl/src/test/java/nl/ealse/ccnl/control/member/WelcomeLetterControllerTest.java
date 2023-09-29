@@ -70,6 +70,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest<WelcomeLetterController> 
     AtomicBoolean result = runFX(() -> {
       controller = new WelcomeLetterController(pageController, documentService);
       prepare();
+      controller.setup();
       controller.getLetterText().setText("Beste <<naam>>, \n Welkom bij Citroën Club Nederland.");
 
       Member m = new Member();
@@ -102,11 +103,11 @@ class WelcomeLetterControllerTest extends FXMLBaseTest<WelcomeLetterController> 
 
   private void prepare() {
     try {
-      Parent h = getPage(controller, PageName.WELCOME_TEXT_HELP);
+      Parent h = getPageWithFxController(controller, PageName.WELCOME_TEXT_HELP);
       when(pageController.loadPage(PageName.WELCOME_TEXT_HELP)).thenReturn(h);
-      Parent s = getPage(controller, PageName.WELCOME_LETTER_SHOW);
+      Parent s = getPageWithoutFxController(controller, PageName.WELCOME_LETTER_SHOW);
       when(pageController.loadPage(PageName.WELCOME_LETTER_SHOW)).thenReturn(s);
-      getPage(controller, PageName.WELCOME_LETTER);
+      getPageWithoutFxController(controller, PageName.WELCOME_LETTER);
     } catch (FXMLMissingException e) {
       e.printStackTrace();
     }

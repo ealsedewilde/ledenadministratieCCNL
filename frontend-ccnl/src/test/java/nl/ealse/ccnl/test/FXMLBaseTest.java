@@ -74,11 +74,37 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
    * @return
    * @throws FXMLMissingException
    */
-  protected Parent getPage(T controller, PageName pageName) throws FXMLMissingException {
+  protected Parent getPageWithFxController(T controller, PageName pageName) throws FXMLMissingException {
+    return getPage(controller, pageName, true);
+  }
+
+  /**
+   * Loading a form without caching.
+   * @param controller
+   * @param pageName
+   * @return
+   * @throws FXMLMissingException
+   */
+  protected Parent getPageWithoutFxController(T controller, PageName pageName) throws FXMLMissingException {
+    return getPage(controller, pageName, false);
+  }
+
+  /**
+   * Loading a form without caching.
+   * @param controller
+   * @param pageName
+   * @return
+   * @throws FXMLMissingException
+   */
+  private Parent getPage(T controller, PageName pageName, boolean factory) throws FXMLMissingException {
     Resource r = new ClassPathResource(FXML_DIR + pageName.getId().getFxmlName());
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
-      fxmlLoader.setControllerFactory(param -> {return controller;});
+      if (factory) {
+        fxmlLoader.setControllerFactory(param -> {return controller;});
+      } else {
+        fxmlLoader.setController(controller);
+      }
       log.info(fxmlLoader.getLocation().toString());
       Parent page = fxmlLoader.load();
       return page;

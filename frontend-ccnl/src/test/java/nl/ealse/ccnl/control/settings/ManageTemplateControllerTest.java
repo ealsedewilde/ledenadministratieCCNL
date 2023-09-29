@@ -66,11 +66,11 @@ class ManageTemplateControllerTest extends FXMLBaseTest<ManageTemplateController
 
   private void prepare() {
     try {
-      Parent p = getPage(sut, PageName.MANAGE_TEMPLATE_TEXT_HELP);
+      Parent p = getPageWithFxController(sut, PageName.MANAGE_TEMPLATE_TEXT_HELP);
       when(pageController.loadPage(PageName.MANAGE_TEMPLATE_TEXT_HELP)).thenReturn(p);
-      p = getPage(sut, PageName.MANAGE_MAIL_HELP);
+      p = getPageWithFxController(sut, PageName.MANAGE_MAIL_HELP);
       when(pageController.loadPage(PageName.MANAGE_MAIL_HELP)).thenReturn(p);
-      getPage(sut, PageName.MANAGE_TEMPLATE);
+      getPageWithFxController(sut, PageName.MANAGE_TEMPLATE);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }

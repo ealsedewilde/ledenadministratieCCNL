@@ -88,8 +88,8 @@ class ReconciliationControllerTest extends FXMLBaseTest<ReconciliationController
   private void prepare() {
     try {
       setDialog(true, "messagesStage");
-      getPage(sut, PageName.RECONCILE_PAYMENTS);
-      Parent m = getPage(sut, PageName.RECONCILE_MESSAGES);
+      getPageWithFxController(sut, PageName.RECONCILE_PAYMENTS);
+      Parent m = getPageWithFxController(sut, PageName.RECONCILE_MESSAGES);
       when(pageController.loadPage(PageName.RECONCILE_MESSAGES)).thenReturn(m);
       setDialog(false, "messagesStage");
       sut.initialize();

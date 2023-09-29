@@ -87,7 +87,7 @@ class AnnualRolloverControllerTest extends FXMLBaseTest<AnnualRolloverController
 
   private void prepare() {
     try {
-      getPage(sut, PageName.ANNUAL_ROLLOVER);
+      getPageWithFxController(sut, PageName.ANNUAL_ROLLOVER);
     } catch (FXMLMissingException e) {
       Assertions.fail(e.getMessage());
     }
