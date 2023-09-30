@@ -2,11 +2,13 @@ package nl.ealse.ccnl.test;
 
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -25,6 +27,7 @@ import org.springframework.core.io.Resource;
  *
  * @param <T>
  */
+@SuppressWarnings("unchecked")
 @Slf4j
 public abstract class FXMLBaseTest<T extends Object> extends FXBase {
 
@@ -38,6 +41,8 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
    * Setup a environment for loading forms.
    */
   static {
+    Callback<Class<?>, Object> controllerFactory = param -> {return mock(param);};
+    doReturn(controllerFactory).when(springContext).getBean(isA(Class.class));
     fnm = new TestFxmlNodeMap(springContext);
     pc = spy(new PageController(fnm));
     //  the main BorderPane is not loaded, so any actions using it will fail.
@@ -124,26 +129,8 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
     
     @Override
     public Parent get(PageId id, Object controller) throws FXMLMissingException {
-      if (controller == null) {
-        return getPage(null);
-      }
       return FXMLNodeMap.getPage(id, null, controller);
     }
-    
-    private Parent getPage(PageName pageName) throws FXMLMissingException {
-      Resource r = new ClassPathResource(FXML_DIR + pageName.getId().getFxmlName());
-      try {
-        FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
-        fxmlLoader.setControllerFactory(param -> {return mock(param);});
-        log.info(fxmlLoader.getLocation().toString());
-        Parent page = fxmlLoader.load();
-        return page;
-      } catch (IOException e) {
-        log.error("error loading fxml", e);
-        throw new FXMLLoadException("error loading fxml", e);
-      }
-    }
-
     
   }
 

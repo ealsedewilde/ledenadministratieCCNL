@@ -83,7 +83,6 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
   }
 
   private void prepare() {
-    when(getSpringContext().getBean(MemberController.class)).thenReturn(controller);
     when(documentService.findSepaAuthorization(m)).thenReturn(Optional.empty());
   }
 
