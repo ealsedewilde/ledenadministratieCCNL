@@ -13,6 +13,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.javafx.FXMLLoadException;
 import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.FXMLNodeMap;
+import nl.ealse.javafx.PageId;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
@@ -37,7 +38,7 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
    * Setup a environment for loading forms.
    */
   static {
-    fnm = new FXMLNodeMap(springContext);
+    fnm = new TestFxmlNodeMap(springContext);
     pc = spy(new PageController(fnm));
     //  the main BorderPane is not loaded, so any actions using it will fail.
     doNothing().when(pc).setActivePage(isA(PageName.class));
@@ -46,7 +47,7 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
     doNothing().when(pc).showPermanentMessage(isA(String.class));
     doNothing().when(pc).activateLogoPage();
     try {
-      FieldUtils.writeDeclaredField(fnm, "fxmlDirectory", FXML_DIR, true);
+      FieldUtils.writeField(fnm, "fxmlDirectory", FXML_DIR, true);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -110,6 +111,40 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
       log.error("error loading fxml", e);
       throw new FXMLLoadException("error loading fxml", e);
     }
+  }
+  
+  /** Non caching variant
+   * 
+   */
+  private static class TestFxmlNodeMap extends FXMLNodeMap {
+
+    public TestFxmlNodeMap(ApplicationContext springContext) {
+      super(springContext);
+    }
+    
+    @Override
+    public Parent get(PageId id, Object controller) throws FXMLMissingException {
+      if (controller == null) {
+        return getPage(null);
+      }
+      return FXMLNodeMap.getPage(id, null, controller);
+    }
+    
+    private Parent getPage(PageName pageName) throws FXMLMissingException {
+      Resource r = new ClassPathResource(FXML_DIR + pageName.getId().getFxmlName());
+      try {
+        FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
+        fxmlLoader.setControllerFactory(param -> {return mock(param);});
+        log.info(fxmlLoader.getLocation().toString());
+        Parent page = fxmlLoader.load();
+        return page;
+      } catch (IOException e) {
+        log.error("error loading fxml", e);
+        throw new FXMLLoadException("error loading fxml", e);
+      }
+    }
+
+    
   }
 
 

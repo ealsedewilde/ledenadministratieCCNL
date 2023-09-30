@@ -10,21 +10,17 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class IbanTestHelper {
   
-  private static SepaAuthorizarionController controller;
-  
   public static SepaAuthorizarionController getSepaAuthorizarionController(PageController pageController) {
-    if (controller == null) {
-      controller = spy(new SepaAuthorizarionController(pageController, 
+      SepaAuthorizarionController controller = spy(new SepaAuthorizarionController(pageController, 
           mock(DocumentService.class), mock(MemberService.class)));
       doNothing().when(controller).selectSepaAuthorization();
-      setDirectory();
+      setDirectory(controller);
       controller.setup();
-     }
-    return controller;
+      return controller;
   }
   
 
-  private static void setDirectory() {
+  private static void setDirectory(SepaAuthorizarionController controller) {
     try {
       FieldUtils.writeField(controller, "sepaDirectory", "C:/temp", true);
     } catch (Exception e) {

@@ -107,7 +107,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
   private void searchCriterium(int index) {
     try {
       ChoiceBox<String> searchCriterium =
-          (ChoiceBox<String>) FieldUtils.readDeclaredField(p, "searchCriterium", true);
+          (ChoiceBox<String>) FieldUtils.readField(p, "searchCriterium", true);
       searchCriterium.getSelectionModel().select(index);
     } catch (Exception e) {
       e.printStackTrace();
@@ -117,7 +117,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
 
   private void searchField(String text) {
     try {
-      TextField searchField = (TextField) FieldUtils.readDeclaredField(p, "searchField", true);
+      TextField searchField = (TextField) FieldUtils.readField(p, "searchField", true);
       searchField.setText(text);
     } catch (Exception e) {
       e.printStackTrace();

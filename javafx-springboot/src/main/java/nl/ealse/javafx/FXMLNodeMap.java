@@ -63,7 +63,7 @@ public class FXMLNodeMap {
 
   public static Parent getPage(PageId id, Object root, Object controller)
       throws FXMLMissingException {
-    return INSTANCE.get(id, root, controller);
+    return INSTANCE.getFXML(id, root, controller);
   }
 
   /**
@@ -75,13 +75,10 @@ public class FXMLNodeMap {
    * @throws FXMLMissingException - when page not found
    */
   public Parent get(PageId id, Object controller) throws FXMLMissingException {
-    return get(id, null, controller);
-  }
-
-  private Parent get(PageId id, Object root, Object controller) throws FXMLMissingException {
     Parent page = FXML_PAGES.get(id.getPagekey());
     if (page == null) {
-      page = getFXML(id, root, controller);
+      page = getFXML(id, null, controller);
+      FXML_PAGES.put(id.getPagekey(), page);
     }
     return page;
   }
@@ -107,7 +104,6 @@ public class FXMLNodeMap {
       }
       log.info(fxmlLoader.getLocation().toString());
       Parent page = fxmlLoader.load();
-      FXML_PAGES.put(id.getPagekey(), page);
       return page;
     } catch (FileNotFoundException e) {
       log.error("Unknown page " + id.getFxmlName());

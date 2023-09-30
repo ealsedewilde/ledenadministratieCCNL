@@ -65,7 +65,7 @@ class PrimaryPageStarterTest extends FXBase {
   private void config() {
     try {
       FieldUtils.writeDeclaredField(sut, "applicationIcon", "Citroen.png", true);
-      FieldUtils.writeDeclaredField(sut, "fxmlDirectory", "fxml/", true);
+      FieldUtils.writeField(fxmlNodeMap, "fxmlDirectory", "fxml/", true);
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -23,8 +23,6 @@ import org.springframework.core.io.Resource;
 class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionController> {
 
   private static WrappedFileChooser fileChooser;
-  private static IbanController ibanController;
-
 
   private SepaAuthorizarionController sut;
   private Member m;
@@ -62,7 +60,6 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
 
   @BeforeAll
   static void setup() {
-    ibanController = mock(IbanController.class);
     fileChooser = mock(WrappedFileChooser.class);
     Resource r = new ClassPathResource("MachtigingsformulierSEPA.pdf");
     try {
