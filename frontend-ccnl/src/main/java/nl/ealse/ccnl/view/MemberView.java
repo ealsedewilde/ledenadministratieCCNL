@@ -10,7 +10,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.GridPane;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.button.SearchButton;

@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.ledenadministratie.model;
 
-import java.util.StringJoiner;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import java.util.StringJoiner;
 import lombok.Data;
 
 @Entity

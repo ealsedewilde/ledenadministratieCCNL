@@ -7,7 +7,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import nl.ealse.ccnl.control.member.MemberController;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
@@ -15,9 +14,7 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.mappers.MembershipStatusMapper;
 import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.test.FXBase;
-import nl.ealse.ccnl.view.AddressView;
 import nl.ealse.ccnl.view.MemberView;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

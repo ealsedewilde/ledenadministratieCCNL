@@ -134,7 +134,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   }
 
   @FXML
-  public void closePDF() {
+  void closePDF() {
     pdfViewer.close();
   }
 

@@ -5,7 +5,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
@@ -121,27 +120,18 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest<SepaDirectDebitsContro
   }
 
   private Label errorMessageLabel() {
-    Label l = null;
     try {
-      Field f = sut.getClass().getDeclaredField("errorMessageLabel");
-      f.setAccessible(true);
-      l = (Label) f.get(sut);
+      return (Label) FieldUtils.readDeclaredField(sut, "errorMessageLabel", true);
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return l;
+    return null;
   }
 
   private void setDialog(boolean b, String name) {
     try {
-      Field f = sut.getClass().getDeclaredField(name);
-      f.setAccessible(true);
-      if (b) {
-        f.set(sut, new Stage());
-      } else {
-        f.set(sut, null);
-
-      }
+      Object value = b ? new Stage() : null;
+      FieldUtils.writeDeclaredField(sut, name, value, true);
     } catch (Exception e) {
       e.printStackTrace();
     }

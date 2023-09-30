@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -49,7 +48,7 @@ public class IbanController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     ibanNumber.textProperty().addListener(new IbanNumberListener(ibanNumberE));
     parentController.getIbanNumberStage().setOnCloseRequest(e -> {
       e.consume();

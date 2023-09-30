@@ -1,10 +1,10 @@
 package nl.ealse.ccnl.control.external;
 
 import javafx.fxml.FXML;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.view.ExternalRelationDeleteView;
@@ -19,7 +19,7 @@ public abstract class ExternalRelationDeleteController<T extends ExternalRelatio
 
   private final ExternalRelationService<T> service;
 
-  @Setter
+  @Setter(value = AccessLevel.PROTECTED)
   private T selectedEntity;
 
   protected ExternalRelationDeleteController(PageController pageController,

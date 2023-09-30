@@ -5,7 +5,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +13,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.javafx.FXMLLoadException;
 import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.FXMLNodeMap;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -46,9 +46,7 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
     doNothing().when(pc).showPermanentMessage(isA(String.class));
     doNothing().when(pc).activateLogoPage();
     try {
-      Field f = FXMLNodeMap.class.getDeclaredField("fxmlDirectory");
-      f.setAccessible(true);
-      f.set(fnm, FXML_DIR);
+      FieldUtils.writeDeclaredField(fnm, "fxmlDirectory", FXML_DIR, true);
     } catch (Exception e) {
       e.printStackTrace();
     }

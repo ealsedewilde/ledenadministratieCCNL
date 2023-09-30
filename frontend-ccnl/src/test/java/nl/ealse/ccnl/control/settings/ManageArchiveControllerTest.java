@@ -2,7 +2,6 @@ package nl.ealse.ccnl.control.settings;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TextField;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -12,6 +11,7 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.ArchiveService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -70,9 +70,7 @@ class ManageArchiveControllerTest extends FXMLBaseTest<ManageArchiveController> 
 
   private void referenceYear() {
     try {
-      Field f = sut.getClass().getDeclaredField("referenceYear");
-      f.setAccessible(true);
-      referenceYear = (TextField) f.get(sut);
+      referenceYear = (TextField) FieldUtils.readDeclaredField(sut, "referenceYear", true);
     } catch (Exception e) {
       e.printStackTrace();
     }

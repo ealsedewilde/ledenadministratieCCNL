@@ -1,10 +1,10 @@
 package nl.ealse.ccnl.service.relation;
 
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;

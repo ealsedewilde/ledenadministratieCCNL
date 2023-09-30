@@ -4,7 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.annual.AnnualRolloverController.AsyncRolloverStep1;
 import nl.ealse.ccnl.control.annual.AnnualRolloverController.AsyncRolloverStep2;
@@ -113,10 +112,7 @@ class AnnualRolloverControllerTest extends FXMLBaseTest<AnnualRolloverController
 
   private void dbDirectory() {
     try {
-      Field f = sut.getClass().getDeclaredField("dbDirectory");
-      f.setAccessible(true);
-      f.set(sut, tempDir.getAbsolutePath());
-
+      FieldUtils.writeDeclaredField(sut, "dbDirectory", tempDir.getAbsolutePath(), true);
     } catch (Exception e) {
       e.printStackTrace();
     }

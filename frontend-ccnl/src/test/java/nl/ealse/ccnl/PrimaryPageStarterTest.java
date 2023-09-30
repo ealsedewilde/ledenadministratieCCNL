@@ -2,7 +2,6 @@ package nl.ealse.ccnl;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.control.menu.MenuController;
@@ -10,6 +9,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.test.FXBase;
 import nl.ealse.javafx.FXMLNodeMap;
 import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -64,13 +64,8 @@ class PrimaryPageStarterTest extends FXBase {
 
   private void config() {
     try {
-      Field f = sut.getClass().getDeclaredField("applicationIcon");
-      f.setAccessible(true);
-      f.set(sut, "Citroen.png");
-      Field d = FXMLNodeMap.class.getDeclaredField("fxmlDirectory");
-      d.setAccessible(true);
-      d.set(fxmlNodeMap, "fxml/");
-
+      FieldUtils.writeDeclaredField(sut, "applicationIcon", "Citroen.png", true);
+      FieldUtils.writeDeclaredField(sut, "fxmlDirectory", "fxml/", true);
     } catch (Exception e) {
       e.printStackTrace();
     }

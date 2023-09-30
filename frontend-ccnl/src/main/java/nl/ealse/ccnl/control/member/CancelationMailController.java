@@ -65,12 +65,6 @@ public class CancelationMailController extends DocumentTemplateController {
   @PostConstruct
   void setup() {
     pageController.loadPage(PageName.MEMBER_CANCEL_MAIL, this);
-  }
-
-  @FXML
-  @Override
-  public void initialize() {
-    super.initialize();
     validation = new CancelMailValidation(this);
     validation.setCallback(valid -> sendButton.setDisable(!valid));
   }

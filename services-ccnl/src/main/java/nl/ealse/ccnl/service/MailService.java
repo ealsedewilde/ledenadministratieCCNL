@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.service;
 
 import java.util.List;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -12,7 +11,6 @@ import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 /**

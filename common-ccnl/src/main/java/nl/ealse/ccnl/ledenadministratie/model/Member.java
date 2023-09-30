@@ -1,8 +1,5 @@
 package nl.ealse.ccnl.ledenadministratie.model;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.StringJoiner;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,6 +7,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Transient;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.StringJoiner;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

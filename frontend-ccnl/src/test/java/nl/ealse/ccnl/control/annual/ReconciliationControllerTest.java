@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -145,14 +144,8 @@ class ReconciliationControllerTest extends FXMLBaseTest<ReconciliationController
 
   private void setDialog(boolean b, String name) {
     try {
-      Field f = sut.getClass().getDeclaredField(name);
-      f.setAccessible(true);
-      if (b) {
-        f.set(sut, new Stage());
-      } else {
-        f.set(sut, null);
-
-      }
+      Object value = b ? new Stage() : null;
+      FieldUtils.writeDeclaredField(sut, name, value ,true);
     } catch (Exception e) {
       e.printStackTrace();
     }

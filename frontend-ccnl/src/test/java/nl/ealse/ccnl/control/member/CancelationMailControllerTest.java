@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
@@ -18,6 +17,7 @@ import nl.ealse.ccnl.service.MailService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -80,9 +80,7 @@ class CancelationMailControllerTest extends FXMLBaseTest<CancelationMailControll
     letterText = controller.getLetterText();
     letterText.setText("Beste <<naam>>\n Dit is een test.");
     try {
-      Field f = CancelationMailController.class.getDeclaredField("mailSubject");
-      f.setAccessible(true);
-      f.set(controller, "test mail");
+      FieldUtils.writeDeclaredField(controller, "mailSubject", "test mail", true);
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

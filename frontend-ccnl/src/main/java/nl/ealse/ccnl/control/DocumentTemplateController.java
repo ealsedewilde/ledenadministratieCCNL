@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -57,7 +58,7 @@ public abstract class DocumentTemplateController {
   @Getter
   private TextArea letterText;
 
-  @Getter
+  @Getter(value = AccessLevel.PROTECTED)
   private WrappedFileChooser fileChooser;
 
   private List<DocumentTemplate> templates;
@@ -70,7 +71,7 @@ public abstract class DocumentTemplateController {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     if (this.dialog == null) {
       this.dialog = new Stage();
       this.dialog.setResizable(false);
@@ -85,7 +86,7 @@ public abstract class DocumentTemplateController {
         dialogScene = new Scene(textHelp, 550, 330);
         fileChooser =
             new WrappedFileChooser(pageController.getPrimaryStage(), templateContext.fileType);
-        pageController.loadPage(templateContext.nextPage, this);
+        pageController.loadPage(templateContext.pdfViewer, this);
       } else {
         dialogScene = new Scene(textHelp, 550, 100);
       }
@@ -183,7 +184,7 @@ public abstract class DocumentTemplateController {
     @NonNull
     final PageName helpPage;
     @Nullable
-    final PageName nextPage;
+    final PageName pdfViewer;
     @Nullable
     final FileExtension fileType;
     @NonNull

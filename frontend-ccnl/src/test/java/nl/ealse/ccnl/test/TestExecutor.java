@@ -1,10 +1,10 @@
 package nl.ealse.ccnl.test;
 
+import java.lang.reflect.InvocationTargetException;
 import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import nl.ealse.ccnl.control.HandledTask;
-import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.core.task.TaskExecutor;
 

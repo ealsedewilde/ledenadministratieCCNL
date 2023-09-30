@@ -4,7 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
@@ -16,6 +15,7 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -87,9 +87,7 @@ class ManageTemplateControllerTest extends FXMLBaseTest<ManageTemplateController
 
   private void initTemplateId() {
     try {
-      Field f = sut.getClass().getDeclaredField("templateId");
-      f.setAccessible(true);
-      templateId = (TextField) f.get(sut);
+      templateId = (TextField) FieldUtils.readDeclaredField(sut, "templateId", true);
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

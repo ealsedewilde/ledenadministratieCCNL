@@ -45,7 +45,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   }
 
   @FXML
-  public void initialize() {
+  void initialize() {
     searchPane.initialize(this);
   }
 
@@ -77,7 +77,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
    * @param value to search for
    * @return the selected model objects that match the search (if any)
    */
-  public abstract List<T> doSearch(SearchItem searchItem, String value);
+  protected abstract List<T> doSearch(SearchItem searchItem, String value);
 
   /**
    * Invoked when question mark column is clicked. (Invoked after selectedMember is set.)
@@ -91,7 +91,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
     alert.showAndWait();
   }
 
-  public abstract E newEntitySelectionEvent(MenuChoice currentMenuChoice);
+  protected abstract E newEntitySelectionEvent(MenuChoice currentMenuChoice);
 
 
   /**

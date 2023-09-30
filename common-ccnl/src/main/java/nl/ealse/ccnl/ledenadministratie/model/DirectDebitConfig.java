@@ -1,13 +1,13 @@
 package nl.ealse.ccnl.ledenadministratie.model;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;

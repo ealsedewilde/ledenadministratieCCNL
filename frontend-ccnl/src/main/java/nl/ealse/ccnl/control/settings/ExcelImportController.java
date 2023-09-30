@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.settings;
 
 import java.io.File;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,7 +11,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.annual.AnnualRolloverController;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;

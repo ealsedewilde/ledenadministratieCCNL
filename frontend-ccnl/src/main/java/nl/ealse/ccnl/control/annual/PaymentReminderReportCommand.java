@@ -2,12 +2,10 @@ package nl.ealse.ccnl.control.annual;
 
 import java.io.File;
 import java.io.IOException;
-import javafx.concurrent.Task;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.settings.ExcelImportController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;

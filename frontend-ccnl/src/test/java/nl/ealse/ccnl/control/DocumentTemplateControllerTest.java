@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,6 +20,7 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXBase;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -45,6 +45,7 @@ class DocumentTemplateControllerTest extends FXBase {
 
 
       sut = new Tester(pageController, documentService);
+      initFXML();
       sut.initialize();
       verify(pageController).loadPage(PageName.PAYMENT_REMINDER_LETTER_SHOW, sut);
 
@@ -60,7 +61,7 @@ class DocumentTemplateControllerTest extends FXBase {
       when(documentService.findDocumentTemplates(DocumentTemplateType.PAYMENT_REMINDER))
           .thenReturn(templates);
       sut.initializeTemplates();
-      Assertions.assertEquals("DEMO", sut.letterText.getText());
+      Assertions.assertEquals("DEMO", sut.getLetterText().getText());
 
       sut.saveText();
       verify(documentService).persistDocumentemplate(any(DocumentTemplate.class));
@@ -71,38 +72,24 @@ class DocumentTemplateControllerTest extends FXBase {
     Assertions.assertTrue(result.get());
   }
 
+  private void initFXML() {
+    try {
+      FieldUtils.writeField(sut, "textId", new TextField(), true);
+      FieldUtils.writeField(sut, "letterText", new TextArea(), true);
+      
+      FieldUtils.writeField(sut, "textIdE", new Label(), true);
+      FieldUtils.writeField(sut, "textSelection", new ChoiceBox<String>(), true);
+   } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
+
   public static class Tester extends DocumentTemplateController {
-
-    TextArea letterText;
-
-    TextField textId;
 
     public Tester(PageController pageController, DocumentService documentService) {
       super(pageController, documentService, DocumentTemplateContext.PAYMENT_REMINDER);
-      initFXML();
-    }
-
-    private void initFXML() {
-      try {
-        Field f = DocumentTemplateController.class.getDeclaredField("textId");
-        f.setAccessible(true);
-        textId = new TextField();
-        f.set(this, textId);
-        f = DocumentTemplateController.class.getDeclaredField("textIdE");
-        f.setAccessible(true);
-        f.set(this, new Label());
-        f = DocumentTemplateController.class.getDeclaredField("textSelection");
-        f.setAccessible(true);
-        f.set(this, new ChoiceBox<String>());
-        f = DocumentTemplateController.class.getDeclaredField("letterText");
-        f.setAccessible(true);
-        letterText = new TextArea();
-        f.set(this, letterText);
-      } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-
     }
 
   }

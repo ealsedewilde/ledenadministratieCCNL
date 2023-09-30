@@ -1,8 +1,8 @@
 package nl.ealse.ccnl.ledenadministratie.dd;
 
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import jakarta.persistence.EntityManager;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigBooleanEntry;

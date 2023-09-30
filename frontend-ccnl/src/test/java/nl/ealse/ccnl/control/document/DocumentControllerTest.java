@@ -42,6 +42,7 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
     AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
+      sut.setup();
       doTest();
       ar.set(true);
     }, ar);
@@ -64,7 +65,7 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
   private void prepare() {
     try {
       getPageWithFxController(sut, PageName.VIEW_DOCUMENTS);
-      Parent p = getPageWithFxController(sut, PageName.VIEW_DOCUMENT_SHOW);
+      Parent p = getPageWithoutFxController(sut, PageName.VIEW_DOCUMENT_SHOW);
       when(pageController.loadPage(PageName.VIEW_DOCUMENT_SHOW)).thenReturn(p);
       TableRow<Document> row = new TableRow<>();
       row.setItem(document());

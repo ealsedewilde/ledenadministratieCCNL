@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.ledenadministratie.model;
 
-import java.time.LocalDate;
 import jakarta.persistence.Basic;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Embedded;
@@ -10,6 +9,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.Lob;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import java.time.LocalDate;
 import lombok.Data;
 
 @Entity

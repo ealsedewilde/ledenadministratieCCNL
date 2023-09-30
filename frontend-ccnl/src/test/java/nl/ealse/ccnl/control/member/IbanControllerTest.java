@@ -1,8 +1,6 @@
 package nl.ealse.ccnl.control.member;
 
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.spy;
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -78,12 +76,8 @@ class IbanControllerTest extends FXMLBaseTest<IbanController>{
 
   private void initialize() {
     try {
-      Field f = sut.getClass().getDeclaredField("ibanNumber");
-      f.setAccessible(true);
-      ibanNumber = (TextField) f.get(sut);
-      f = sut.getClass().getDeclaredField("ibanNumberE");
-      f.setAccessible(true);
-      ibanNumberE = (Label) f.get(sut);
+      ibanNumber = (TextField) FieldUtils.readDeclaredField(sut, "ibanNumber", true);
+      ibanNumberE = (Label) FieldUtils.readDeclaredField(sut, "ibanNumberE", true);
     } catch (Exception e) {
       e.printStackTrace();
     }

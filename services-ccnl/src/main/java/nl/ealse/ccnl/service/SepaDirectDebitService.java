@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.service;
 
+import jakarta.persistence.EntityManager;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -8,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.EntityManager;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

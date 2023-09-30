@@ -2,7 +2,6 @@ package nl.ealse.ccnl.control.menu;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Node;
 import javafx.scene.control.Label;

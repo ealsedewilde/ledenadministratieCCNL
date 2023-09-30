@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -23,6 +22,7 @@ import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -106,9 +106,8 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
   @SuppressWarnings("unchecked")
   private void searchCriterium(int index) {
     try {
-      Field f = MemberSearch.class.getSuperclass().getDeclaredField("searchCriterium");
-      f.setAccessible(true);
-      ChoiceBox<String> searchCriterium = (ChoiceBox<String>) f.get(p);
+      ChoiceBox<String> searchCriterium =
+          (ChoiceBox<String>) FieldUtils.readDeclaredField(p, "searchCriterium", true);
       searchCriterium.getSelectionModel().select(index);
     } catch (Exception e) {
       e.printStackTrace();
@@ -118,9 +117,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
 
   private void searchField(String text) {
     try {
-      Field f = MemberSearch.class.getSuperclass().getDeclaredField("searchField");
-      f.setAccessible(true);
-      TextField searchField = (TextField) f.get(p);
+      TextField searchField = (TextField) FieldUtils.readDeclaredField(p, "searchField", true);
       searchField.setText(text);
     } catch (Exception e) {
       e.printStackTrace();
