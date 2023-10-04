@@ -99,7 +99,7 @@ public class PDFViewer extends BorderPane {
       throw new PDFViewerException("Error rendering PDF", e);
     }
   }
-
+  
   /**
    * Show a PDF for the document owner
    * @param pdf - document to show (PDF +owner)
@@ -139,10 +139,7 @@ public class PDFViewer extends BorderPane {
    * Initialize for a single page PDF
    */
   private void initializeSinglePage() {
-    Region parent = (Region) getParent();
-    parent.setPrefWidth(620);
-    parent.setPrefHeight(920);
-
+    setDimension(23, 80);
     initializeScene();
 
     this.setRight(null);
@@ -154,10 +151,7 @@ public class PDFViewer extends BorderPane {
    * Initialize for a mult page PDF
    */
   private void initializeMultiPage() {
-    Region parent = (Region) getParent();
-    parent.setPrefWidth(737);
-    parent.setPrefHeight(965);
-
+    setDimension(141, 110);
     initializeScene();
 
     nextButton = new PagingButton("\u00BB");
@@ -172,6 +166,21 @@ public class PDFViewer extends BorderPane {
     header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
     BorderPane.setAlignment(header, Pos.CENTER);
     this.setTop(header);
+  }
+
+  private void setDimension(int w, int h) {
+    PDFRenderer renderer = new PDFRenderer(document);
+    try {
+      BufferedImage bufferedImage = renderer.renderImage(0);
+      Region parent = (Region) getParent();
+      parent.setPrefWidth(bufferedImage.getWidth() + w);
+      parent.setPrefHeight(bufferedImage.getHeight() + h);
+    } catch (IOException e) {
+      log.error("Error first page", e);
+      Thread.currentThread().interrupt();
+      throw new PDFViewerException("Error first page", e);
+    }
+  
   }
 
   private void previousPage() {
