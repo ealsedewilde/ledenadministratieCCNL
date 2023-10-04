@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.member;
 
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,10 +14,11 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 class IbanControllerTest extends FXMLBaseTest<IbanController>{
   
-  private static SepaAuthorizarionController parentController;
+  private static ApplicationEventPublisher eventPublisher;
   
   private IbanController sut;
   private Member m;
@@ -55,14 +57,13 @@ class IbanControllerTest extends FXMLBaseTest<IbanController>{
   }
   
   private void prepare() {
-    parentController = IbanTestHelper.getSepaAuthorizarionController(getPageController());
-    doNothing().when(parentController).selectSepaAuthorization();
-    sut = new IbanController(parentController, getPageController());
+    sut = new IbanController(eventPublisher, getPageController());
     sut.setup();
   }
   
   @BeforeAll
   static void setup() {
+    eventPublisher = mock(ApplicationEventPublisher.class);
   }
   
   private static Member member() {

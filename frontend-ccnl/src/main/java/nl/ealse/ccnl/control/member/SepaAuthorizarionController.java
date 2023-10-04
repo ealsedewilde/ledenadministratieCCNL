@@ -8,9 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -22,7 +19,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
-import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 import nl.ealse.javafx.util.WrappedFileChooser;
@@ -30,12 +26,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Add SEPA authorization document for Direct Debits.
+ */
 @Controller
 @Slf4j
 public class SepaAuthorizarionController {
 
   @Value("${ccnl.directory.sepa:c:/temp}")
   private String sepaDirectory;
+  
+  private final IbanController ibanController;
 
   private final PageController pageController;
 
@@ -52,18 +53,17 @@ public class SepaAuthorizarionController {
 
   private WrappedFileChooser fileChooser;
 
-  @Getter
-  private Stage ibanNumberStage;
-
   /**
    * ADD SEPA-authorization PDF to a member.
    * @param pageController
+   * @param ibanController - cpopup for adding iban-number to member
    * @param documentService
    * @param service
    */
-  public SepaAuthorizarionController(PageController pageController, DocumentService documentService,
+  public SepaAuthorizarionController(PageController pageController, IbanController ibanController, DocumentService documentService,
       MemberService service) {
     this.pageController = pageController;
+    this.ibanController = ibanController;
     this.documentService = documentService;
     this.service = service;
   }
@@ -71,12 +71,6 @@ public class SepaAuthorizarionController {
   @PostConstruct
   void setup() {
     pageController.loadPage(PageName.SEPA_AUTHORIZATION_ADD, this);
-    
-    ibanNumberStage = new Stage();
-    ibanNumberStage.initModality(Modality.APPLICATION_MODAL);
-    ibanNumberStage.setTitle("IBAN-nummer toevoegen");
-    ibanNumberStage.getIcons().add(ImagesMap.get("Citroen.png"));
-    ibanNumberStage.initOwner(pageController.getPrimaryStage());
     
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), PDF, PNG);
     fileChooser.setInitialDirectory(new File(sepaDirectory));
@@ -87,12 +81,16 @@ public class SepaAuthorizarionController {
   public void onApplicationEvent(MemberSeLectionEvent event) {
     this.selectedMember = event.getSelectedEntity();
     if (selectedMember.getIbanNumber() == null) {
-      ibanNumberStage.show();
+      ibanController.show();
     } else {
       selectSepaAuthorization();
     }
   }
 
+  /**
+   * Start adding SEPA authorization document.
+   */
+  @EventListener(value = IbanNumberAddedEvent.class)
   public void selectSepaAuthorization() {
     selectedFile = fileChooser.showOpenDialog();
     if (selectedFile != null) {

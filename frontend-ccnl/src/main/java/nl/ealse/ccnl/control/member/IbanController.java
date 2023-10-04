@@ -8,18 +8,26 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
+import nl.ealse.javafx.ImagesMap;
 import org.apache.commons.validator.routines.IBANValidator;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Controls the popup for adding a missing IBAN-number.
+ */
 @Controller
 public class IbanController {
 
-  private final SepaAuthorizarionController parentController;
+  private final ApplicationEventPublisher eventPublisher;
+
   private final PageController pageController;
 
   @FXML
@@ -34,26 +42,33 @@ public class IbanController {
   private final IBANValidator ibanValidator = new IBANValidator();
 
   private Member selectedMember;
+  
+  private Stage ibanNumberStage;
 
-  public IbanController(SepaAuthorizarionController parentController, PageController pageController) {
-    this.parentController = parentController;
+  public IbanController(ApplicationEventPublisher eventPublisher, PageController pageController) {
+    this.eventPublisher = eventPublisher;
     this.pageController = pageController;
   }
   
   @PostConstruct
   void setup() {
+    ibanNumberStage = new Stage();
+    ibanNumberStage.initModality(Modality.APPLICATION_MODAL);
+    ibanNumberStage.setTitle("IBAN-nummer toevoegen");
+    ibanNumberStage.getIcons().add(ImagesMap.get("Citroen.png"));
+    ibanNumberStage.initOwner(pageController.getPrimaryStage());
     Parent p = pageController.loadPage(PageName.ADD_IBAN_NUMBER, this);
     Scene dialogScene = new Scene(p, 1200, 400);
-    parentController.getIbanNumberStage().setScene(dialogScene);
+    ibanNumberStage.setScene(dialogScene);
   }
 
   @FXML
   void initialize() {
     ibanNumber.textProperty().addListener(new IbanNumberListener(ibanNumberE));
-    parentController.getIbanNumberStage().setOnCloseRequest(e -> {
-      e.consume();
-      save();
-    });
+  }
+  
+  public void show() {
+    ibanNumberStage.show();
   }
 
   @FXML
@@ -61,9 +76,9 @@ public class IbanController {
     String iban = ibanNumber.getText().toUpperCase();
     if (ibanValidator.isValid(iban)) {
       ibanNumberE.setVisible(false);
+      ibanNumberStage.close();
       selectedMember.setIbanNumber(iban);
-      parentController.getIbanNumberStage().close();
-      parentController.selectSepaAuthorization();
+      eventPublisher.publishEvent(new IbanNumberAddedEvent(this));
     } else if (iban == null || iban.isBlank()) {
       ibanNumberE.setText("IBAN-nummer is verplicht");
       ibanNumberE.setVisible(true);
@@ -94,7 +109,7 @@ public class IbanController {
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue,
         String newValue) {
-      ibanNumberE.setVisible(true);
+      ibanNumberE.setVisible(false);
     }
 
   }

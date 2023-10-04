@@ -2,6 +2,7 @@ package nl.ealse.ccnl.control.member;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
@@ -11,6 +12,8 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
+import nl.ealse.ccnl.service.DocumentService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -22,6 +25,9 @@ import org.springframework.core.io.Resource;
 
 class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionController> {
 
+  private static IbanController ibanController;
+  private static DocumentService documentService;
+  private static MemberService memberService;
   private static WrappedFileChooser fileChooser;
 
   private SepaAuthorizarionController sut;
@@ -52,7 +58,10 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
   }
 
   private void prepare() {
-    sut = IbanTestHelper.getSepaAuthorizarionController(getPageController());
+    sut = spy(new SepaAuthorizarionController(getPageController(), ibanController, documentService,
+        memberService));
+    setDirectory();
+    sut.setup();
     doNothing().when(sut).closePDFViewer();
     setFile();
     setFileChooser();
@@ -60,6 +69,8 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
 
   @BeforeAll
   static void setup() {
+    documentService = mock(DocumentService.class);
+    memberService = mock(MemberService.class);
     fileChooser = mock(WrappedFileChooser.class);
     Resource r = new ClassPathResource("MachtigingsformulierSEPA.pdf");
     try {
@@ -97,4 +108,13 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionCont
       e.printStackTrace();
     }
   }
+  
+  private void setDirectory() {
+    try {
+      FieldUtils.writeField(sut, "sepaDirectory", "C:/temp", true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
 }
