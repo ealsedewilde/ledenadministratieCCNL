@@ -12,12 +12,8 @@ public enum PageName {
       "member/memberCancel"), MEMBER_CANCEL_MAIL("member/memberCancelMail"),
 
   WELCOME_TEXT_HELP(), REMINDER_TEXT_HELP(), MANAGE_TEMPLATE_TEXT_HELP(), MAIL_HELP(
-      "dialog/mailhelp"), MANAGE_MAIL_HELP("dialog/mailhelp"),
-
-  SEPA_AUTHORIZATION_ADD("document/sepaAuthorizationAdd"), SEPA_AUTHORIZATION_SHOW(
-      "document/sepaAuthorizationShow"), WELCOME_LETTER(
-          "member/welcomeLetter"), WELCOME_LETTER_SHOW(
-              "document/welcomeLetterShow"), ADD_IBAN_NUMBER("dialog/addIban"),
+      "dialog/mailhelp"), MANAGE_MAIL_HELP("dialog/mailhelp"), WELCOME_LETTER(
+          "member/welcomeLetter"), ADD_IBAN_NUMBER("dialog/addIban"),
 
   EXTERNAL_CLUB_SEARCH("club/externalClubSearch"), EXTERNAL_CLUB_FORM(
       "form/form"), EXTERNAL_CLUB_DELETE("club/externalClubDelete"),
@@ -31,8 +27,7 @@ public enum PageName {
   PARTNER_SEARCH("partner/partnerSearch"), PARTNER_FORM("form/form"), PARTNER_DELETE(
       "partner/partnerDelete"),
 
-  ADD_DOCUMENT("document/addDocument"), VIEW_DOCUMENTS(
-      "document/viewDocuments"), VIEW_DOCUMENT_SHOW("document/viewDocumentShow"),
+  ADD_DOCUMENT("document/addDocument"), VIEW_DOCUMENTS("document/viewDocuments"),
 
   MAGAZINE_ADDRESS_LIST("magazine/magazineAddressList"), MAGAZINE_INVALID_ADDRESS(
       "magazine/magazineInvalidAddress"),
@@ -42,9 +37,7 @@ public enum PageName {
           "dialog/directDebitMessages"), RECONCILE_PAYMENTS(
               "annual/reconcilePayments"), RECONCILE_MESSAGES(
                   "dialog/reconciliationMessages"), PAYMENT_REMINDER_LETTERS(
-                      "annual/paymentReminderLetters"), PAYMENT_REMINDER_LETTER_SHOW(
-                          "annual/paymentReminderLetterShow"), ANNUAL_ROLLOVER(
-                              "annual/annualRollover"),
+                      "annual/paymentReminderLetters"), ANNUAL_ROLLOVER("annual/annualRollover"),
 
 
   EXCEL_IMPORT("settings/excelImport"), TEMPLATES_OVERVIEW(

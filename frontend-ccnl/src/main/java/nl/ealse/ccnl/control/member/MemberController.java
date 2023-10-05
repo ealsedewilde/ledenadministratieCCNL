@@ -51,10 +51,6 @@ public class MemberController extends MemberView implements FormController {
 
   private MenuChoice currentMenuChoice;
 
-  /**
-   * 
-   */
-  @FXML
   private PDFViewer pdfViewer;
 
   @FXML
@@ -90,7 +86,7 @@ public class MemberController extends MemberView implements FormController {
 
   // Helper to detect changes in the iban owner
   private String savedName;
-  
+
   private MemberFormPages formPages;
 
   public MemberController(PageController pageController, MemberService service,
@@ -101,14 +97,17 @@ public class MemberController extends MemberView implements FormController {
     this.memberValidation = new MemberValidation(this);
     bindFxml();
   }
-  
+
   private void bindFxml() {
     pageController.loadPage(PageName.MEMBER_FORM, this);
     formPages = new MemberFormPages(this);
-    pageController.loadPage(PageName.SEPA_AUTHORIZATION_SHOW, this);
-    
+
     memberValidation.initialize();
     memberValidation.setCallback(valid -> saveButton.setDisable(!valid));
+
+    pdfViewer = PDFViewer.builder().withDeleteButton(e -> deletePDF())
+        .withPrintButton(e -> printPDF()).withCancelButton(e -> closePDF()).build();
+    pdfViewer.setWindowTitle("SEPA machtiging voor lid: %d (%s)");
   }
 
   @FXML
@@ -359,7 +358,7 @@ public class MemberController extends MemberView implements FormController {
   @Override
   public void validateForm() {
     memberValidation.validate();
-    
+
   }
 
 }

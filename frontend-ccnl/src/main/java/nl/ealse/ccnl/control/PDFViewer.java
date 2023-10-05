@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,13 +20,19 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.button.CancelButton;
+import nl.ealse.ccnl.control.button.DeleteButton;
+import nl.ealse.ccnl.control.button.PrintButton;
+import nl.ealse.ccnl.control.button.SaveButton;
 import nl.ealse.ccnl.control.exception.PDFViewerException;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -54,7 +62,6 @@ public class PDFViewer extends BorderPane {
   @Setter
   private Object windowTitle;
 
-
   private Label header;
 
   private Button prevButton;
@@ -70,10 +77,9 @@ public class PDFViewer extends BorderPane {
   @Getter
   private byte[] pdf;
 
-  public PDFViewer() {
+  private PDFViewer() {
     this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
         CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-    this.setPadding(new Insets(5, 0, 5, 0));
   }
 
   /**
@@ -139,7 +145,7 @@ public class PDFViewer extends BorderPane {
    * Initialize for a single page PDF
    */
   private void initializeSinglePage() {
-    setDimension(23, 80);
+    setDimension(23, 70);
     initializeScene();
 
     this.setRight(null);
@@ -148,10 +154,10 @@ public class PDFViewer extends BorderPane {
   }
 
   /**
-   * Initialize for a mult page PDF
+   * Initialize for a multi page PDF
    */
   private void initializeMultiPage() {
-    setDimension(141, 110);
+    setDimension(141, 100);
     initializeScene();
 
     nextButton = new PagingButton("\u00BB");
@@ -173,8 +179,13 @@ public class PDFViewer extends BorderPane {
     try {
       BufferedImage bufferedImage = renderer.renderImage(0);
       Region parent = (Region) getParent();
-      parent.setPrefWidth(bufferedImage.getWidth() + w);
-      parent.setPrefHeight(bufferedImage.getHeight() + h);
+      double width = bufferedImage.getWidth() + w;
+      parent.setMinWidth(width);
+      // for whatever reason need to set both min and max  height to resize properly
+      // Strangely enough it is not neceassary for the width
+      double height = bufferedImage.getHeight() + h;
+      parent.setMinHeight(height);
+      parent.setMaxHeight(height);
     } catch (IOException e) {
       log.error("Error first page", e);
       Thread.currentThread().interrupt();
@@ -248,5 +259,64 @@ public class PDFViewer extends BorderPane {
     }
 
   }
+  
+  public static Builder builder() {
+    return new Builder();
+  }
+  
+  /**
+   * Builder for PDFViewer.
+   */
+  public static class Builder {
+    
+    private PDFViewer instance = new PDFViewer();
+    private HBox buttons = new HBox();
+    
+    public Builder() {
+      VBox parent = new VBox();
+      parent.setPadding(new Insets(10.d));
+      parent.getChildren().add(instance);
+      buttons = new HBox();
+      buttons.setPadding(new Insets(10d, 0d, 0d, 0d));
+      buttons.setSpacing(20d);
+      parent.getChildren().add(buttons);
+    }
+    
+    public Builder withCancelButton(EventHandler<ActionEvent> handler) {
+      CancelButton cb = new CancelButton();
+      cb.setText("Sluiten");
+      addButton(cb, handler);
+      return this;
+    }
+    
+    public Builder withDeleteButton(EventHandler<ActionEvent> handler) {
+      addButton(new DeleteButton(), handler);
+      return this;
+    }
+    
+    public Builder withPrintButton(EventHandler<ActionEvent> handler) {
+      addButton(new PrintButton(), handler);
+      return this;
+    }
+    
+    public Builder withSaveButton(EventHandler<ActionEvent> handler) {
+      SaveButton sb = new SaveButton();
+      sb.setText("Toevoegen");
+      addButton(sb, handler);
+      return this;
+    }
+    
+    private void addButton(Button button, EventHandler<javafx.event.ActionEvent> handler) {
+      button.setOnAction(handler);
+      buttons.getChildren().add(button);
+    }
+
+    
+    public PDFViewer build() {
+      return instance;
+    }
+    
+  }
+  
 
 }

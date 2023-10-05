@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
+import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToFile;
 import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToPrint;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -106,10 +107,9 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderL
       Parent p = getPageWithFxController(sut, PageName.REMINDER_TEXT_HELP);
       when(pageController.loadPage(PageName.REMINDER_TEXT_HELP)).thenReturn(p);
       getPageWithFxController(sut, PageName.PAYMENT_REMINDER_LETTERS);
-      getPageWithoutFxController(sut, PageName.PAYMENT_REMINDER_LETTER_SHOW);
+      setPdfViewer();
       setFileChooser();
     } catch (FXMLMissingException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
@@ -117,6 +117,16 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderL
   private void setFileChooser() {
     try {
       FieldUtils.writeField(sut, "fileChooser", fileChooser, true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void setPdfViewer() {
+    PDFViewer pdfViewer = PDFViewer.builder().build();
+    pdfViewer.setWindowTitle("Herinneringsbrief voor lid: %d (%s)");
+    try {
+      FieldUtils.writeField(sut, "pdfViewer", pdfViewer, true);
     } catch (Exception e) {
       e.printStackTrace();
     }

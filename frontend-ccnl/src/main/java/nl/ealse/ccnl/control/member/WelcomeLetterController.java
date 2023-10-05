@@ -34,7 +34,6 @@ public class WelcomeLetterController extends DocumentTemplateController {
 
   private Member selectedMember;
 
-  @FXML
   private PDFViewer pdfViewer;
 
   public WelcomeLetterController(PageController pageController, DocumentService documentService) {
@@ -46,6 +45,9 @@ public class WelcomeLetterController extends DocumentTemplateController {
   @PostConstruct
   void setup() {
     pageController.loadPage(PageName.WELCOME_LETTER, this);
+    pdfViewer = PDFViewer.builder().withPrintButton(evt -> printPDF())
+        .withCancelButton(evt -> closePDF()).build();
+    pdfViewer.setWindowTitle("Welkomsbrief voor lid: %d (%s)");
   }
 
   @EventListener(condition = "#event.name('NEW_MEMBER')")

@@ -26,7 +26,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 /**
- * Supper class for all Controller that require a DocumentTemplate.
+ * Super class for all Controller that require a DocumentTemplate.
  * 
  * @author ealse
  *
@@ -86,7 +86,6 @@ public abstract class DocumentTemplateController {
         dialogScene = new Scene(textHelp, 550, 330);
         fileChooser =
             new WrappedFileChooser(pageController.getPrimaryStage(), templateContext.fileType);
-        pageController.loadPage(templateContext.pdfViewer, this);
       } else {
         dialogScene = new Scene(textHelp, 550, 100);
       }
@@ -157,15 +156,15 @@ public abstract class DocumentTemplateController {
    * @author ealse
    */
   public enum DocumentTemplateContext {
-    MEMBERSHIP_CANCELATION_MAIL(new DocumentTemplateContextData(PageName.MAIL_HELP, null, null,
+    MEMBERSHIP_CANCELATION_MAIL(new DocumentTemplateContextData(PageName.MAIL_HELP, null,
         DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL)),
     //
     PAYMENT_REMINDER(new DocumentTemplateContextData(PageName.REMINDER_TEXT_HELP,
-        PageName.PAYMENT_REMINDER_LETTER_SHOW, FileExtension.PDF,
+        FileExtension.PDF,
         DocumentTemplateType.PAYMENT_REMINDER)),
     //
     WELCOME_LETTER(new DocumentTemplateContextData(PageName.WELCOME_TEXT_HELP,
-        PageName.WELCOME_LETTER_SHOW, FileExtension.DOCX, DocumentTemplateType.WELCOME_LETTER));
+        FileExtension.DOCX, DocumentTemplateType.WELCOME_LETTER));
 
     final DocumentTemplateContextData data;
 
@@ -183,8 +182,6 @@ public abstract class DocumentTemplateController {
   private static class DocumentTemplateContextData {
     @NonNull
     final PageName helpPage;
-    @Nullable
-    final PageName pdfViewer;
     @Nullable
     final FileExtension fileType;
     @NonNull

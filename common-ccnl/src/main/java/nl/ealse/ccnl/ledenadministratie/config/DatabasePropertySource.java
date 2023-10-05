@@ -48,21 +48,22 @@ public class DatabasePropertySource extends PropertySource<Properties> {
    * DataSource to load properties from the SETTINGS database table.
    */
   private void initialize(final ConfigurableEnvironment environment) {
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
-    executorService.execute(() -> {
-      initializeDbLocation();
-      String userName = environment.getProperty("spring.datasource.username");
-      String url = environment.getProperty(PROP_DS_URL);
-      String driverClassName = environment.getProperty("spring.datasource.driverClassName");
-      DataSource ds = DataSourceBuilder.create().username(userName).url(url)
-          .driverClassName(driverClassName).build();
-      try {
-        load(ds);
-      } catch (SQLException e) {
-        log.warn("Error loading properties from the database");
-        initSql(ds);
-      }
-    });
+    try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+      executorService.execute(() -> {
+        initializeDbLocation();
+        String userName = environment.getProperty("spring.datasource.username");
+        String url = environment.getProperty(PROP_DS_URL);
+        String driverClassName = environment.getProperty("spring.datasource.driverClassName");
+        DataSource ds = DataSourceBuilder.create().username(userName).url(url)
+            .driverClassName(driverClassName).build();
+        try {
+          load(ds);
+        } catch (SQLException e) {
+          log.warn("Error loading properties from the database");
+          initSql(ds);
+        }
+      });
+    }
   }
 
   /**

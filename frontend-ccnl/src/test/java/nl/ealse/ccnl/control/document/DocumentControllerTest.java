@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
+import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -21,6 +22,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.FXMLMissingException;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -65,8 +67,7 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
   private void prepare() {
     try {
       getPageWithFxController(sut, PageName.VIEW_DOCUMENTS);
-      Parent p = getPageWithoutFxController(sut, PageName.VIEW_DOCUMENT_SHOW);
-      when(pageController.loadPage(PageName.VIEW_DOCUMENT_SHOW)).thenReturn(p);
+      setPdfViewer();
       TableRow<Document> row = new TableRow<>();
       row.setItem(document());
       when(mouseEvent.getSource()).thenReturn(row);
@@ -74,6 +75,17 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
       Assertions.fail(e.getMessage());
     }
   }
+  
+
+  private void setPdfViewer() {
+    PDFViewer pdfViewer = PDFViewer.builder().build();
+    try {
+      FieldUtils.writeField(sut, "pdfViewer", pdfViewer, true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
 
   @BeforeAll
   static void setup() {

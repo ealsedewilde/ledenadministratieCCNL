@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -35,7 +34,7 @@ public class SepaAuthorizarionController {
 
   @Value("${ccnl.directory.sepa:c:/temp}")
   private String sepaDirectory;
-  
+
   private final IbanController ibanController;
 
   private final PageController pageController;
@@ -44,7 +43,6 @@ public class SepaAuthorizarionController {
 
   private final MemberService service;
 
-  @FXML
   private PDFViewer pdfViewer;
 
   private Member selectedMember;
@@ -55,23 +53,26 @@ public class SepaAuthorizarionController {
 
   /**
    * ADD SEPA-authorization PDF to a member.
+   * 
    * @param pageController
    * @param ibanController - cpopup for adding iban-number to member
    * @param documentService
    * @param service
    */
-  public SepaAuthorizarionController(PageController pageController, IbanController ibanController, DocumentService documentService,
-      MemberService service) {
+  public SepaAuthorizarionController(PageController pageController, IbanController ibanController,
+      DocumentService documentService, MemberService service) {
     this.pageController = pageController;
     this.ibanController = ibanController;
     this.documentService = documentService;
     this.service = service;
   }
-  
+
   @PostConstruct
   void setup() {
-    pageController.loadPage(PageName.SEPA_AUTHORIZATION_ADD, this);
-    
+    pdfViewer = PDFViewer.builder().withSaveButton(e -> addSepaPDF())
+        .withPrintButton(e -> printSepaPDF()).withCancelButton(e -> closePDFViewer()).build();
+    pdfViewer.setWindowTitle("SEPA machtiging toevoegen bij lid: %d (%s)");
+
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), PDF, PNG);
     fileChooser.setInitialDirectory(new File(sepaDirectory));
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
+import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -84,8 +85,9 @@ class WelcomeLetterControllerTest extends FXMLBaseTest<WelcomeLetterController> 
       a.setCity("Plaats");
       MemberSeLectionEvent event = new MemberSeLectionEvent(controller, MenuChoice.NEW_MEMBER, m);
       controller.onApplicationEvent(event);
-      controller.showLetterExample();
+      setPdfViewer();
       setFileChooser();
+      controller.showLetterExample();
       controller.saveletter();
 
       controller.getAddSepa().setSelected(true);
@@ -105,8 +107,6 @@ class WelcomeLetterControllerTest extends FXMLBaseTest<WelcomeLetterController> 
     try {
       Parent h = getPageWithFxController(controller, PageName.WELCOME_TEXT_HELP);
       when(pageController.loadPage(PageName.WELCOME_TEXT_HELP)).thenReturn(h);
-      Parent s = getPageWithoutFxController(controller, PageName.WELCOME_LETTER_SHOW);
-      when(pageController.loadPage(PageName.WELCOME_LETTER_SHOW)).thenReturn(s);
       getPageWithoutFxController(controller, PageName.WELCOME_LETTER);
     } catch (FXMLMissingException e) {
       e.printStackTrace();
@@ -116,6 +116,16 @@ class WelcomeLetterControllerTest extends FXMLBaseTest<WelcomeLetterController> 
   private void setFileChooser() {
     try {
       FieldUtils.writeField(controller, "fileChooser", fileChooser, true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void setPdfViewer() {
+    PDFViewer pdfViewer = PDFViewer.builder().build();
+    pdfViewer.setWindowTitle("Welkosbrief voor lid: %d (%s)");
+    try {
+      FieldUtils.writeField(controller, "pdfViewer", pdfViewer, true);
     } catch (Exception e) {
       e.printStackTrace();
     }

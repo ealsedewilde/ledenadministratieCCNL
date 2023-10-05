@@ -8,6 +8,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.PDFViewer;
+import nl.ealse.ccnl.control.button.PrintButton;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -36,7 +37,6 @@ public class DocumentController {
   @FXML
   private TableView<Document> tableView;
 
-  @FXML
   private PDFViewer pdfViewer;
 
 
@@ -47,7 +47,9 @@ public class DocumentController {
 
   @PostConstruct
   void setup() {
-    pageController.loadPage(PageName.VIEW_DOCUMENT_SHOW, this);
+    pdfViewer = PDFViewer.builder().withPrintButton(evt -> printDocument())
+        .withDeleteButton(evt -> deleteDocument()).withCancelButton(evet -> closeDocument())
+        .build();
   }
 
   @EventListener(condition = "#event.name('VIEW_DOCUMENT')")
