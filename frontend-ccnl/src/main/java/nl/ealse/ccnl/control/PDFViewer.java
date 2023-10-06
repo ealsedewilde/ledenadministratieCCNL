@@ -130,23 +130,11 @@ public class PDFViewer extends BorderPane {
     pdfStage.close();
   }
 
-  private void initializeScene() {
-    if (scene == null) {
-      scene = new Scene(getParent());
-      pdfStage = new Stage();
-      pdfStage.initModality(Modality.APPLICATION_MODAL);
-      pdfStage.setAlwaysOnTop(true);
-      pdfStage.getIcons().add(ImagesMap.get("Citroen.png"));
-      pdfStage.setScene(scene);
-    }
-  }
-
   /**
    * Initialize for a single page PDF
    */
   private void initializeSinglePage() {
-    setDimension(23, 70);
-    initializeScene();
+    setDimension(23d, 70d);
 
     this.setRight(null);
     this.setLeft(null);
@@ -157,24 +145,15 @@ public class PDFViewer extends BorderPane {
    * Initialize for a multi page PDF
    */
   private void initializeMultiPage() {
-    setDimension(141, 100);
-    initializeScene();
+    setDimension(141d, 100d);
 
-    nextButton = new PagingButton("\u00BB");
-    nextButton.setOnAction(e -> nextPage());
     this.setRight(nextButton);
-    prevButton = new PagingButton("\u00AB");
-    prevButton.setOnAction(e -> previousPage());
-    prevButton.setDisable(true);
     this.setLeft(prevButton);
-
-    header = new Label();
-    header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-    BorderPane.setAlignment(header, Pos.CENTER);
     this.setTop(header);
+    prevButton.setDisable(true);
   }
 
-  private void setDimension(int w, int h) {
+  private void setDimension(double w, double h) {
     PDFRenderer renderer = new PDFRenderer(document);
     try {
       BufferedImage bufferedImage = renderer.renderImage(0);
@@ -260,6 +239,10 @@ public class PDFViewer extends BorderPane {
 
   }
   
+  /**
+   * Always obtain a PDFViewer via the builder pattern.
+   * @return
+   */
   public static Builder builder() {
     return new Builder();
   }
@@ -271,8 +254,11 @@ public class PDFViewer extends BorderPane {
     
     private PDFViewer instance = new PDFViewer();
     private HBox buttons = new HBox();
-    
     public Builder() {
+      initialize();
+    }
+    
+    public void initialize() {
       VBox parent = new VBox();
       parent.setPadding(new Insets(10.d));
       parent.getChildren().add(instance);
@@ -280,6 +266,21 @@ public class PDFViewer extends BorderPane {
       buttons.setPadding(new Insets(10d, 0d, 0d, 0d));
       buttons.setSpacing(20d);
       parent.getChildren().add(buttons);
+      
+      instance.scene = new Scene(parent);
+      instance.pdfStage = new Stage();
+      instance.pdfStage.initModality(Modality.APPLICATION_MODAL);
+      instance.pdfStage.setAlwaysOnTop(true);
+      instance.pdfStage.getIcons().add(ImagesMap.get("Citroen.png"));
+      instance.pdfStage.setScene(instance.scene);
+      
+      instance.nextButton = new PagingButton("\u00BB");
+      instance.nextButton.setOnAction(e -> instance.nextPage());
+      instance.prevButton = new PagingButton("\u00AB");
+      instance.prevButton.setOnAction(e -> instance.previousPage());
+      instance.header = new Label();
+      instance.header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+      BorderPane.setAlignment(instance.header, Pos.CENTER);
     }
     
     public Builder withCancelButton(EventHandler<ActionEvent> handler) {
@@ -317,6 +318,5 @@ public class PDFViewer extends BorderPane {
     }
     
   }
-  
 
 }

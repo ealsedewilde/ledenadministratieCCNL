@@ -139,7 +139,7 @@ public class AddressListController {
     @Setter
     protected File addressFile;
 
-    public FileTask(PageController pageController) {
+    protected FileTask(PageController pageController) {
       super(pageController);
     }
 

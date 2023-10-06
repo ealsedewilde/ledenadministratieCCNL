@@ -11,16 +11,12 @@ public class TemplateSelectionEvent extends ApplicationEvent {
   private final boolean newTemplate;
   
   @Getter
-  private final DocumentTemplate selectedTemplate;
+  private final transient DocumentTemplate selectedTemplate;
 
   public TemplateSelectionEvent(Object source, DocumentTemplate template, boolean newTemplate) {
     super(source);
     this.selectedTemplate = template;
     this.newTemplate = newTemplate;
-  }
-  
-  public boolean name(String... eventNames) {
-    return false;
   }
 
 }

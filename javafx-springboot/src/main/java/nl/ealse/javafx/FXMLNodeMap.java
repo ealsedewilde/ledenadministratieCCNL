@@ -39,13 +39,17 @@ public class FXMLNodeMap {
    */
   private static final Map<String, Parent> FXML_PAGES = new HashMap<>();
 
-  private static FXMLNodeMap INSTANCE;
+  private static FXMLNodeMap instance ;
 
   private final ApplicationContext springContext; // NOSONAR
 
   public FXMLNodeMap(ApplicationContext springContext) {
     this.springContext = springContext;
-    INSTANCE = this;
+    setInstance(this);
+  }
+  
+  private static void setInstance(FXMLNodeMap fnm) {
+    instance = fnm;
   }
 
   /**
@@ -63,7 +67,7 @@ public class FXMLNodeMap {
 
   public static Parent getPage(PageId id, Object root, Object controller)
       throws FXMLMissingException {
-    return INSTANCE.getFXML(id, root, controller);
+    return instance.getFXML(id, root, controller);
   }
 
   /**
@@ -103,8 +107,7 @@ public class FXMLNodeMap {
         fxmlLoader.setController(controller);
       }
       log.info(fxmlLoader.getLocation().toString());
-      Parent page = fxmlLoader.load();
-      return page;
+      return fxmlLoader.load();
     } catch (FileNotFoundException e) {
       log.error("Unknown page " + id.getFxmlName());
       throw new FXMLMissingException("Unknown page", id.getFxmlName());

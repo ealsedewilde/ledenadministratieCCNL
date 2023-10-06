@@ -1,10 +1,6 @@
 package nl.ealse.ccnl.control.external;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.form.FormController;
@@ -19,7 +15,7 @@ import nl.ealse.javafx.mapping.ViewModel;
  * Super class for all External relations.
  */
 public abstract class ExternalRelationController<T extends ExternalRelation>
-    extends ExternalRelationView implements FormController {
+    extends ExternalRelationView {
   private final PageController pageController;
 
   protected final ExternalRelationValidation externalRelationValidation;
@@ -33,37 +29,6 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
   protected T selectedExternalRelation;
 
   protected MenuChoice currentMenuChoice;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formMenu;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formPage;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formButtons;
-
-  @FXML
-  protected Label headerText;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Button nextButton;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Button previousButton;
-
-  @FXML
-  private Button saveButton;
 
   protected ExternalRelationController(PageController pageController,
       ExternalRelationService<T> externalRelationService) {
@@ -98,12 +63,23 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
     pageController.activateLogoPage();
   }
 
+  @FXML
+  public void nextPage() {
+    getFormPages().setActiveFormPage(getFormPages().getCurrentPage() + 1);
+  }
+
+  @FXML
+  public void previousPage() {
+    getFormPages().setActiveFormPage(getFormPages().getCurrentPage() - 1);
+  }
+
   protected abstract String getSaveText();
 
-  protected abstract String getHeaderText();
+  protected abstract String getHeaderTextValue();
 
-  protected abstract FormPages getFormPages();
+  protected abstract <F extends FormPages<FormController>> F getFormPages();
 
+  @Override
   public void validateForm() {
     externalRelationValidation.validate();
   }

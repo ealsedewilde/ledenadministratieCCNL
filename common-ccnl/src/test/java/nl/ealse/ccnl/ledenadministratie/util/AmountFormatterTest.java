@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +17,7 @@ class AmountFormatterTest {
     try {
       double result = AmountFormatter.parse("€ 27,50");
       Assertions.assertEquals(27.5, result);
-    } catch (ParseException e) {
+    } catch (NumberFormatException e) {
       Assertions.fail(e.getMessage());
     }
     

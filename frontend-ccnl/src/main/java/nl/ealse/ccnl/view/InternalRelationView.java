@@ -9,7 +9,7 @@ import lombok.Getter;
 import nl.ealse.javafx.mapping.Mapping;
 
 @Getter
-public class InternalRelationView extends AddressView {
+public abstract class InternalRelationView extends AddressView {
 
   @FXML
   private ChoiceBox<String> title;

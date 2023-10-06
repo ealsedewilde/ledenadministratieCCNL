@@ -31,7 +31,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class PageController {
 
-  private static final PageId LOGO = new PageId("LOGO", "logo");
+  private static final PageId LOGO_ID = new PageId("LOGO", "logo");
 
   private final FXMLNodeMap fxmlNodeMap;
 
@@ -59,7 +59,7 @@ public class PageController {
   }
 
   public void activateLogoPage() {
-    Parent page = loadPage(LOGO, null);
+    Parent page = loadPage(LOGO_ID, null);
     mainPage.setCenter(page);
   }
 

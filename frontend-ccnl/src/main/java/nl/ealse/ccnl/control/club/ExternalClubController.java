@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.club;
 
-import javafx.fxml.FXML;
 import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -39,21 +38,11 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
     this.currentMenuChoice = event.getMenuChoice();
     this.selectedExternalRelation = event.getSelectedEntity();
     this.model = new ExternalRelationClub();
-    headerText.setText(getHeaderText());
+    headerText.setText(getHeaderTextValue());
     reset();
   }
 
-  @FXML
-  void nextPage() {
-    formPages.setActiveFormPage(formPages.getCurrentPage() + 1);
-  }
-
-  @FXML
-  void previousPage() {
-    formPages.setActiveFormPage(formPages.getCurrentPage() - 1);
-  }
-
-  protected String getHeaderText() {
+  protected String getHeaderTextValue() {
     switch (currentMenuChoice) {
       case NEW_EXTERNAL_CLUB:
         return "Club opvoeren";

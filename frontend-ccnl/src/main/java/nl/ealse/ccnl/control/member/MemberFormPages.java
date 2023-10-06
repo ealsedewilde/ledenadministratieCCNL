@@ -16,13 +16,13 @@ public class MemberFormPages extends FormPages<MemberController> {
   }
 
   private void initialize(MemberController controller) {
-    // initialize the 4 pages of the form;
-    formPages[0] =
+    // initialize the 4 pages of the form.
+    formPageArray[0] =
         new FormPane(new PageId("MEMBER_PERSONAL", "member/form/pagePersonal"), controller);
-    formPages[1] = new FormPane(new PageId("MEMBER_ADDRESS", "form/address"), controller);
-    formPages[2] =
+    formPageArray[1] = new FormPane(new PageId("MEMBER_ADDRESS", "form/address"), controller);
+    formPageArray[2] =
         new FormPane(new PageId("MEMBER_FINANCIAL", "member/form/pageFinancial"), controller);
-    formPages[3] =
+    formPageArray[3] =
         new FormPane(new PageId("MEMBER_EXTRA_INFO", "member/form/pageExtraInfo"), controller);
 
     // initialize the submenu for form nsvigation.
@@ -33,15 +33,12 @@ public class MemberFormPages extends FormPages<MemberController> {
   }
   
   public Pane getThirdPage() {
-    return formPages[3];
+    return formPageArray[3];
   }
 
   @Override
   protected void setFocus(int pageIndex) {
     switch (pageIndex) {
-      default:
-        controller.getInitials().requestFocus();
-        break;
       case 1:
         controller.getStreet().requestFocus();
         break;
@@ -50,6 +47,9 @@ public class MemberFormPages extends FormPages<MemberController> {
         break;
       case 3:
         controller.getMemberInfo().requestFocus();
+        break;
+      default:
+        controller.getInitials().requestFocus();
         break;
     }
 

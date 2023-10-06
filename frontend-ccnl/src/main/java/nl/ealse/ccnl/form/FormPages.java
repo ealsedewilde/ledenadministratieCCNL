@@ -13,7 +13,7 @@ public abstract class FormPages<C extends FormController> {
 
   private final Hyperlink[] links;
   private final Label[] labels;
-  protected final FormPane[] formPages;
+  protected final FormPane[] formPageArray;
 
   protected final C controller;
 
@@ -27,12 +27,12 @@ public abstract class FormPages<C extends FormController> {
    * @param numberOfPages of a form
    * @param controller of the form
    */
-  public FormPages(int numberOfPages, C controller) {
+  protected FormPages(int numberOfPages, C controller) {
     this.controller = controller;
     this.maxPageIndex = numberOfPages - 1;
     this.links = new Hyperlink[numberOfPages];
     this.labels = new Label[numberOfPages];
-    this.formPages = new FormPane[numberOfPages];
+    this.formPageArray = new FormPane[numberOfPages];
   }
 
   /**
@@ -44,7 +44,7 @@ public abstract class FormPages<C extends FormController> {
     resetFormMenu();
     controller.getFormMenu().getChildren().set(pageIndex + 1, labels[pageIndex]);
     handleButtons(pageIndex);
-    controller.getFormPage().getChildren().set(1, formPages[pageIndex]);
+    controller.getFormPage().getChildren().set(1, formPageArray[pageIndex]);
     setFocus(pageIndex);
     currentPage = pageIndex;
   }

@@ -5,9 +5,6 @@ import java.util.StringJoiner;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import lombok.Getter;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.SearchController;
@@ -16,7 +13,6 @@ import nl.ealse.ccnl.control.menu.MenuController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
-import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
@@ -24,7 +20,6 @@ import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberView;
-import nl.ealse.javafx.mapping.Mapping;
 import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
@@ -32,7 +27,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MemberController extends MemberView implements FormController {
+public class MemberController extends MemberView {
 
   private final PageController pageController;
 
@@ -52,37 +47,6 @@ public class MemberController extends MemberView implements FormController {
   private MenuChoice currentMenuChoice;
 
   private PDFViewer pdfViewer;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formMenu;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formPage;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formButtons;
-
-  @FXML
-  private Label headerText;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Button nextButton;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Button previousButton;
-
-  @FXML
-  private Button saveButton;
 
   // Helper to detect changes in the iban owner
   private String savedName;
@@ -153,7 +117,7 @@ public class MemberController extends MemberView implements FormController {
     this.model = new Member();
     getIbanNumber().textProperty()
         .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
-    headerText.setText(getHeaderText());
+    headerText.setText(getHeaderTextValue());
   }
 
 
@@ -284,7 +248,7 @@ public class MemberController extends MemberView implements FormController {
     formPages.setActiveFormPage(formPages.getCurrentPage() - 1);
   }
 
-  private String getHeaderText() {
+  private String getHeaderTextValue() {
     switch (currentMenuChoice) {
       case NEW_MEMBER:
         return "Nieuw Lid opvoeren";

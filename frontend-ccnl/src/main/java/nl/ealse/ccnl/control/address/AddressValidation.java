@@ -16,6 +16,7 @@ public class AddressValidation extends CompositeValidator {
   /**
    * Initialize this validation with the JavaFX controls.
    */
+  @Override
   public void initialize() {
     required(addressController.getStreet(), addressController.getStreetE());
     AddressNumberValidator addressNumberValidator = new AddressNumberValidator(

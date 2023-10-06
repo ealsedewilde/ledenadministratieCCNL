@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.member;
 
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.Label;

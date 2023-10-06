@@ -20,7 +20,7 @@ import nl.ealse.javafx.util.ContentUpdate;
 
 @Getter
 @Setter
-public class MemberView extends AddressView {
+public abstract class MemberView extends AddressView {
 
   @FXML
   private Label memberNumber;

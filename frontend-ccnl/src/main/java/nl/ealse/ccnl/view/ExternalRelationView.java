@@ -10,7 +10,7 @@ import nl.ealse.javafx.mapping.Mapping;
 import nl.ealse.javafx.util.ContentUpdate;
 
 @Getter
-public class ExternalRelationView extends AddressView {
+public abstract class ExternalRelationView extends AddressView {
 
   @FXML
   private Label relationNumber;

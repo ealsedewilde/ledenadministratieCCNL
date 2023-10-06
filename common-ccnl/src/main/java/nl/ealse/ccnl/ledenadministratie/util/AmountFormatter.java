@@ -3,7 +3,6 @@ package nl.ealse.ccnl.ledenadministratie.util;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -26,13 +25,12 @@ public class AmountFormatter {
   }
   
   /**
-   * The String amount from the database seems somestimes have
+   * The String amount from the database seems sometimes have
    * a problem with the decimal separator when using a DecimalFormat.
    * @param amount
    * @return
-   * @throws ParseException
    */
-  public double parse(String amount) throws ParseException {
+  public double parse(String amount) throws NumberFormatException {
     StringBuilder sb = new StringBuilder();
     for (char c : amount.toCharArray()) {
       if (Character.isDigit(c)) {

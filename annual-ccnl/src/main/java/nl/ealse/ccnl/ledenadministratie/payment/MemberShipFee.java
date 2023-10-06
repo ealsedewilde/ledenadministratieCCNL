@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.ledenadministratie.payment;
 
-import java.text.ParseException;
 import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +20,7 @@ public class MemberShipFee {
   private double toDouble(String bedrag) {
     try {
       return AmountFormatter.parse(bedrag);
-    } catch (ParseException e) {
+    } catch (NumberFormatException e) {
       throw new PaymentException("ongeldig bedrag " + bedrag, e);
     }
     

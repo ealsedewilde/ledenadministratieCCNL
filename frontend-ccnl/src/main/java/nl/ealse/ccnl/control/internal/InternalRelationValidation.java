@@ -11,6 +11,7 @@ public class InternalRelationValidation extends AddressValidation {
     this.controller = controller;
   }
 
+  @Override
   public void initialize() {
     required(controller.getContactName(), controller.getContactNameE());
     super.initialize();

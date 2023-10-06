@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationEvent;
 public class SettingSelectionEvent extends ApplicationEvent {
   
   @Getter
-  private final Setting selectedSetting;
+  private final transient Setting selectedSetting;
 
   public SettingSelectionEvent(Object source, Setting setting) {
     super(source);

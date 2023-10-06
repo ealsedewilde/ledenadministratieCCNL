@@ -13,6 +13,7 @@ public class MemberValidation extends AddressValidation {
     this.controller = controller;
   }
 
+  @Override
   public void initialize() {
     IbanNumberValidator ddValidator = new IbanNumberValidator(controller.getPaymentMethod(),
         controller.getIbanNumber(), controller.getIbanNumberE());

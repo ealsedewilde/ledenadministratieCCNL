@@ -13,6 +13,7 @@ public class ExternalRelationValidation extends AddressValidation {
     this.controller = controller;
   }
 
+  @Override
   public void initialize() {
     required(controller.getRelationName(), controller.getRelationNameE());
     required(controller.getContactName(), controller.getContactNameE());

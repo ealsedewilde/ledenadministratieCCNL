@@ -40,7 +40,7 @@ class DataMapperTest  extends FXBase {
   }
 
   private MemberView initializedForm() {
-    MemberView form = new MemberView();
+    MemberView form = new MemberViewImpl();
     //injectAddressController(form);
     form.setStreet(new TextField("Helena Hoeve"));
     form.setAddressNumber(new TextField("26"));
@@ -90,6 +90,10 @@ class DataMapperTest  extends FXBase {
     member.setTelephoneNumber("06-123456789");
 
     return member;
+  }
+  
+  private static class MemberViewImpl extends MemberView {
+    
   }
 
 }

@@ -15,9 +15,9 @@ public class InternalRelationFormpages extends FormPages<InternalRelationControl
   }
   
   private void initialize(InternalRelationController controller) {
-    formPages[0] =
+    formPageArray[0] =
         new FormPane(new PageId("INTERNAL_RELATION", "internal/form/pageRelation"), controller);
-    formPages[1] = new FormPane(new PageId("INTERNAL_ADDRESS", "form/address"), controller);
+    formPageArray[1] = new FormPane(new PageId("INTERNAL_ADDRESS", "form/address"), controller);
 
     // initialize the submenu for form nsvigation.
     addMenuItem(0, "Functiegegevens");

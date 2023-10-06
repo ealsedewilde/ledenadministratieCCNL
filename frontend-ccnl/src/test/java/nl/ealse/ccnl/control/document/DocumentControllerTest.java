@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.scene.Parent;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.PDFViewer;

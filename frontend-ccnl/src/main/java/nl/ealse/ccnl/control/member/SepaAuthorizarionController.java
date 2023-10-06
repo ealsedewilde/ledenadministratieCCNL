@@ -2,7 +2,6 @@ package nl.ealse.ccnl.control.member;
 
 import static nl.ealse.javafx.util.WrappedFileChooser.FileExtension.PDF;
 import static nl.ealse.javafx.util.WrappedFileChooser.FileExtension.PNG;
-
 import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;

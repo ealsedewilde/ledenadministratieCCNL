@@ -108,7 +108,7 @@ public class SepaDirectDebitService {
         String amount = prop.getValue().substring(--ix);
          try {
           a.setValue(BigDecimal.valueOf(AmountFormatter.parse(amount)));
-        } catch (ParseException nfe) {
+        } catch (NumberFormatException nfe) {
           result.setValid(false);
           result.setErrorMessage(String.format("'%s' kan niet worden omgezet naar een bedrag", amount));
         }

@@ -3,26 +3,20 @@ package nl.ealse.ccnl.control.internal;
 import java.util.Arrays;
 import java.util.List;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import lombok.Getter;
-import nl.ealse.ccnl.control.button.SaveButton;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
-import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationView;
-import nl.ealse.javafx.mapping.Mapping;
 import nl.ealse.javafx.mapping.ViewModel;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class InternalRelationController extends InternalRelationView implements FormController {
+public class InternalRelationController extends InternalRelationView {
   private final PageController pageController;
 
   private final InternalRelationValidation internalRelationValidation;
@@ -34,38 +28,6 @@ public class InternalRelationController extends InternalRelationView implements 
   private InternalRelation selectedInternalRelation;
 
   private MenuChoice currentMenuChoice;
-
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formMenu;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formPage;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Pane formButtons;
-
-  @FXML
-  private Label headerText;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Button nextButton;
-
-  @FXML
-  @Getter
-  @Mapping(ignore = true)
-  private Button previousButton;
-
-  @FXML
-  private SaveButton saveButton;
 
   private InternalRelationFormpages formPages;
 
@@ -91,7 +53,7 @@ public class InternalRelationController extends InternalRelationView implements 
     this.currentMenuChoice = event.getMenuChoice();
     pageController.setActivePage(PageName.INTERNAL_RELATION_FORM);
     formPages.setActiveFormPage(0);
-    headerText.setText(getHeaderText());
+    headerText.setText(getHeaderTextValue());
     this.selectedInternalRelation = event.getSelectedEntity();
     this.model = new InternalRelation();
     if (event.getMenuChoice() == MenuChoice.NEW_INTERNAL_RELATION) {
@@ -154,7 +116,7 @@ public class InternalRelationController extends InternalRelationView implements 
     formPages.setActiveFormPage(formPages.getCurrentPage() - 1);
   }
 
-  private String getHeaderText() {
+  private String getHeaderTextValue() {
     switch (currentMenuChoice) {
       case NEW_INTERNAL_RELATION:
         return "Interne functie opvoeren";

@@ -9,10 +9,10 @@ import nl.ealse.ccnl.ledenadministratie.payment.MemberShipFee;
 
 public final class FilterChain {
   private final List<Filter> filters = new ArrayList<>();
-  private final LidnummerFilter LidnummerFilter;
+  private final LidnummerFilter lidnummerFilter;
 
   public FilterChain(List<Member> members, LocalDate referenceDate, MemberShipFee memberShipFee) {
-    LidnummerFilter = new LidnummerFilter(members);
+    lidnummerFilter = new LidnummerFilter(members);
     filters.add(new PeildatumFilter(referenceDate));
     filters.add(new BedragFilter(memberShipFee));
     filters.add(new BoekingTypeFilter());
@@ -24,7 +24,7 @@ public final class FilterChain {
         return false;
       }
     }
-    LidnummerFilter.doFilter(booking);
+    lidnummerFilter.doFilter(booking);
     return true;
   }
 

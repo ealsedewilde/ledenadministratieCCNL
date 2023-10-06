@@ -36,10 +36,10 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
 
     service = mock(MemberService.class);
     documentService = mock(DocumentService.class);
-    controller = new MemberController(getPageController(), service, documentService);
     final AtomicBoolean ar = new AtomicBoolean();
     m = getMember();
     AtomicBoolean result = runFX(() -> {
+      controller = new MemberController(getPageController(), service, documentService);
       prepare();
       doTest();
       testFormPages();
@@ -128,7 +128,7 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     }
     
     public  FormPane[] getFormPages() {
-      return formPages;
+      return formPageArray;
     }
     
   }

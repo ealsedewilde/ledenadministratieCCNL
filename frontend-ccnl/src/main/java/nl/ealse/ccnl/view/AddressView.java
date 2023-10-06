@@ -5,13 +5,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.mappers.InvalidAddressMapper;
 import nl.ealse.javafx.mapping.Mapping;
 import nl.ealse.javafx.util.ContentUpdate;
 
 @Getter
 @Setter
-public class AddressView {
+public abstract class AddressView extends FormController {
 
   @FXML
   private TextField street;
@@ -59,8 +60,8 @@ public class AddressView {
     ContentUpdate.firstCapital(getStreet());
     ContentUpdate.firstCapital(getCity());
 
-   String country = getCountry().getText();
-    if ((country == null || country.isEmpty())) {
+    String countryText = getCountry().getText();
+    if ((countryText == null || countryText.isEmpty())) {
       ContentUpdate.formatPostalCode(getPostalCode());
     } else {
       ContentUpdate.firstCapital(getCountry());
