@@ -6,11 +6,16 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 /**
  * Control the form pages for an external relation.
  */
-public class ExternalOtherFormpages extends ExternalRelationFormPages<ExternalRelationOther, ExternalOtherController> {
+public class ExternalOtherFormpages
+    extends ExternalRelationFormPages<ExternalRelationOther, ExternalOtherController> {
 
   public ExternalOtherFormpages(ExternalOtherController controller) {
     super(controller);
-    initialize(controller, "external/form/pageRelation");
+  }
+
+  @Override
+  protected void initializePages() {
+    initialize("external/form/pageRelation", "Relatiegegevens");
   }
 
 }

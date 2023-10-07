@@ -1,23 +1,66 @@
 package nl.ealse.ccnl.form;
 
 import java.util.List;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import lombok.Getter;
+import nl.ealse.ccnl.validation.CompositeValidator;
+import nl.ealse.javafx.FXMLMissingException;
+import nl.ealse.javafx.FXMLNodeMap;
+import nl.ealse.javafx.mapping.Mapping;
 
 /**
  * Helper to control the various pages of a form.
  */
-public abstract class FormPages<C extends FormController> {
+public abstract class FormPages {
+
+  @FXML
+  private Pane formMenu;
+
+  @FXML
+  private Pane formPage;
+
+  @FXML
+  private Pane formButtons;
+
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  protected Label headerText;
+
+  @FXML
+  private Button nextButton;
+
+  @FXML
+  private Button previousButton;
+
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  protected Button saveButton;
+
+  @FXML
+  @Getter
+  @Mapping(ignore = true)
+  protected Button undoButton;
 
   private final Hyperlink[] links;
   private final Label[] labels;
   protected final FormPane[] formPageArray;
 
-  protected final C controller;
-
   @Getter
+  private final CompositeValidator validator;
+  
+  @Getter
+  private Parent form;
+
   private int currentPage;
 
   private final int maxPageIndex;
@@ -27,12 +70,27 @@ public abstract class FormPages<C extends FormController> {
    * @param numberOfPages of a form
    * @param controller of the form
    */
-  protected FormPages(int numberOfPages, C controller) {
-    this.controller = controller;
+  protected FormPages(int numberOfPages, CompositeValidator validator) {
+    this.validator = validator;
     this.maxPageIndex = numberOfPages - 1;
     this.links = new Hyperlink[numberOfPages];
     this.labels = new Label[numberOfPages];
     this.formPageArray = new FormPane[numberOfPages];
+  }
+  
+  public void initializeForm() throws FXMLMissingException {
+    this.form = FXMLNodeMap.getPage("form/form", null, this);
+    initializePages();
+    validator.initialize();
+    validator.setCallback(valid -> saveButton.setDisable(!valid));
+  }
+  
+  public void setOnSave(EventHandler<ActionEvent> handler) {
+    saveButton.setOnAction(handler);
+  }
+  
+  public void setOnReset(EventHandler<ActionEvent> handler) {
+    undoButton.setOnAction(handler);
   }
 
   /**
@@ -40,48 +98,59 @@ public abstract class FormPages<C extends FormController> {
    * @param pageIndex
    */
   public void setActiveFormPage(int pageIndex) {
-    controller.validateForm();
+    validator.validate();
     resetFormMenu();
-    controller.getFormMenu().getChildren().set(pageIndex + 1, labels[pageIndex]);
+    formMenu.getChildren().set(pageIndex + 1, labels[pageIndex]);
     handleButtons(pageIndex);
-    controller.getFormPage().getChildren().set(1, formPageArray[pageIndex]);
+    formPage.getChildren().set(1, formPageArray[pageIndex]);
     setFocus(pageIndex);
     currentPage = pageIndex;
   }
 
+  @FXML
+  public void nextPage() {
+    setActiveFormPage(currentPage + 1);
+  }
+
+  @FXML
+  public void previousPage() {
+    setActiveFormPage(currentPage - 1);
+  }
+
   private void resetFormMenu() {
-    List<Node> menuItems = controller.getFormMenu().getChildren();
+    List<Node> menuItems = formMenu.getChildren();
     for (int ix = 0; ix < links.length; ix++) {
       menuItems.set(ix + 1, links[ix]);
     }
   }
   
   private void handleButtons(int pageIndex) {
-    List<Node> buttons = controller.getFormButtons().getChildren();
+    List<Node> buttons = formButtons.getChildren();
     if (pageIndex == maxPageIndex) {
-      buttons.remove(controller.getNextButton());
-    } else if (!buttons.contains(controller.getNextButton())) {
-      buttons.add(1, controller.getNextButton());
+      buttons.remove(nextButton);
+    } else if (!buttons.contains(nextButton)) {
+      buttons.add(1, nextButton);
     }
     if (pageIndex == 0) {
-      buttons.remove(controller.getPreviousButton());
-    } else if (!buttons.contains(controller.getPreviousButton())) {
-      buttons.add(0, controller.getPreviousButton());
+      buttons.remove(previousButton);
+    } else if (!buttons.contains(previousButton)) {
+      buttons.add(0, previousButton);
     }
   }
-
 
   protected void addMenuItem(int index, String text) {
     Hyperlink link = new Hyperlink();
     link.setText(text);
     link.setOnAction(evt -> setActiveFormPage(index));
-    controller.getFormMenu().getChildren().add(link);
+    formMenu.getChildren().add(link);
     links[index] = link;
 
     Label label = new Label();
     label.setText(text);
     labels[index] = label;
   }
+  
+  protected abstract void initializePages();
 
   protected abstract void setFocus(int pageIndex);
 

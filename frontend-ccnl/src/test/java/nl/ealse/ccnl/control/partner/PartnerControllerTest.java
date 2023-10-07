@@ -24,6 +24,7 @@ class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
   @Test
   void testController() {
     sut = new PartnerController(getPageController(), service);
+    sut.setup();
     partner = externalRelationPartner();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -40,8 +41,8 @@ class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
     sut.save();
     verify(getPageController()).showMessage("Partnergegevens opgeslagen");
 
-    sut.nextPage();
-    sut.previousPage();
+    sut.getFormPages().nextPage();
+    sut.getFormPages().previousPage();
   }
 
   @BeforeAll

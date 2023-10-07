@@ -24,6 +24,7 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
   @Test
   void testController() {
     sut = new ExternalOtherController(getPageController(), service);
+    sut.setup();
     relation = externalRelationOther();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -41,8 +42,8 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
     sut.save();
     verify(getPageController()).showMessage("Externe relatie opgeslagen");
 
-    sut.nextPage();
-    sut.previousPage();
+    sut.getFormPages().nextPage();
+    sut.getFormPages().previousPage();
   }
 
   @BeforeAll

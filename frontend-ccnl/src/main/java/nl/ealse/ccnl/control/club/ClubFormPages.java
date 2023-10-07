@@ -6,11 +6,16 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 /**
  * Control the form pages for an external club.
  */
-public class ClubFormPages extends ExternalRelationFormPages<ExternalRelationClub, ExternalClubController> {
+public class ClubFormPages
+    extends ExternalRelationFormPages<ExternalRelationClub, ExternalClubController> {
 
   public ClubFormPages(ExternalClubController controller) {
     super(controller);
-    initialize(controller, "club/form/pageClub");
+  }
+
+  @Override
+  protected void initializePages() {
+    initialize("club/form/pageClub", "Clubgegevens");
   }
 
 }

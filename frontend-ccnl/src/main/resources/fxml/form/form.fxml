@@ -38,8 +38,8 @@
 		          <children>
 		            <NextPageButton fx:id="nextButton" onAction="#nextPage" />
 		            <PreviousPageButton  fx:id="previousButton" onAction="#previousPage" />
-		            <SaveButton fx:id="saveButton" disable="true" onAction="#save"/>
-		            <UndoButton onAction="#reset" />
+		            <SaveButton fx:id="saveButton" disable="true"/>
+		            <UndoButton fx:id="undoButton"/>
 		          </children>
 		        </HBox>
 					</children>

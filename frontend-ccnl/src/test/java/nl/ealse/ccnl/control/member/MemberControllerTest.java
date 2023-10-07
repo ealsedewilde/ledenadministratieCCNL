@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.form.FormPages;
 import nl.ealse.ccnl.form.FormPane;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
@@ -17,6 +18,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -28,7 +30,7 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
   private MemberService service;
 
   private MemberController controller;
-  private TestFormPages formPages;
+  private FormPages formPages;
   private Member m;
 
   @Test
@@ -40,6 +42,8 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     m = getMember();
     AtomicBoolean result = runFX(() -> {
       controller = new MemberController(getPageController(), service, documentService);
+      controller.setup();
+      formPages = getFormPages();
       prepare();
       doTest();
       testFormPages();
@@ -50,8 +54,8 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
   }
   
    void testFormPages() {
-   formPages = new TestFormPages(controller);
-    FormPane[] formPanes = formPages.getFormPages();
+    formPages = getFormPages();
+    FormPane[] formPanes = getFormPanes();
     Assertions.assertNotNull(formPanes[3]);
   }
 
@@ -64,12 +68,12 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     MemberSeLectionEvent event = new MemberSeLectionEvent(controller, MenuChoice.AMEND_MEMBER, m);
     controller.amendMember(event);
     fillIbanNumber();
-    controller.nextPage();
-    controller.nextPage();
-    controller.nextPage();
-    controller.previousPage();
-    controller.previousPage();
-    controller.previousPage();
+    formPages.nextPage();
+    formPages.nextPage();
+    formPages.nextPage();
+    formPages.previousPage();
+    formPages.previousPage();
+    formPages.previousPage();
     controller.save();
     verify(service).persistMember(any(Member.class));
 
@@ -120,18 +124,24 @@ class MemberControllerTest extends FXMLBaseTest<MemberController> {
     controller.getIbanNumber().setText("foo");
   }
   
-  
-  private static class TestFormPages extends MemberFormPages {
-
-    public TestFormPages(MemberController controller) {
-      super(controller);
+  private FormPages getFormPages() {
+    try {
+      return (FormPages) FieldUtils.readField(controller, "formPages", true);
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
     }
-    
-    public  FormPane[] getFormPages() {
-      return formPageArray;
-    }
-    
+    return null;
   }
+  
+  private FormPane[] getFormPanes() {
+    try {
+      return (FormPane[]) FieldUtils.readField(formPages, "formPageArray", true);
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
 
 
 

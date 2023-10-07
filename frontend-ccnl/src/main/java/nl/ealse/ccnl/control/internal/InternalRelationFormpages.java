@@ -6,14 +6,17 @@ import nl.ealse.ccnl.form.FormPane;
 /**
  * Control the form pages for an internal relation.
  */
-public class InternalRelationFormpages extends FormPages<InternalRelationController> {
+public class InternalRelationFormpages extends FormPages {
+  
+  private final InternalRelationController controller;
 
   public InternalRelationFormpages(InternalRelationController controller) {
-    super(2, controller);
-    initialize(controller);
+    super(2, new InternalRelationValidation(controller));
+    this.controller = controller;
   }
   
-  private void initialize(InternalRelationController controller) {
+  @Override
+  protected void initializePages() {
     formPageArray[0] =
         new FormPane("internal/form/pageRelation", controller);
     formPageArray[1] = new FormPane("form/address", controller);

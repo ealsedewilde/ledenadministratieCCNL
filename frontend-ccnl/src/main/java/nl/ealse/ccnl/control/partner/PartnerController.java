@@ -1,12 +1,14 @@
 package nl.ealse.ccnl.control.partner;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.javafx.FXMLMissingException;
+import nl.ealse.javafx.mapping.Mapping;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -21,24 +23,28 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
       ExternalRelationService<ExternalRelationPartner> partnerService) {
     super(pageController, partnerService);
     this.pageController = pageController;
-    bindFxml();
   }
 
-  private void bindFxml() {
-    pageController.loadPage(PageName.PARTNER_FORM, this);
+  @PostConstruct
+  void setup() {
     formPages = new PartnerFormPages(this);
-    
-    initializeValidation();
+    try {
+      formPages.initializeForm();
+      formPages.setOnSave(e -> save());
+      formPages.setOnReset(e -> reset());
+    } catch (FXMLMissingException e) {
+      pageController.showErrorMessage(e.getMessage());
+    }
   }
 
   @EventListener(condition = "#event.name('NEW_PARTNER','AMEND_PARTNER')")
   public void handlePartner(PartnerSelectionEvent event) {
-    pageController.setActivePage(PageName.PARTNER_FORM);
+    pageController.setActivateFormPage(formPages.getForm());
     formPages.setActiveFormPage(0);
     this.selectedExternalRelation = event.getSelectedEntity();
     this.model = new ExternalRelationPartner();
     this.currentMenuChoice = event.getMenuChoice();
-    headerText.setText(getHeaderTextValue());
+    formPages.getHeaderText().setText(getHeaderTextValue());
     reset();
   }
 

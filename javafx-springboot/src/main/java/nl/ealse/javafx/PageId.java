@@ -12,8 +12,6 @@ import lombok.Getter;
 @Getter
 public class PageId {
 
-  private static final String FXML_TYPE = ".fxml";
-
   /**
    * Unique id for a page in the application.
    */
@@ -26,7 +24,7 @@ public class PageId {
 
   public PageId(String pagekey, String fxmlName) {
     this.pagekey = pagekey;
-    this.fxmlName = fxmlName + FXML_TYPE;
+    this.fxmlName = fxmlName;
   }
 
 }

@@ -5,14 +5,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
-import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.mappers.InvalidAddressMapper;
 import nl.ealse.javafx.mapping.Mapping;
 import nl.ealse.javafx.util.ContentUpdate;
 
 @Getter
 @Setter
-public abstract class AddressView extends FormController {
+public abstract class AddressView {
 
   @FXML
   private TextField street;

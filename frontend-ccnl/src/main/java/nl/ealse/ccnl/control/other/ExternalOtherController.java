@@ -1,12 +1,14 @@
 package nl.ealse.ccnl.control.other;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.javafx.FXMLMissingException;
+import nl.ealse.javafx.mapping.Mapping;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -21,24 +23,28 @@ public class ExternalOtherController extends ExternalRelationController<External
       ExternalRelationService<ExternalRelationOther> externalRelationService) {
     super(pageController, externalRelationService);
     this.pageController = pageController;
-    bindFxml();
   }
 
-  private void bindFxml() {
-    pageController.loadPage(PageName.EXTERNAL_RELATION_FORM, this);
+  @PostConstruct
+  void setup() {
     formPages = new ExternalOtherFormpages(this);
-    
-    initializeValidation();
+    try {
+      formPages.initializeForm();
+      formPages.setOnSave(e -> save());
+      formPages.setOnReset(e -> reset());
+    } catch (FXMLMissingException e) {
+      pageController.showErrorMessage(e.getMessage());
+    }
   }
 
   @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION','AMEND_EXTERNAL_RELATION')")
   public void handleRelation(ExternalOtherSelectionEvent event) {
-    pageController.setActivePage(PageName.EXTERNAL_RELATION_FORM);
+    pageController.setActivateFormPage(formPages.getForm());
     formPages.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
     this.selectedExternalRelation = event.getSelectedEntity();
     this.model = new ExternalRelationOther();
-    headerText.setText(getHeaderTextValue());
+    formPages.getHeaderText().setText(getHeaderTextValue());
     reset();
   }
 

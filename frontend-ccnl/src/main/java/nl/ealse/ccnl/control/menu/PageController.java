@@ -63,6 +63,10 @@ public class PageController {
     mainPage.setCenter(page);
   }
 
+  public void setActivateFormPage(Parent form) {
+    mainPage.setCenter(form);
+  }
+
   /**
    * Load fxml and show it in the GUI.
    * @param pageName

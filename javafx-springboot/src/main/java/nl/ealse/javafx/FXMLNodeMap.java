@@ -31,6 +31,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class FXMLNodeMap {
 
+  private static final String FXML_TYPE = ".fxml";
+
   @Value("${fxml.dir}")
   private String fxmlDirectory;
 
@@ -96,7 +98,8 @@ public class FXMLNodeMap {
    * @throws FXMLMissingException 
    */
   private Parent getFXML(String fxmlName, Object root, Object controller) throws FXMLMissingException {
-    Resource r = new ClassPathResource(fxmlDirectory + fxmlName);
+    String fqFxmlName = fxmlDirectory + fxmlName + FXML_TYPE;
+    Resource r = new ClassPathResource(fqFxmlName);
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
       fxmlLoader.setRoot(root);
@@ -109,8 +112,8 @@ public class FXMLNodeMap {
       log.info(fxmlLoader.getLocation().toString());
       return fxmlLoader.load();
     } catch (FileNotFoundException e) {
-      log.error("Unknown page " + fxmlName);
-      throw new FXMLMissingException("Unknown page", fxmlName);
+      log.error("Unknown page " + fqFxmlName);
+      throw new FXMLMissingException("Unknown page", fqFxmlName);
     } catch (IOException e) {
       log.error("error loading fxml", e);
       throw new FXMLLoadException("error loading fxml", e);

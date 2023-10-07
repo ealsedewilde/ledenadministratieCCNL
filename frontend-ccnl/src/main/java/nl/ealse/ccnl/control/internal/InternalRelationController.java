@@ -1,16 +1,17 @@
 package nl.ealse.ccnl.control.internal;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import javafx.fxml.FXML;
 import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationView;
+import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.mapping.ViewModel;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
@@ -18,8 +19,6 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class InternalRelationController extends InternalRelationView {
   private final PageController pageController;
-
-  private final InternalRelationValidation internalRelationValidation;
 
   private final InternalRelationService internalRelationService;
 
@@ -35,25 +34,26 @@ public class InternalRelationController extends InternalRelationView {
       InternalRelationService internalRelationService) {
     this.pageController = pageController;
     this.internalRelationService = internalRelationService;
-    this.internalRelationValidation = new InternalRelationValidation(this);
-    bindFxml();
   }
 
-  private void bindFxml() {
-    pageController.loadPage(PageName.INTERNAL_RELATION_FORM, this);
+  @PostConstruct 
+  void setup() {
     formPages = new InternalRelationFormpages(this);
-    
-    internalRelationValidation.initialize();
-    internalRelationValidation.setCallback(valid -> saveButton.setDisable(!valid));
-
+    try {
+      formPages.initializeForm();
+      formPages.setOnSave(e -> save());
+      formPages.setOnReset(e -> reset());
+    } catch (FXMLMissingException e) {
+      pageController.showErrorMessage(e.getMessage());
+    }
   }
 
   @EventListener(condition = "#event.name('NEW_INTERNAL_RELATION','AMEND_INTERNAL_RELATION')")
   public void handleRelation(InternalRelationSelectionEvent event) {
     this.currentMenuChoice = event.getMenuChoice();
-    pageController.setActivePage(PageName.INTERNAL_RELATION_FORM);
+    pageController.setActivateFormPage(formPages.getForm());
     formPages.setActiveFormPage(0);
-    headerText.setText(getHeaderTextValue());
+    formPages.getHeaderText().setText(getHeaderTextValue());
     this.selectedInternalRelation = event.getSelectedEntity();
     this.model = new InternalRelation();
     if (event.getMenuChoice() == MenuChoice.NEW_INTERNAL_RELATION) {
@@ -106,16 +106,6 @@ public class InternalRelationController extends InternalRelationView {
     pageController.activateLogoPage();
   }
 
-  @FXML
-  void nextPage() {
-    formPages.setActiveFormPage(formPages.getCurrentPage() + 1);
-  }
-
-  @FXML
-  void previousPage() {
-    formPages.setActiveFormPage(formPages.getCurrentPage() - 1);
-  }
-
   private String getHeaderTextValue() {
     switch (currentMenuChoice) {
       case NEW_INTERNAL_RELATION:
@@ -163,11 +153,6 @@ public class InternalRelationController extends InternalRelationView {
       }
       throw new IllegalArgumentException(label);
     }
-  }
-
-  @Override
-  public void validateForm() {
-    internalRelationValidation.validate();
   }
 
 }

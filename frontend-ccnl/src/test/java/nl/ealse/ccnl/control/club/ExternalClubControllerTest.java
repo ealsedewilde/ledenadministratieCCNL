@@ -27,6 +27,7 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
+      sut.setup();
       doTest();
       ar.set(true);
     }, ar);
@@ -41,8 +42,8 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
     sut.save();
     verify(getPageController()).showMessage("Club gegevens zijn opgeslagen");
 
-    sut.nextPage();
-    sut.previousPage();
+    sut.getFormPages().nextPage();
+    sut.getFormPages().previousPage();
   }
 
   @BeforeAll

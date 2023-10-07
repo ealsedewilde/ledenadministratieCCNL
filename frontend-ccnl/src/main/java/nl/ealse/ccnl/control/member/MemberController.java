@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.control.member;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.StringJoiner;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import lombok.Getter;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -20,6 +20,7 @@ import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberView;
+import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
@@ -34,9 +35,6 @@ public class MemberController extends MemberView {
   private final MemberService service;
 
   private final DocumentService documentService;
-
-  @Getter
-  private final MemberValidation memberValidation;
 
   private Member model;
 
@@ -58,16 +56,18 @@ public class MemberController extends MemberView {
     this.pageController = pageController;
     this.service = service;
     this.documentService = documentService;
-    this.memberValidation = new MemberValidation(this);
-    bindFxml();
   }
 
-  private void bindFxml() {
-    pageController.loadPage(PageName.MEMBER_FORM, this);
+  @PostConstruct
+  void setup() {
     formPages = new MemberFormPages(this);
-
-    memberValidation.initialize();
-    memberValidation.setCallback(valid -> saveButton.setDisable(!valid));
+    try {
+      formPages.initializeForm();
+      formPages.setOnSave(e -> save());
+      formPages.setOnReset(e -> reset());
+    } catch (FXMLMissingException e) {
+      pageController.showErrorMessage(e.getMessage());
+    }
 
     pdfViewer = PDFViewer.builder().withDeleteButton(e -> deletePDF())
         .withPrintButton(e -> printPDF()).withCancelButton(e -> closePDF()).build();
@@ -85,7 +85,7 @@ public class MemberController extends MemberView {
    */
   @EventListener(condition = "#event.name('NEW_MEMBER')")
   public void newMember(MemberSeLectionEvent event) {
-    pageController.setActivePage(PageName.MEMBER_FORM);
+    pageController.setActivateFormPage(formPages.getForm());
     formPages.setActiveFormPage(0);
     handleEvent(event);
     selectedMember.setMemberNumber(service.getFreeNumber());
@@ -99,7 +99,7 @@ public class MemberController extends MemberView {
    */
   @EventListener(condition = "#event.name('AMEND_MEMBER')")
   public void amendMember(MemberSeLectionEvent event) {
-    pageController.setActivePage(PageName.MEMBER_FORM);
+    pageController.setActivateFormPage(formPages.getForm());
     formPages.setActiveFormPage(0);
     handleEvent(event);
     Optional<Document> optSepaAuthorization = documentService.findSepaAuthorization(selectedMember);
@@ -117,7 +117,7 @@ public class MemberController extends MemberView {
     this.model = new Member();
     getIbanNumber().textProperty()
         .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
-    headerText.setText(getHeaderTextValue());
+    formPages.getHeaderText().setText(getHeaderTextValue());
   }
 
 
@@ -137,8 +137,8 @@ public class MemberController extends MemberView {
       getSepaButton().setVisible(true);
       getSepaLabel().setVisible(true);
     }
-    memberValidation.initialize();
-    saveButton.setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER);
+    formPages.getValidator().initialize();
+    formPages.getSaveButton().setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER);
     formPages.setActiveFormPage(0);
   }
 
@@ -168,7 +168,7 @@ public class MemberController extends MemberView {
       getCurrentYearPaid().setDisable(false);
     }
     // and now revalidate
-    memberValidation.validate();
+    formPages.getValidator().validate();
   }
 
   @FXML
@@ -232,20 +232,6 @@ public class MemberController extends MemberView {
   @FXML
   void closePDF() {
     pdfViewer.close();
-  }
-
-  /*
-   * Page selection method
-   */
-
-  @FXML
-  void nextPage() {
-    formPages.setActiveFormPage(formPages.getCurrentPage() + 1);
-  }
-
-  @FXML
-  void previousPage() {
-    formPages.setActiveFormPage(formPages.getCurrentPage() - 1);
   }
 
   private String getHeaderTextValue() {
@@ -317,12 +303,6 @@ public class MemberController extends MemberView {
 
   private boolean hasContent(String text) {
     return text != null && !text.isBlank();
-  }
-
-  @Override
-  public void validateForm() {
-    memberValidation.validate();
-
   }
 
 }

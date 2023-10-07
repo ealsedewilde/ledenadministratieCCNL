@@ -8,24 +8,22 @@ import nl.ealse.javafx.PageId;
  */
 public enum PageName {
 
-  MEMBER_SEARCH("member/memberSearch"), MEMBER_FORM("form/form"), MEMBER_CANCEL(
-      "member/memberCancel"), MEMBER_CANCEL_MAIL("member/memberCancelMail"),
+  MEMBER_SEARCH("member/memberSearch"), MEMBER_CANCEL("member/memberCancel"), MEMBER_CANCEL_MAIL(
+      "member/memberCancelMail"),
 
   WELCOME_TEXT_HELP(), REMINDER_TEXT_HELP(), MANAGE_TEMPLATE_TEXT_HELP(), MAIL_HELP(
       "dialog/mailhelp"), MANAGE_MAIL_HELP("dialog/mailhelp"), WELCOME_LETTER(
           "member/welcomeLetter"), ADD_IBAN_NUMBER("dialog/addIban"),
 
-  EXTERNAL_CLUB_SEARCH("club/externalClubSearch"), EXTERNAL_CLUB_FORM(
-      "form/form"), EXTERNAL_CLUB_DELETE("club/externalClubDelete"),
+  EXTERNAL_CLUB_SEARCH("club/externalClubSearch"), EXTERNAL_CLUB_DELETE("club/externalClubDelete"),
 
-  EXTERNAL_RELATION_SEARCH("external/externalRelationSearch"), EXTERNAL_RELATION_FORM(
-      "form/form"), EXTERNAL_RELATION_DELETE("external/externalRelationDelete"),
+  EXTERNAL_RELATION_SEARCH("external/externalRelationSearch"), EXTERNAL_RELATION_DELETE(
+      "external/externalRelationDelete"),
 
-  INTERNAL_RELATION_SEARCH("internal/internalRelationSearch"), INTERNAL_RELATION_FORM(
-      "form/form"), INTERNAL_RELATION_DELETE("internal/internalRelationDelete"),
+  INTERNAL_RELATION_SEARCH("internal/internalRelationSearch"), INTERNAL_RELATION_DELETE(
+      "internal/internalRelationDelete"),
 
-  PARTNER_SEARCH("partner/partnerSearch"), PARTNER_FORM("form/form"), PARTNER_DELETE(
-      "partner/partnerDelete"),
+  PARTNER_SEARCH("partner/partnerSearch"), PARTNER_DELETE("partner/partnerDelete"),
 
   ADD_DOCUMENT("document/addDocument"), VIEW_DOCUMENTS("document/viewDocuments"),
 

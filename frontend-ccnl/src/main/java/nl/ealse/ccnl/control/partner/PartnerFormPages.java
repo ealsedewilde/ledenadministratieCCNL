@@ -11,7 +11,11 @@ public class PartnerFormPages
 
   public PartnerFormPages(PartnerController controller) {
     super(controller);
-    initialize(controller, "partner/form/pagePartner");
+  }
+
+  @Override
+  protected void initializePages() {
+    initialize("partner/form/pagePartner", "Partnergegevens");
   }
 
 }

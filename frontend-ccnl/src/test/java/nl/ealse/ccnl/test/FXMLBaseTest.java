@@ -46,6 +46,7 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
     fnm = new TestFxmlNodeMap(springContext);
     pc = spy(new PageController(fnm));
     //  the main BorderPane is not loaded, so any actions using it will fail.
+    doNothing().when(pc).setActivateFormPage(isA(Parent.class));
     doNothing().when(pc).setActivePage(isA(PageName.class));
     doNothing().when(pc).showMessage(isA(String.class));
     doNothing().when(pc).showErrorMessage(isA(String.class));
@@ -101,7 +102,7 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
    * @throws FXMLMissingException
    */
   private Parent getPage(T controller, PageName pageName, boolean factory) throws FXMLMissingException {
-    Resource r = new ClassPathResource(FXML_DIR + pageName.getId().getFxmlName());
+    Resource r = new ClassPathResource(FXML_DIR + pageName.getId().getFxmlName() + ".fxml");
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
       if (factory) {
@@ -125,6 +126,15 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
 
     public TestFxmlNodeMap(ApplicationContext springContext) {
       super(springContext);
+      initialize();
+    }
+    
+    private void initialize() {
+      try {
+        FieldUtils.writeField(this, "fxmlDirectory", FXML_DIR, true);
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      }
     }
     
     @Override

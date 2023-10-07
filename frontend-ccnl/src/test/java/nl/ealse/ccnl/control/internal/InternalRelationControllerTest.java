@@ -6,10 +6,12 @@ import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
+import nl.ealse.ccnl.form.FormPages;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,7 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
     rel = internalRelation();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
+      sut.setup();
       doTest();
       ar.set(true);
     }, ar);
@@ -42,8 +45,9 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
     sut.save();
     verify(getPageController()).showMessage("Functiegegevens opgeslagen");
 
-    sut.nextPage();
-    sut.previousPage();
+    FormPages formPages = getFormPages();
+    formPages.nextPage();
+    formPages.previousPage();
 
   }
 
@@ -67,6 +71,15 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
     r.setTelephoneNumber("06-01234567");
     r.setRelationNumber(8506);
     return r;
+  }
+  
+  private FormPages getFormPages() {
+    try {
+      return (FormPages) FieldUtils.readDeclaredField(sut, "formPages", true);
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
 }
