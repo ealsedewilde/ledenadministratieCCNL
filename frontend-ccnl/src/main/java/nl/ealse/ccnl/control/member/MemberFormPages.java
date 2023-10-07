@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.member;
 import javafx.scene.layout.Pane;
 import nl.ealse.ccnl.form.FormPages;
 import nl.ealse.ccnl.form.FormPane;
-import nl.ealse.javafx.PageId;
 
 /**
  * Helper for form pages.
@@ -18,12 +17,12 @@ public class MemberFormPages extends FormPages<MemberController> {
   private void initialize(MemberController controller) {
     // initialize the 4 pages of the form.
     formPageArray[0] =
-        new FormPane(new PageId("MEMBER_PERSONAL", "member/form/pagePersonal"), controller);
-    formPageArray[1] = new FormPane(new PageId("MEMBER_ADDRESS", "form/address"), controller);
+        new FormPane("member/form/pagePersonal", controller);
+    formPageArray[1] = new FormPane("form/address", controller);
     formPageArray[2] =
-        new FormPane(new PageId("MEMBER_FINANCIAL", "member/form/pageFinancial"), controller);
+        new FormPane("member/form/pageFinancial", controller);
     formPageArray[3] =
-        new FormPane(new PageId("MEMBER_EXTRA_INFO", "member/form/pageExtraInfo"), controller);
+        new FormPane("member/form/pageExtraInfo", controller);
 
     // initialize the submenu for form nsvigation.
     addMenuItem(0, "Persoonsgegevens");

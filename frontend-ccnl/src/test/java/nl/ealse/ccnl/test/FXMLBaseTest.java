@@ -129,7 +129,7 @@ public abstract class FXMLBaseTest<T extends Object> extends FXBase {
     
     @Override
     public Parent get(PageId id, Object controller) throws FXMLMissingException {
-      return FXMLNodeMap.getPage(id, null, controller);
+      return FXMLNodeMap.getPage(id.getFxmlName(), null, controller);
     }
     
   }

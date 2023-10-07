@@ -65,9 +65,9 @@ public class FXMLNodeMap {
    * @throws FXMLMissingException - when page not found
    */
 
-  public static Parent getPage(PageId id, Object root, Object controller)
+  public static Parent getPage(String fxmlName, Object root, Object controller)
       throws FXMLMissingException {
-    return instance.getFXML(id, root, controller);
+    return instance.getFXML(fxmlName, root, controller);
   }
 
   /**
@@ -81,7 +81,7 @@ public class FXMLNodeMap {
   public Parent get(PageId id, Object controller) throws FXMLMissingException {
     Parent page = FXML_PAGES.get(id.getPagekey());
     if (page == null) {
-      page = getFXML(id, null, controller);
+      page = getFXML(id.getFxmlName(), null, controller);
       FXML_PAGES.put(id.getPagekey(), page);
     }
     return page;
@@ -90,13 +90,13 @@ public class FXMLNodeMap {
   /**
    * Loading of the FXML from the classpath.
    * 
-   * @param id - of the page to retrieve
+   * @param fxmlName - of the page to retrieve
    * @param root - optional root object for the fxml
    * @return
    * @throws FXMLMissingException 
    */
-  private Parent getFXML(PageId id, Object root, Object controller) throws FXMLMissingException {
-    Resource r = new ClassPathResource(fxmlDirectory + id.getFxmlName());
+  private Parent getFXML(String fxmlName, Object root, Object controller) throws FXMLMissingException {
+    Resource r = new ClassPathResource(fxmlDirectory + fxmlName);
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
       fxmlLoader.setRoot(root);
@@ -109,8 +109,8 @@ public class FXMLNodeMap {
       log.info(fxmlLoader.getLocation().toString());
       return fxmlLoader.load();
     } catch (FileNotFoundException e) {
-      log.error("Unknown page " + id.getFxmlName());
-      throw new FXMLMissingException("Unknown page", id.getFxmlName());
+      log.error("Unknown page " + fxmlName);
+      throw new FXMLMissingException("Unknown page", fxmlName);
     } catch (IOException e) {
       log.error("error loading fxml", e);
       throw new FXMLLoadException("error loading fxml", e);

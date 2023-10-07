@@ -54,7 +54,7 @@ public class SepaAuthorizarionController {
    * ADD SEPA-authorization PDF to a member.
    * 
    * @param pageController
-   * @param ibanController - cpopup for adding iban-number to member
+   * @param ibanController - popup for adding iban-number to member
    * @param documentService
    * @param service
    */
@@ -117,6 +117,7 @@ public class SepaAuthorizarionController {
 
     documentService.saveDocument(document);
     pageController.showMessage("SEPA-machtiging opgeslagen bij lid");
+    pageController.activateLogoPage();
     closePDFViewer();
 
     selectedMember.setPaymentMethod(PaymentMethod.DIRECT_DEBIT);

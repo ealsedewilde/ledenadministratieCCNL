@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.external;
 import nl.ealse.ccnl.form.FormPages;
 import nl.ealse.ccnl.form.FormPane;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
-import nl.ealse.javafx.PageId;
 
 public abstract class ExternalRelationFormPages<T extends ExternalRelation, C extends ExternalRelationController<T>>
     extends FormPages<C> {
@@ -12,9 +11,9 @@ public abstract class ExternalRelationFormPages<T extends ExternalRelation, C ex
     super(2, controller);
   }
 
-  protected void initialize(C controller, PageId pageId) {
-    formPageArray[0] = new FormPane(pageId, controller);
-    formPageArray[1] = new FormPane(new PageId("EXTERNAL_CLUB_ADDRESS", "form/address"), controller);
+  protected void initialize(C controller, String fxmlName) {
+    formPageArray[0] = new FormPane(fxmlName, controller);
+    formPageArray[1] = new FormPane("form/address", controller);
 
     // initialize the submenu for form nsvigation.
     addMenuItem(0, "Clubgegevens");

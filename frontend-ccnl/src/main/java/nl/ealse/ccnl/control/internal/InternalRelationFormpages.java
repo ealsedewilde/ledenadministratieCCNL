@@ -2,7 +2,6 @@ package nl.ealse.ccnl.control.internal;
 
 import nl.ealse.ccnl.form.FormPages;
 import nl.ealse.ccnl.form.FormPane;
-import nl.ealse.javafx.PageId;
 
 /**
  * Control the form pages for an internal relation.
@@ -16,8 +15,8 @@ public class InternalRelationFormpages extends FormPages<InternalRelationControl
   
   private void initialize(InternalRelationController controller) {
     formPageArray[0] =
-        new FormPane(new PageId("INTERNAL_RELATION", "internal/form/pageRelation"), controller);
-    formPageArray[1] = new FormPane(new PageId("INTERNAL_ADDRESS", "form/address"), controller);
+        new FormPane("internal/form/pageRelation", controller);
+    formPageArray[1] = new FormPane("form/address", controller);
 
     // initialize the submenu for form nsvigation.
     addMenuItem(0, "Functiegegevens");
