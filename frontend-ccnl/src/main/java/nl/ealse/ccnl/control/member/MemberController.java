@@ -49,7 +49,7 @@ public class MemberController extends MemberView {
   // Helper to detect changes in the iban owner
   private String savedName;
 
-  private MemberFormPages formPages;
+  private MemberFormController formController;
 
   public MemberController(PageController pageController, MemberService service,
       DocumentService documentService) {
@@ -60,11 +60,11 @@ public class MemberController extends MemberView {
 
   @PostConstruct
   void setup() {
-    formPages = new MemberFormPages(this);
+    formController = new MemberFormController(this);
     try {
-      formPages.initializeForm();
-      formPages.setOnSave(e -> save());
-      formPages.setOnReset(e -> reset());
+      formController.initializeForm();
+      formController.setOnSave(e -> save());
+      formController.setOnReset(e -> reset());
     } catch (FXMLMissingException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -85,8 +85,8 @@ public class MemberController extends MemberView {
    */
   @EventListener(condition = "#event.name('NEW_MEMBER')")
   public void newMember(MemberSeLectionEvent event) {
-    pageController.setActivateFormPage(formPages.getForm());
-    formPages.setActiveFormPage(0);
+    pageController.setActivateFormPage(formController.getForm());
+    formController.setActiveFormPage(0);
     handleEvent(event);
     selectedMember.setMemberNumber(service.getFreeNumber());
     sepaAuthorization = null;
@@ -99,8 +99,8 @@ public class MemberController extends MemberView {
    */
   @EventListener(condition = "#event.name('AMEND_MEMBER')")
   public void amendMember(MemberSeLectionEvent event) {
-    pageController.setActivateFormPage(formPages.getForm());
-    formPages.setActiveFormPage(0);
+    pageController.setActivateFormPage(formController.getForm());
+    formController.setActiveFormPage(0);
     handleEvent(event);
     Optional<Document> optSepaAuthorization = documentService.findSepaAuthorization(selectedMember);
     if (optSepaAuthorization.isPresent()) {
@@ -117,7 +117,7 @@ public class MemberController extends MemberView {
     this.model = new Member();
     getIbanNumber().textProperty()
         .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
-    formPages.getHeaderText().setText(getHeaderTextValue());
+    formController.getHeaderText().setText(getHeaderTextValue());
   }
 
 
@@ -137,9 +137,9 @@ public class MemberController extends MemberView {
       getSepaButton().setVisible(true);
       getSepaLabel().setVisible(true);
     }
-    formPages.getValidator().initialize();
-    formPages.getSaveButton().setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER);
-    formPages.setActiveFormPage(0);
+    formController.getValidator().initialize();
+    formController.getSaveButton().setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER);
+    formController.setActiveFormPage(0);
   }
 
   private void initializeInitialsType() {
@@ -168,7 +168,7 @@ public class MemberController extends MemberView {
       getCurrentYearPaid().setDisable(false);
     }
     // and now revalidate
-    formPages.getValidator().validate();
+    formController.getValidator().validate();
   }
 
   @FXML
@@ -246,7 +246,7 @@ public class MemberController extends MemberView {
   }
 
   private void formatIbanOwnerName(String ibanNumber) {
-    ObservableList<Node> children = formPages.getThirdPage().getChildren();
+    ObservableList<Node> children = formController.getThirdPage().getChildren();
     if (hasContent(ibanNumber)) {
       updateIbanOwnerName();
       if (!children.contains(getIbanOwnerName())) {
@@ -255,7 +255,7 @@ public class MemberController extends MemberView {
     } else {
       savedName = null;
       getIbanOwnerName().setText(null);
-      formPages.getThirdPage().getChildren().removeAll(getIbanOwnerNameL(), getIbanOwnerName(),
+      formController.getThirdPage().getChildren().removeAll(getIbanOwnerNameL(), getIbanOwnerName(),
           getBicCodeL(), getBicCode());
     }
   }

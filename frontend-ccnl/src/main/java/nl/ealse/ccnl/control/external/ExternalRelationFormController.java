@@ -1,15 +1,15 @@
 package nl.ealse.ccnl.control.external;
 
-import nl.ealse.ccnl.form.FormPages;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.form.FormPane;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 
-public abstract class ExternalRelationFormPages<T extends ExternalRelation, C extends ExternalRelationController<T>>
-    extends FormPages {
+public abstract class ExternalRelationFormController<T extends ExternalRelation, C extends ExternalRelationController<T>>
+    extends FormController {
   
   private final C controller;
 
-  protected ExternalRelationFormPages(C controller) {
+  protected ExternalRelationFormController(C controller) {
     super(2, new ExternalRelationValidation(controller));
     this.controller = controller;
   }

@@ -5,10 +5,10 @@ import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.javafx.FXMLMissingException;
-import nl.ealse.javafx.mapping.Mapping;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -17,7 +17,7 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   private final PageController pageController;
 
   @Getter
-  private PartnerFormPages formPages;
+  private FormController formController;
 
   public PartnerController(PageController pageController,
       ExternalRelationService<ExternalRelationPartner> partnerService) {
@@ -27,11 +27,11 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
 
   @PostConstruct
   void setup() {
-    formPages = new PartnerFormPages(this);
+    formController = new PartnerFormController(this);
     try {
-      formPages.initializeForm();
-      formPages.setOnSave(e -> save());
-      formPages.setOnReset(e -> reset());
+      formController.initializeForm();
+      formController.setOnSave(e -> save());
+      formController.setOnReset(e -> reset());
     } catch (FXMLMissingException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -39,12 +39,12 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
 
   @EventListener(condition = "#event.name('NEW_PARTNER','AMEND_PARTNER')")
   public void handlePartner(PartnerSelectionEvent event) {
-    pageController.setActivateFormPage(formPages.getForm());
-    formPages.setActiveFormPage(0);
+    pageController.setActivateFormPage(formController.getForm());
+    formController.setActiveFormPage(0);
     this.selectedExternalRelation = event.getSelectedEntity();
     this.model = new ExternalRelationPartner();
     this.currentMenuChoice = event.getMenuChoice();
-    formPages.getHeaderText().setText(getHeaderTextValue());
+    formController.getHeaderText().setText(getHeaderTextValue());
     reset();
   }
 

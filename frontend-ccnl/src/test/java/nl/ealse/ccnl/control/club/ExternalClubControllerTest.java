@@ -42,8 +42,8 @@ class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
     sut.save();
     verify(getPageController()).showMessage("Club gegevens zijn opgeslagen");
 
-    sut.getFormPages().nextPage();
-    sut.getFormPages().previousPage();
+    sut.getFormController().nextPage();
+    sut.getFormController().previousPage();
   }
 
   @BeforeAll

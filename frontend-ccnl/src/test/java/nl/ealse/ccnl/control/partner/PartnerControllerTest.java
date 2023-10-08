@@ -41,8 +41,8 @@ class PartnerControllerTest extends FXMLBaseTest<PartnerController> {
     sut.save();
     verify(getPageController()).showMessage("Partnergegevens opgeslagen");
 
-    sut.getFormPages().nextPage();
-    sut.getFormPages().previousPage();
+    sut.getFormController().nextPage();
+    sut.getFormController().previousPage();
   }
 
   @BeforeAll

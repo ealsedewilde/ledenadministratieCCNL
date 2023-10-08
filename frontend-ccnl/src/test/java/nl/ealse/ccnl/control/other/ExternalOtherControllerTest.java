@@ -42,8 +42,8 @@ class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> 
     sut.save();
     verify(getPageController()).showMessage("Externe relatie opgeslagen");
 
-    sut.getFormPages().nextPage();
-    sut.getFormPages().previousPage();
+    sut.getFormController().nextPage();
+    sut.getFormController().previousPage();
   }
 
   @BeforeAll

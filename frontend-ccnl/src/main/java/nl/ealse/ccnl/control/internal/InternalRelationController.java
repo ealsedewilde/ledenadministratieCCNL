@@ -8,6 +8,7 @@ import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationView;
@@ -28,7 +29,7 @@ public class InternalRelationController extends InternalRelationView {
 
   private MenuChoice currentMenuChoice;
 
-  private InternalRelationFormpages formPages;
+  private FormController formController;
 
   public InternalRelationController(PageController pageController,
       InternalRelationService internalRelationService) {
@@ -38,11 +39,11 @@ public class InternalRelationController extends InternalRelationView {
 
   @PostConstruct 
   void setup() {
-    formPages = new InternalRelationFormpages(this);
+    formController = new InternalRelationFormController(this);
     try {
-      formPages.initializeForm();
-      formPages.setOnSave(e -> save());
-      formPages.setOnReset(e -> reset());
+      formController.initializeForm();
+      formController.setOnSave(e -> save());
+      formController.setOnReset(e -> reset());
     } catch (FXMLMissingException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -51,9 +52,9 @@ public class InternalRelationController extends InternalRelationView {
   @EventListener(condition = "#event.name('NEW_INTERNAL_RELATION','AMEND_INTERNAL_RELATION')")
   public void handleRelation(InternalRelationSelectionEvent event) {
     this.currentMenuChoice = event.getMenuChoice();
-    pageController.setActivateFormPage(formPages.getForm());
-    formPages.setActiveFormPage(0);
-    formPages.getHeaderText().setText(getHeaderTextValue());
+    pageController.setActivateFormPage(formController.getForm());
+    formController.setActiveFormPage(0);
+    formController.getHeaderText().setText(getHeaderTextValue());
     this.selectedInternalRelation = event.getSelectedEntity();
     this.model = new InternalRelation();
     if (event.getMenuChoice() == MenuChoice.NEW_INTERNAL_RELATION) {
@@ -92,7 +93,7 @@ public class InternalRelationController extends InternalRelationView {
     if (currentMenuChoice == MenuChoice.NEW_INTERNAL_RELATION && !getTitle().getItems().isEmpty()) {
       getTitle().getSelectionModel().selectFirst();
     }
-    formPages.setActiveFormPage(0);
+    formController.setActiveFormPage(0);
   }
 
   @FXML

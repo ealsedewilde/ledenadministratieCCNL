@@ -5,10 +5,10 @@ import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.javafx.FXMLMissingException;
-import nl.ealse.javafx.mapping.Mapping;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -17,7 +17,7 @@ public class ExternalOtherController extends ExternalRelationController<External
   private final PageController pageController;
   
   @Getter
-  private ExternalOtherFormpages formPages;
+  private FormController formController;
 
   public ExternalOtherController(PageController pageController,
       ExternalRelationService<ExternalRelationOther> externalRelationService) {
@@ -27,11 +27,11 @@ public class ExternalOtherController extends ExternalRelationController<External
 
   @PostConstruct
   void setup() {
-    formPages = new ExternalOtherFormpages(this);
+    formController = new ExternalOtherFormController(this);
     try {
-      formPages.initializeForm();
-      formPages.setOnSave(e -> save());
-      formPages.setOnReset(e -> reset());
+      formController.initializeForm();
+      formController.setOnSave(e -> save());
+      formController.setOnReset(e -> reset());
     } catch (FXMLMissingException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -39,12 +39,12 @@ public class ExternalOtherController extends ExternalRelationController<External
 
   @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION','AMEND_EXTERNAL_RELATION')")
   public void handleRelation(ExternalOtherSelectionEvent event) {
-    pageController.setActivateFormPage(formPages.getForm());
-    formPages.setActiveFormPage(0);
+    pageController.setActivateFormPage(formController.getForm());
+    formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
     this.selectedExternalRelation = event.getSelectedEntity();
     this.model = new ExternalRelationOther();
-    formPages.getHeaderText().setText(getHeaderTextValue());
+    formController.getHeaderText().setText(getHeaderTextValue());
     reset();
   }
 

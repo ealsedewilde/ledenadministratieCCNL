@@ -1,15 +1,15 @@
 package nl.ealse.ccnl.control.other;
 
-import nl.ealse.ccnl.control.external.ExternalRelationFormPages;
+import nl.ealse.ccnl.control.external.ExternalRelationFormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 
 /**
  * Control the form pages for an external relation.
  */
-public class ExternalOtherFormpages
-    extends ExternalRelationFormPages<ExternalRelationOther, ExternalOtherController> {
+public class ExternalOtherFormController
+    extends ExternalRelationFormController<ExternalRelationOther, ExternalOtherController> {
 
-  public ExternalOtherFormpages(ExternalOtherController controller) {
+  public ExternalOtherFormController(ExternalOtherController controller) {
     super(controller);
   }
 

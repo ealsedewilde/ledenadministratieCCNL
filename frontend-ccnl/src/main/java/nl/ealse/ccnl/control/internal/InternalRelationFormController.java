@@ -1,16 +1,16 @@
 package nl.ealse.ccnl.control.internal;
 
-import nl.ealse.ccnl.form.FormPages;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.form.FormPane;
 
 /**
  * Control the form pages for an internal relation.
  */
-public class InternalRelationFormpages extends FormPages {
+public class InternalRelationFormController extends FormController {
   
   private final InternalRelationController controller;
 
-  public InternalRelationFormpages(InternalRelationController controller) {
+  public InternalRelationFormController(InternalRelationController controller) {
     super(2, new InternalRelationValidation(controller));
     this.controller = controller;
   }

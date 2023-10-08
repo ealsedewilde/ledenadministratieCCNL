@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
-import nl.ealse.ccnl.form.FormPages;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
@@ -45,9 +45,9 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
     sut.save();
     verify(getPageController()).showMessage("Functiegegevens opgeslagen");
 
-    FormPages formPages = getFormPages();
-    formPages.nextPage();
-    formPages.previousPage();
+    FormController formController = getFormController();
+    formController.nextPage();
+    formController.previousPage();
 
   }
 
@@ -73,9 +73,9 @@ class InternalRelationControllerTest extends FXMLBaseTest<InternalRelationContro
     return r;
   }
   
-  private FormPages getFormPages() {
+  private FormController getFormController() {
     try {
-      return (FormPages) FieldUtils.readDeclaredField(sut, "formPages", true);
+      return (FormController) FieldUtils.readDeclaredField(sut, "formController", true);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     }

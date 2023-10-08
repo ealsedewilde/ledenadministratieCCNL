@@ -19,7 +19,7 @@ import nl.ealse.javafx.mapping.Mapping;
 /**
  * Helper to control the various pages of a form.
  */
-public abstract class FormPages {
+public abstract class FormController {
 
   @FXML
   private Pane formMenu;
@@ -70,7 +70,7 @@ public abstract class FormPages {
    * @param numberOfPages of a form
    * @param controller of the form
    */
-  protected FormPages(int numberOfPages, CompositeValidator validator) {
+  protected FormController(int numberOfPages, CompositeValidator validator) {
     this.validator = validator;
     this.maxPageIndex = numberOfPages - 1;
     this.links = new Hyperlink[numberOfPages];

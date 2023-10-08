@@ -3,7 +3,7 @@ package nl.ealse.ccnl.control.external;
 import javafx.fxml.FXML;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.form.FormPages;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.view.ExternalRelationView;
@@ -38,7 +38,7 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
 
   protected void initializeValidation() {
     externalRelationValidation.initialize();
-    externalRelationValidation.setCallback(valid -> getFormPages().getSaveButton().setDisable(!valid));
+    externalRelationValidation.setCallback(valid -> getFormController().getSaveButton().setDisable(!valid));
   }
 
   @FXML
@@ -48,7 +48,7 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
     }
     ViewModel.modelToView(this, selectedExternalRelation);
     ViewModel.viewToModel(this, model);
-    getFormPages().setActiveFormPage(0);
+    getFormController().setActiveFormPage(0);
 
   }
 
@@ -66,5 +66,5 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
 
   protected abstract String getHeaderTextValue();
 
-  protected abstract FormPages getFormPages();
+  protected abstract FormController getFormController();
 }

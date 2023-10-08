@@ -1,17 +1,17 @@
 package nl.ealse.ccnl.control.member;
 
 import javafx.scene.layout.Pane;
-import nl.ealse.ccnl.form.FormPages;
+import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.form.FormPane;
 
 /**
  * Helper for form pages.
  */
-public class MemberFormPages extends FormPages {
+public class MemberFormController extends FormController {
   
   private final MemberController controller;
 
-  public MemberFormPages(MemberController controller) {
+  public MemberFormController(MemberController controller) {
     super(4, new MemberValidation(controller));
     this.controller = controller;
   }
