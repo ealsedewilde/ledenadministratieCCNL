@@ -12,7 +12,6 @@ import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationView;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.mapping.ViewModel;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
@@ -37,16 +36,12 @@ public class InternalRelationController extends InternalRelationView {
     this.internalRelationService = internalRelationService;
   }
 
-  @PostConstruct 
+  @PostConstruct
   void setup() {
     formController = new InternalRelationFormController(this);
-    try {
-      formController.initializeForm();
-      formController.setOnSave(e -> save());
-      formController.setOnReset(e -> reset());
-    } catch (FXMLMissingException e) {
-      pageController.showErrorMessage(e.getMessage());
-    }
+    formController.initializeForm();
+    formController.setOnSave(e -> save());
+    formController.setOnReset(e -> reset());
   }
 
   @EventListener(condition = "#event.name('NEW_INTERNAL_RELATION','AMEND_INTERNAL_RELATION')")

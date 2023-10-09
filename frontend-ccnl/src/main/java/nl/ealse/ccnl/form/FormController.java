@@ -12,8 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import lombok.Getter;
 import nl.ealse.ccnl.validation.CompositeValidator;
-import nl.ealse.javafx.FXMLMissingException;
-import nl.ealse.javafx.FXMLNodeMap;
+import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.mapping.Mapping;
 
 /**
@@ -78,8 +77,8 @@ public abstract class FormController {
     this.formPageArray = new FormPane[numberOfPages];
   }
   
-  public void initializeForm() throws FXMLMissingException {
-    this.form = FXMLNodeMap.getPage("form/form", null, this);
+  public void initializeForm() {
+    this.form = FXMLLoaderBean.getPage("form/form", this);
     initializePages();
     validator.initialize();
     validator.setCallback(valid -> saveButton.setDisable(!valid));

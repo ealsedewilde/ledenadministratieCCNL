@@ -27,6 +27,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
+import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
@@ -104,7 +105,7 @@ public class ReconciliationController {
       messagesStage.setTitle("Aflettermeldingen");
       messagesStage.getIcons().add(ImagesMap.get("info.png"));
       messagesStage.initOwner(pageController.getPrimaryStage());
-      Parent parent = pageController.loadPage(PageName.RECONCILE_MESSAGES);
+      Parent parent = FXMLLoaderBean.getPage("dialog/reconciliationMessages", this);
       Scene messagesScene = new Scene(parent, 600, 400);
       messagesStage.setScene(messagesScene);
     }

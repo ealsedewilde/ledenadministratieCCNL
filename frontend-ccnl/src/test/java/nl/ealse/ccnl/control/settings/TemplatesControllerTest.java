@@ -20,19 +20,18 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 
-class TemplatesControllerTest extends FXMLBaseTest<TemplatesController> {
+class TemplatesControllerTest extends FXMLBaseTest {
 
   private static ApplicationContext context;
   private static DocumentService service;
   private static PageController pageController;
   private static Event ev;
-  
+
   private static DocumentTemplate template;
 
   private TemplatesController sut;
@@ -63,20 +62,16 @@ class TemplatesControllerTest extends FXMLBaseTest<TemplatesController> {
   }
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.TEMPLATES_OVERVIEW);
-      TableRow<DocumentTemplate> row = new TableRow<>();
-      row.setItem(template);
-      ev = mock(Event.class);
-      when(ev.getSource()).thenReturn(row);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    getPageWithFxController(sut, PageName.TEMPLATES_OVERVIEW);
+    TableRow<DocumentTemplate> row = new TableRow<>();
+    row.setItem(template);
+    ev = mock(Event.class);
+    when(ev.getSource()).thenReturn(row);
   }
 
   @BeforeAll
   static void setup() {
-   
+
     context = mock(ApplicationContext.class);
     service = mock(DocumentService.class);
     pageController = mock(PageController.class);

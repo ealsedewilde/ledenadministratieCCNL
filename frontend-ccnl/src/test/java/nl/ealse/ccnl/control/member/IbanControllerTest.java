@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
 
-class IbanControllerTest extends FXMLBaseTest<IbanController>{
+class IbanControllerTest extends FXMLBaseTest {
   
   private static ApplicationEventPublisher eventPublisher;
   

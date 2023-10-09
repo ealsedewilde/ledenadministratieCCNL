@@ -2,91 +2,77 @@ package nl.ealse.javafx;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 /**
- * FXML cache.
+ * Spring bean for loading FXML.
  * <p>
- * The FXML is lazily loaded. Almost pages contain a reference to a Spring Boot controller. If
- * Spring is also configured for lazy loading, such a controller gets loaded as the FXML gets
- * loaded.
- * </p>
- * <p>
- * Important: Every FXML only gets loaded once.
+ * This bean is the only eargerly loaded bean of the application !
  * </p>
  * 
  * @author ealse
  *
  */
 @Component
+@Lazy(false)
 @Slf4j
-public class FXMLNodeMap {
+public class FXMLLoaderBean {
 
   private static final String FXML_TYPE = ".fxml";
 
   @Value("${fxml.dir}")
   private String fxmlDirectory;
 
-  /**
-   * Cache for all loaded pages.
-   */
-  private static final Map<String, Parent> FXML_PAGES = new HashMap<>();
-
-  private static FXMLNodeMap instance ;
+  private static FXMLLoaderBean instance;
 
   private final ApplicationContext springContext; // NOSONAR
 
-  public FXMLNodeMap(ApplicationContext springContext) {
+  public FXMLLoaderBean(ApplicationContext springContext) {
     this.springContext = springContext;
     setInstance(this);
   }
-  
-  private static void setInstance(FXMLNodeMap fnm) {
+
+  private static void setInstance(FXMLLoaderBean fnm) {
     instance = fnm;
   }
 
   /**
    * Get the page for fxml with fx:root.
    * <p>
-   * Used by non Spring components.
-   * </p?
+   * Used by non Spring components. </p?
    * 
-   * @param id - unique id of the page
+   * @param String fxmlName - unique id of the page
    * @param root - the root object for the fxml
    * @param controller - the controller object fxml binding.
    * @return Parent of the page
-   * @throws FXMLMissingException - when page not found
    */
-
-  public static Parent getPage(String fxmlName, Object root, Object controller)
-      throws FXMLMissingException {
-    return instance.getFXML(fxmlName, root, controller);
+  public static Parent getPage(String fxmlName, Object root, Object controller) {
+    return instance.loadFXML(fxmlName, root, controller);
   }
 
   /**
    * Lookup an initialized FXML page.
    * 
-   * @param id - unique id of the page
+   * @param String fxmlName - unique id of the page
    * @param controller - the controller object fxml binding.
    * @return Parent of the page
-   * @throws FXMLMissingException - when page not found
    */
-  public Parent get(PageId id, Object controller) throws FXMLMissingException {
-    Parent page = FXML_PAGES.get(id.getPagekey());
-    if (page == null) {
-      page = getFXML(id.getFxmlName(), null, controller);
-      FXML_PAGES.put(id.getPagekey(), page);
-    }
-    return page;
+  public static Parent getPage(String fxmlName, Object controller) {
+    return instance.loadFXML(fxmlName, null, controller);
+  }
+
+  public static Parent getPage(String fxmlName) {
+    return instance.loadFXML(fxmlName, null, null);
   }
 
   /**
@@ -95,9 +81,8 @@ public class FXMLNodeMap {
    * @param fxmlName - of the page to retrieve
    * @param root - optional root object for the fxml
    * @return
-   * @throws FXMLMissingException 
    */
-  private Parent getFXML(String fxmlName, Object root, Object controller) throws FXMLMissingException {
+  private Parent loadFXML(String fxmlName, Object root, Object controller) {
     String fqFxmlName = fxmlDirectory + fxmlName + FXML_TYPE;
     Resource r = new ClassPathResource(fqFxmlName);
     try {
@@ -105,7 +90,7 @@ public class FXMLNodeMap {
       fxmlLoader.setRoot(root);
       if (controller == null) {
         // Take Spring managed bean as the fx:controller
-        fxmlLoader.setControllerFactory(springContext::getBean);
+        fxmlLoader.setControllerFactory(getControllerFactory());
       } else {
         fxmlLoader.setController(controller);
       }
@@ -113,11 +98,17 @@ public class FXMLNodeMap {
       return fxmlLoader.load();
     } catch (FileNotFoundException e) {
       log.error("Unknown page " + fqFxmlName);
-      throw new FXMLMissingException("Unknown page", fqFxmlName);
+      Parent errorLabel = new Label("Unknown page: " + fqFxmlName);
+      errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 30; -fx-font-weight: bold;");
+      return errorLabel;
     } catch (IOException e) {
       log.error("error loading fxml", e);
       throw new FXMLLoadException("error loading fxml", e);
     }
+  }
+
+  protected Callback<Class<?>, Object> getControllerFactory() {
+    return springContext::getBean;
   }
 
 }

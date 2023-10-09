@@ -8,7 +8,6 @@ import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
-import nl.ealse.javafx.FXMLMissingException;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -28,13 +27,9 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   @PostConstruct
   void setup() {
     formController = new PartnerFormController(this);
-    try {
-      formController.initializeForm();
-      formController.setOnSave(e -> save());
-      formController.setOnReset(e -> reset());
-    } catch (FXMLMissingException e) {
-      pageController.showErrorMessage(e.getMessage());
-    }
+    formController.initializeForm();
+    formController.setOnSave(e -> save());
+    formController.setOnReset(e -> reset());
   }
 
   @EventListener(condition = "#event.name('NEW_PARTNER','AMEND_PARTNER')")

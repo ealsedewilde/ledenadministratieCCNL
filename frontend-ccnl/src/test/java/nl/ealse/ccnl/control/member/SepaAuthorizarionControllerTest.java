@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-class SepaAuthorizarionControllerTest extends FXMLBaseTest<SepaAuthorizarionController> {
+class SepaAuthorizarionControllerTest extends FXMLBaseTest {
 
   private static IbanController ibanController;
   private static DocumentService documentService;

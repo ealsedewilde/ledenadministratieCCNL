@@ -1,7 +1,7 @@
 package nl.ealse.ccnl;
 
 import javafx.application.Application;
-import nl.ealse.javafx.FXMLNodeMap;
+import nl.ealse.javafx.FXMLLoaderBean;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -14,7 +14,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "nl.ealse.ccnl.ledenadministratie.model.dao", bootstrapMode = BootstrapMode.LAZY)
 @EnableAsync
-@Import(FXMLNodeMap.class)
+@Import(FXMLLoaderBean.class)
 public class LedenadministratieApplication {
 
   /**

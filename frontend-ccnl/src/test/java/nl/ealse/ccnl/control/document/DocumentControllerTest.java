@@ -20,7 +20,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
+class DocumentControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static DocumentService documentService;
@@ -64,17 +63,13 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
 
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.VIEW_DOCUMENTS);
-      setPdfViewer();
-      TableRow<Document> row = new TableRow<>();
-      row.setItem(document());
-      when(mouseEvent.getSource()).thenReturn(row);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    getPageWithFxController(sut, PageName.VIEW_DOCUMENTS);
+    setPdfViewer();
+    TableRow<Document> row = new TableRow<>();
+    row.setItem(document());
+    when(mouseEvent.getSource()).thenReturn(row);
   }
-  
+
 
   private void setPdfViewer() {
     PDFViewer pdfViewer = PDFViewer.builder().build();
@@ -88,7 +83,7 @@ class DocumentControllerTest extends FXMLBaseTest<DocumentController> {
 
   @BeforeAll
   static void setup() {
-   
+
     pageController = mock(PageController.class);
     documentService = mock(DocumentService.class);
     document = document();

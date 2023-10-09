@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -12,39 +13,32 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 
-class FXMLNodeMapTest {
+class FXMLLoaderBeanTest {
 
   private static ApplicationContext springContext;
-  private static FXMLNodeMap sut;
 
   @Test
   void getPage() {
-     try {
-      Parent p = sut.get(new PageId("LOGO", "logo"), null);
-      Assertions.assertTrue(p instanceof VBox);
-    } catch (FXMLMissingException e) {
-      e.printStackTrace();
-    }
+    Parent p = FXMLLoaderBean.getPage("logo");
+    Assertions.assertTrue(p instanceof VBox);
   }
 
   @Test
   void pageNotFound() {
-    Assertions.assertThrows(FXMLMissingException.class,
-        () -> sut.get(new PageId("DUMMY", "dummy"), null));
+    Parent p = FXMLLoaderBean.getPage("dummy");
+    Assertions.assertTrue(p instanceof Label);
   }
 
   @Test
   void pageInError() {
-    PageId id = new PageId("EMPTY", "empty");
-    Assertions.assertThrows(FXMLLoadException.class, () -> sut.get(id, null));
+    Assertions.assertThrows(FXMLLoadException.class, () -> FXMLLoaderBean.getPage("empty"));
   }
   
   @BeforeAll
   static void setup() {
     new JFXPanel();
     springContext = mock(ApplicationContext.class);
-    sut = new FXMLNodeMap(springContext);
-    fxmlDirectory();
+    fxmlDirectory(new FXMLLoaderBean(springContext));
   }
   
   @AfterAll
@@ -52,9 +46,9 @@ class FXMLNodeMapTest {
     Platform.exit();
   }
   
-  private static void fxmlDirectory() {
+  private static void fxmlDirectory(FXMLLoaderBean flb) {
     try {
-      FieldUtils.writeField(sut, "fxmlDirectory", "fxml/", true);
+      FieldUtils.writeField(flb, "fxmlDirectory", "fxml/", true);
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -3,9 +3,7 @@ package nl.ealse.ccnl.control.member;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -16,14 +14,13 @@ import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.MailService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 
-class CancelationMailControllerTest extends FXMLBaseTest<CancelationMailController> {
+class CancelationMailControllerTest extends FXMLBaseTest {
 
   private PageController pageController;
   private DocumentService documentService;
@@ -66,14 +63,7 @@ class CancelationMailControllerTest extends FXMLBaseTest<CancelationMailControll
   }
 
   private void prepare() {
-    try {
-      Parent h = getPageWithFxController(controller, PageName.MAIL_HELP);
-      when(pageController.loadPage(PageName.MAIL_HELP)).thenReturn(h);
-      getPageWithoutFxController(controller, PageName.MEMBER_CANCEL_MAIL);
-    } catch (FXMLMissingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    getPageWithoutFxController(controller, PageName.MEMBER_CANCEL_MAIL);
   }
 
   private void setContent() {

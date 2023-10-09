@@ -12,12 +12,11 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class PartnerDeleteControllerTest extends FXMLBaseTest<PartnerDeleteController> {
+class PartnerDeleteControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static CommercialPartnerService service;
@@ -55,11 +54,7 @@ class PartnerDeleteControllerTest extends FXMLBaseTest<PartnerDeleteController> 
   };
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.PARTNER_DELETE);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    getPageWithFxController(sut, PageName.PARTNER_DELETE);
   }
 
   private ExternalRelationPartner externalRelationPartner() {

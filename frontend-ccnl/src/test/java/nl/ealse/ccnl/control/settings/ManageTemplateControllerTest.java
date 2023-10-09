@@ -3,9 +3,7 @@ package nl.ealse.ccnl.control.settings;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -14,14 +12,13 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 
-class ManageTemplateControllerTest extends FXMLBaseTest<ManageTemplateController> {
+class ManageTemplateControllerTest extends FXMLBaseTest {
 
   private static ApplicationContext context;
   private static DocumentService service;
@@ -65,16 +62,7 @@ class ManageTemplateControllerTest extends FXMLBaseTest<ManageTemplateController
   }
 
   private void prepare() {
-    try {
-      Parent p = getPageWithFxController(sut, PageName.MANAGE_TEMPLATE_TEXT_HELP);
-      when(pageController.loadPage(PageName.MANAGE_TEMPLATE_TEXT_HELP)).thenReturn(p);
-      p = getPageWithFxController(sut, PageName.MANAGE_MAIL_HELP);
-      when(pageController.loadPage(PageName.MANAGE_MAIL_HELP)).thenReturn(p);
-      getPageWithFxController(sut, PageName.MANAGE_TEMPLATE);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
-
+    getPageWithFxController(sut, PageName.MANAGE_TEMPLATE);
   }
 
   @BeforeAll

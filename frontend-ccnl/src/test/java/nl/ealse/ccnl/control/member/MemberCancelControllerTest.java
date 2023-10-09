@@ -11,12 +11,11 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class MemberCancelControllerTest extends FXMLBaseTest<MemberCancelController> {
+class MemberCancelControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static MemberService memberService;
@@ -46,11 +45,7 @@ class MemberCancelControllerTest extends FXMLBaseTest<MemberCancelController> {
   }
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.MEMBER_CANCEL);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    getPageWithFxController(sut, PageName.MEMBER_CANCEL);
   }
 
   @BeforeAll

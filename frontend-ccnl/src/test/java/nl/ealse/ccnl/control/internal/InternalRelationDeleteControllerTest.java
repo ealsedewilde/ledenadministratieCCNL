@@ -12,12 +12,11 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class InternalRelationDeleteControllerTest extends FXMLBaseTest<InternalRelationDeleteController> {
+class InternalRelationDeleteControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static InternalRelationService service;
@@ -55,11 +54,7 @@ class InternalRelationDeleteControllerTest extends FXMLBaseTest<InternalRelation
   };
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.INTERNAL_RELATION_DELETE);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    getPageWithFxController(sut, PageName.INTERNAL_RELATION_DELETE);
   }
 
   private InternalRelation internalRelation() {

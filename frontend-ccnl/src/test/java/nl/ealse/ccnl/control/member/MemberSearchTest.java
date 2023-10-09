@@ -21,14 +21,13 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 
-class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
+class MemberSearchTest extends FXMLBaseTest {
 
   private static ApplicationContext springContext;
   private static MemberService service;
@@ -75,12 +74,7 @@ class MemberSearchTest extends FXMLBaseTest<MemberSearchController> {
   }
 
   private void prepare() {
-    try {
-      p = (MemberSearch) getPageWithFxController(sut, PageName.MEMBER_SEARCH);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-      e.printStackTrace();
-    }
+    p = (MemberSearch) getPageWithFxController(sut, PageName.MEMBER_SEARCH);
   }
 
 

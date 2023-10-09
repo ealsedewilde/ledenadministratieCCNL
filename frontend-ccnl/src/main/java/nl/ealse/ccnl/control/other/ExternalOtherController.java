@@ -8,14 +8,13 @@ import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
-import nl.ealse.javafx.FXMLMissingException;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class ExternalOtherController extends ExternalRelationController<ExternalRelationOther> {
   private final PageController pageController;
-  
+
   @Getter
   private FormController formController;
 
@@ -28,13 +27,9 @@ public class ExternalOtherController extends ExternalRelationController<External
   @PostConstruct
   void setup() {
     formController = new ExternalOtherFormController(this);
-    try {
-      formController.initializeForm();
-      formController.setOnSave(e -> save());
-      formController.setOnReset(e -> reset());
-    } catch (FXMLMissingException e) {
-      pageController.showErrorMessage(e.getMessage());
-    }
+    formController.initializeForm();
+    formController.setOnSave(e -> save());
+    formController.setOnReset(e -> reset());
   }
 
   @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION','AMEND_EXTERNAL_RELATION')")

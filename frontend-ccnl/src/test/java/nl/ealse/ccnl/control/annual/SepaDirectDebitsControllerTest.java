@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.control.annual.SepaDirectDebitsController.DirectDebitTask;
@@ -22,7 +21,6 @@ import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
 import nl.ealse.ccnl.service.SepaDirectDebitService.MappingResult;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.ccnl.test.TestExecutor;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -31,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.core.task.TaskExecutor;
 
-class SepaDirectDebitsControllerTest extends FXMLBaseTest<SepaDirectDebitsController> {
+class SepaDirectDebitsControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static SepaDirectDebitService service;
@@ -84,25 +82,17 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest<SepaDirectDebitsContro
   }
 
   private void prepare() {
-    try {
-      setDialog(true, "settingsStage");
-      setDialog(true, "messagesStage");
-      getPageWithFxController(sut, PageName.DIRECT_DEBITS);
-      Parent p = getPageWithFxController(sut, PageName.DIRECT_DEBITS_SETTINGS);
-      when(pageController.loadPage(PageName.DIRECT_DEBITS_SETTINGS)).thenReturn(p);
-      Parent m = getPageWithFxController(sut, PageName.DIRECT_DEBITS_MESSAGES);
-      when(pageController.loadPage(PageName.DIRECT_DEBITS_MESSAGES)).thenReturn(m);
-      setDialog(false, "settingsStage");
-      setDialog(false, "messagesStage");
-      sut.initialize();
-    } catch (FXMLMissingException e) {
-      e.printStackTrace();
-    }
+    setDialog(true, "settingsStage");
+    setDialog(true, "messagesStage");
+    getPageWithFxController(sut, PageName.DIRECT_DEBITS);
+    setDialog(false, "settingsStage");
+    setDialog(false, "messagesStage");
+    sut.initialize();
   }
 
   @BeforeAll
   static void setup() {
-   
+
     pageController = mock(PageController.class);
     service = mock(SepaDirectDebitService.class);
     result = new MappingResult();

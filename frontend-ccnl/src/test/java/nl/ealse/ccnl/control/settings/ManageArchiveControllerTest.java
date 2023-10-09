@@ -10,13 +10,12 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.ArchiveService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class ManageArchiveControllerTest extends FXMLBaseTest<ManageArchiveController> {
+class ManageArchiveControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static ArchiveService service;
@@ -54,11 +53,7 @@ class ManageArchiveControllerTest extends FXMLBaseTest<ManageArchiveController> 
   }
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.MANAGE_ARCHIVE);
-    } catch (FXMLMissingException e) {
-      e.printStackTrace();
-    }
+    getPageWithFxController(sut, PageName.MANAGE_ARCHIVE);
   }
 
   @BeforeAll

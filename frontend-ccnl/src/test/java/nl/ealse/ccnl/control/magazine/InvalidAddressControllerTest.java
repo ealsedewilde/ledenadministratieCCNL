@@ -10,12 +10,11 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class InvalidAddressControllerTest extends FXMLBaseTest<InvalidAddressController> {
+class InvalidAddressControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static MemberService service;
@@ -45,11 +44,7 @@ class InvalidAddressControllerTest extends FXMLBaseTest<InvalidAddressController
   }
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.MAGAZINE_INVALID_ADDRESS);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    getPageWithFxController(sut, PageName.MAGAZINE_INVALID_ADDRESS);
   }
 
   @BeforeAll

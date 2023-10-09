@@ -19,6 +19,7 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
+import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
@@ -82,10 +83,8 @@ public class ManageTemplateController {
     this.dialog.getIcons().add(ImagesMap.get("info.png"));
 
     dialog.initOwner(pageController.getPrimaryStage());
-    letterHelpScene =
-        new Scene(pageController.loadPage(PageName.MANAGE_TEMPLATE_TEXT_HELP), 550, 330);
-    mailHelpScene = new Scene(pageController.loadPage(PageName.MANAGE_MAIL_HELP), 550, 150);
-
+    letterHelpScene = new Scene(FXMLLoaderBean.getPage("dialog/texthelp"), 550, 330);
+    mailHelpScene = new Scene(FXMLLoaderBean.getPage("dialog/mailhelp"), 550, 150);
   }
 
   @EventListener

@@ -1,40 +1,63 @@
 package nl.ealse.ccnl.control.settings;
 
+import jakarta.annotation.PostConstruct;
 import javafx.fxml.FXML;
-import lombok.Getter;
-import lombok.Setter;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
+import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.ImagesMap;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class SettingsEdit extends SettingsView {
 
-  @Getter
   private final SettingsController controller;
+  private final PageController pageController;
 
-  @Setter
   private Setting selectedSettings;
+  
+  private Stage editStage;
 
-  public SettingsEdit(SettingsController parentController) {
+
+  public SettingsEdit(SettingsController parentController, PageController pageController) {
     this.controller = parentController;
+    this.pageController = pageController;
+  }
+  
+  @PostConstruct
+  void setup() {
+    editStage = new Stage();
+    editStage.initModality(Modality.APPLICATION_MODAL);
+    editStage.setTitle("Setting wijzigen");
+    editStage.getIcons().add(ImagesMap.get("Citroen.png"));
+    editStage.initOwner(pageController.getPrimaryStage());
+    Parent p = FXMLLoaderBean.getPage("settings/settingsEdit", this);
+    Scene dialogScene = new Scene(p, 1200, 400);
+    editStage.setScene(dialogScene);
   }
 
   @FXML
   void update() {
     if (valid()) {
-      String oldId = selectedSettings.getId();
       selectedSettings.setKey(getKey().getText());
       selectedSettings.setValue(getValue().getText());
       selectedSettings.setDescription(getDescription().getText());
       selectedSettings.setSettingsGroup(getGroup().getText());
+      String oldId = selectedSettings.getId();
       controller.update(selectedSettings, oldId);
+      editStage.close();
     }
   }
 
   @FXML
   void delete() {
     controller.delete(selectedSettings);
+    editStage.close();
   }
 
   @FXML
@@ -52,6 +75,10 @@ public class SettingsEdit extends SettingsView {
   public void onApplicationEvent(SettingSelectionEvent event) {
     selectedSettings = event.getSelectedSetting();
     reset();
+    if (!editStage.isShowing()) {
+      editStage.show();
+    }
+
   }
 
 }

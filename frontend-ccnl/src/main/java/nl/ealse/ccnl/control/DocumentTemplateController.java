@@ -14,11 +14,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
+import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
@@ -79,7 +79,7 @@ public abstract class DocumentTemplateController {
       this.dialog.getIcons().add(ImagesMap.get("info.png"));
       this.dialog.initOwner(pageController.getPrimaryStage());
 
-      Parent textHelp = pageController.loadPage(templateContext.helpPage);
+      Parent textHelp = FXMLLoaderBean.getPage(templateContext.helpPage);
       Scene dialogScene;
 
       if (templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
@@ -156,14 +156,14 @@ public abstract class DocumentTemplateController {
    * @author ealse
    */
   public enum DocumentTemplateContext {
-    MEMBERSHIP_CANCELATION_MAIL(new DocumentTemplateContextData(PageName.MAIL_HELP, null,
+    MEMBERSHIP_CANCELATION_MAIL(new DocumentTemplateContextData("dialog/mailhelp", null,
         DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL)),
     //
-    PAYMENT_REMINDER(new DocumentTemplateContextData(PageName.REMINDER_TEXT_HELP,
+    PAYMENT_REMINDER(new DocumentTemplateContextData("dialog/texthelp",
         FileExtension.PDF,
         DocumentTemplateType.PAYMENT_REMINDER)),
     //
-    WELCOME_LETTER(new DocumentTemplateContextData(PageName.WELCOME_TEXT_HELP,
+    WELCOME_LETTER(new DocumentTemplateContextData("dialog/texthelp",
         FileExtension.DOCX, DocumentTemplateType.WELCOME_LETTER));
 
     final DocumentTemplateContextData data;
@@ -181,7 +181,7 @@ public abstract class DocumentTemplateController {
   @AllArgsConstructor
   private static class DocumentTemplateContextData {
     @NonNull
-    final PageName helpPage;
+    final String helpPage;
     @Nullable
     final FileExtension fileType;
     @NonNull

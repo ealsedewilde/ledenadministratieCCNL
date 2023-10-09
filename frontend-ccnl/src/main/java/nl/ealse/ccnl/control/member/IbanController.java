@@ -11,9 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
+import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
 import org.apache.commons.validator.routines.IBANValidator;
 import org.springframework.context.ApplicationEventPublisher;
@@ -42,14 +42,14 @@ public class IbanController {
   private final IBANValidator ibanValidator = new IBANValidator();
 
   private Member selectedMember;
-  
+
   private Stage ibanNumberStage;
 
   public IbanController(ApplicationEventPublisher eventPublisher, PageController pageController) {
     this.eventPublisher = eventPublisher;
     this.pageController = pageController;
   }
-  
+
   @PostConstruct
   void setup() {
     ibanNumberStage = new Stage();
@@ -57,7 +57,7 @@ public class IbanController {
     ibanNumberStage.setTitle("IBAN-nummer toevoegen");
     ibanNumberStage.getIcons().add(ImagesMap.get("Citroen.png"));
     ibanNumberStage.initOwner(pageController.getPrimaryStage());
-    Parent p = pageController.loadPage(PageName.ADD_IBAN_NUMBER, this);
+    Parent p = FXMLLoaderBean.getPage("dialog/addIban", this);
     Scene dialogScene = new Scene(p, 1200, 400);
     ibanNumberStage.setScene(dialogScene);
   }
@@ -66,7 +66,7 @@ public class IbanController {
   void initialize() {
     ibanNumber.textProperty().addListener(new IbanNumberListener(ibanNumberE));
   }
-  
+
   public void show() {
     ibanNumberStage.show();
   }

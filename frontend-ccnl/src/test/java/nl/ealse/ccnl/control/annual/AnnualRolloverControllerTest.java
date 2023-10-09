@@ -18,7 +18,6 @@ import nl.ealse.ccnl.service.excelexport.ExportArchiveService;
 import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.ccnl.test.TestExecutor;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.core.task.TaskExecutor;
 
-class AnnualRolloverControllerTest extends FXMLBaseTest<AnnualRolloverController> {
+class AnnualRolloverControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static BackupRestoreService backupService;
@@ -85,11 +84,7 @@ class AnnualRolloverControllerTest extends FXMLBaseTest<AnnualRolloverController
   }
 
   private void prepare() {
-    try {
       getPageWithFxController(sut, PageName.ANNUAL_ROLLOVER);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
   }
 
   @BeforeAll

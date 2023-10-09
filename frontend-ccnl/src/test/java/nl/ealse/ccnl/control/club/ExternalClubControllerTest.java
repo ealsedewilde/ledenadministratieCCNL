@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class ExternalClubControllerTest extends FXMLBaseTest<ExternalClubController> {
+class ExternalClubControllerTest extends FXMLBaseTest {
 
   private static ExternalClubService service;
 

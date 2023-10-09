@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.scene.Parent;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToFile;
 import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToPrint;
@@ -33,7 +32,6 @@ import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.ccnl.test.TestExecutor;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -44,7 +42,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
 
-class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderLettersController> {
+class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static DocumentService documentService;
@@ -103,15 +101,9 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest<PaymentReminderL
   }
 
   private void prepare() {
-    try {
-      Parent p = getPageWithFxController(sut, PageName.REMINDER_TEXT_HELP);
-      when(pageController.loadPage(PageName.REMINDER_TEXT_HELP)).thenReturn(p);
-      getPageWithFxController(sut, PageName.PAYMENT_REMINDER_LETTERS);
-      setPdfViewer();
-      setFileChooser();
-    } catch (FXMLMissingException e) {
-      e.printStackTrace();
-    }
+    getPageWithFxController(sut, PageName.PAYMENT_REMINDER_LETTERS);
+    setPdfViewer();
+    setFileChooser();
   }
 
   private void setFileChooser() {

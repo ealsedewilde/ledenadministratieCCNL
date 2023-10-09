@@ -20,7 +20,6 @@ import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberView;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
@@ -61,13 +60,9 @@ public class MemberController extends MemberView {
   @PostConstruct
   void setup() {
     formController = new MemberFormController(this);
-    try {
-      formController.initializeForm();
-      formController.setOnSave(e -> save());
-      formController.setOnReset(e -> reset());
-    } catch (FXMLMissingException e) {
-      pageController.showErrorMessage(e.getMessage());
-    }
+    formController.initializeForm();
+    formController.setOnSave(e -> save());
+    formController.setOnReset(e -> reset());
 
     pdfViewer = PDFViewer.builder().withDeleteButton(e -> deletePDF())
         .withPrintButton(e -> printPDF()).withCancelButton(e -> closePDF()).build();

@@ -14,7 +14,6 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.excelimport.ImportService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.ccnl.test.TestExecutor;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +23,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
 
-class ExcelImportControllerTest extends FXMLBaseTest<ExcelImportController> {
+class ExcelImportControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static ImportService importService;
@@ -66,11 +65,7 @@ class ExcelImportControllerTest extends FXMLBaseTest<ExcelImportController> {
   }
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.EXCEL_IMPORT);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    getPageWithFxController(sut, PageName.EXCEL_IMPORT);
   }
 
   @BeforeAll

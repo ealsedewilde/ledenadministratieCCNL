@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-class MemberControllerTest extends FXMLBaseTest<MemberController> {
+class MemberControllerTest extends FXMLBaseTest {
 
   private DocumentService documentService;
   private MemberService service;

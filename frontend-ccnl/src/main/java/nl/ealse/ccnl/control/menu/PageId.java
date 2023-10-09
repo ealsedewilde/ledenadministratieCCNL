@@ -1,4 +1,4 @@
-package nl.ealse.javafx;
+package nl.ealse.ccnl.control.menu;
 
 import lombok.Getter;
 

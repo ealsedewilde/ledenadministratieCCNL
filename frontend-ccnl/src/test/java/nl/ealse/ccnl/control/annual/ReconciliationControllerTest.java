@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
@@ -27,7 +26,6 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.ccnl.test.TestExecutor;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -37,7 +35,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 
-class ReconciliationControllerTest extends FXMLBaseTest<ReconciliationController> {
+class ReconciliationControllerTest extends FXMLBaseTest {
   private static ApplicationContext context;
   private static PageController pageController;
   private static ReconciliationService service;
@@ -85,16 +83,10 @@ class ReconciliationControllerTest extends FXMLBaseTest<ReconciliationController
   }
 
   private void prepare() {
-    try {
       setDialog(true, "messagesStage");
       getPageWithFxController(sut, PageName.RECONCILE_PAYMENTS);
-      Parent m = getPageWithFxController(sut, PageName.RECONCILE_MESSAGES);
-      when(pageController.loadPage(PageName.RECONCILE_MESSAGES)).thenReturn(m);
       setDialog(false, "messagesStage");
       sut.initialize();
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
   }
 
   @BeforeAll

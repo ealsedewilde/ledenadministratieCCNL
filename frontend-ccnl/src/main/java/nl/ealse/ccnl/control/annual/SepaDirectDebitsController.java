@@ -23,6 +23,7 @@ import nl.ealse.ccnl.service.SepaDirectDebitService;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
 import nl.ealse.ccnl.service.SepaDirectDebitService.MappingResult;
+import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
@@ -97,7 +98,7 @@ public class SepaDirectDebitsController {
       settingsStage.getIcons().add(ImagesMap.get("info.png"));
 
       settingsStage.initOwner(pageController.getPrimaryStage());
-      Parent parent = pageController.loadPage(PageName.DIRECT_DEBITS_SETTINGS);
+      Parent parent = FXMLLoaderBean.getPage("dialog/directDebitsSettings", this);
       Scene dialogScene = new Scene(parent, 1000, 600);
       settingsStage.setScene(dialogScene);
 
@@ -118,7 +119,7 @@ public class SepaDirectDebitsController {
       messagesStage.setTitle("Incassomeldingen");
       messagesStage.getIcons().add(ImagesMap.get("info.png"));
       messagesStage.initOwner(pageController.getPrimaryStage());
-      Parent parent = pageController.loadPage(PageName.DIRECT_DEBITS_MESSAGES);
+      Parent parent = FXMLLoaderBean.getPage("dialog/directDebitMessages", this);
       Scene messagesScene = new Scene(parent, 600, 400);
       messagesStage.setScene(messagesScene);
     }

@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.scene.Parent;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -25,7 +24,6 @@ import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.ccnl.test.PrintCount;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +33,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-class WelcomeLetterControllerTest extends FXMLBaseTest<WelcomeLetterController> {
+class WelcomeLetterControllerTest extends FXMLBaseTest {
 
   @TempDir
   File tempDir;
@@ -104,13 +102,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest<WelcomeLetterController> 
   }
 
   private void prepare() {
-    try {
-      Parent h = getPageWithFxController(controller, PageName.WELCOME_TEXT_HELP);
-      when(pageController.loadPage(PageName.WELCOME_TEXT_HELP)).thenReturn(h);
       getPageWithoutFxController(controller, PageName.WELCOME_LETTER);
-    } catch (FXMLMissingException e) {
-      e.printStackTrace();
-    }
   }
 
   private void setFileChooser() {

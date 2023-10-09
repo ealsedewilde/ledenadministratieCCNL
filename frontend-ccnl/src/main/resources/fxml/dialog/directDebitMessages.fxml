@@ -8,8 +8,7 @@
 
 <VBox stylesheets="@../../css/main.css" spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
   minWidth="-Infinity" prefHeight="390.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8"
-  xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="nl.ealse.ccnl.control.annual.SepaDirectDebitsController">
+  xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <Label text="Incassomeldingen" styleClass="header" />
     <ListView fx:id="directDebitMessages"/>

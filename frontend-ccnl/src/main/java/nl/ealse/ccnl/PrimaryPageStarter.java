@@ -1,15 +1,11 @@
 package nl.ealse.ccnl;
 
 import java.awt.SplashScreen;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.javafx.FXMLMissingException;
-import nl.ealse.javafx.FXMLNodeMap;
+import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
-import nl.ealse.javafx.PageId;
 import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
@@ -25,19 +21,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class PrimaryPageStarter {
 
-  private static final PageId MAIN_FXML = new PageId("main", "main");
-
-  private final FXMLNodeMap fxmlNodeMap;
+  private static final String MAIN_FXML = "main";
 
   @Value("${fxml.title}")
   private String applicationTitle;
 
   @Value("${fxml.icon}")
   private String applicationIcon;
-
-  public PrimaryPageStarter(FXMLNodeMap fxmlNodeMap) {
-    this.fxmlNodeMap = fxmlNodeMap;
-  }
 
   /**
    * initialize the primary scene of the application.
@@ -48,7 +38,7 @@ public class PrimaryPageStarter {
       final Stage stage = event.getStage();
       stage.setTitle(applicationTitle);
       stage.getIcons().add(ImagesMap.get(applicationIcon));
-      Scene scene = new Scene(getRoot());
+      Scene scene = new Scene(FXMLLoaderBean.getPage(MAIN_FXML));
       stage.setScene(scene);
       stage.show();
     } catch (Exception e) {
@@ -60,17 +50,6 @@ public class PrimaryPageStarter {
         splash.close();
       }
     }
-  }
-
-  private Parent getRoot() {
-    Parent root;
-    try {
-      root = fxmlNodeMap.get(MAIN_FXML, null);
-    } catch (FXMLMissingException e) {
-      root = new Label(e.getMessage() + e.getPagekey());
-      root.setStyle("-fx-text-fill: red; -fx-font-size: 30; -fx-font-weight: bold;");
-    }
-    return root;
   }
 
 }

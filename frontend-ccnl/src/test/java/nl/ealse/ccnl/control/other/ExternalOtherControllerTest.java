@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class ExternalOtherControllerTest extends FXMLBaseTest<ExternalOtherController> {
+class ExternalOtherControllerTest extends FXMLBaseTest {
 
   private static ExternalOtherService service;
 

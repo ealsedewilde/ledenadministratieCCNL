@@ -1,21 +1,24 @@
 package nl.ealse.ccnl.control.settings;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
+import nl.ealse.ccnl.test.FXBase;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.javafx.FXMLLoaderBean;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+class SettingsEditTest extends FXMLBaseTest {
 
-class SettingsEditTest extends FXMLBaseTest<SettingsEdit> {
-  
   private static final String id = "id";
 
   private SettingsController parentController;
 
   private SettingsEdit sut;
-  
+
   private Setting setting;
 
   @Test
@@ -26,10 +29,7 @@ class SettingsEditTest extends FXMLBaseTest<SettingsEdit> {
     setting.setValue("value");
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      SettingsEditHelper seh = SettingsEditHelper.getInstance();
-      seh.loadSettingsEditPage();
-      sut = seh.getSettingsEdit();
-      parentController = seh.getParentController();
+      prepare();
       doTest();
       ar.set(true);
     }, ar);
@@ -44,6 +44,12 @@ class SettingsEditTest extends FXMLBaseTest<SettingsEdit> {
     verify(parentController).update(setting, id);
 
     sut.delete();
+  }
+
+  public void prepare() {
+    parentController = mock(SettingsController.class);
+    sut = new SettingsEdit(parentController, getPageController());
+    sut.setup();
   }
 
 }

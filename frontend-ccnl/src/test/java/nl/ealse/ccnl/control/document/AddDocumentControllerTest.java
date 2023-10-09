@@ -12,7 +12,6 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.FXMLMissingException;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -21,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-class AddDocumentControllerTest extends FXMLBaseTest<AddDocumentController> {
+class AddDocumentControllerTest extends FXMLBaseTest {
 
   private static PageController pageController;
   private static DocumentService documentService;
@@ -55,11 +54,7 @@ class AddDocumentControllerTest extends FXMLBaseTest<AddDocumentController> {
   }
 
   private void prepare() {
-    try {
-      getPageWithFxController(sut, PageName.ADD_DOCUMENT);
-    } catch (FXMLMissingException e) {
-      Assertions.fail(e.getMessage());
-    }
+    getPageWithFxController(sut, PageName.ADD_DOCUMENT);
   }
 
   @BeforeAll
