@@ -1,10 +1,9 @@
 package nl.ealse.ccnl.control.annual;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.util.List;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -23,8 +22,6 @@ import nl.ealse.ccnl.service.SepaDirectDebitService;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
 import nl.ealse.ccnl.service.SepaDirectDebitService.MappingResult;
-import nl.ealse.javafx.FXMLLoaderBean;
-import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.context.event.EventListener;
@@ -77,6 +74,26 @@ public class SepaDirectDebitsController {
     this.service = service;
     this.executor = executor;
   }
+  
+  @PostConstruct
+  void setup() {
+    messagesStage = new StageBuilder(pageController).fxml("dialog/directDebitMessages", this)
+        .title("Incassomeldingen").size(600, 400).build();
+    settingsStage = new StageBuilder(pageController).fxml("dialog/directDebitsSettings", this)
+        .title("Incasso instellingen").size(1000, 600).build();
+    valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    valueColumn.setOnEditCommit(t -> {
+      t.getRowValue().setValue(t.getNewValue());
+      saveProperty(t.getRowValue());
+    });
+    descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    descriptionColumn.setOnEditCommit(t -> {
+      t.getRowValue().setDescription(t.getNewValue());
+      saveProperty(t.getRowValue());
+    });
+   fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XML);
+    fileChooser.setInitialDirectory(service.getDirectDebitsDirectory());
+  }
 
   @EventListener(condition = "#event.name('PRODUCE_DIRECT_DEBITS_FILE')")
   public void onApplicationEvent(MenuChoiceEvent event) {
@@ -84,45 +101,6 @@ public class SepaDirectDebitsController {
     generateButton.setDisable(true);
     selectedFile = null;
     errorMessageLabel.setVisible(false);
-  }
-
-  @FXML
-  void initialize() {
-    if (settingsStage == null) {
-      fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XML);
-      fileChooser.setInitialDirectory(service.getDirectDebitsDirectory());
-
-      settingsStage = new Stage();
-      settingsStage.setResizable(false);
-      settingsStage.setTitle("Incasso instellingen");
-      settingsStage.getIcons().add(ImagesMap.get("info.png"));
-
-      settingsStage.initOwner(pageController.getPrimaryStage());
-      Parent parent = FXMLLoaderBean.getPage("dialog/directDebitsSettings", this);
-      Scene dialogScene = new Scene(parent, 1000, 600);
-      settingsStage.setScene(dialogScene);
-
-      valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-      valueColumn.setOnEditCommit(t -> {
-        t.getRowValue().setValue(t.getNewValue());
-        saveProperty(t.getRowValue());
-      });
-      descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-      descriptionColumn.setOnEditCommit(t -> {
-        t.getRowValue().setDescription(t.getNewValue());
-        saveProperty(t.getRowValue());
-      });
-    }
-    if (messagesStage == null) {
-      messagesStage = new Stage();
-      messagesStage.setResizable(false);
-      messagesStage.setTitle("Incassomeldingen");
-      messagesStage.getIcons().add(ImagesMap.get("info.png"));
-      messagesStage.initOwner(pageController.getPrimaryStage());
-      Parent parent = FXMLLoaderBean.getPage("dialog/directDebitMessages", this);
-      Scene messagesScene = new Scene(parent, 600, 400);
-      messagesStage.setScene(messagesScene);
-    }
   }
 
   @FXML

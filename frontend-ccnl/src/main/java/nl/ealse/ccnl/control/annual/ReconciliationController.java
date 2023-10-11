@@ -1,13 +1,12 @@
 package nl.ealse.ccnl.control.annual;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -27,11 +26,8 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
-import nl.ealse.javafx.FXMLLoaderBean;
-import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
@@ -42,11 +38,9 @@ public class ReconciliationController {
 
   private final PageController pageController;
 
-  private final ApplicationContext springContext;
-
   private final TaskExecutor executor;
 
-  private ReconciliationService service;
+  private final ReconciliationService service;
 
   private WrappedFileChooser fileChooser;
 
@@ -71,11 +65,18 @@ public class ReconciliationController {
 
   private Stage messagesStage;
 
-  public ReconciliationController(PageController pageController, ApplicationContext springContext,
+  public ReconciliationController(PageController pageController, ReconciliationService service,
       TaskExecutor executor) {
     this.pageController = pageController;
-    this.springContext = springContext;
+    this.service = service;
     this.executor = executor;
+  }
+
+  @PostConstruct
+  void setup() {
+    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XML);
+    messagesStage = new StageBuilder(pageController).fxml("dialog/reconciliationMessages", this)
+        .title("Aflettermeldingen").size(600, 400).build();
   }
 
   @EventListener(condition = "#event.name('RECONCILE_PAYMENTS')")
@@ -95,19 +96,9 @@ public class ReconciliationController {
 
   @FXML
   void initialize() {
-    service = springContext.getBean(ReconciliationService.class);
-    buttonColumn.setCellFactory(
-        t -> new ButtonCell<PaymentFile, String>(new DeleteButton(), this::deleteFile));
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XML);
-    if (messagesStage == null) {
-      messagesStage = new Stage();
-      messagesStage.setResizable(false);
-      messagesStage.setTitle("Aflettermeldingen");
-      messagesStage.getIcons().add(ImagesMap.get("info.png"));
-      messagesStage.initOwner(pageController.getPrimaryStage());
-      Parent parent = FXMLLoaderBean.getPage("dialog/reconciliationMessages", this);
-      Scene messagesScene = new Scene(parent, 600, 400);
-      messagesStage.setScene(messagesScene);
+    if (buttonColumn != null) {
+      buttonColumn.setCellFactory(
+          t -> new ButtonCell<PaymentFile, String>(new DeleteButton(), this::deleteFile));
     }
   }
 
@@ -145,7 +136,7 @@ public class ReconciliationController {
       messagesStage.close();
     }
     reconcileMessages.getItems().clear();
-    
+
     LocalDate dateValue = referenceDate.getValue();
     if (dateValue == null) {
       referenceDateE.setVisible(true);

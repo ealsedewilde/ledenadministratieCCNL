@@ -8,7 +8,6 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import nl.ealse.ccnl.control.annual.SepaDirectDebitsController.DirectDebitTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -82,12 +81,8 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    setDialog(true, "settingsStage");
-    setDialog(true, "messagesStage");
+    sut.setup();
     getPageWithFxController(sut, PageName.DIRECT_DEBITS);
-    setDialog(false, "settingsStage");
-    setDialog(false, "messagesStage");
-    sut.initialize();
   }
 
   @BeforeAll
@@ -116,16 +111,6 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
     return null;
-  }
-
-  private void setDialog(boolean b, String name) {
-    try {
-      Object value = b ? new Stage() : null;
-      FieldUtils.writeDeclaredField(sut, name, value, true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
   }
 
 }

@@ -11,7 +11,7 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -22,9 +22,9 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
   private final PageController pageController;
   private final MemberService service;
 
-  public MemberSearchController(ApplicationContext springContext, MemberService service,
+  public MemberSearchController(ApplicationEventPublisher eventPublisher, MemberService service,
       PageController pageController) {
-    super(springContext);
+    super(eventPublisher);
     this.initializeSearchItems();
     this.pageController = pageController;
     this.service = service;

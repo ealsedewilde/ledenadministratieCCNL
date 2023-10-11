@@ -10,7 +10,7 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -20,10 +20,10 @@ public class ExternalOtherSearchController
 
   private final PageController pageController;
 
-  protected ExternalOtherSearchController(ApplicationContext springContext,
+  protected ExternalOtherSearchController(ApplicationEventPublisher eventPublisher,
       ExternalRelationService<ExternalRelationOther> externalOtherService,
       PageController pageController) {
-    super(springContext, externalOtherService);
+    super(eventPublisher, externalOtherService);
     this.pageController = pageController;
     this.initializeSearchItems();
   }

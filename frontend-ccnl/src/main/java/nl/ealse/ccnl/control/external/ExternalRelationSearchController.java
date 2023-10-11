@@ -6,16 +6,16 @@ import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 
 public abstract class ExternalRelationSearchController<T extends ExternalRelation>
     extends SearchController<T, EntitySelectionEvent<T>> {
 
   private final ExternalRelationService<T> externalRelationService;
 
-  protected ExternalRelationSearchController(ApplicationContext springContext,
+  protected ExternalRelationSearchController(ApplicationEventPublisher eventPublisher,
       ExternalRelationService<T> externalRelationService) {
-    super(springContext);
+    super(eventPublisher);
     this.externalRelationService = externalRelationService;
   }
 

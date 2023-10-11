@@ -11,7 +11,7 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -22,9 +22,9 @@ public class InternalRelationSearchController
   private final PageController pageController;
   private final InternalRelationService internalRelationService;
 
-  public InternalRelationSearchController(ApplicationContext springContext,
+  public InternalRelationSearchController(ApplicationEventPublisher eventPublisher,
       InternalRelationService internalRelationService, PageController pageController) {
-    super(springContext);
+    super(eventPublisher);
     this.pageController = pageController;
     this.internalRelationService = internalRelationService;
     this.initializeSearchItems();

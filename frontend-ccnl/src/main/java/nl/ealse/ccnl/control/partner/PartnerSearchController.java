@@ -10,7 +10,7 @@ import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -20,10 +20,10 @@ public class PartnerSearchController
 
   private final PageController pageController;
 
-  public PartnerSearchController(ApplicationContext springContext,
+  public PartnerSearchController(ApplicationEventPublisher eventPublisher,
       ExternalRelationService<ExternalRelationPartner> partnerService,
       PageController pageController) {
-    super(springContext, partnerService);
+    super(eventPublisher, partnerService);
     this.pageController = pageController;
     this.initializeSearchItems();
   }

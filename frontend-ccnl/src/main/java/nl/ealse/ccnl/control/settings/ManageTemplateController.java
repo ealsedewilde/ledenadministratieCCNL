@@ -21,14 +21,14 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class ManageTemplateController {
 
-  private final ApplicationContext springContext;
+  private final ApplicationEventPublisher eventPublisher;
 
   private final PageController pageController;
 
@@ -69,8 +69,8 @@ public class ManageTemplateController {
 
 
   public ManageTemplateController(PageController pageController, DocumentService documentService,
-      ApplicationContext springContext) {
-    this.springContext = springContext;
+      ApplicationEventPublisher eventPublisher) {
+    this.eventPublisher = eventPublisher;
     this.pageController = pageController;
     this.documentService = documentService;
   }
@@ -171,7 +171,7 @@ public class ManageTemplateController {
     if (dialog.isShowing()) {
       dialog.close();
     }
-    springContext.publishEvent(new MenuChoiceEvent(this, MenuChoice.TEMPLATES_OVERVIEW));
+    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.TEMPLATES_OVERVIEW));
   }
 
 }

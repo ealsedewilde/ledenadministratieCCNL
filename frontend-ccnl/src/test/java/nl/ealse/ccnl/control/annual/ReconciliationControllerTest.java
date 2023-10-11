@@ -16,7 +16,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
-import javafx.stage.Stage;
 import nl.ealse.ccnl.control.annual.ReconciliationController.ReconcileTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -32,11 +31,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 
 class ReconciliationControllerTest extends FXMLBaseTest {
-  private static ApplicationContext context;
   private static PageController pageController;
   private static ReconciliationService service;
   private static WrappedFileChooser fileChooser;
@@ -49,7 +46,7 @@ class ReconciliationControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    sut = new ReconciliationController(pageController, context, executor);
+    sut = new ReconciliationController(pageController, service, executor);
     File reconcileFile = new File(tempDir, "reconcile.xml");
     when(fileChooser.showOpenDialog()).thenReturn(reconcileFile);
     final AtomicBoolean ar = new AtomicBoolean();
@@ -83,18 +80,14 @@ class ReconciliationControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-      setDialog(true, "messagesStage");
-      getPageWithFxController(sut, PageName.RECONCILE_PAYMENTS);
-      setDialog(false, "messagesStage");
-      sut.initialize();
+    sut.setup();
+    getPageWithFxController(sut, PageName.RECONCILE_PAYMENTS);
   }
 
   @BeforeAll
   static void setup() {
     pageController = mock(PageController.class);
-    context = mock(ApplicationContext.class);
     service = mock(ReconciliationService.class);
-    when(context.getBean(ReconciliationService.class)).thenReturn(service);
 
     try {
       when(service.saveFile(any(File.class))).thenReturn(true);
@@ -132,17 +125,5 @@ class ReconciliationControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
   }
-
-
-  private void setDialog(boolean b, String name) {
-    try {
-      Object value = b ? new Stage() : null;
-      FieldUtils.writeDeclaredField(sut, name, value ,true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-  }
-
 
 }
