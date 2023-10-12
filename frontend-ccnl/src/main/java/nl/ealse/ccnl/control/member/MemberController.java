@@ -11,7 +11,6 @@ import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.MenuController;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -23,6 +22,7 @@ import nl.ealse.ccnl.view.MemberView;
 import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
@@ -34,6 +34,8 @@ public class MemberController extends MemberView {
   private final MemberService service;
 
   private final DocumentService documentService;
+  
+  private final ApplicationEventPublisher eventPublisher;
 
   private Member model;
 
@@ -51,10 +53,11 @@ public class MemberController extends MemberView {
   private MemberFormController formController;
 
   public MemberController(PageController pageController, MemberService service,
-      DocumentService documentService) {
+      DocumentService documentService, ApplicationEventPublisher eventPublisher) {
     this.pageController = pageController;
     this.service = service;
     this.documentService = documentService;
+    this.eventPublisher = eventPublisher;
   }
 
   @PostConstruct
@@ -193,8 +196,7 @@ public class MemberController extends MemberView {
 
     if (currentMenuChoice == MenuChoice.NEW_MEMBER) {
       // next page
-      ViewModel.viewToModel(this, selectedMember);
-      pageController.setActivePage(PageName.WELCOME_LETTER);
+      eventPublisher.publishEvent(new WelcomeletterEvent(this, selectedMember));
     } else {
       pageController.activateLogoPage();
     }

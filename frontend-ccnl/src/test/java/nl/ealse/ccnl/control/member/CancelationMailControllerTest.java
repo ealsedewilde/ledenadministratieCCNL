@@ -48,13 +48,11 @@ class CancelationMailControllerTest extends FXMLBaseTest {
       m.setMemberNumber(4444);
       m.setInitials("tester");
       m.setEmail("test@ealse.nl");
-      MemberSeLectionEvent event =
-          new MemberSeLectionEvent(controller, MenuChoice.CANCEL_MEMBERSHIP, m);
-      controller.onApplicationEvent(event);
       prepare();
       setContent();
+      CancelMailEvent event = new CancelMailEvent(controller, m);
       controller.onApplicationEvent(event);
-      controller.sendMail();
+       controller.sendMail();
       ar.set(true);
     }, ar);
     Assertions.assertTrue(result.get());

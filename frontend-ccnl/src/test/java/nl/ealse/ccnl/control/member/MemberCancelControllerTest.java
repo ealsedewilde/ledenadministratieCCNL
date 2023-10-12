@@ -1,10 +1,10 @@
 package nl.ealse.ccnl.control.member;
 
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -14,18 +14,19 @@ import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 class MemberCancelControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
   private static MemberService memberService;
+  private static ApplicationEventPublisher eventPublisher;
 
   private MemberCancelController sut;
   private Member m;
 
   @Test
   void testController() {
-    sut = new MemberCancelController(memberService, pageController);
+    sut = new MemberCancelController(memberService, getPageController(), eventPublisher);
     m = member();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -41,7 +42,7 @@ class MemberCancelControllerTest extends FXMLBaseTest {
     sut.onApplicationEvent(event);
     Assertions.assertEquals(MembershipStatus.LAST_YEAR_MEMBERSHIP, m.getMemberStatus());
     sut.save();
-    verify(pageController).setActivePage(PageName.MEMBER_CANCEL_MAIL);
+    verify(eventPublisher).publishEvent(isA(CancelMailEvent.class));
   }
 
   private void prepare() {
@@ -50,8 +51,7 @@ class MemberCancelControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-   
-    pageController = mock(PageController.class);
+    eventPublisher = mock(ApplicationEventPublisher.class);
     memberService = mock(MemberService.class);
   }
 

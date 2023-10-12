@@ -78,7 +78,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
       a.setAddressNumber("1");
       a.setPostalCode("1234 AA");
       a.setCity("Plaats");
-      MemberSeLectionEvent event = new MemberSeLectionEvent(controller, MenuChoice.NEW_MEMBER, m);
+      WelcomeletterEvent event = new WelcomeletterEvent(controller, m);
       controller.onApplicationEvent(event);
       prepare();
       controller.onApplicationEvent(event);

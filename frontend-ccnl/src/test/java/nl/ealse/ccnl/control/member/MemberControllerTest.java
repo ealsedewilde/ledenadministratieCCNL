@@ -20,14 +20,17 @@ import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 class MemberControllerTest extends FXMLBaseTest {
 
-  private DocumentService documentService;
-  private MemberService service;
+  private static DocumentService documentService;
+  private static MemberService service;
+  private static ApplicationEventPublisher eventPublisher;
 
   private MemberController controller;
   private FormController formController;
@@ -41,7 +44,8 @@ class MemberControllerTest extends FXMLBaseTest {
     final AtomicBoolean ar = new AtomicBoolean();
     m = getMember();
     AtomicBoolean result = runFX(() -> {
-      controller = new MemberController(getPageController(), service, documentService);
+      controller =
+          new MemberController(getPageController(), service, documentService, eventPublisher);
       controller.setup();
       formController = getFormController();
       prepare();
@@ -52,8 +56,8 @@ class MemberControllerTest extends FXMLBaseTest {
     Assertions.assertTrue(result.get());
 
   }
-  
-   void testFormController() {
+
+  void testFormController() {
     formController = getFormController();
     FormPane[] formPanes = getFormPanes();
     Assertions.assertNotNull(formPanes[3]);
@@ -89,6 +93,12 @@ class MemberControllerTest extends FXMLBaseTest {
   private void prepare() {
     when(documentService.findSepaAuthorization(m)).thenReturn(Optional.empty());
   }
+  @BeforeAll
+  static void setup() {
+    eventPublisher = mock(ApplicationEventPublisher.class);
+    service = mock(MemberService.class);
+    documentService = mock(DocumentService.class);
+  }
 
   private Member getMember() {
     Member m = new Member();
@@ -123,7 +133,7 @@ class MemberControllerTest extends FXMLBaseTest {
     controller.getLastName().setText("Tester");
     controller.getIbanNumber().setText("foo");
   }
-  
+
   private FormController getFormController() {
     try {
       return (FormController) FieldUtils.readField(controller, "formController", true);
@@ -132,7 +142,7 @@ class MemberControllerTest extends FXMLBaseTest {
     }
     return null;
   }
-  
+
   private FormPane[] getFormPanes() {
     try {
       return (FormPane[]) FieldUtils.readField(formController, "formPageArray", true);
@@ -141,7 +151,6 @@ class MemberControllerTest extends FXMLBaseTest {
     }
     return null;
   }
-
 
 
 

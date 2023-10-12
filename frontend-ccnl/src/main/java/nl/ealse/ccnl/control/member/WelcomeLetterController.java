@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -40,9 +40,10 @@ public class WelcomeLetterController extends DocumentTemplateController {
     this.documentService = documentService;
   }
 
-  @EventListener(condition = "#event.name('NEW_MEMBER')")
-  public void onApplicationEvent(MemberSeLectionEvent event) {
-    this.selectedMember = event.getSelectedEntity();
+  @EventListener
+  public void onApplicationEvent(WelcomeletterEvent event) {
+    this.selectedMember = event.getMember();
+    pageController.setActivePage(PageName.WELCOME_LETTER);
   }
   
   @FXML

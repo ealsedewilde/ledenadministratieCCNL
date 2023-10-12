@@ -11,15 +11,21 @@ import nl.ealse.ccnl.mappers.MembershipStatusMapper;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberCancelView;
 import nl.ealse.javafx.mapping.ViewModel;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Controller for membership canceling.
+ */
 @Controller
 public class MemberCancelController extends MemberCancelView {
 
   private final PageController pageController;
 
   private final MemberService service;
+
+  private final ApplicationEventPublisher eventPublisher;
 
   private final MembershipStatusMapper membershipStatusMapper = new MembershipStatusMapper();
 
@@ -29,9 +35,11 @@ public class MemberCancelController extends MemberCancelView {
   @FXML
   private Label initialsLabel;
 
-  public MemberCancelController(MemberService service, PageController pageController) {
+  public MemberCancelController(MemberService service, PageController pageController,
+      ApplicationEventPublisher eventPublisher) {
     this.pageController = pageController;
     this.service = service;
+    this.eventPublisher = eventPublisher;
   }
 
 
@@ -48,8 +56,7 @@ public class MemberCancelController extends MemberCancelView {
     pageController.showMessage("Lidgegevens opgeslagen");
 
     if (status == MembershipStatus.LAST_YEAR_MEMBERSHIP) {
-      // next page
-      pageController.setActivePage(PageName.MEMBER_CANCEL_MAIL);
+      eventPublisher.publishEvent(new CancelMailEvent(this, selectedMember));
     } else {
       pageController.activateLogoPage();
     }

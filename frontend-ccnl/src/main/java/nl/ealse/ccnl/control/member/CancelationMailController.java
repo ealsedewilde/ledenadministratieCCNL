@@ -2,7 +2,7 @@ package nl.ealse.ccnl.control.member;
 
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NAME;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NUMBER;
-import jakarta.annotation.PostConstruct;
+
 import java.util.StringJoiner;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.MailService;
@@ -67,18 +67,12 @@ public class CancelationMailController extends DocumentTemplateController {
     initializeTemplates();
     validation = new CancelMailValidation(this);
     validation.setCallback(valid -> sendButton.setDisable(!valid));
-    reset();
   }
 
-  @EventListener(condition = "#event.name('CANCEL_MEMBERSHIP')")
-  public void onApplicationEvent(MemberSeLectionEvent event) {
-    selectedMember = event.getSelectedEntity();
-    if (validation != null) {
-      reset();
-    }
-  }
-  
-  private void reset() {
+  @EventListener
+  public void onApplicationEvent(CancelMailEvent event) {
+    selectedMember = event.getMember();
+    pageController.setActivePage(PageName.MEMBER_CANCEL_MAIL);
     toMailAddress.setText(selectedMember.getEmail());
     saveMailAddress.setSelected(false);
     validation.validate();
