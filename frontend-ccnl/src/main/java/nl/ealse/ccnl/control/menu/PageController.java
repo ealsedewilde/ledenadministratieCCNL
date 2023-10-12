@@ -85,16 +85,6 @@ public class PageController {
     mainPage.setCenter(page);
   }
 
-  /**
-   * Load fxml without showing it.
-   * @param pageName
-   * @param controller
-   * @return
-   */
-  public Parent loadPage(PageName pageName, Object controller) {
-    return loadPage(pageName.getId(), controller);
-  }
-
   private Parent loadPage(PageId pageId, Object controller) {
     Parent page = FXML_PAGES.get(pageId.getPagekey());
     if (page == null) {

@@ -1,12 +1,16 @@
-package nl.ealse.ccnl.control.annual;
+package nl.ealse.ccnl.control;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
 
+/**
+ * Build info pages.
+ */
 public class StageBuilder {
   
   private final Stage stage = new Stage();
@@ -35,6 +39,7 @@ public class StageBuilder {
   }
   
   public Stage build() {
+    stage.initModality(Modality.APPLICATION_MODAL);
     stage.setResizable(false);
     stage.getIcons().add(ImagesMap.get("info.png"));
     Scene scene = new Scene(parent, width, height);

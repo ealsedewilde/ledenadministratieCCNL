@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -78,6 +79,7 @@ public class ManageTemplateController {
   @FXML
   void initialize() {
     this.dialog = new Stage();
+    this.dialog.initModality(Modality.APPLICATION_MODAL);
     this.dialog.setResizable(false);
     this.dialog.setTitle("Invul hulp");
     this.dialog.getIcons().add(ImagesMap.get("info.png"));

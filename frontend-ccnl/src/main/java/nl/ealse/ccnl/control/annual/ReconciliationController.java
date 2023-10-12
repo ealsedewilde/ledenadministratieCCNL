@@ -18,6 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.HandledTask;
+import nl.ealse.ccnl.control.StageBuilder;
 import nl.ealse.ccnl.control.button.ButtonCell;
 import nl.ealse.ccnl.control.button.DeleteButton;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;

@@ -50,7 +50,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
 
   @Test
   void doTest() {
-   
+
     pageController = mock(PageController.class);
 
     documentService = mock(DocumentService.class);
@@ -68,9 +68,6 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       controller = new WelcomeLetterController(pageController, documentService);
-      prepare();
-      controller.setup();
-      controller.getLetterText().setText("Beste <<naam>>, \n Welkom bij Citroën Club Nederland.");
 
       Member m = new Member();
       m.setMemberNumber(4444);
@@ -83,8 +80,8 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
       a.setCity("Plaats");
       MemberSeLectionEvent event = new MemberSeLectionEvent(controller, MenuChoice.NEW_MEMBER, m);
       controller.onApplicationEvent(event);
-      setPdfViewer();
-      setFileChooser();
+      prepare();
+      controller.onApplicationEvent(event);
       controller.showLetterExample();
       controller.saveletter();
 
@@ -102,22 +99,14 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-      getPageWithoutFxController(controller, PageName.WELCOME_LETTER);
+    getPageWithFxController(controller, PageName.WELCOME_LETTER);
+    controller.getLetterText().setText("Beste <<naam>>, \n Welkom bij Citroën Club Nederland.");
+    setFileChooser();
   }
 
   private void setFileChooser() {
     try {
       FieldUtils.writeField(controller, "fileChooser", fileChooser, true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void setPdfViewer() {
-    PDFViewer pdfViewer = PDFViewer.builder().build();
-    pdfViewer.setWindowTitle("Welkosbrief voor lid: %d (%s)");
-    try {
-      FieldUtils.writeField(controller, "pdfViewer", pdfViewer, true);
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -13,6 +13,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.HandledTask;
+import nl.ealse.ccnl.control.StageBuilder;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;

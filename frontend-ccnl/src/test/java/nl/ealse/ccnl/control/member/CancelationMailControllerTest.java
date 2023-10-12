@@ -44,15 +44,15 @@ class CancelationMailControllerTest extends FXMLBaseTest {
     AtomicBoolean result = runFX(() -> {
       controller =
           new CancelationMailController(pageController, documentService, mailService, memberService);
-      prepare();
-      controller.setup();
-      setContent();
-      Member m = new Member();
+     Member m = new Member();
       m.setMemberNumber(4444);
       m.setInitials("tester");
       m.setEmail("test@ealse.nl");
       MemberSeLectionEvent event =
           new MemberSeLectionEvent(controller, MenuChoice.CANCEL_MEMBERSHIP, m);
+      controller.onApplicationEvent(event);
+      prepare();
+      setContent();
       controller.onApplicationEvent(event);
       controller.sendMail();
       ar.set(true);
@@ -63,7 +63,7 @@ class CancelationMailControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    getPageWithoutFxController(controller, PageName.MEMBER_CANCEL_MAIL);
+    getPageWithFxController(controller, PageName.MEMBER_CANCEL_MAIL);
   }
 
   private void setContent() {
@@ -72,7 +72,6 @@ class CancelationMailControllerTest extends FXMLBaseTest {
     try {
       FieldUtils.writeDeclaredField(controller, "mailSubject", "test mail", true);
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

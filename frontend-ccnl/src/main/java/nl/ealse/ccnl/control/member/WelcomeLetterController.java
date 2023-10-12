@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.member;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -41,19 +39,19 @@ public class WelcomeLetterController extends DocumentTemplateController {
     this.pageController = pageController;
     this.documentService = documentService;
   }
-  
-  @PostConstruct
-  void setup() {
-    pageController.loadPage(PageName.WELCOME_LETTER, this);
-    pdfViewer = PDFViewer.builder().withPrintButton(evt -> printPDF())
-        .withCancelButton(evt -> closePDF()).build();
-    pdfViewer.setWindowTitle("Welkomsbrief voor lid: %d (%s)");
-  }
 
   @EventListener(condition = "#event.name('NEW_MEMBER')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
     this.selectedMember = event.getSelectedEntity();
+  }
+  
+  @FXML
+  protected void initialize() {
+    super.initialize();
     initializeTemplates();
+    pdfViewer = PDFViewer.builder().withPrintButton(evt -> printPDF())
+        .withCancelButton(evt -> closePDF()).build();
+    pdfViewer.setWindowTitle("Welkomsbrief voor lid: %d (%s)");
   }
 
   @FXML

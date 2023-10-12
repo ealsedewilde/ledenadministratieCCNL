@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
@@ -62,21 +61,27 @@ public class CancelationMailController extends DocumentTemplateController {
     this.mailService = mailService;
   }
   
-  @PostConstruct
-  void setup() {
-    pageController.loadPage(PageName.MEMBER_CANCEL_MAIL, this);
+  @FXML
+  protected void initialize() {
+    super.initialize();
+    initializeTemplates();
     validation = new CancelMailValidation(this);
     validation.setCallback(valid -> sendButton.setDisable(!valid));
+    reset();
   }
 
   @EventListener(condition = "#event.name('CANCEL_MEMBERSHIP')")
   public void onApplicationEvent(MemberSeLectionEvent event) {
     selectedMember = event.getSelectedEntity();
+    if (validation != null) {
+      reset();
+    }
+  }
+  
+  private void reset() {
     toMailAddress.setText(selectedMember.getEmail());
     saveMailAddress.setSelected(false);
     validation.validate();
-
-    initializeTemplates();
   }
 
   @FXML

@@ -70,26 +70,18 @@ public abstract class DocumentTemplateController {
     this.templateContext = templateContext.data;
   }
 
-  @FXML
-  void initialize() {
+  protected void initialize() {
     if (this.dialog == null) {
-      this.dialog = new Stage();
-      this.dialog.setResizable(false);
-      this.dialog.setTitle("Invul hulp");
-      this.dialog.getIcons().add(ImagesMap.get("info.png"));
-      this.dialog.initOwner(pageController.getPrimaryStage());
-
-      Parent textHelp = FXMLLoaderBean.getPage(templateContext.helpPage);
-      Scene dialogScene;
-
+      double height;
       if (templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
-        dialogScene = new Scene(textHelp, 550, 330);
+        height = 330;
         fileChooser =
             new WrappedFileChooser(pageController.getPrimaryStage(), templateContext.fileType);
       } else {
-        dialogScene = new Scene(textHelp, 550, 100);
+        height = 100;
       }
-      dialog.setScene(dialogScene);
+      this.dialog = new StageBuilder(pageController).fxml(templateContext.helpPage, pageController)
+          .title("Invul hulp").size(550, height).build();
     }
   }
 
@@ -159,12 +151,11 @@ public abstract class DocumentTemplateController {
     MEMBERSHIP_CANCELATION_MAIL(new DocumentTemplateContextData("dialog/mailhelp", null,
         DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL)),
     //
-    PAYMENT_REMINDER(new DocumentTemplateContextData("dialog/texthelp",
-        FileExtension.PDF,
+    PAYMENT_REMINDER(new DocumentTemplateContextData("dialog/texthelp", FileExtension.PDF,
         DocumentTemplateType.PAYMENT_REMINDER)),
     //
-    WELCOME_LETTER(new DocumentTemplateContextData("dialog/texthelp",
-        FileExtension.DOCX, DocumentTemplateType.WELCOME_LETTER));
+    WELCOME_LETTER(new DocumentTemplateContextData("dialog/texthelp", FileExtension.DOCX,
+        DocumentTemplateType.WELCOME_LETTER));
 
     final DocumentTemplateContextData data;
 

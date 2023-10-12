@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.annual;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,8 +60,9 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     this.executor = executor;
   }
   
-  @PostConstruct
-  void setup() {
+  @FXML
+  protected void initialize() {
+    super.initialize();
     pdfViewer = PDFViewer.builder().withPrintButton(evt -> printPDF())
         .withCancelButton(evt -> closePDF()).build();
     pdfViewer.setWindowTitle("Herinneringsbrief voor lid: %d (%s)");
