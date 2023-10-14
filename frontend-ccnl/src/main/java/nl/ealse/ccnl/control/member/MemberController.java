@@ -12,6 +12,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.MenuController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
@@ -82,11 +83,10 @@ public class MemberController extends MemberView {
    * existing Member the {@link SearchController} fires the event.
    */
   @EventListener(condition = "#event.name('NEW_MEMBER')")
-  public void newMember(MemberSeLectionEvent event) {
-    pageController.setActivateFormPage(formController.getForm());
-    formController.setActiveFormPage(0);
-    handleEvent(event);
+  public void newMember(MenuChoiceEvent event) {
+    this.selectedMember = new Member();
     selectedMember.setMemberNumber(service.getFreeNumber());
+    handleEvent(event);
     sepaAuthorization = null;
     reset();
   }
@@ -97,8 +97,7 @@ public class MemberController extends MemberView {
    */
   @EventListener(condition = "#event.name('AMEND_MEMBER')")
   public void amendMember(MemberSeLectionEvent event) {
-    pageController.setActivateFormPage(formController.getForm());
-    formController.setActiveFormPage(0);
+    this.selectedMember = event.getSelectedEntity();
     handleEvent(event);
     Optional<Document> optSepaAuthorization = documentService.findSepaAuthorization(selectedMember);
     if (optSepaAuthorization.isPresent()) {
@@ -109,9 +108,10 @@ public class MemberController extends MemberView {
     reset();
   }
 
-  private void handleEvent(MemberSeLectionEvent event) {
+  private void handleEvent(MenuChoiceEvent event) {
+    pageController.setActivateFormPage(formController.getForm());
+    formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
-    this.selectedMember = event.getSelectedEntity();
     this.model = new Member();
     getIbanNumber().textProperty()
         .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));

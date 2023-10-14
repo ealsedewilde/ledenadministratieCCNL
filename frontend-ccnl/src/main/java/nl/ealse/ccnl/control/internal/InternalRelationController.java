@@ -8,6 +8,7 @@ import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
+import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
@@ -44,13 +45,23 @@ public class InternalRelationController extends InternalRelationView {
     formController.setOnReset(e -> reset());
   }
 
-  @EventListener(condition = "#event.name('NEW_INTERNAL_RELATION','AMEND_INTERNAL_RELATION')")
-  public void handleRelation(InternalRelationSelectionEvent event) {
+  @EventListener(condition = "#event.name('NEW_INTERNAL_RELATION')")
+  public void newRelation(MenuChoiceEvent event) {
+    this.selectedInternalRelation = new InternalRelation();
+    handleRelation(event);
+  }
+
+  @EventListener(condition = "#event.name('AMEND_INTERNAL_RELATION')")
+  public void amendRelation(InternalRelationSelectionEvent event) {
+    this.selectedInternalRelation = event.getSelectedEntity();
+    handleRelation(event);
+  }
+  
+  private  void handleRelation(MenuChoiceEvent event) {
     this.currentMenuChoice = event.getMenuChoice();
     pageController.setActivateFormPage(formController.getForm());
     formController.setActiveFormPage(0);
     formController.getHeaderText().setText(getHeaderTextValue());
-    this.selectedInternalRelation = event.getSelectedEntity();
     this.model = new InternalRelation();
     if (event.getMenuChoice() == MenuChoice.NEW_INTERNAL_RELATION) {
       initializeTitles();

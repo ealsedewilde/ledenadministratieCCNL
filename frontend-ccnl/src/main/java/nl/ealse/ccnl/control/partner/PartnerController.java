@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
 import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
@@ -32,11 +33,21 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
     formController.setOnReset(e -> reset());
   }
 
-  @EventListener(condition = "#event.name('NEW_PARTNER','AMEND_PARTNER')")
-  public void handlePartner(PartnerSelectionEvent event) {
+  @EventListener(condition = "#event.name('NEW_PARTNER')")
+  public void newPartner(MenuChoiceEvent event) {
+    this.selectedExternalRelation = new ExternalRelationPartner();
+    handlePartner(event);
+  }
+
+  @EventListener(condition = "#event.name('AMEND_PARTNER')")
+  public void amendPartner(PartnerSelectionEvent event) {
+    this.selectedExternalRelation = event.getSelectedEntity();
+    handlePartner(event);
+  }
+  
+  private void handlePartner(MenuChoiceEvent event) {
     pageController.setActivateFormPage(formController.getForm());
     formController.setActiveFormPage(0);
-    this.selectedExternalRelation = event.getSelectedEntity();
     this.model = new ExternalRelationPartner();
     this.currentMenuChoice = event.getMenuChoice();
     formController.getHeaderText().setText(getHeaderTextValue());

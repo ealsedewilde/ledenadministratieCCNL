@@ -5,6 +5,7 @@ import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
+import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
@@ -32,12 +33,22 @@ public class ExternalOtherController extends ExternalRelationController<External
     formController.setOnReset(e -> reset());
   }
 
-  @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION','AMEND_EXTERNAL_RELATION')")
-  public void handleRelation(ExternalOtherSelectionEvent event) {
+  @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION')")
+  public void newRelation(MenuChoiceEvent event) {
+    this.selectedExternalRelation = new ExternalRelationOther();
+    handleRelation(event);
+  }
+
+  @EventListener(condition = "#event.name('AMEND_EXTERNAL_RELATION')")
+  public void amendRelation(ExternalOtherSelectionEvent event) {
+    this.selectedExternalRelation = event.getSelectedEntity();
+    handleRelation(event);
+  }
+
+  private void handleRelation(MenuChoiceEvent event) {
     pageController.setActivateFormPage(formController.getForm());
     formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
-    this.selectedExternalRelation = event.getSelectedEntity();
     this.model = new ExternalRelationOther();
     formController.getHeaderText().setText(getHeaderTextValue());
     reset();

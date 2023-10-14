@@ -2,7 +2,6 @@ package nl.ealse.ccnl.control.member;
 
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NAME;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NUMBER;
-
 import java.util.StringJoiner;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

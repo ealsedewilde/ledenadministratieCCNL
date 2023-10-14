@@ -36,8 +36,8 @@ class ExternalOtherControllerTest extends FXMLBaseTest {
 
   private void doTest() {
     ExternalOtherSelectionEvent event =
-        new ExternalOtherSelectionEvent(sut, MenuChoice.NEW_EXTERNAL_RELATION, relation);
-    sut.handleRelation(event);
+        new ExternalOtherSelectionEvent(sut, MenuChoice.AMEND_EXTERNAL_RELATION, relation);
+    sut.amendRelation(event);
 
     sut.save();
     verify(getPageController()).showMessage("Externe relatie opgeslagen");

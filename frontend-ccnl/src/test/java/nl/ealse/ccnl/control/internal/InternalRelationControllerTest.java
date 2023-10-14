@@ -39,8 +39,8 @@ class InternalRelationControllerTest extends FXMLBaseTest {
 
   private void doTest() {
     InternalRelationSelectionEvent event =
-        new InternalRelationSelectionEvent(sut, MenuChoice.NEW_INTERNAL_RELATION, rel);
-    sut.handleRelation(event);
+        new InternalRelationSelectionEvent(sut, MenuChoice.AMEND_INTERNAL_RELATION, rel);
+    sut.amendRelation(event);
 
     sut.save();
     verify(getPageController()).showMessage("Functiegegevens opgeslagen");

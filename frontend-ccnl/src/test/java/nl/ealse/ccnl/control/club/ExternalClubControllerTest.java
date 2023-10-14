@@ -36,8 +36,8 @@ class ExternalClubControllerTest extends FXMLBaseTest {
 
   private void doTest() {
      ExternalClubSelectionEvent event =
-        new ExternalClubSelectionEvent(sut, MenuChoice.NEW_EXTERNAL_CLUB, club);
-    sut.handleClub(event);
+        new ExternalClubSelectionEvent(sut, MenuChoice.AMEND_EXTERNAL_CLUB, club);
+    sut.amendClub(event);
 
     sut.save();
     verify(getPageController()).showMessage("Club gegevens zijn opgeslagen");

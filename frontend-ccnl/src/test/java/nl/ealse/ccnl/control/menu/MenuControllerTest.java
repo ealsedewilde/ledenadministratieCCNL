@@ -21,6 +21,8 @@ class MenuControllerTest {
 
   private static MenuController sut;
 
+  private ArgumentCaptor<MenuChoiceEvent> menu =
+      ArgumentCaptor.forClass(MenuChoiceEvent.class);
   private ArgumentCaptor<MemberSeLectionEvent> ams =
       ArgumentCaptor.forClass(MemberSeLectionEvent.class);
   private ArgumentCaptor<PartnerSelectionEvent> aps =
@@ -36,8 +38,8 @@ class MenuControllerTest {
   @Test
   void newMember() {
     sut.newMember();
-    verify(springContext, atLeastOnce()).publishEvent(ams.capture());
-    MemberSeLectionEvent event = ams.getValue();
+    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_MEMBER, event.getMenuChoice());
   }
 
@@ -68,8 +70,8 @@ class MenuControllerTest {
   @Test
   void newPartner() {
     sut.newPartner();
-    verify(springContext, atLeastOnce()).publishEvent(aps.capture());
-    PartnerSelectionEvent event = aps.getValue();
+    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_PARTNER, event.getMenuChoice());
   }
 
@@ -92,8 +94,8 @@ class MenuControllerTest {
   @Test
   void newExternalClub() {
     sut.newExternalClub();
-    verify(springContext, atLeastOnce()).publishEvent(acs.capture());
-    ExternalClubSelectionEvent event = acs.getValue();
+    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_EXTERNAL_CLUB, event.getMenuChoice());
   }
 
@@ -116,8 +118,8 @@ class MenuControllerTest {
   @Test
   void newExternalRelation() {
     sut.newExternalRelation();
-    verify(springContext, atLeastOnce()).publishEvent(aos.capture());
-    ExternalOtherSelectionEvent event = aos.getValue();
+    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_EXTERNAL_RELATION, event.getMenuChoice());
   }
 
@@ -140,8 +142,8 @@ class MenuControllerTest {
   @Test
   void newInternalRelation() {
     sut.newInternalRelation();
-    verify(springContext, atLeastOnce()).publishEvent(ais.capture());
-    InternalRelationSelectionEvent event = ais.getValue();
+    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_INTERNAL_RELATION, event.getMenuChoice());
   }
 
@@ -275,7 +277,7 @@ class MenuControllerTest {
 
   @Test
   void makeReminderLettersDD() {
-    sut.makeReminderLettersDD();
+    sut.makeReminderLettersDirectDebit();
     verify(springContext, atLeastOnce()).publishEvent(am.capture());
     MenuChoiceEvent event = am.getValue();
     Assertions.assertEquals(MenuChoice.PRODUCE_REMINDER_LETTERS_DD, event.getMenuChoice());
@@ -283,7 +285,7 @@ class MenuControllerTest {
 
   @Test
   void makeReminderLettersBT() {
-    sut.makeReminderLettersBT();
+    sut.makeReminderLettersBankTranfer();
     verify(springContext, atLeastOnce()).publishEvent(am.capture());
     MenuChoiceEvent event = am.getValue();
     Assertions.assertEquals(MenuChoice.PRODUCE_REMINDER_LETTERS_BT, event.getMenuChoice());

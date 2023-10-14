@@ -1,12 +1,7 @@
 package nl.ealse.ccnl.control.menu;
 
 import javafx.fxml.FXML;
-import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
-import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
-import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
-import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 
@@ -25,7 +20,7 @@ public class MenuController {
   // Member controls
   @FXML
   void newMember() {
-    eventPublisher.publishEvent(new MemberSeLectionEvent(this, MenuChoice.NEW_MEMBER));
+    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.NEW_MEMBER));
   }
 
   @FXML
@@ -46,7 +41,7 @@ public class MenuController {
   // Partner controls
   @FXML
   void newPartner() {
-    eventPublisher.publishEvent(new PartnerSelectionEvent(this, MenuChoice.NEW_PARTNER));
+    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.NEW_PARTNER));
   }
 
   @FXML
@@ -62,7 +57,7 @@ public class MenuController {
   // Club controls
   @FXML
   void newExternalClub() {
-    eventPublisher.publishEvent(new ExternalClubSelectionEvent(this, MenuChoice.NEW_EXTERNAL_CLUB));
+    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.NEW_EXTERNAL_CLUB));
   }
 
   @FXML
@@ -79,7 +74,7 @@ public class MenuController {
   @FXML
   void newExternalRelation() {
     eventPublisher
-        .publishEvent(new ExternalOtherSelectionEvent(this, MenuChoice.NEW_EXTERNAL_RELATION));
+        .publishEvent(new MenuChoiceEvent(this, MenuChoice.NEW_EXTERNAL_RELATION));
   }
 
   @FXML
@@ -96,7 +91,7 @@ public class MenuController {
   @FXML
   void newInternalRelation() {
     eventPublisher
-        .publishEvent(new InternalRelationSelectionEvent(this, MenuChoice.NEW_INTERNAL_RELATION));
+        .publishEvent(new MenuChoiceEvent(this, MenuChoice.NEW_INTERNAL_RELATION));
   }
 
   @FXML
@@ -196,12 +191,12 @@ public class MenuController {
   }
 
   @FXML
-  void makeReminderLettersDD() {
+  void makeReminderLettersDirectDebit() {
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.PRODUCE_REMINDER_LETTERS_DD));
   }
 
   @FXML
-  void makeReminderLettersBT() {
+  void makeReminderLettersBankTranfer() {
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.PRODUCE_REMINDER_LETTERS_BT));
   }
 

@@ -96,9 +96,9 @@
           text="Overzicht Herinneringen" />
         <Menu mnemonicParsing="false" text="Herinneringsbrieven aanmaken">
           <items>
-            <MenuItem onAction="#makeReminderLettersDD" mnemonicParsing="false"
+            <MenuItem onAction="#makeReminderLettersDirectDebit" mnemonicParsing="false"
               text="Leden met Automatische Incasso" />
-            <MenuItem onAction="#makeReminderLettersBT" mnemonicParsing="false"
+            <MenuItem onAction="#makeReminderLettersBankTranfer" mnemonicParsing="false"
               text="Leden met Overboeking" />
           </items>
         </Menu>

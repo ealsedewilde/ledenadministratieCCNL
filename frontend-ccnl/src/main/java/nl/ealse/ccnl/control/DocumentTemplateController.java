@@ -2,8 +2,6 @@ package nl.ealse.ccnl.control;
 
 import java.util.List;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -18,8 +16,6 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.javafx.FXMLLoaderBean;
-import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 import org.springframework.lang.NonNull;

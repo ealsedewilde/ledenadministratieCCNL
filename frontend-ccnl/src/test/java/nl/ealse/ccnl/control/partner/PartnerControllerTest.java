@@ -35,8 +35,8 @@ class PartnerControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    PartnerSelectionEvent event = new PartnerSelectionEvent(sut, MenuChoice.NEW_PARTNER, partner);
-    sut.handlePartner(event);
+    PartnerSelectionEvent event = new PartnerSelectionEvent(sut, MenuChoice.AMEND_PARTNER, partner);
+    sut.amendPartner(event);
 
     sut.save();
     verify(getPageController()).showMessage("Partnergegevens opgeslagen");

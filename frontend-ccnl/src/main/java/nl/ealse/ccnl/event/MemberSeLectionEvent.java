@@ -15,9 +15,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 @SuppressWarnings("serial")
 public class MemberSeLectionEvent extends EntitySelectionEvent<Member> {
 
-  public MemberSeLectionEvent(Object source, MenuChoice menuChoice) {
-    super(source, menuChoice, new Member());
-  }
   public MemberSeLectionEvent(Object source, MenuChoice menuChoice, Member member) {
     super(source, menuChoice, member);
   }
