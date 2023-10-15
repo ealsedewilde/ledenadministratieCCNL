@@ -33,7 +33,7 @@
         </HBox>
         <Label text="Type document" GridPane.rowIndex="1" GridPane.columnIndex="0" />
         <ChoiceBox fx:id="documentType" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-        <Label text="Kenmerk" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <Label text="Omschrijving" GridPane.rowIndex="2" GridPane.columnIndex="0" />
         <TextField fx:id="documentDescription" maxWidth="250" GridPane.rowIndex="2"
           GridPane.columnIndex="1" />
         <SaveButton fx:id="saveButton" disable="true" mnemonicParsing="false"

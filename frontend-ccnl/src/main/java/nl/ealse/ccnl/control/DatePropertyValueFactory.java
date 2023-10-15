@@ -36,12 +36,11 @@ public class DatePropertyValueFactory
       String methodName = "get" + property.substring(0, 1).toUpperCase() + property.substring(1);
       try {
         getter = param.getValue().getClass().getMethod(methodName);
-        return retrieveProperty(param);
       } catch (Exception e) {
         log.warn("Error retrieving property getter method", e);
       }
     }
-    return null;
+    return retrieveProperty(param);
   }
 
   private ObservableValue<String> retrieveProperty(CellDataFeatures<?, String> param) {

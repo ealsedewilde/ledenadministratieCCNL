@@ -5,6 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import nl.ealse.ccnl.control.document.DocumentRowFactory?>
+<?import nl.ealse.ccnl.control.document.DocumentTypePropertyValueFactory?>
 <?import nl.ealse.ccnl.control.DatePropertyValueFactory?>
 
 
@@ -42,7 +43,7 @@
         </TableColumn>
         <TableColumn prefWidth="250.0" text="Soort document">
           <cellValueFactory>
-            <PropertyValueFactory property="description" />
+            <DocumentTypePropertyValueFactory property="description" />
           </cellValueFactory>
         </TableColumn>
       </columns>
