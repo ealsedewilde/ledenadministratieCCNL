@@ -304,7 +304,7 @@ class MenuControllerTest {
     sut.manageSepaAuthorizationForm();
     verify(springContext, atLeastOnce()).publishEvent(am.capture());
     MenuChoiceEvent event = am.getValue();
-    Assertions.assertEquals(MenuChoice.MANAGE_SEPA_FORM, event.getMenuChoice());
+    Assertions.assertEquals(MenuChoice.UPLOAD_SEPA_FORM, event.getMenuChoice());
   }
 
   @Test

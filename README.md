@@ -15,7 +15,7 @@ Aside of developing the application, I also wanted to look at an efficient deplo
 
 # Design
 ## Spring Boot
-I've designed quite some applications througout my career.
+I've designed quite some applications throughout my career.
 Over the years Spring Boot has been the natural starting point for structuring an application. After checking some websites it turned out that combining Spring Boot and Java-FX is quite easy. My Class `SpringJavaFXBase` contains the extendable base structure to accomplish the integration of Spring Boot and Java-FX.
 
 ```
@@ -54,10 +54,16 @@ As said before, the startup takes time, so the user needs to know that something
 ## FXML
 I've chosen for FXML because I had no experience of building screens. In such a situation the SceneBuilder is handy to roughly model the screens. I also had the idea that FXML somehow will give me a ModelViewController like solution. I now think that the View (FXML) is too closely coupled with the Java-FX controller to have a true MVC-paradigm. 
 
-I need a mechanism to control the flow between the dozens of fxml files. I have defined the `PageName` enum that points to the fxml file that it refers to. I noticed that loading fxml is a quite heavy task, so once loaded I cache the fxml; in the `fxmlLoaderBean`. Caching means that the initialization of controllers only happens once. When reusing a screen it has to be reset explicitly. (I'm used to it, but I'm not sure if it is the best option.) Later i came across the FxWeaver framework. I've looked at it, but found it not flexible enough to suit my needs, so I sticked to the mechanism I had.
+The application has three groups of FXML resources.
+1. FXML resources that make up de main flow of the application. They a triggerd by a menuchoice.
+2. FXML resources that a pages in foms.
+3. FXML resources that are used in popup windows
+
+I need a mechanism to control the main flow between the dozens of fxml files. I have defined the `PageName` enum that points to the fxml file that it refers to. I noticed that loading fxml is a quite heavy task, so once loaded I cache the fxml; in the `PageController`. Caching means that the initialization of controllers only happens once. When reusing a screen it has to be reset explicitly. (I'm used to it, but I'm not sure if it is the best option.) Later i came across the FxWeaver framework. I've looked at it, but found it not flexible enough to suit my needs, so I sticked to the mechanism I had.
 
 ## Controlling the UI.
-Being able to identify a fxml pages via the PageName enum is a start, but not the whole story of controlling the UI.
+
+Being able to identify a fxml pages via the `PageName` enum is a start, but not the whole story of controlling the UI.
 My design is that my base screen (main.fxml) is a Vbox with the included menu.fxml and a BorderPane. In the TOP section of the BorderPane I show a generic header. The CENTER initially contains a placeholder fxml. Based on menu choices various dialogs of pages are loaded one by one in the CENTER of the BorderPane. The BOTTOM section is used for displaying messages. 
 
 It is the `PageController` that handles the loading of pages and showing the correct page in the CENTER of the BorderPane of the main.fxml. The PageController also controls the display of confirmation/error messages in the BOTTOM section.
@@ -71,7 +77,7 @@ The CENTER of the BorderPane has to show the placeholder fxml when such a comman
 
 As said I use lazy loading of Spring components. The `@EventListener` eventing mechanism loads the Spring component when not yet loaded. 
 
-The application uses **forms** that span multiple pages. (Registering all properties for a new member is a form that is spread across four pages.) All the pages of a form are linked to the `FormController` extension for the specific form. I use one generic form.fxml as a skeleton for all forms; When loading this generic form.fxml, the applicable `FormController` extension gets attached and FXML initialized. In this generic form.fxml the required form page fxml's are added/removed as needed. I use a generic basic mechanism for navigation between the pages of a form. This mechanism is extended for every specific form.
+The application uses **forms** that span multiple pages. (Registering all properties for a new member is a form that is spread across four pages.) All the pages of a form are linked to the `FormController` extension for the specific form. I use one generic `form.fxml` as a skeleton for all forms; When loading this generic form.fxml, the applicable `FormController` extension gets attached and FXML initialized. In this generic form.fxml the required form page fxml's are added/removed as needed. I use a generic basic mechanism for navigation between the pages of a form. This mechanism is extended for every specific form.
 
 ## Model View ViewMapping.
 When using forms **data** has to be mapped between the **model** (JPA entities) and the **form** (Java-FX controls in the controller). I've built a generic extensible framework that can do this mapping (mainly) based on name equality of property names in both the **model** and the **form**; see the `ViewModel` class. I rely on Java bean introspection to determine the mapping. The ViewModel framework works quite well as long as the naming in model and controller is structured carefully. See my project https://github.com/ealsedewilde/javafx-viewmodel.

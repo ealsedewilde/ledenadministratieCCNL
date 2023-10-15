@@ -16,8 +16,8 @@ public class MemberFormController extends FormController {
     this.controller = controller;
   }
   
-  public Pane getThirdPage() {
-    return formPageArray[3];
+  public Pane getFinancialPage() {
+    return formPageArray[2];
   }
 
   @Override

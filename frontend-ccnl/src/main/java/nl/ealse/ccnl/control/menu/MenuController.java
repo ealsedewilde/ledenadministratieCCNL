@@ -208,7 +208,7 @@ public class MenuController {
   // Maintenance controls
   @FXML
   void manageSepaAuthorizationForm() {
-    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MANAGE_SEPA_FORM));
+    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.UPLOAD_SEPA_FORM));
   }
 
   @FXML

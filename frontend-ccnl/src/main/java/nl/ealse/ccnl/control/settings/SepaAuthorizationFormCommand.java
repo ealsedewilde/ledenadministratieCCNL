@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.settings;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,17 +32,17 @@ public class SepaAuthorizationFormCommand {
     this.pageController = pageController;
     this.documentService = documentService;
   }
-
-  private void initialize() {
+  
+  @PostConstruct
+  void setup() {
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.PDF);
+    boolean b = new File(sepaDirectory).exists();
     fileChooser.setInitialDirectory(new File(sepaDirectory));
+    
   }
-  @EventListener(condition = "#event.name('MANAGE_SEPA_FORM')")
+
+  @EventListener(condition = "#event.name('UPLOAD_SEPA_FORM')")
   public void executeCommand(MenuChoiceEvent event) {
-    if (fileChooser == null) {
-      // There is no fxml associated with this controller; so no @FXML initialize() available!
-      initialize();
-    }
     File selectedFile = fileChooser.showOpenDialog();
     if (selectedFile != null) {
       handleSelected(selectedFile);

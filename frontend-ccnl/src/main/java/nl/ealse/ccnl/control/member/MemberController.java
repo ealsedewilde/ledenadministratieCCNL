@@ -71,6 +71,9 @@ public class MemberController extends MemberView {
     pdfViewer = PDFViewer.builder().withDeleteButton(e -> deletePDF())
         .withPrintButton(e -> printPDF()).withCancelButton(e -> closePDF()).build();
     pdfViewer.setWindowTitle("SEPA machtiging voor lid: %d (%s)");
+    
+    getIbanNumber().textProperty()
+    .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
   }
 
   @FXML
@@ -113,8 +116,6 @@ public class MemberController extends MemberView {
     formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
     this.model = new Member();
-    getIbanNumber().textProperty()
-        .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
     formController.getHeaderText().setText(getHeaderTextValue());
   }
 
@@ -138,6 +139,8 @@ public class MemberController extends MemberView {
     formController.getValidator().initialize();
     formController.getSaveButton().setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER);
     formController.setActiveFormPage(0);
+    
+    setIbanControls(selectedMember.getIbanNumber());
   }
 
   private void initializeInitialsType() {
@@ -242,17 +245,24 @@ public class MemberController extends MemberView {
     }
   }
 
-  private void formatIbanOwnerName(String ibanNumber) {
-    ObservableList<Node> children = formController.getThirdPage().getChildren();
+  void formatIbanOwnerName(String ibanNumber) {
     if (hasContent(ibanNumber)) {
       updateIbanOwnerName();
+    } else {
+      savedName = null;
+      getIbanOwnerName().setText(null);
+    }
+    setIbanControls(ibanNumber);
+  }
+  
+  private void setIbanControls(String ibanNumber) {
+    ObservableList<Node> children = formController.getFinancialPage().getChildren();
+    if (hasContent(ibanNumber)) {
       if (!children.contains(getIbanOwnerName())) {
         children.addAll(getIbanOwnerNameL(), getIbanOwnerName(), getBicCodeL(), getBicCode());
       }
     } else {
-      savedName = null;
-      getIbanOwnerName().setText(null);
-      formController.getThirdPage().getChildren().removeAll(getIbanOwnerNameL(), getIbanOwnerName(),
+      children.removeAll(getIbanOwnerNameL(), getIbanOwnerName(),
           getBicCodeL(), getBicCode());
     }
   }

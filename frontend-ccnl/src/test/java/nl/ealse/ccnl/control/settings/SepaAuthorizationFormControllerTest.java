@@ -46,7 +46,6 @@ class SepaAuthorizationFormControllerTest extends FXBase {
 
   @BeforeAll
   static void setup() {
-   
     pageController = mock(PageController.class);
     documentService = mock(DocumentService.class);
     fileChooser = mock(WrappedFileChooser.class);
@@ -76,7 +75,7 @@ class SepaAuthorizationFormControllerTest extends FXBase {
 
   private void doInitialize() {
     try {
-      MethodUtils.invokeMethod(sut, true, "initialize");
+      MethodUtils.invokeMethod(sut, true, "setup");
     } catch (Exception e) {
       e.printStackTrace();
     }
