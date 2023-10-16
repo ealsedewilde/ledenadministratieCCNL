@@ -20,11 +20,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Document;
 public class DocumentTypePropertyValueFactory
     implements Callback<TableColumn.CellDataFeatures<Document, String>, ObservableValue<String>> {
 
-  @Getter
-  @Setter
-  private String property;
-
-
   @Override
   public ObservableValue<String> call(CellDataFeatures<Document, String> param) {
     try {

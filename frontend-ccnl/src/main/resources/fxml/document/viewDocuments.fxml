@@ -43,7 +43,7 @@
         </TableColumn>
         <TableColumn prefWidth="250.0" text="Soort document">
           <cellValueFactory>
-            <DocumentTypePropertyValueFactory property="description" />
+            <DocumentTypePropertyValueFactory/>
           </cellValueFactory>
         </TableColumn>
       </columns>

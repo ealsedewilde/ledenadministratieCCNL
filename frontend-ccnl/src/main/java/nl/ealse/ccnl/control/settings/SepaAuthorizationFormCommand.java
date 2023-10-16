@@ -36,8 +36,7 @@ public class SepaAuthorizationFormCommand {
   @PostConstruct
   void setup() {
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.PDF);
-    boolean b = new File(sepaDirectory).exists();
-    fileChooser.setInitialDirectory(new File(sepaDirectory));
+    fileChooser.setInitialDirectory(new File(sepaDirectory).getParentFile());
     
   }
 

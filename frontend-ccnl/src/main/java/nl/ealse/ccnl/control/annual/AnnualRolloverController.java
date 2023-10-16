@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.annual;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -41,6 +42,9 @@ public class AnnualRolloverController {
   @Value("${ccnl.directory.db:c:/temp}")
   private String dbDirectory;
 
+  @Value("${ccnl.directory.annual:c:/temp}")
+  private String annualDirectory;
+
   private final PageController pageController;
 
   private final BackupRestoreService backupService;
@@ -55,7 +59,7 @@ public class AnnualRolloverController {
 
   private WrappedFileChooser fileChooser;
 
-  private File parent;
+  private File excelParent;
 
   @FXML
   private Button backupButton;
@@ -79,11 +83,12 @@ public class AnnualRolloverController {
     this.archiveService = archiveService;
     this.executor = executor;
   }
-
-  @FXML
-  void initialize() {
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.ZIP);
-    fileChooser.setInitialDirectory(new File(dbDirectory));
+  
+  @PostConstruct
+  void setup() {
+    this.fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.ZIP);
+    this.fileChooser.setInitialDirectory(new File(dbDirectory));
+    this.excelParent = new File(annualDirectory);
   }
 
   /**
@@ -91,9 +96,6 @@ public class AnnualRolloverController {
    */
   @FXML
   void backupDatabase() {
-    if (fileChooser == null) {
-      initialize();
-    }
     String fileName = String.format(BACKUP_FILE_NAME, formatter.format(LocalDateTime.now()));
     fileChooser.setInitialFileName(fileName);
     File backupFile = fileChooser.showSaveDialog();
@@ -148,7 +150,6 @@ public class AnnualRolloverController {
 
     @Override
     protected String call() {
-      controller.parent = backupFile.getParentFile();
       try {
         controller.backupService.backupDatabase(backupFile);
         controller.backupButton.setDisable(true);
@@ -196,7 +197,7 @@ public class AnnualRolloverController {
       String memberFileName =
           String.format(MEMBER_FILE_NAME, formatter.format(LocalDateTime.now()));
       try {
-        controller.exportService.exportALL(new File(controller.parent, memberFileName));
+        controller.exportService.exportALL(new File(controller.excelParent, memberFileName));
       } catch (IOException e) {
         log.error("Could not write Excel document", e);
         throw new AsyncTaskException("Schrijven leden MS Excel-werkblad is mislukt");
@@ -207,7 +208,7 @@ public class AnnualRolloverController {
       String archiveFileName =
           String.format(ARCHIVE_FILE_NAME, formatter.format(LocalDateTime.now()));
       try {
-        controller.archiveService.export(new File(controller.parent, archiveFileName));
+        controller.archiveService.export(new File(controller.excelParent, archiveFileName));
       } catch (IOException e) {
         log.error("Could not write Excel document", e);
         throw new AsyncTaskException("Schrijven archief MS Excel-werkblad is mislukt");
