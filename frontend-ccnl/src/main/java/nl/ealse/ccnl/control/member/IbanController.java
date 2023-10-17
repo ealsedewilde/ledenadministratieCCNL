@@ -94,6 +94,7 @@ public class IbanController {
     this.selectedMember = event.getSelectedEntity();
     memberInfo.setText(String.format("Lid %d (%s)", selectedMember.getMemberNumber(),
         selectedMember.getFullName()));
+    ibanNumber.setText("");
     ibanNumberE.setText(null);
     ibanNumberE.setVisible(false);
   }

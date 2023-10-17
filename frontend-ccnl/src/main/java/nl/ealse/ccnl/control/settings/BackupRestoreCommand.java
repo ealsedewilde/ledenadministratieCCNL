@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.settings;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,12 +43,15 @@ public class BackupRestoreCommand {
     this.service = service;
     this.executor = executor;
   }
+  
+  @PostConstruct
+  void setup() {
+    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.ZIP);
+    fileChooser.setInitialDirectory(new File(dbDirectory));
+  }
 
   @EventListener(condition = "#event.name('MANAGE_BACKUP_DATABASE')")
   public void backup(MenuChoiceEvent event) {
-    if (fileChooser == null) {
-      initialize();
-    }
     String fileName = String.format(FILE_NAME, formatter.format(LocalDateTime.now()));
     fileChooser.setInitialFileName(fileName);
     File backupFile = fileChooser.showSaveDialog();
@@ -60,9 +64,6 @@ public class BackupRestoreCommand {
 
   @EventListener(condition = "#event.name('MANAGE_RESTORE_DATABASE')")
   public void restore(MenuChoiceEvent event) {
-    if (fileChooser == null) {
-      initialize();
-    }
     fileChooser.setInitialFileName(null);
     File backupFile = fileChooser.showOpenDialog();
     if (backupFile != null) {
@@ -73,8 +74,6 @@ public class BackupRestoreCommand {
   }
 
   private void initialize() {
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.ZIP);
-    fileChooser.setInitialDirectory(new File(dbDirectory));
   }
 
   protected static class BackupTask extends HandledTask {
