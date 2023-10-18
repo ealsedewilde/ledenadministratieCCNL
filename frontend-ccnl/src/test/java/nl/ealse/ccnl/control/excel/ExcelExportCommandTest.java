@@ -15,7 +15,6 @@ import nl.ealse.ccnl.test.FXBase;
 import nl.ealse.ccnl.test.TestExecutor;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,7 +70,7 @@ class ExcelExportCommandTest extends FXBase {
   }
 
   private void doTest() {
-    doInitialize();
+    sut.setup();
     setFileChooser();
 
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.REPORT_ARCHIVE);
@@ -106,14 +105,6 @@ class ExcelExportCommandTest extends FXBase {
   private void setDirectory() {
     try {
       FieldUtils.writeField(sut, "excelDirectory", tempDir.getAbsolutePath(), true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void doInitialize() {
-    try {
-      MethodUtils.invokeMethod(sut, true, "initialize");
     } catch (Exception e) {
       e.printStackTrace();
     }

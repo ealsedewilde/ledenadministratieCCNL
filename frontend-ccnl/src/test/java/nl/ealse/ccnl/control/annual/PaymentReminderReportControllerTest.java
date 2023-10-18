@@ -12,7 +12,6 @@ import nl.ealse.ccnl.test.FXBase;
 import nl.ealse.ccnl.test.TestExecutor;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class PaymentReminderReportControllerTest  extends FXBase {
     AtomicBoolean result = runFX(() -> {
       sut = new PaymentReminderReportCommand(exportService, pageController, executor);
       reportDirectory();
-      doInitialize();
+      sut.setup();
       setFileChooser();
       sut.executeCommand(null);
       verify(pageController).showMessage("Herinneringen overzicht is aangemaakt");
@@ -63,14 +62,6 @@ class PaymentReminderReportControllerTest  extends FXBase {
   private void setFileChooser() {
     try {
       FieldUtils.writeField(sut, "fileChooser", fileChooser, true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void doInitialize() {
-    try {
-      MethodUtils.invokeMethod(sut, true, "initialize");
     } catch (Exception e) {
       e.printStackTrace();
     }

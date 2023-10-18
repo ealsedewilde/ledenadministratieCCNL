@@ -13,7 +13,6 @@ import nl.ealse.ccnl.test.FXBase;
 import nl.ealse.ccnl.test.TestExecutor;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,11 +28,10 @@ class BackupRestoreControllerTest extends FXBase {
   private static File zip = new File("dummy.zip");
 ;
 
-  private BackupRestoreCommand sut;
+  private static BackupRestoreCommand sut;
 
   @Test
   void testBackupController() {
-    sut = new BackupRestoreCommand(pageController, service, backupExecutor);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       backup();
@@ -55,7 +53,7 @@ class BackupRestoreControllerTest extends FXBase {
 
   private void backup() {
     dbDirectory();
-    doInitialize();
+    sut.setup();
     setFileChooser();
 
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_BACKUP_DATABASE);
@@ -65,7 +63,7 @@ class BackupRestoreControllerTest extends FXBase {
 
   private void restore() {
     dbDirectory();
-    doInitialize();
+    sut.setup();
     setFileChooser();
 
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_RESTORE_DATABASE);
@@ -101,14 +99,6 @@ class BackupRestoreControllerTest extends FXBase {
   private void setFileChooser() {
     try {
       FieldUtils.writeField(sut, "fileChooser", fileChooser, true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void doInitialize() {
-    try {
-      MethodUtils.invokeMethod(sut, true, "initialize");
     } catch (Exception e) {
       e.printStackTrace();
     }
