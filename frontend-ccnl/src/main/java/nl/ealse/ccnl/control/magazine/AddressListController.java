@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.magazine;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -94,11 +95,13 @@ public class AddressListController {
     MemberListTask asyncTask = new MemberListTask(pageController, magazineService, true);
     generateFile(String.format(MEMBER_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
+  @PostConstruct
+  void setup() {
+    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
+    fileChooser.setInitialDirectory(new File(magazineDirectory));
+  }
 
   private void generateFile(String fileName, FileTask task) {
-    if (fileChooser == null) {
-      initialize();
-    }
     fileChooser.setInitialFileName(fileName);
     File addressFile = fileChooser.showSaveDialog();
     if (addressFile != null) {
@@ -107,11 +110,6 @@ public class AddressListController {
       executor.execute(task);
       pageController.activateLogoPage();
     }
-  }
-
-  private void initialize() {
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
-    fileChooser.setInitialDirectory(new File(magazineDirectory));
   }
 
   /**

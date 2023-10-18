@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.annual;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
@@ -37,22 +38,20 @@ public class PaymentReminderReportCommand {
     this.executor = executor;
   }
 
+  @PostConstruct
+  void setup() {
+    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
+    fileChooser.setInitialDirectory(new File(reportDirectory));
+  }
+
   @EventListener(condition = "#event.name('PRODUCE_REMINDER_REPORT')")
   public void executeCommand(MenuChoiceEvent event) {
-    if (fileChooser == null) {
-      initialize();
-    }
     File reportFile = fileChooser.showSaveDialog();
     if (reportFile != null) {
       pageController.showPermanentMessage("Herinneringen overzicht wordt aangemaakt");
       ReminderTask reminderTask = new ReminderTask(this, reportFile);
       executor.execute(reminderTask);
     }
-  }
-
-  private void initialize() {
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
-    fileChooser.setInitialDirectory(new File(reportDirectory));
   }
 
   protected static class ReminderTask extends HandledTask {

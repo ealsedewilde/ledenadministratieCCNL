@@ -73,9 +73,6 @@ public class BackupRestoreCommand {
     }
   }
 
-  private void initialize() {
-  }
-
   protected static class BackupTask extends HandledTask {
 
     private final BackupRestoreService service;

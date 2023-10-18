@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.excel;
 
 import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_ARCHIVE;
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
@@ -43,17 +44,14 @@ public class ExcelExportCommand {
     this.executor = executor;
   }
 
-  private void initialize() {
+  @PostConstruct
+  void setup() {
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
     fileChooser.setInitialDirectory(new File(excelDirectory));
   }
 
   @EventListener(condition = "#event.group('REPORTS')")
   public void executeCommand(MenuChoiceEvent event) {
-    if (fileChooser == null) {
-      // There is no fxml associated with this controller; so no @FXML initialize() available!
-      initialize();
-    }
     File exportFile = fileChooser.showSaveDialog();
     if (exportFile != null) {
       pageController.showPermanentMessage("MS Excel-werkblad wordt aangemaakt; even geduld a.u.b.");

@@ -31,7 +31,7 @@ import org.springframework.core.io.Resource;
  */
 @Slf4j
 public class DatabasePropertySource extends PropertySource<Properties> {
-  private static final String  PROP_DS_URL = "spring.datasource.url";
+  private static final String PROP_DS_URL = "spring.datasource.url";
 
   public DatabasePropertySource(ConfigurableEnvironment environment) {
     super("databaseProperties", new Properties());
@@ -48,33 +48,32 @@ public class DatabasePropertySource extends PropertySource<Properties> {
    * DataSource to load properties from the SETTINGS database table.
    */
   private void initialize(final ConfigurableEnvironment environment) {
-    try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
-      executorService.execute(() -> {
-        initializeDbLocation();
-        String userName = environment.getProperty("spring.datasource.username");
-        String url = environment.getProperty(PROP_DS_URL);
-        String driverClassName = environment.getProperty("spring.datasource.driverClassName");
-        DataSource ds = DataSourceBuilder.create().username(userName).url(url)
-            .driverClassName(driverClassName).build();
-        try {
-          load(ds);
-        } catch (SQLException e) {
-          log.warn("Error loading properties from the database");
-          initSql(ds);
-        }
-      });
-    }
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    executorService.execute(() -> {
+      initializeDbLocation();
+      String userName = environment.getProperty("spring.datasource.username");
+      String url = environment.getProperty(PROP_DS_URL);
+      String driverClassName = environment.getProperty("spring.datasource.driverClassName");
+      DataSource ds = DataSourceBuilder.create().username(userName).url(url)
+          .driverClassName(driverClassName).build();
+      try {
+        load(ds);
+      } catch (SQLException e) {
+        log.warn("Error loading properties from the database");
+        initSql(ds);
+      }
+    });
   }
 
   /**
-   * Is the default "spring.datasource.url" overridden?
-   * If so put the new URL is this PropertySource.
+   * Is the default "spring.datasource.url" overridden? If so put the new URL is this
+   * PropertySource.
    */
   private void initializeDbLocation() {
     DatabaseLocation dbl = new DatabaseLocation();
     Optional<String> dbUrl = dbl.getDataBaseUrl();
     if (dbUrl.isPresent()) {
-      log.warn(PROP_DS_URL+ dbUrl.get());
+      log.warn(PROP_DS_URL + dbUrl.get());
       getSource().put(PROP_DS_URL, dbUrl.get());
     }
   }
