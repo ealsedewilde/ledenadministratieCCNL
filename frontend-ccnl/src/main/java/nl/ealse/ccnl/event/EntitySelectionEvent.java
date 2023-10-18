@@ -17,7 +17,7 @@ import nl.ealse.ccnl.control.menu.MenuController;
 public class EntitySelectionEvent<T> extends MenuChoiceEvent {
 
   @Getter
-  private final T selectedEntity; // NOSONAR
+  private final transient T selectedEntity; // NOSONAR
 
   public EntitySelectionEvent(Object source, MenuChoice menuChoice, T selectedEntity) {
     super(source, menuChoice);

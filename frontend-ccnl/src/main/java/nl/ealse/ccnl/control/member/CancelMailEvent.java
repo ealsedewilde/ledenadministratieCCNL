@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationEvent;
 public class CancelMailEvent extends ApplicationEvent {
   
   @Getter
-  private final Member member;
+  private final transient Member member;
 
   public CancelMailEvent(Object source, Member member) {
     super(source);

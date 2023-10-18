@@ -47,6 +47,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   }
   
   @FXML
+  @Override
   protected void initialize() {
     super.initialize();
     initializeTemplates();

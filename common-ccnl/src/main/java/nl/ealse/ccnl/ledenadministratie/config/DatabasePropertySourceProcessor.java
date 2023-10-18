@@ -12,7 +12,6 @@ public class DatabasePropertySourceProcessor implements EnvironmentPostProcessor
     /*
      * Properties that are managed by the user
      */
-    System.out.println("Load User Properties");
     environment.getPropertySources().addFirst(new DatabasePropertySource(environment));
   }
 
