@@ -80,22 +80,23 @@ public class CancelationMailController extends DocumentTemplateController {
 
   @FXML
   void sendMail() {
+    String mailAddress = toMailAddress.getText();
     if (saveMailAddress.isSelected()) {
-      selectedMember.setEmail(toMailAddress.getText());
+      selectedMember.setEmail(mailAddress);
       memberService.persistMember(selectedMember);
     }
     String mailContent = generateText();
     SimpleMailMessage mailMessage =
-        mailService.sendMail(toMailAddress.getText(), mailSubject, mailContent);
+        mailService.sendMail(mailAddress, mailSubject, mailContent);
     mailService.saveMail(selectedMember, mailMessage);
-    pageController.showMessage("Email is verzonden naar: " + toMailAddress.getText());
     pageController.activateLogoPage();
+    pageController.showMessage("Email is verzonden naar: " + mailAddress);
   }
 
   @FXML
   void noMail() {
-    pageController.showMessage("Geen Email verzonden");
     pageController.activateLogoPage();
+    pageController.showMessage("Geen Email verzonden");
   }
 
   /**
