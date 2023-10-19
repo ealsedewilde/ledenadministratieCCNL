@@ -44,5 +44,9 @@ public class ExternalRelation implements AddressOwner {
   public int getId() {
     return relationNumber;
   }
+  
+  public String getFullName() {
+    return relationName;
+  }
 
 }

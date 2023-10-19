@@ -40,6 +40,11 @@ public class InternalRelation implements AddressOwner {
   public void prePersist() {
     setModificationDate(LocalDate.now());
   }
+  
+  public String getFullName() {
+    return title;
+  }
+
 
 
 }
