@@ -104,7 +104,7 @@ public abstract class FXMLBaseTest extends FXBase {
    * @throws FXMLMissingException
    */
   private Parent getPage(Object controller, PageName pageName, boolean factory) {
-    Resource r = new ClassPathResource(FXML_DIR + pageName.getId().getFxmlName() + ".fxml");
+    Resource r = new ClassPathResource(FXML_DIR + pageName.getFxmlName() + ".fxml");
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
       if (factory) {

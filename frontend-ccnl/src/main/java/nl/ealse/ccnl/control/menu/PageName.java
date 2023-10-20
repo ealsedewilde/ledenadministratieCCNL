@@ -1,6 +1,8 @@
 package nl.ealse.ccnl.control.menu;
 
+import javafx.scene.Parent;
 import lombok.Getter;
+import nl.ealse.javafx.FXMLLoaderBean;
 
 /**
  * Pages to load via the PageController.
@@ -31,13 +33,27 @@ public enum PageName {
 
   EXCEL_IMPORT("settings/excelImport"), TEMPLATES_OVERVIEW(
       "settings/templatesOverview"), MANAGE_TEMPLATE("settings/manageTemplate"), MANAGE_DATABASE(
-          "manageDatabase"), SETTINGS("settings/settings"), MANAGE_ARCHIVE("settings/manageArchive");
+          "manageDatabase"), SETTINGS(
+              "settings/settings"), MANAGE_ARCHIVE("settings/manageArchive");
 
   @Getter
-  private final PageId id;
+  private final String fxmlName;
+
+  private Parent page;
 
   PageName(String fxmlName) {
-    this.id = new PageId(this.name(), fxmlName);
+    this.fxmlName = fxmlName;
+  }
+
+  /**
+   * Get the loaded fxml page;
+   * @return
+   */
+  public Parent getPage() {
+    if (page == null) {
+      page = FXMLLoaderBean.getPage(fxmlName);
+    }
+    return page;
   }
 
 }
