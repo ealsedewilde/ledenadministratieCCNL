@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.member;
 
-import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.javafx.FXMLLoaderBean;
