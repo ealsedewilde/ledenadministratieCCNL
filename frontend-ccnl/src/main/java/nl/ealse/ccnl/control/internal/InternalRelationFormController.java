@@ -1,7 +1,7 @@
 package nl.ealse.ccnl.control.internal;
 
 import nl.ealse.ccnl.form.FormController;
-import nl.ealse.ccnl.form.FormPane;
+import nl.ealse.javafx.FXMLLoaderBean;
 
 /**
  * Control the form pages for an internal relation.
@@ -18,8 +18,8 @@ public class InternalRelationFormController extends FormController {
   @Override
   protected void initializePages() {
     formPageArray[0] =
-        new FormPane("internal/form/pageRelation", controller);
-    formPageArray[1] = new FormPane("form/address", controller);
+        FXMLLoaderBean.getPage("internal/form/pageRelation", controller);
+    formPageArray[1] = FXMLLoaderBean.getPage("form/address", controller);
 
     // initialize the submenu for form nsvigation.
     addMenuItem(0, "Functiegegevens");

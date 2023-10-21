@@ -47,20 +47,6 @@ public class FXMLLoaderBean {
   }
 
   /**
-   * Get the page for fxml with fx:root.
-   * <p>
-   * Used by non Spring components. </p?
-   * 
-   * @param String fxmlName - unique id of the page
-   * @param root - the root object for the fxml
-   * @param controller - the controller object fxml binding.
-   * @return Parent of the page
-   */
-  public static Parent getPage(String fxmlName, Object root, Object controller) {
-    return instance.loadFXML(fxmlName, root, controller);
-  }
-
-  /**
    * Lookup an initialized FXML page.
    * 
    * @param String fxmlName - unique id of the page
@@ -68,26 +54,25 @@ public class FXMLLoaderBean {
    * @return Parent of the page
    */
   public static Parent getPage(String fxmlName, Object controller) {
-    return instance.loadFXML(fxmlName, null, controller);
+    return instance.loadFXML(fxmlName, controller);
   }
 
   public static Parent getPage(String fxmlName) {
-    return instance.loadFXML(fxmlName, null, null);
+    return instance.loadFXML(fxmlName, null);
   }
 
   /**
    * Loading of the FXML from the classpath.
    * 
    * @param fxmlName - of the page to retrieve
-   * @param root - optional root object for the fxml
+   * @param controller - optional controller
    * @return
    */
-  private Parent loadFXML(String fxmlName, Object root, Object controller) {
+  private Parent loadFXML(String fxmlName, Object controller) {
     String fqFxmlName = fxmlDirectory + fxmlName + FXML_TYPE;
     Resource r = new ClassPathResource(fqFxmlName);
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
-      fxmlLoader.setRoot(root);
       if (controller == null) {
         // Take Spring managed bean as the fx:controller
         fxmlLoader.setControllerFactory(getControllerFactory());

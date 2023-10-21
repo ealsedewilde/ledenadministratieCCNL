@@ -6,7 +6,7 @@
 <?import javafx.scene.image.*?>
 <?import nl.ealse.ccnl.control.button.*?>
 
-<fx:root type="javafx.scene.layout.GridPane" xmlns="http://javafx.com/javafx"
+<GridPane xmlns="http://javafx.com/javafx"
 	xmlns:fx="http://javafx.com/fxml" prefWidth="Infinity" styleClass="page">
 	<columnConstraints>
 		<ColumnConstraints minWidth="150" />
@@ -40,5 +40,5 @@
         <Label text="Wil geen clubblad" GridPane.columnIndex="0" GridPane.rowIndex="7" />
         <CheckBox fx:id="noMagazine" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 	</children>
-</fx:root>
+</GridPane>
 	

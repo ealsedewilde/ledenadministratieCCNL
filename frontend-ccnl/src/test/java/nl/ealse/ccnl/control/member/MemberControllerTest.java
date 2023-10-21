@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javafx.scene.Parent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.form.FormController;
-import nl.ealse.ccnl.form.FormPane;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -59,7 +59,7 @@ class MemberControllerTest extends FXMLBaseTest {
 
   void testFormController() {
     formController = getFormController();
-    FormPane[] formPanes = getFormPanes();
+    Parent[] formPanes = getFormPanes();
     Assertions.assertNotNull(formPanes[3]);
   }
 
@@ -143,9 +143,9 @@ class MemberControllerTest extends FXMLBaseTest {
     return null;
   }
 
-  private FormPane[] getFormPanes() {
+  private Parent[] getFormPanes() {
     try {
-      return (FormPane[]) FieldUtils.readField(formController, "formPageArray", true);
+      return (Parent[]) FieldUtils.readField(formController, "formPageArray", true);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     }

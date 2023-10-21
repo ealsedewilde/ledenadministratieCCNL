@@ -52,7 +52,7 @@ public abstract class FormController {
 
   private final Hyperlink[] links;
   private final Label[] labels;
-  protected final FormPane[] formPageArray;
+  protected final Parent[] formPageArray;
 
   @Getter
   private final CompositeValidator validator;
@@ -74,7 +74,7 @@ public abstract class FormController {
     this.maxPageIndex = numberOfPages - 1;
     this.links = new Hyperlink[numberOfPages];
     this.labels = new Label[numberOfPages];
-    this.formPageArray = new FormPane[numberOfPages];
+    this.formPageArray = new Parent[numberOfPages];
   }
   
   public void initializeForm() {
