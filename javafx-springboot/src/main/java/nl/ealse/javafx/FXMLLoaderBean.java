@@ -33,6 +33,8 @@ public class FXMLLoaderBean {
   @Value("${fxml.dir}")
   private String fxmlDirectory;
 
+  private final FXMLLoader fxmlLoader = new FXMLLoader();
+
   private static FXMLLoaderBean instance;
 
   private final ApplicationContext springContext; // NOSONAR
@@ -44,6 +46,7 @@ public class FXMLLoaderBean {
 
   private static void setInstance(FXMLLoaderBean fnm) {
     instance = fnm;
+    instance.fxmlLoader.setControllerFactory(instance.getControllerFactory());
   }
 
   /**
@@ -72,13 +75,10 @@ public class FXMLLoaderBean {
     String fqFxmlName = fxmlDirectory + fxmlName + FXML_TYPE;
     Resource r = new ClassPathResource(fqFxmlName);
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(r.getURL());
-      if (controller == null) {
-        // Take Spring managed bean as the fx:controller
-        fxmlLoader.setControllerFactory(getControllerFactory());
-      } else {
-        fxmlLoader.setController(controller);
-      }
+      fxmlLoader.setRoot(null);
+      fxmlLoader.setController(controller);
+      fxmlLoader.setLocation(r.getURL());
+
       log.info(fxmlLoader.getLocation().toString());
       return fxmlLoader.load();
     } catch (FileNotFoundException e) {

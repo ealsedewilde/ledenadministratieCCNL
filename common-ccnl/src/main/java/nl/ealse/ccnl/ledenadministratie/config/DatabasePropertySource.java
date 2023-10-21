@@ -48,7 +48,8 @@ public class DatabasePropertySource extends PropertySource<Properties> {
    * DataSource to load properties from the SETTINGS database table.
    */
   private void initialize(final ConfigurableEnvironment environment) {
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    // AutoCloseable seems to block the database access.
+    ExecutorService executorService = Executors.newSingleThreadExecutor(); //NOSONAR  
     executorService.execute(() -> {
       initializeDbLocation();
       String userName = environment.getProperty("spring.datasource.username");
