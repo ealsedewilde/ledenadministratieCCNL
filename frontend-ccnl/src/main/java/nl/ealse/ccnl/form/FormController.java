@@ -14,6 +14,7 @@ import lombok.Getter;
 import nl.ealse.ccnl.control.menu.PageReference;
 import nl.ealse.ccnl.validation.CompositeValidator;
 import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.mapping.Mapping;
 
 /**
  * Helper to control the a multiple page form.
@@ -47,6 +48,7 @@ public abstract class FormController {
    */
   @FXML
   @Getter
+  @Mapping(ignore = true)
   protected Label headerText;
 
   @FXML
@@ -57,10 +59,12 @@ public abstract class FormController {
 
   @FXML
   @Getter
+  @Mapping(ignore = true)
   protected Button saveButton;
 
   @FXML
   @Getter
+  @Mapping(ignore = true)
   protected Button undoButton;
 
   private final Hyperlink[] links;

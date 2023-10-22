@@ -55,11 +55,13 @@ As said before, the startup takes time, so the user needs to know that something
 I've chosen for FXML because I had no experience of building screens. In such a situation the SceneBuilder is handy to roughly model the screens. I also had the idea that FXML somehow will give me a ModelViewController like solution. I now think that the View (FXML) is too closely coupled with the Java-FX controller to have a true MVC-paradigm. 
 
 The application has three groups of FXML resources.
-1. FXML resources that make up de main flow of the application. They a triggerd by a menuchoice.
-2. FXML resources that a pages in foms.
+1. FXML resources that make up de main flow of the application. They a triggered by a menuchoice event.
+2. FXML resources that the pages in a multi page form.
 3. FXML resources that are used in popup windows
 
-I need a mechanism to control the main flow between the dozens of fxml files. I have defined the `PageName` enum that points to the fxml file that it refers to. I noticed that loading fxml is a quite heavy task, so once loaded I cache the fxml; in the `PageController`. Caching means that the initialization of controllers only happens once. When reusing a screen it has to be reset explicitly. (I'm used to it, but I'm not sure if it is the best option.) Later i came across the FxWeaver framework. I've looked at it, but found it not flexible enough to suit my needs, so I sticked to the mechanism I had.
+I need a mechanism to control the main flow between the dozens of fxml files. I have defined the `PageName` enum that points to the fxml file that it refers to. I noticed that loading fxml is a quite heavy task, so once loaded I cache the fxml; in the `PageName` instance. 
+Multi page forms are special cases. There is one framework fxml file that is used for all forms. So the same fxml is used by multiple controllers. The `FormController` handles the generic functionality for all forms. Extensions of this class handle the various pages of a form.
+Caching fxml means that the fxml initialization of controllers only happens once. When reusing a screen it has to be reset explicitly. (I'm used to it, but I'm not sure if it is the best option.) Later i came across the FxWeaver framework. I've looked at it, but found it not flexible enough to suit my needs, so I sticked to the mechanism I had.
 
 ## Controlling the UI.
 
