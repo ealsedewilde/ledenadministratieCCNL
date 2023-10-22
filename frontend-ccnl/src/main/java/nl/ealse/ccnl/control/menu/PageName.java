@@ -7,7 +7,7 @@ import nl.ealse.javafx.FXMLLoaderBean;
 /**
  * Pages to load via the PageController.
  */
-public enum PageName {
+public enum PageName implements PageReference {
 
   MEMBER_SEARCH("member/memberSearch"), MEMBER_CANCEL("member/memberCancel"), MEMBER_CANCEL_MAIL(
       "member/memberCancelMail"), WELCOME_LETTER("member/welcomeLetter"),
@@ -49,6 +49,7 @@ public enum PageName {
    * Get the loaded fxml page;
    * @return
    */
+  @Override
   public Parent getPage() {
     if (page == null) {
       page = FXMLLoaderBean.getPage(fxmlName);

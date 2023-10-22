@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * <p>
  * This bean is the only eargerly loaded bean of the application !
  * </p>
- * 
+ *
  * @author ealse
  *
  */
@@ -51,7 +51,7 @@ public class FXMLLoaderBean {
 
   /**
    * Lookup an initialized FXML page.
-   * 
+   *
    * @param String fxmlName - unique id of the page
    * @param controller - the controller object fxml binding.
    * @return Parent of the page
@@ -66,7 +66,7 @@ public class FXMLLoaderBean {
 
   /**
    * Loading of the FXML from the classpath.
-   * 
+   *
    * @param fxmlName - of the page to retrieve
    * @param controller - optional controller
    * @return

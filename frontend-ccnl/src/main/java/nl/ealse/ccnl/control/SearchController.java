@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * Super class for all controllers for searching a relation in the database.
- * 
+ *
  * @author ealse
  * @param <T> - relation type to search
  * @param <E> - event for the selected relation
@@ -59,7 +59,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
 
   /**
    * Re-initialize the SearchPane.
-   * 
+   *
    * @param event fired due to a menu choice
    */
   protected void prepareSearch(MenuChoiceEvent event) {
@@ -72,7 +72,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
 
   /**
    * Perform the actual search operation.
-   * 
+   *
    * @param searchItem type of information to search for
    * @param value to search for
    * @return the selected model objects that match the search (if any)
@@ -81,7 +81,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
 
   /**
    * Invoked when question mark column is clicked. (Invoked after selectedMember is set.)
-   * 
+   *
    * @param event fire when a question mark cell in the <code>TableView</code> is clicked
    */
   public void extraInfo(MouseEvent event) {
@@ -96,7 +96,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
 
   /**
    * Invoked when NON question mark column is clicked.
-   * 
+   *
    * @param event fire when a <code>Tableview</code> row is clicked
    */
   public void handleSelected(MouseEvent event) {

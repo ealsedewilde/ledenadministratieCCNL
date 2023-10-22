@@ -10,6 +10,11 @@ import lombok.Setter;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.AddressOwner;
 
+/**
+ * Adress properties in a TableView.
+ *
+ * @param <T>
+ */
 public class AddressPropertyValueFactory<T extends AddressOwner>
     implements Callback<TableColumn.CellDataFeatures<T, String>, ObservableValue<String>> {
 

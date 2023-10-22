@@ -5,6 +5,9 @@ import nl.ealse.ccnl.validation.CompositeValidator;
 import nl.ealse.ccnl.validation.PostcodeValidator;
 import nl.ealse.ccnl.view.AddressView;
 
+/**
+ * Validate the address properties of a form.
+ */
 public class AddressValidation extends CompositeValidator {
 
   private final AddressView addressController;

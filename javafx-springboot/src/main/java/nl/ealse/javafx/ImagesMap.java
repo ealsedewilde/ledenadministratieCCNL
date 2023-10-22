@@ -12,7 +12,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * Utility that is capable of loading image-files from the classpath.
- * 
+ *
  * @author ealse
  *
  */

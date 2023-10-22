@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * Thrown when loading FXML throws an {@link IOException}.
- * 
+ *
  * @author ealse
  *
  */

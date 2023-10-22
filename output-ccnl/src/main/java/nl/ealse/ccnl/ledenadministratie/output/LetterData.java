@@ -7,7 +7,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 
 /**
  * Content for generating a docx- of PDF-document.
- * 
+ *
  * @author ealse
  *
  */
@@ -20,7 +20,7 @@ public class LetterData {
 
   /**
    * All possible tokens in a content template.
-   * 
+   *
    * @author ealse
    *
    */

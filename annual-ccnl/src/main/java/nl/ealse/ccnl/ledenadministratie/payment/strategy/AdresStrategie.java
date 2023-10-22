@@ -14,7 +14,7 @@ public class AdresStrategie extends BetalingStrategie {
   }
 
   /**
-   * 
+   *
    */
   // Could it be that we no longer get address info from the ING?
   // Perhaps due to new privacy regulations?

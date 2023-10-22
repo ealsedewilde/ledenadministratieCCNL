@@ -2,7 +2,7 @@ package nl.ealse.ccnl.ledenadministratie.excel.base;
 
 /**
  * Marker interface
- * 
+ *
  * @author Ealse
  */
 public interface ColumnDefinition {

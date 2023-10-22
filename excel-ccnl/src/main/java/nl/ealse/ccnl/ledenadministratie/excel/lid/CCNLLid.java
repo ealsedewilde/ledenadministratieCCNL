@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 
 /**
  * Een lid in het ledenbestand.
- * 
+ *
  * @author Ealse
  *
  */

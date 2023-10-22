@@ -19,7 +19,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * Opvragen BIC-codes voor Nederlandse banken.
- * 
+ *
  * @author Ealse
  *
  */

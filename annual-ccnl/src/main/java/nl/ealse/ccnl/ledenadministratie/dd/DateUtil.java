@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Helper for XML-dates.
- * 
+ *
  * @author Ealse
  *
  */
@@ -24,7 +24,7 @@ public class DateUtil {
 
   /**
    * Convert Date without time to XML-format.
-   * 
+   *
    * @param date - date to convert
    * @return - XML-data
    */
@@ -40,7 +40,7 @@ public class DateUtil {
 
   /**
    * Date + Time to XML format.
-   * 
+   *
    * @param date - date to convert
    * @return - XML-data
    */

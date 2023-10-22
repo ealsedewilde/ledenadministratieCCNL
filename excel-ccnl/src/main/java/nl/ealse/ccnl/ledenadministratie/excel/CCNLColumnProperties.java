@@ -28,7 +28,7 @@ public class CCNLColumnProperties {
 
   /**
    * De eerste waarde uit de reeks
-   * 
+   *
    * @return
    */
   public String getPropertyAutomatischeIncasso() {

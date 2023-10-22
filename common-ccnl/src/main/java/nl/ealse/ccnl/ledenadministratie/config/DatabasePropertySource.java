@@ -25,7 +25,7 @@ import org.springframework.core.io.Resource;
  * Properties from the database. These properties should be loaded before the ApplicationContext
  * gets initialized. When no properties exist, the SETTINGS table is initialized from the init.sql
  * file on the classpath.
- * 
+ *
  * @author ealse
  *
  */
@@ -81,7 +81,7 @@ public class DatabasePropertySource extends PropertySource<Properties> {
 
   /**
    * Load the properties from the SETTINGS table.
-   * 
+   *
    * @param ds
    * @throws SQLException
    */
@@ -100,7 +100,7 @@ public class DatabasePropertySource extends PropertySource<Properties> {
 
   /**
    * Initialize the SETTINGS table from the init.sql file.
-   * 
+   *
    * @param ds
    * @throws SQLException
    */
@@ -116,7 +116,7 @@ public class DatabasePropertySource extends PropertySource<Properties> {
 
   /**
    * Execute the statements in the 'init.sql' file.
-   * 
+   *
    * @param c
    * @throws SQLException
    */

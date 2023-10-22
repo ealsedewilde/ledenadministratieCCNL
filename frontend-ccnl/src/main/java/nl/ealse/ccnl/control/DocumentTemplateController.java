@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * Super class for all Controller that require a DocumentTemplate.
- * 
+ *
  * @author ealse
  *
  */
@@ -140,7 +140,7 @@ public abstract class DocumentTemplateController {
 
   /**
    * Context for the three sub classes of the DocumentTemplateController.
-   * 
+   *
    * @author ealse
    */
   public enum DocumentTemplateContext {
@@ -161,8 +161,8 @@ public abstract class DocumentTemplateController {
   }
 
   /**
-   * Context for the specific DocumentTemplateController subclass
-   * 
+   * Context for the specific DocumentTemplateController subclass.
+   *
    * @author ealse
    */
   @AllArgsConstructor

@@ -11,27 +11,42 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import lombok.Getter;
+import nl.ealse.ccnl.control.menu.PageReference;
 import nl.ealse.ccnl.validation.CompositeValidator;
 import nl.ealse.javafx.FXMLLoaderBean;
-import nl.ealse.javafx.mapping.Mapping;
 
 /**
- * Helper to control the various pages of a form.
+ * Helper to control the a multiple page form.
+ * <p>
+ * A form consist of a frame page in which the various pages of the form are loaded.
+ * The frame also ha a menu to select a page of the form.
+ * </p>
  */
 public abstract class FormController {
 
+  /**
+   * Menu to select a page of the form
+   */
   @FXML
   private Pane formMenu;
 
+  /**
+   * Pane wherein a page of the form is loade.
+   */
   @FXML
   private Pane formPage;
 
+  /**
+   * Pane for the various buttons to control the form.
+   */
   @FXML
   private Pane formButtons;
 
+  /**
+   * Text showing the context of the form.
+   */
   @FXML
   @Getter
-  @Mapping(ignore = true)
   protected Label headerText;
 
   @FXML
@@ -42,32 +57,42 @@ public abstract class FormController {
 
   @FXML
   @Getter
-  @Mapping(ignore = true)
   protected Button saveButton;
 
   @FXML
   @Getter
-  @Mapping(ignore = true)
   protected Button undoButton;
 
   private final Hyperlink[] links;
   private final Label[] labels;
   protected final Parent[] formPageArray;
 
+  /**
+   * Form validator.
+   */
   @Getter
   private final CompositeValidator validator;
-  
-  @Getter
+
+  /**
+   * The frame form.
+   */
   private Parent form;
 
+  /**
+   * Zero based Index of the form page currently active
+   */
   private int currentPage;
 
+  /**
+   * The the number of forma pages in the form.
+   */
   private final int maxPageIndex;
 
   /**
    * Constructor.
+   *
    * @param numberOfPages of a form
-   * @param controller of the form
+   * @param validator of the form
    */
   protected FormController(int numberOfPages, CompositeValidator validator) {
     this.validator = validator;
@@ -76,25 +101,31 @@ public abstract class FormController {
     this.labels = new Label[numberOfPages];
     this.formPageArray = new Parent[numberOfPages];
   }
-  
+
+  /**
+   * Initialize this FromController.
+   */
   public void initializeForm() {
     this.form = FXMLLoaderBean.getPage("form/form", this);
     initializePages();
     validator.initialize();
+    
+    // The save button is only enabled when the for m is valid
     validator.setCallback(valid -> saveButton.setDisable(!valid));
   }
-  
+
   public void setOnSave(EventHandler<ActionEvent> handler) {
     saveButton.setOnAction(handler);
   }
-  
+
   public void setOnReset(EventHandler<ActionEvent> handler) {
     undoButton.setOnAction(handler);
   }
 
   /**
    * Show the requested form page.
-   * @param pageIndex
+   *
+   * @param pageIndex - zero based index of the form page
    */
   public void setActiveFormPage(int pageIndex) {
     validator.validate();
@@ -122,7 +153,7 @@ public abstract class FormController {
       menuItems.set(ix + 1, links[ix]);
     }
   }
-  
+
   private void handleButtons(int pageIndex) {
     List<Node> buttons = formButtons.getChildren();
     if (pageIndex == maxPageIndex) {
@@ -148,7 +179,18 @@ public abstract class FormController {
     label.setText(text);
     labels[index] = label;
   }
-  
+
+  /**
+   * Get reference to the load form fxml.
+   *
+   * @return the page reference
+   */
+  public PageReference getPageReference() {
+    return () -> {
+      return form;
+    };
+  }
+
   protected abstract void initializePages();
 
   protected abstract void setFocus(int pageIndex);

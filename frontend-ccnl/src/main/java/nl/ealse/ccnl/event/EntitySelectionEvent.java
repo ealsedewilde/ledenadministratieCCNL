@@ -8,7 +8,7 @@ import nl.ealse.ccnl.control.menu.MenuController;
  * Entity selected for processing in the various screens. For new entities it is the
  * {@link MenuController} that provides an initial entity. For other cases the entity is the result
  * of a search process.
- * 
+ *
  * @author ealse
  *
  * @param <T> selected model object

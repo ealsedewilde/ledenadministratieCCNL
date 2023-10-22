@@ -46,7 +46,7 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   }
   
   private void handlePartner(MenuChoiceEvent event) {
-    pageController.setActivateFormPage(formController.getForm());
+    pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     this.model = new ExternalRelationPartner();
     this.currentMenuChoice = event.getMenuChoice();

@@ -32,6 +32,12 @@ public class StageBuilder {
     return this;
   }
   
+  /**
+   * Set te dimension of Stage.
+   * @param width
+   * @param height
+   * @return
+   */
   public StageBuilder size(double width, double height) {
     this.width = width;
     this.height = height;

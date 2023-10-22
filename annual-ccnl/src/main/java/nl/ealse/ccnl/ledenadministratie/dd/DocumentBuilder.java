@@ -10,7 +10,7 @@ import nl.ealse.ccnl.ledenadministratie.dd.model.PaymentInstructionInformation4;
 
 /**
  * Het SEPA-INCASSO document opbouwen.
- * 
+ *
  * @author Ealse
  *
  */
@@ -27,7 +27,7 @@ public class DocumentBuilder {
 
   /**
    * Aanmaakdatum vullen
-   * 
+   *
    * @param creDtTm - aanmaakdatum
    * @return builder
    */
@@ -38,7 +38,7 @@ public class DocumentBuilder {
 
   /**
    * (Optioneel) Som van alle te incasseren bedragen.
-   * 
+   *
    * @param ctrlSum - totaal te incasseren bedrag
    * @return builder
    */
@@ -49,7 +49,7 @@ public class DocumentBuilder {
 
   /**
    * MessageId (maximaal 35 tekens)
-   * 
+   *
    * @param messageId - incasso referentie
    * @return builder
    */
@@ -60,7 +60,7 @@ public class DocumentBuilder {
 
   /**
    * Totaal aantal transacties
-   * 
+   *
    * @param nbOfTxs - totaal aantal transacties
    * @return builder
    */
@@ -71,7 +71,7 @@ public class DocumentBuilder {
 
   /**
    * Crediteur gedeelte toevoegen.
-   * 
+   *
    * @param paymentInstruction - opgebouwde <code>PaymentInstruction</code>.
    * @return builder
    */

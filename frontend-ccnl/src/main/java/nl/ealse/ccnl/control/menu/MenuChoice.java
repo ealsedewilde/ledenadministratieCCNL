@@ -11,7 +11,7 @@ import lombok.Getter;
 
 /**
  * A MenuChoice for every choice made in the application's menu.
- * 
+ *
  * @author ealse
  *
  */

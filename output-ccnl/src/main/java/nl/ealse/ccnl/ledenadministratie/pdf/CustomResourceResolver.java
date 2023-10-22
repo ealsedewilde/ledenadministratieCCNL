@@ -8,7 +8,7 @@ import org.apache.xmlgraphics.io.ResourceResolver;
 
 /**
  * Resolve resource URI's to absolute paths.
- * 
+ *
  * @author ealse
  *
  */

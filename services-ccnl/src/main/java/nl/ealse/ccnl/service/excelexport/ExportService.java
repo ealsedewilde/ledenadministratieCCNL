@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Export all data to Excel.
- * 
+ *
  * @author ealse
  *
  */
@@ -53,7 +53,7 @@ public class ExportService {
 
   /**
    * Export all data to an Excel file on the local filesystem.
-   * 
+   *
    * @param selectedFile - location for the target Excel file
    * @throws IOException in case generating the file fails
    */

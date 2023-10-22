@@ -5,7 +5,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 
 /**
  * Fills the Address from a CCNLLid.
- * 
+ *
  * @author ealse
  *
  */

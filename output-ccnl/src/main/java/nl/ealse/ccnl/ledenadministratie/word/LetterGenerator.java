@@ -32,7 +32,7 @@ import org.springframework.core.io.ClassPathResource;
 
 /**
  * docx-document Generator. Instances of this class are not reusable.
- * 
+ *
  * @author ealse
  */
 public class LetterGenerator {
@@ -61,7 +61,7 @@ public class LetterGenerator {
 
   /**
    * Generate a docx-document from a template document.
-   * 
+   *
    * @param data - content for the document
    * @return the docx-document
    */
@@ -100,7 +100,7 @@ public class LetterGenerator {
 
   /**
    * Generate the address part of the letter.
-   * 
+   *
    * @param data
    */
   private void setAddress(Member member) {
@@ -118,7 +118,7 @@ public class LetterGenerator {
 
   /**
    * Replace the placeholder with content.
-   * 
+   *
    * @param data - with relevant content
    * @param line - with placeholders
    * @return line with content
@@ -139,7 +139,7 @@ public class LetterGenerator {
 
   /**
    * Configure the context based on tokens in the line
-   * 
+   *
    * @param lineContext
    * @param line
    */
@@ -169,7 +169,7 @@ public class LetterGenerator {
 
   /**
    * Create a paragraph and run with whitespace at the end.
-   * 
+   *
    * @param lineContext
    */
   private void createParagraph(LineContext lineContext) {
@@ -181,7 +181,7 @@ public class LetterGenerator {
 
   /**
    * Add one line to the letter.
-   * 
+   *
    * @param lineContext
    * @param line
    */
@@ -200,7 +200,7 @@ public class LetterGenerator {
 
   /**
    * Add an item to a list.
-   * 
+   *
    * @param lineContext
    * @param itemLine
    */
@@ -222,7 +222,7 @@ public class LetterGenerator {
 
   /**
    * Create paragraph an run for a list.
-   * 
+   *
    * @param lineContext
    */
   private void createListRun(LineContext lineContext) {
@@ -235,7 +235,7 @@ public class LetterGenerator {
 
   /**
    * Add hyperlink or mailto link.
-   * 
+   *
    * @param lineContext
    * @param itemLine
    */
@@ -290,7 +290,7 @@ public class LetterGenerator {
 
   /**
    * Helper for building lines in the document.
-   * 
+   *
    * @author ealse
    *
    */
@@ -312,7 +312,7 @@ public class LetterGenerator {
 
   /**
    * Names for fixed paragraphs in the template.
-   * 
+   *
    * @author ealse
    *
    */

@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * Check if we need to override the "spring.datasource.url". Invoke this class before the
  * application is started.
- * 
+ *
  * @author ealse
  */
 @SuppressWarnings("serial")

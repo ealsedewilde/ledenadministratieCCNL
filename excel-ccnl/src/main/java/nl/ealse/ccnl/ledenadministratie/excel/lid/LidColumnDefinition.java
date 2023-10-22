@@ -4,7 +4,7 @@ import nl.ealse.ccnl.ledenadministratie.excel.base.ColumnDefinition;
 
 /**
  * De kolom definities van het ledenbestand
- * 
+ *
  * @author Ealse
  *
  */

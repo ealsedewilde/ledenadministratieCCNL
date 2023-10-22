@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Manage the primary scene {@code Scene} handling of this application.
- * 
+ *
  * @author ealse
  *
  */

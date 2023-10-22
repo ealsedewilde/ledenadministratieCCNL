@@ -15,7 +15,7 @@ import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * Generic Spring JavaFX integration class.
- * 
+ *
  * @author ealse
  *
  */
@@ -70,7 +70,7 @@ public abstract class SpringJavaFXBase extends Application {
 
   /**
    * The event indicating that the application is ready to handle the JavaFX stage.
-   * 
+   *
    * @author ealse
    */
   @SuppressWarnings("serial")

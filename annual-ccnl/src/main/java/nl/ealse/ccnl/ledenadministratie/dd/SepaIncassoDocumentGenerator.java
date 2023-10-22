@@ -85,7 +85,7 @@ public class SepaIncassoDocumentGenerator {
 
   /**
    * Debit kant van een INCASSO aanmaken.
-   * 
+   *
    * @param lid
    * @return
    */

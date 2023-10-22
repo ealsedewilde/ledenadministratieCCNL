@@ -22,7 +22,7 @@ public enum CancelReason {
   AG02("Ongeldige bank transactie code"), AM04("Onvoldoende saldo"), MD01(
       "Geen machtiging verstrekt"), MD02("Machtigingsgegevens niet volledig of niet juist"),
   /*
-   * 
+   *
    */
   MD06("Terugboeking op verzoek klant"),
 

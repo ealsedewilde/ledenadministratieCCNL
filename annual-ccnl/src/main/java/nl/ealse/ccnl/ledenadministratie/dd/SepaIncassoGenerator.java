@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * SEPA INCASSO bestand aanmaken.
- * 
+ *
  * @author Ealse
  *
  */
@@ -45,7 +45,7 @@ public class SepaIncassoGenerator {
 
   /**
    * SEPA INCASSO bestand aanmaken op basis van het ledenbestand
-   * 
+   *
    * @param targetFile - doel incassobestand
    * @param controlExcelFile - Excel controlebestand
    * @return aangemaakte SEPA INCASSO document
@@ -67,7 +67,7 @@ public class SepaIncassoGenerator {
 
   /**
    * Zet het SEPA INCASSO document om naar een XML-bestand.
-   * 
+   *
    * @param document - het weg te schrijven incassodocument
    * @param targetFile - het doelbestand
    * @throws IncassoException - fout tijdens aanmaken incassobestand

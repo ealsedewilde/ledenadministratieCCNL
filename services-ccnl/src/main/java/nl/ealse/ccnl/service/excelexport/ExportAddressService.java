@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Export all data to Excel.
- * 
+ *
  * @author ealse
  *
  */
@@ -56,7 +56,7 @@ public class ExportAddressService {
 
   /**
    * Export all addresses to an Excel file on the local filesystem.
-   * 
+   *
    * @param addressFile - location for the target Excel file
    * @return generated wrapper around Excel file
    * @throws IOException - in case generating the file fails 

@@ -63,7 +63,7 @@ public class PaymentHandler {
 
   /**
    * Apply bookings result to the members state.
-   * 
+   *
    * @param bookingList - all contribution bookings.
    * @param rc - context for this run
    */

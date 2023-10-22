@@ -19,7 +19,7 @@ public class LedenadministratieApplication {
 
   /**
    * Start the JavaFX application.
-   * 
+   *
    * @param args - commandline args
    */
   public static void main(String[] args) {

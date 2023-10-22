@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.menu;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -27,7 +26,7 @@ import org.springframework.stereotype.Controller;
  * <p>
  * For convenience it provides a reference to the primary stage of this application.
  * </p>
- * 
+ *
  * @author ealse
  */
 @Controller
@@ -56,15 +55,6 @@ public class PageController {
   }
 
   /**
-   * Show a form.
-   * 
-   * @param form - the form type page
-   */
-  public void setActivateFormPage(Parent form) {
-    mainPage.setCenter(form);
-  }
-
-  /**
    * Show the logo page.
    */
   public void activateLogoPage() {
@@ -73,17 +63,17 @@ public class PageController {
 
   /**
    * Load page and show it in the GUI.
-   * 
-   * @param pageName
+   *
+   * @param pageRefrence - reference to the loade fxml page
    */
-  public void setActivePage(PageName pageName) {
-    mainPage.setCenter(pageName.getPage());
+  public void setActivePage(PageReference pageReference) {
+    mainPage.setCenter(pageReference.getPage());
   }
 
   /**
    * Show a message.
    * <p>
-   * Use this when starting a async Task. Replace this message when the asybc Task is finshed.
+   * Use this when starting a async Task. Replace this message when the async Task is finshed.
    * </p>
    */
   public void showPermanentMessage(String message) {

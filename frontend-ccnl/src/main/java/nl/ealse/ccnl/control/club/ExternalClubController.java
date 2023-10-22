@@ -46,7 +46,7 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
   }
   
   private void handleClub(MenuChoiceEvent event) {
-    pageController.setActivateFormPage(formController.getForm());
+    pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
     this.model = new ExternalRelationClub();

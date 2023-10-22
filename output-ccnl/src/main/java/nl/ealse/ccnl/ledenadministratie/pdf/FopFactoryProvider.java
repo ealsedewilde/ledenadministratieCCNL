@@ -13,7 +13,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * Handles all the difficulties in configuring a {@link FopFactory}.
- * 
+ *
  * @author ealse
  *
  */

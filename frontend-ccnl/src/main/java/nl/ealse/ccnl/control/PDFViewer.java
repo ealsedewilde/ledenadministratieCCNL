@@ -43,6 +43,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 /**
  * Simple PDF-view with paging capability.
+ *
  * @author ealse
  *
  */
@@ -124,7 +125,7 @@ public class PDFViewer extends BorderPane {
   }
 
   /**
-   * 
+   *
    */
   public void close() {
     pdfStage.close();

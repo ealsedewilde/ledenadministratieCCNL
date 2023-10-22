@@ -9,7 +9,7 @@ import lombok.Getter;
 
 /**
  * Wrapper around a {@link FileChooser}.
- * 
+ *
  * @author ealse
  *
  */

@@ -12,6 +12,7 @@ import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.control.menu.PageReference;
 import nl.ealse.javafx.FXMLLoadException;
 import nl.ealse.javafx.FXMLLoaderBean;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -21,7 +22,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * Non caching FXML loading for unit-tests.
- * 
+ *
  * @author ealse
  *
  * @param <T>
@@ -50,8 +51,7 @@ public abstract class FXMLBaseTest extends FXBase {
     new TestfxmlLoaderBean(springContext);
     pc = spy(new PageController());
     // the main BorderPane is not loaded, so any actions using it will fail.
-    doNothing().when(pc).setActivateFormPage(isA(Parent.class));
-    doNothing().when(pc).setActivePage(isA(PageName.class));
+    doNothing().when(pc).setActivePage(isA(PageReference.class));
     doNothing().when(pc).showMessage(isA(String.class));
     doNothing().when(pc).showErrorMessage(isA(String.class));
     doNothing().when(pc).showPermanentMessage(isA(String.class));
@@ -60,7 +60,7 @@ public abstract class FXMLBaseTest extends FXBase {
 
   /**
    * Return a mockito spy. Use it when working with a form.
-   * 
+   *
    * @return
    */
   protected PageController getPageController() {
@@ -73,7 +73,7 @@ public abstract class FXMLBaseTest extends FXBase {
 
   /**
    * Loading a form without caching.
-   * 
+   *
    * @param controller
    * @param pageName
    * @return
@@ -85,7 +85,7 @@ public abstract class FXMLBaseTest extends FXBase {
 
   /**
    * Loading a form without caching.
-   * 
+   *
    * @param controller
    * @param pageName
    * @return
@@ -97,7 +97,7 @@ public abstract class FXMLBaseTest extends FXBase {
 
   /**
    * Loading a form without caching.
-   * 
+   *
    * @param controller
    * @param pageName
    * @return

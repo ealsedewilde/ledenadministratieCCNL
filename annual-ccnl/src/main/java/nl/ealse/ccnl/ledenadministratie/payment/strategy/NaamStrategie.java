@@ -10,7 +10,7 @@ import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 
 /**
  * Lidnummer bepalen op basis van de naam.
- * 
+ *
  * @author Ealse
  */
 @Slf4j
@@ -108,7 +108,7 @@ public class NaamStrategie extends BetalingStrategie {
    * Op hoeveel letters is er een overeenkomst? 
    * Omdat de naam ook voorvoegsel kan bevatten, wordt er
    * van achter naar voren gewerkt.
-   * 
+   *
    * @param naam
    * @param lidnaam
    * @return

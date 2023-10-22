@@ -59,7 +59,7 @@ public class InternalRelationController extends InternalRelationView {
   
   private  void handleRelation(MenuChoiceEvent event) {
     this.currentMenuChoice = event.getMenuChoice();
-    pageController.setActivateFormPage(formController.getForm());
+    pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     formController.getHeaderText().setText(getHeaderTextValue());
     this.model = new InternalRelation();

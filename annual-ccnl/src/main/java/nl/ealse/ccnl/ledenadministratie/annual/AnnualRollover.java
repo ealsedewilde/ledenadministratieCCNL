@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Rollover to a new membership year.
- * 
+ *
  * @author ealse
  */
 @Component

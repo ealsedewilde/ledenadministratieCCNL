@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Generate a random new member number from the list with free numbers.
- * 
+ *
  * @author ealse
  *
  */

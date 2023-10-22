@@ -11,7 +11,7 @@ import lombok.Data;
 
 /**
  * Text template for generating letters or mail.
- * 
+ *
  * @author ealse
  *
  */

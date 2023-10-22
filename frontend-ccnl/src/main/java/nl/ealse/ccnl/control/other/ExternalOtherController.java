@@ -46,7 +46,7 @@ public class ExternalOtherController extends ExternalRelationController<External
   }
 
   private void handleRelation(MenuChoiceEvent event) {
-    pageController.setActivateFormPage(formController.getForm());
+    pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
     this.model = new ExternalRelationOther();

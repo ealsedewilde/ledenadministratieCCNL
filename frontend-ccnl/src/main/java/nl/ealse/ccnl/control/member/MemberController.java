@@ -112,7 +112,7 @@ public class MemberController extends MemberView {
   }
 
   private void handleEvent(MenuChoiceEvent event) {
-    pageController.setActivateFormPage(formController.getForm());
+    pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
     this.model = new Member();
@@ -289,7 +289,7 @@ public class MemberController extends MemberView {
   /**
    * Return the full name of the member as filled in the user interface. Return null when nothing is
    * filled in the user interface
-   * 
+   *
    * @return the full name of the member or null
    */
   private String formatMemberName() {

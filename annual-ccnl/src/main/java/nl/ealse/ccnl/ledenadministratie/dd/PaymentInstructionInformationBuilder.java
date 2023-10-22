@@ -23,7 +23,7 @@ import nl.ealse.ccnl.ledenadministratie.excel.dd.BicResolver;
 
 /**
  * Bouwen crediteur zijde van de INCASSO
- * 
+ *
  * @author Ealse
  *
  */
@@ -41,7 +41,7 @@ public class PaymentInstructionInformationBuilder {
 
   /**
    * Betaalinformatie toevoegen.
-   * 
+   *
    * @param paymentInformation - betaalinformatie
    * @return builder
    */
@@ -52,7 +52,7 @@ public class PaymentInstructionInformationBuilder {
 
   /**
    * Datum zetten waarop de INCASSO uitgevoerd moet worden.
-   * 
+   *
    * @param incassodatum - uitvoeringsdatum
    * @return builder
    */
@@ -63,7 +63,7 @@ public class PaymentInstructionInformationBuilder {
 
   /**
    * Debit transactie toevoegen.
-   * 
+   *
    * @param transactie - de toe te voegen transactie
    * @return builder
    */
@@ -75,7 +75,7 @@ public class PaymentInstructionInformationBuilder {
 
   /**
    * Het totaal aantal van transacties toevoegen.
-   * 
+   *
    * @param aantalTransacties - totaal aantal transacties
    * @return builder
    */
@@ -86,7 +86,7 @@ public class PaymentInstructionInformationBuilder {
 
   /**
    * Het totaalbedrag van alle transacties toevoegen.
-   * 
+   *
    * @param somTransactieBedrag - totale transactiebedrag
    * @return builder
    */
@@ -142,7 +142,7 @@ public class PaymentInstructionInformationBuilder {
 
   /**
    * Incassant id deel opbouwen.
-   * 
+   *
    * @return opgebouwde Incassant Id informatie
    */
   private PartyIdentification32 buildSchemaId(IncassoProperties properties) {

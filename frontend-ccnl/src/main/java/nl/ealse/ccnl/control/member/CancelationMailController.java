@@ -101,7 +101,7 @@ public class CancelationMailController extends DocumentTemplateController {
 
   /**
    * Construct the content of the mail.
-   * 
+   *
    * @return
    */
   private String generateText() {

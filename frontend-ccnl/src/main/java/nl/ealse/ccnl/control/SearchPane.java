@@ -22,7 +22,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * Generic pane to seach a relation.
- * 
+ *
  * @author ealse
  *
  * @param <T> - relation type to search
@@ -77,7 +77,7 @@ public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> extends V
   }
 
   /**
-   * Search for models according to search criteria
+   * Search for models according to search criteria.
    */
   @FXML
   public void search() {
