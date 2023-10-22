@@ -26,7 +26,7 @@ import nl.ealse.javafx.mapping.Mapping;
 public abstract class FormController {
 
   /**
-   * Menu to select a page of the form
+   * Menu to select a page of the form.
    */
   @FXML
   private Pane formMenu;
@@ -190,9 +190,7 @@ public abstract class FormController {
    * @return the page reference
    */
   public PageReference getPageReference() {
-    return () -> {
-      return form;
-    };
+    return () -> form;
   }
 
   protected abstract void initializePages();
