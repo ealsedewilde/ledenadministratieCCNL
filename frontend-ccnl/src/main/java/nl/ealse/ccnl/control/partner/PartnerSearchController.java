@@ -1,10 +1,10 @@
 package nl.ealse.ccnl.control.partner;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
@@ -27,10 +27,15 @@ public class PartnerSearchController
     this.pageController = pageController;
     this.initializeSearchItems();
   }
+  
+  @PostConstruct
+  void setup() {
+    initialize(new PartnerSearch());
+  }
 
   @EventListener(condition = "#event.group('SEARCH_PARTNER')")
   public void searchPartner(MenuChoiceEvent event) {
-    pageController.setActivePage(PageName.PARTNER_SEARCH);
+    pageController.setActivePage(getSearchPane().getPageReference());
     prepareSearch(event);
   }
 

@@ -8,6 +8,11 @@ import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Add onMouseClicked EventHandler to TableRow.
+ *
+ * @param <T> The type of the item contained within the Cell.
+ */
 public class RowFactory<T extends Object> implements Callback<TableView<T>, TableRow<T>> {
 
   @Getter

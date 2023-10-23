@@ -7,7 +7,6 @@ import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_EXTERNAL;
 import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_INTERNAL;
 import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_MEMBER;
 import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_PARTNER;
-
 import lombok.Getter;
 
 /**

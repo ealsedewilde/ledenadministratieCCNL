@@ -28,6 +28,9 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   private final ApplicationEventPublisher eventPublisher;
 
   @Getter
+  private SearchPane<T, E> searchPane;
+
+  @Getter
   private final Map<String, SearchItem> searchItemValues = new LinkedHashMap<>();
 
   @Getter
@@ -37,16 +40,13 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   @Getter
   private MenuChoice currentMenuChoice;
 
-  @FXML
-  private SearchPane<T, E> searchPane;
-
   protected SearchController(ApplicationEventPublisher eventPublisher) {
     this.eventPublisher = eventPublisher;
   }
 
-  @FXML
-  void initialize() {
+  protected void initialize(SearchPane<T, E> searchPane) {
     searchPane.initialize(this);
+    this.searchPane = searchPane;
   }
 
   /**

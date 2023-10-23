@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.control.member;
 
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -30,9 +30,14 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
     this.service = service;
   }
 
+  @PostConstruct
+  void setup() {
+    initialize(new MemberSearch());
+  }
+
   @EventListener(condition = "#event.group('SEARCH_MEMBER')")
   public void searchMember(MenuChoiceEvent event) {
-    pageController.setActivePage(PageName.MEMBER_SEARCH);
+    pageController.setActivePage(getSearchPane().getPageReference());
     prepareSearch(event);
   }
 

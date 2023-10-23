@@ -1,11 +1,10 @@
 package nl.ealse.ccnl.control;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -14,11 +13,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import nl.ealse.ccnl.control.button.ImageCell;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageReference;
 import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import nl.ealse.javafx.FXMLLoadException;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import nl.ealse.javafx.FXMLLoaderBean;
 
 /**
  * Generic pane to seach a relation.
@@ -28,7 +26,7 @@ import org.springframework.core.io.Resource;
  * @param <T> - relation type to search
  * @param <E> - event for the selected relation
  */
-public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> extends VBox {
+public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> {
 
   @FXML
   private Label headerText;
@@ -57,23 +55,11 @@ public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> extends V
   private SearchController<T, E> controller;
 
   private Map<String, SearchItem> searchItems;
+  
+  private final Parent parent;
 
   protected SearchPane() {
-    this.setSpacing(20);
-    load();
-  }
-
-  private void load() {
-    Resource path = new ClassPathResource("fxml_includes/search.fxml");
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader(path.getURL());
-      fxmlLoader.setRoot(this);
-
-      fxmlLoader.setController(this);
-      fxmlLoader.load();
-    } catch (IOException exception) {
-      throw new FXMLLoadException("Failed to load FXML", exception);
-    }
+    parent = FXMLLoaderBean.getPage("search/search", this);
   }
 
   /**
@@ -145,6 +131,10 @@ public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> extends V
 
     // define an event when a questionmark column is clicked
     buttonColumn.setCellFactory(param -> new ImageCell<T>("question.png", controller::extraInfo));
+  }
+  
+  public PageReference getPageReference() {
+    return () -> parent;
   }
 
   private boolean validate(SearchItem searchItem, String searchValue) {

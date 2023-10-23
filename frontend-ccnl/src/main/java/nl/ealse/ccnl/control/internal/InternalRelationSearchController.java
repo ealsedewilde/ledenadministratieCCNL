@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.control.internal;
 
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
@@ -29,10 +29,15 @@ public class InternalRelationSearchController
     this.internalRelationService = internalRelationService;
     this.initializeSearchItems();
   }
+  
+  @PostConstruct
+  void setup() {
+    initialize(new InternalRelationSearch());
+  }
 
   @EventListener(condition = "#event.group('SEARCH_INTERNAL')")
   public void searchInternalRelation(MenuChoiceEvent event) {
-    pageController.setActivePage(PageName.INTERNAL_RELATION_SEARCH);
+    pageController.setActivePage(getSearchPane().getPageReference());
     prepareSearch(event);
   }
 

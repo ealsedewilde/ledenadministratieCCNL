@@ -1,10 +1,10 @@
 package nl.ealse.ccnl.control.club;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
@@ -27,10 +27,15 @@ public class ExternalClubSearchController
     this.pageController = pageController;
     this.initializeSearchItems();
   }
+  
+  @PostConstruct
+  void setup() {
+    initialize(new ExternalClubSearch());
+  }
 
   @EventListener(condition = "#event.group('SEARCH_CLUB')")
   public void searchClub(MenuChoiceEvent event) {
-    pageController.setActivePage(PageName.EXTERNAL_CLUB_SEARCH);
+    pageController.setActivePage(getSearchPane().getPageReference());
     prepareSearch(event);
   }
 

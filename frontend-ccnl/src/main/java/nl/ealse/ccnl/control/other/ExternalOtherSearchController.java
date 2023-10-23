@@ -1,10 +1,10 @@
 package nl.ealse.ccnl.control.other;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
@@ -27,10 +27,15 @@ public class ExternalOtherSearchController
     this.pageController = pageController;
     this.initializeSearchItems();
   }
+  
+  @PostConstruct
+  void setup() {
+    initialize(new ExternalOtherSearch());
+  }
 
   @EventListener(condition = "#event.group('SEARCH_EXTERNAL')")
   public void search(MenuChoiceEvent event) {
-    pageController.setActivePage(PageName.EXTERNAL_RELATION_SEARCH);
+    pageController.setActivePage(getSearchPane().getPageReference());
     prepareSearch(event);
   }
 

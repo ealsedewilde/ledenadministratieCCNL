@@ -14,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -74,7 +73,8 @@ class MemberSearchTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    p = (MemberSearch) getPageWithFxController(sut, PageName.MEMBER_SEARCH);
+    sut.setup();
+    p = (MemberSearch) sut.getSearchPane();
   }
 
 

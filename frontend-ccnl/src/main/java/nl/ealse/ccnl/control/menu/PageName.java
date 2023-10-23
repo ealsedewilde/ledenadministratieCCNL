@@ -9,18 +9,16 @@ import nl.ealse.javafx.FXMLLoaderBean;
  */
 public enum PageName implements PageReference {
 
-  MEMBER_SEARCH("member/memberSearch"), MEMBER_CANCEL("member/memberCancel"), MEMBER_CANCEL_MAIL(
+  MEMBER_CANCEL("member/memberCancel"), MEMBER_CANCEL_MAIL(
       "member/memberCancelMail"), WELCOME_LETTER("member/welcomeLetter"),
 
-  EXTERNAL_CLUB_SEARCH("club/externalClubSearch"), EXTERNAL_CLUB_DELETE("club/externalClubDelete"),
+  EXTERNAL_CLUB_DELETE("club/externalClubDelete"),
 
-  EXTERNAL_RELATION_SEARCH("external/externalRelationSearch"), EXTERNAL_RELATION_DELETE(
-      "external/externalRelationDelete"),
+  EXTERNAL_RELATION_DELETE("external/externalRelationDelete"),
 
-  INTERNAL_RELATION_SEARCH("internal/internalRelationSearch"), INTERNAL_RELATION_DELETE(
-      "internal/internalRelationDelete"),
+  INTERNAL_RELATION_DELETE("internal/internalRelationDelete"),
 
-  PARTNER_SEARCH("partner/partnerSearch"), PARTNER_DELETE("partner/partnerDelete"),
+  PARTNER_DELETE("partner/partnerDelete"),
 
   ADD_DOCUMENT("document/addDocument"), VIEW_DOCUMENTS("document/viewDocuments"),
 

@@ -33,10 +33,10 @@ public class StageBuilder {
   }
   
   /**
-   * Set te dimension of Stage.
+   * Set the dimension of Stage.
    *
-   * @param width
-   * @param height
+   * @param width - Stage widht
+   * @param height - Stage height
    * @return Th builder to build a Stage
    */
   public StageBuilder size(double width, double height) {
