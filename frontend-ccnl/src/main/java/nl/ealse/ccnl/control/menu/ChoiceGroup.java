@@ -1,8 +1,9 @@
 package nl.ealse.ccnl.control.menu;
 
 /**
- * A Choice group bundles a number of menu choices that are handled by one
+ * A Choice group bundles a number of menu choices that are handled by one.
  * {@link org.springframework.context.event.EventListener#condition()}
+ *
  * @author ealse
  */
 public enum ChoiceGroup {

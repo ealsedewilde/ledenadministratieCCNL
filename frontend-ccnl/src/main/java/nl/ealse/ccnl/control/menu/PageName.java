@@ -46,8 +46,9 @@ public enum PageName implements PageReference {
   }
 
   /**
-   * Get the loaded fxml page;
-   * @return
+   * Get the loaded fxml page.
+   *
+   * @return the loaded fxml page
    */
   @Override
   public Parent getPage() {

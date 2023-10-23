@@ -64,7 +64,7 @@ public class PageController {
   /**
    * Load page and show it in the GUI.
    *
-   * @param pageRefrence - reference to the loade fxml page
+   * @param pageReference - reference to the loaded fxml page
    */
   public void setActivePage(PageReference pageReference) {
     mainPage.setCenter(pageReference.getPage());
