@@ -112,6 +112,7 @@ public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> extends V
   /**
    * The same (already initialized) page can be used in a different contexts. The header text must
    * reflect the actual context.
+   *
    * @param currentMenuChoice the choice that steers the text selection
    */
   public void updateHeaderText(MenuChoice currentMenuChoice) {
@@ -124,7 +125,8 @@ public abstract class SearchPane<T, E extends EntitySelectionEvent<T>> extends V
   }
 
   /**
-   * Initialize this abstract JavaFX-container
+   * Initialize this abstract JavaFX-container.
+   *
    * @param controller the controller for this Pane
    */
   public void initialize(SearchController<T, E> controller) {

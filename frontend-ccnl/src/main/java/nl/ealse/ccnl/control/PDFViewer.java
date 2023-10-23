@@ -84,7 +84,8 @@ public class PDFViewer extends BorderPane {
   }
 
   /**
-   * Show the PDF page by page
+   * Show the PDF page by page.
+   *
    * @param pdf binary PDF-content
    * @param member PDF-owner
    */
@@ -101,14 +102,15 @@ public class PDFViewer extends BorderPane {
       pdfStage.show();
       pageNum = 0;
       showPage(member);
-    } catch(IOException e) {
+    } catch (IOException e) {
       log.error("Error rendering PDF", e);
       throw new PDFViewerException("Error rendering PDF", e);
     }
   }
   
   /**
-   * Show a PDF for the document owner
+   * Show a PDF for the document owner.
+   *
    * @param pdf - document to show (PDF +owner)
    */
   public void showPDF(Document pdf) {
@@ -116,7 +118,8 @@ public class PDFViewer extends BorderPane {
   }
 
   /**
-   * Display aPDF-document
+   * Display aPDF-document.
+   *
    * @param selectedFile PDF-file
    * @param member the owner of the PDF-document
    */
@@ -125,14 +128,14 @@ public class PDFViewer extends BorderPane {
   }
 
   /**
-   *
+   * Close this PDF viewer.
    */
   public void close() {
     pdfStage.close();
   }
 
   /**
-   * Initialize for a single page PDF
+   * Initialize for a single page PDF.
    */
   private void initializeSinglePage() {
     setDimension(23d, 70d);
@@ -143,7 +146,7 @@ public class PDFViewer extends BorderPane {
   }
 
   /**
-   * Initialize for a multi page PDF
+   * Initialize for a multi page PDF.
    */
   private void initializeMultiPage() {
     setDimension(141d, 100d);
@@ -242,7 +245,8 @@ public class PDFViewer extends BorderPane {
   
   /**
    * Always obtain a PDFViewer via the builder pattern.
-   * @return
+   *
+   * @return builder for a PDFViwer
    */
   public static Builder builder() {
     return new Builder();
@@ -255,6 +259,7 @@ public class PDFViewer extends BorderPane {
     
     private PDFViewer instance = new PDFViewer();
     private HBox buttons = new HBox();
+    
     public Builder() {
       initialize();
     }

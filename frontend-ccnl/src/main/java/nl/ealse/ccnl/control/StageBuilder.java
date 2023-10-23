@@ -34,9 +34,10 @@ public class StageBuilder {
   
   /**
    * Set te dimension of Stage.
+   *
    * @param width
    * @param height
-   * @return
+   * @return Th builder to build a Stage
    */
   public StageBuilder size(double width, double height) {
     this.width = width;
@@ -44,6 +45,11 @@ public class StageBuilder {
     return this;
   }
   
+  /**
+   * Build the requested Stage.
+   *
+   * @return the requested Stage
+   */
   public Stage build() {
     stage.initModality(Modality.APPLICATION_MODAL);
     stage.setResizable(false);
