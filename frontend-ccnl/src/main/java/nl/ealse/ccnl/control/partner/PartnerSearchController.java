@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.partner;
 
-import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -25,21 +24,16 @@ public class PartnerSearchController
       PageController pageController) {
     super(eventPublisher, partnerService);
     this.pageController = pageController;
-    this.initializeSearchItems();
-  }
-  
-  @PostConstruct
-  void setup() {
-    initialize(new PartnerSearch());
   }
 
   @EventListener(condition = "#event.group('SEARCH_PARTNER')")
   public void searchPartner(MenuChoiceEvent event) {
-    pageController.setActivePage(getSearchPane().getPageReference());
+    pageController.setActivePage(getPageReference());
     prepareSearch(event);
   }
 
-  private void initializeSearchItems() {
+  @Override
+  protected void initializeSearchItems() {
     Map<String, SearchItem> map = getSearchItemValues();
     map.put("Adverteerder id (85xx)", SearchItem.values()[0]);
     map.put("Naam adverteerder", SearchItem.values()[1]);
@@ -49,8 +43,23 @@ public class PartnerSearchController
   }
 
   @Override
-  public PartnerSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
+  protected PartnerSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
     return new PartnerSelectionEvent(this, currentMenuChoice, getSelectedEntity());
+  }
+
+  @Override
+  protected String headerText(MenuChoice curentContext) {
+    return "Opzoeken adverteerder";
+  }
+
+  @Override
+  protected String columnName(int ix) {
+    return "Partner nr.";
+  }
+
+  @Override
+  protected String resultHeaderText(MenuChoice currentMenuChoice) {
+    return "Gevonden adverteerders";
   }
 
 }

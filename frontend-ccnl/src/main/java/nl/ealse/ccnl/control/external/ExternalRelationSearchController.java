@@ -20,7 +20,7 @@ public abstract class ExternalRelationSearchController<T extends ExternalRelatio
   }
 
   @Override
-  public List<T> doSearch(SearchItem searchItem, String value) {
+  protected List<T> doSearch(SearchItem searchItem, String value) {
     return externalRelationService.searchExternalRelation(searchItem, value);
   }
 

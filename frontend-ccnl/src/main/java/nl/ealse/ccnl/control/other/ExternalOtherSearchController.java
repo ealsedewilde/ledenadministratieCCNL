@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.other;
 
-import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -25,21 +24,16 @@ public class ExternalOtherSearchController
       PageController pageController) {
     super(eventPublisher, externalOtherService);
     this.pageController = pageController;
-    this.initializeSearchItems();
-  }
-  
-  @PostConstruct
-  void setup() {
-    initialize(new ExternalOtherSearch());
   }
 
   @EventListener(condition = "#event.group('SEARCH_EXTERNAL')")
   public void search(MenuChoiceEvent event) {
-    pageController.setActivePage(getSearchPane().getPageReference());
+    pageController.setActivePage(getPageReference());
     prepareSearch(event);
   }
 
-  private void initializeSearchItems() {
+  @Override
+  protected void initializeSearchItems() {
     Map<String, SearchItem> map = getSearchItemValues();
     map.put("Relatie id (84xx)", SearchItem.values()[0]);
     map.put("Naam externe relatie", SearchItem.values()[1]);
@@ -49,8 +43,23 @@ public class ExternalOtherSearchController
   }
 
   @Override
-  public ExternalOtherSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
+  protected ExternalOtherSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
     return new ExternalOtherSelectionEvent(this, currentMenuChoice, getSelectedEntity());
+  }
+
+  @Override
+  protected String headerText(MenuChoice curentContext) {
+    return "Opzoeken externe relatie";
+  }
+
+  @Override
+  protected String columnName(int ix) {
+    return "Relatie nr.";
+  }
+
+  @Override
+  protected String resultHeaderText(MenuChoice currentMenuChoice) {
+    return "Gevonden externe relaties";
   }
 
 }

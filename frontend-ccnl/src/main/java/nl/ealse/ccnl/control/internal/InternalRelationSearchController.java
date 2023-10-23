@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.internal;
 
-import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import nl.ealse.ccnl.control.SearchController;
@@ -27,21 +26,16 @@ public class InternalRelationSearchController
     super(eventPublisher);
     this.pageController = pageController;
     this.internalRelationService = internalRelationService;
-    this.initializeSearchItems();
-  }
-  
-  @PostConstruct
-  void setup() {
-    initialize(new InternalRelationSearch());
   }
 
   @EventListener(condition = "#event.group('SEARCH_INTERNAL')")
   public void searchInternalRelation(MenuChoiceEvent event) {
-    pageController.setActivePage(getSearchPane().getPageReference());
+    pageController.setActivePage(getPageReference());
     prepareSearch(event);
   }
 
-  private void initializeSearchItems() {
+  @Override
+  protected void initializeSearchItems() {
     Map<String, SearchItem> map = getSearchItemValues();
     map.put("Functie", SearchItem.values()[1]);
     map.put("Interne relatie id", SearchItem.values()[0]);
@@ -51,13 +45,28 @@ public class InternalRelationSearchController
   }
 
   @Override
-  public InternalRelationSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
+  protected InternalRelationSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
     return new InternalRelationSelectionEvent(this, currentMenuChoice, getSelectedEntity());
   }
 
   @Override
-  public List<InternalRelation> doSearch(SearchItem searchItem, String value) {
+  protected List<InternalRelation> doSearch(SearchItem searchItem, String value) {
     return internalRelationService.searchInternalRelation(searchItem, value);
+  }
+
+  @Override
+  protected String headerText(MenuChoice currentMenuChoice) {
+    return "Opzoeken functie";
+  }
+
+  @Override
+  protected String columnName(int ix) {
+    return "Intern nr.";
+  }
+
+  @Override
+  protected String resultHeaderText(MenuChoice currentMenuChoice) {
+    return "Gevonden functies";
   }
 
 }

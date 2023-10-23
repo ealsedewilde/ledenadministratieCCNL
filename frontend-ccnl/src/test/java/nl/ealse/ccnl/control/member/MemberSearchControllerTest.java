@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 
-class MemberSearchTest extends FXMLBaseTest {
+class MemberSearchControllerTest extends FXMLBaseTest {
 
   private static ApplicationContext springContext;
   private static MemberService service;
@@ -36,14 +36,10 @@ class MemberSearchTest extends FXMLBaseTest {
   private static SearchItem si = SearchItem.NUMBER;
   private static String sv = "1234";
 
-  private MemberSearch p;
-
-
   private MemberSearchController sut;
 
   @Test
   void testSearch() {
-    sut = new MemberSearchController(springContext, service, pageController);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -61,11 +57,11 @@ class MemberSearchTest extends FXMLBaseTest {
       verify(springContext).publishEvent(any(MemberSeLectionEvent.class));
 
       searchField("1234");
-      p.search();
+      sut.search();
       searchCriterium(3);
       searchField("1234aa");
-      p.search();
-      p.reset();
+      sut.search();
+      sut.reset();
 
       ar.set(true);
     }, ar);
@@ -73,8 +69,7 @@ class MemberSearchTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut.setup();
-    p = (MemberSearch) sut.getSearchPane();
+    sut = new MemberSearchController(springContext, service, pageController);
   }
 
 
@@ -101,7 +96,7 @@ class MemberSearchTest extends FXMLBaseTest {
   private void searchCriterium(int index) {
     try {
       ChoiceBox<String> searchCriterium =
-          (ChoiceBox<String>) FieldUtils.readField(p, "searchCriterium", true);
+          (ChoiceBox<String>) FieldUtils.readField(sut, "searchCriterium", true);
       searchCriterium.getSelectionModel().select(index);
     } catch (Exception e) {
       e.printStackTrace();
@@ -111,7 +106,7 @@ class MemberSearchTest extends FXMLBaseTest {
 
   private void searchField(String text) {
     try {
-      TextField searchField = (TextField) FieldUtils.readField(p, "searchField", true);
+      TextField searchField = (TextField) FieldUtils.readField(sut, "searchField", true);
       searchField.setText(text);
     } catch (Exception e) {
       e.printStackTrace();

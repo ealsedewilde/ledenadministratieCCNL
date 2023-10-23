@@ -3,17 +3,28 @@ package nl.ealse.ccnl.control;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
+import nl.ealse.ccnl.control.button.ImageCell;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageReference;
 import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.relation.SearchItem;
+import nl.ealse.javafx.FXMLLoaderBean;
 import org.springframework.context.ApplicationEventPublisher;
 
 /**
@@ -25,10 +36,32 @@ import org.springframework.context.ApplicationEventPublisher;
  */
 public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
 
-  private final ApplicationEventPublisher eventPublisher;
+  @FXML
+  private Label headerText;
 
-  @Getter
-  private SearchPane<T, E> searchPane;
+  @FXML
+  private Label resultHeader;
+
+  @FXML
+  private ChoiceBox<String> searchCriterium;
+
+  @FXML
+  private TextField searchField;
+
+  @FXML
+  private Label errorMessage;
+
+  @FXML
+  private VBox result;
+
+  @FXML
+  private TableView<T> tableView;
+
+  @FXML
+  private TableColumn<T, Void> buttonColumn;
+
+
+  private final ApplicationEventPublisher eventPublisher;
 
   @Getter
   private final Map<String, SearchItem> searchItemValues = new LinkedHashMap<>();
@@ -39,22 +72,64 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
 
   @Getter
   private MenuChoice currentMenuChoice;
+  
+  private Parent parent;
 
   protected SearchController(ApplicationEventPublisher eventPublisher) {
     this.eventPublisher = eventPublisher;
+    this.parent = FXMLLoaderBean.getPage("search/search", this);
   }
 
-  protected void initialize(SearchPane<T, E> searchPane) {
-    searchPane.initialize(this);
-    this.searchPane = searchPane;
+  @FXML
+  void initialize() {
+    initializeSearchItems();
+    searchCriterium.getItems().addAll(searchItemValues.keySet());
+    searchCriterium.getSelectionModel().selectFirst();
+
+    tableView.setPlaceholder(new Label("Geen gegevens gevonden"));
+    tableView.getColumns().get(0).setText(columnName(0));
+
+    // define an event when a row is clicked
+    RowFactory<T> rf = new RowFactory<>();
+    rf.setOnMouseClicked(this::handleSelected);
+    tableView.setRowFactory(rf);
+
+    // define an event when a questionmark column is clicked
+    buttonColumn.setCellFactory(param -> new ImageCell<T>("question.png", this::extraInfo));
+  }
+
+  /**
+   * Search for models according to search criteria.
+   */
+  @FXML
+  public void search() {
+    SearchItem searchItem = searchItemValues.get(searchCriterium.getValue());
+    if (validate(searchItem, searchField.getText())) {
+      String searchValue = searchField.getText().trim();
+      searchValue = formatPostalCode(searchItem, searchValue);
+      List<T> searchResult = doSearch(searchItem, searchValue);
+      if (searchResult.size() == 1) {
+        selectedEntity = searchResult.get(0);
+        handleSelected(null);
+      } else {
+        tableView.getItems().clear();
+        tableView.getItems().addAll(searchResult);
+        result.setVisible(true);
+      }
+    }
   }
 
   /**
    * Reset the search page to its initial state.
    */
   @FXML
-  void reset() {
-    searchPane.reset();
+  public void reset() {
+    tableView.getItems().clear();
+    result.setVisible(false);
+    searchCriterium.getSelectionModel().selectFirst();
+    searchField.setText(null);
+    searchField.requestFocus();
+    errorMessage.setVisible(false);
   }
 
   /**
@@ -64,10 +139,17 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
    */
   protected void prepareSearch(MenuChoiceEvent event) {
     this.currentMenuChoice = event.getMenuChoice();
-    if (this.searchPane != null) {
-      searchPane.updateHeaderText(currentMenuChoice);
-      searchPane.reset();
+    if (headerText != null) {
+      headerText.setText(headerText(currentMenuChoice));
     }
+    if (resultHeader != null) {
+      resultHeader.setText(resultHeaderText(currentMenuChoice));
+    }
+    reset();
+  }
+  
+  protected PageReference getPageReference() {
+    return () -> parent;
   }
 
   /**
@@ -78,6 +160,16 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
    * @return the selected model objects that match the search (if any)
    */
   protected abstract List<T> doSearch(SearchItem searchItem, String value);
+
+  protected abstract E newEntitySelectionEvent(MenuChoice currentMenuChoice);
+  
+  protected abstract void initializeSearchItems();
+
+  protected abstract String headerText(MenuChoice currentMenuChoice);
+
+  protected abstract String resultHeaderText(MenuChoice currentMenuChoice);
+
+  protected abstract String columnName(int ix);
 
   /**
    * Invoked when question mark column is clicked. (Invoked after selectedMember is set.)
@@ -90,9 +182,6 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
     alert.setTitle("Extra Info");
     alert.showAndWait();
   }
-
-  protected abstract E newEntitySelectionEvent(MenuChoice currentMenuChoice);
-
 
   /**
    * Invoked when NON question mark column is clicked.
@@ -111,6 +200,43 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
     eventPublisher.publishEvent(newEntitySelectionEvent(currentMenuChoice));
   }
 
+  private boolean validate(SearchItem searchItem, String searchValue) {
+    errorMessage.setVisible(false);
+    result.setVisible(false);
+    StringJoiner errors = new StringJoiner("\n");
+    if (searchItem == null) {
+      errors.add("Selecteer een zoekcriterium.");
+    }
+    if (searchValue == null || searchValue.isBlank()) {
+      errors.add("Vul het zoekgegeven.");
+    } else if (SearchItem.NUMBER == searchItem && !searchValue.matches("^[1-9]\\d{0,3}")) {
+      errors.add("Zoekgegeven moet een nummer zijn van maximaal 4 cijfers.");
+    }
 
+    if (errors.length() > 0) {
+      errorMessage.setText(errors.toString());
+      errorMessage.setVisible(true);
+      return false;
+    }
+    return true;
+  }
+
+  private String formatPostalCode(SearchItem searchItem, String searchValue) {
+    if (SearchItem.POSTAL_CODE == searchItem && searchValue.length() == 6) {
+      int letters = 0;
+      int digits = 0;
+      for (char ch : searchValue.toCharArray()) {
+        if (Character.isLetter(ch)) {
+          letters++;
+        } else if (Character.isDigit(ch)) {
+          digits++;
+        }
+      }
+      if (digits == 4 && letters == 2) {
+        return searchValue.substring(0, 4) + " " + searchValue.substring(4);
+      }
+    }
+    return searchValue;
+  }
 
 }

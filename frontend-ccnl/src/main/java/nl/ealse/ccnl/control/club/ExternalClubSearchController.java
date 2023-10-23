@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.club;
 
-import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -25,21 +24,16 @@ public class ExternalClubSearchController
       PageController pageController) {
     super(eventPublisher, externalRelationService);
     this.pageController = pageController;
-    this.initializeSearchItems();
-  }
-  
-  @PostConstruct
-  void setup() {
-    initialize(new ExternalClubSearch());
   }
 
   @EventListener(condition = "#event.group('SEARCH_CLUB')")
   public void searchClub(MenuChoiceEvent event) {
-    pageController.setActivePage(getSearchPane().getPageReference());
+    pageController.setActivePage(getPageReference());
     prepareSearch(event);
   }
 
-  private void initializeSearchItems() {
+  @Override
+  protected void initializeSearchItems() {
     Map<String, SearchItem> map = getSearchItemValues();
     map.put("Club id (82xx)", SearchItem.values()[0]);
     map.put("Naam club", SearchItem.values()[1]);
@@ -49,8 +43,23 @@ public class ExternalClubSearchController
   }
 
   @Override
-  public ExternalClubSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
+  protected ExternalClubSelectionEvent newEntitySelectionEvent(MenuChoice currentMenuChoice) {
     return new ExternalClubSelectionEvent(this, currentMenuChoice, getSelectedEntity());
+  }
+
+  @Override
+  protected String headerText(MenuChoice currentMenuChoice) {
+    return "Opzoeken club";
+  }
+
+  @Override
+  protected String columnName(int ix) {
+    return "Club nr.";
+  }
+
+  @Override
+  protected String resultHeaderText(MenuChoice currentMenuChoice) {
+    return "Gevonden Clubs";
   }
 
 }
