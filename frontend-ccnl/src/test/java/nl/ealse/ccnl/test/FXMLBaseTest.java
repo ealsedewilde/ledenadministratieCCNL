@@ -137,13 +137,11 @@ public abstract class FXMLBaseTest extends FXBase {
     private void initialize() {
       try {
         FieldUtils.writeField(this, "fxmlDirectory", FXML_DIR, true);
+        FXMLLoader fxmlLoader = (FXMLLoader) FieldUtils.readField(this, "fxmlLoader", true);
+        fxmlLoader.setControllerFactory(controllerFactory);
       } catch (IllegalAccessException e) {
         e.printStackTrace();
       }
-    }
-
-    protected Callback<Class<?>, Object> getControllerFactory() {
-      return controllerFactory;
     }
   }
 

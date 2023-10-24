@@ -5,7 +5,6 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -37,16 +36,13 @@ public class FXMLLoaderBean {
 
   private static FXMLLoaderBean instance;
 
-  private final ApplicationContext springContext; // NOSONAR
-
   public FXMLLoaderBean(ApplicationContext springContext) {
-    this.springContext = springContext;
+    fxmlLoader.setControllerFactory(springContext::getBean);
     setInstance(this);
   }
 
   private static void setInstance(FXMLLoaderBean fnm) {
     instance = fnm;
-    instance.fxmlLoader.setControllerFactory(instance.getControllerFactory());
   }
 
   /**
@@ -90,10 +86,6 @@ public class FXMLLoaderBean {
       log.error("error loading fxml", e);
       throw new FXMLLoadException("error loading fxml", e);
     }
-  }
-
-  protected Callback<Class<?>, Object> getControllerFactory() {
-    return springContext::getBean;
   }
 
 }
