@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
-import nl.ealse.ccnl.control.PDFViewer;
+import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -72,9 +72,9 @@ class DocumentControllerTest extends FXMLBaseTest {
 
 
   private void setPdfViewer() {
-    PDFViewer pdfViewer = PDFViewer.builder().build();
+    DocumentViewer documentViewer = DocumentViewer.builder().build();
     try {
-      FieldUtils.writeField(sut, "pdfViewer", pdfViewer, true);
+      FieldUtils.writeField(sut, "documentViewer", documentViewer, true);
     } catch (Exception e) {
       e.printStackTrace();
     }

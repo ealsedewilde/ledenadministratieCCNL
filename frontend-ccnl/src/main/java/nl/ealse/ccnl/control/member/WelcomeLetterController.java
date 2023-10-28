@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javax.print.PrintService;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
-import nl.ealse.ccnl.control.PDFViewer;
+import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
@@ -17,6 +17,7 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.service.DocumentService;
+import nl.ealse.javafx.util.PdfPrintDocument;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 import org.springframework.context.event.EventListener;
@@ -32,7 +33,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
 
   private Member selectedMember;
 
-  private PDFViewer pdfViewer;
+  private DocumentViewer documentViewer;
 
   public WelcomeLetterController(PageController pageController, DocumentService documentService) {
     super(pageController, documentService, DocumentTemplateContext.WELCOME_LETTER);
@@ -51,9 +52,9 @@ public class WelcomeLetterController extends DocumentTemplateController {
   protected void initialize() {
     super.initialize();
     initializeTemplates();
-    pdfViewer = PDFViewer.builder().withPrintButton(evt -> printPDF())
+    documentViewer = DocumentViewer.builder().withPrintButton(evt -> printPDF())
         .withCancelButton(evt -> closePDF()).build();
-    pdfViewer.setWindowTitle("Welkomsbrief voor lid: %d (%s)");
+    documentViewer.setWindowTitle("Welkomsbrief voor lid: %d (%s)");
   }
 
   @FXML
@@ -62,7 +63,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
     LetterData data = new LetterData(getLetterText().getText());
     data.getMembers().add(selectedMember);
     byte[] pdf = documentService.generatePDF(data);
-    pdfViewer.showPDF(pdf, selectedMember);
+    documentViewer.showPdf(pdf, selectedMember);
   }
 
   @FXML
@@ -90,7 +91,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
     byte[] pdf = documentService.generatePDF(data);
     saveWelcomeLetter(pdf);
     try {
-      Optional<PrintService> ps = PrintUtil.print(pdf);
+      Optional<PrintService> ps = PrintUtil.print(new PdfPrintDocument(pdf));
       if (ps.isPresent()) {
         printAttachement(ps);
         pageController.activateLogoPage();
@@ -120,10 +121,10 @@ public class WelcomeLetterController extends DocumentTemplateController {
   @FXML
   void printPDF() {
     try {
-      Optional<PrintService> ps = PrintUtil.print(pdfViewer.getPdf());
+      Optional<PrintService> ps = PrintUtil.print(documentViewer.getDocument());
       if (ps.isPresent()) {
         printAttachement(ps);
-        pdfViewer.close();
+        documentViewer.close();
         pageController.activateLogoPage();
       }
     } catch (PrintException e) {
@@ -142,7 +143,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
 
   @FXML
   void closePDF() {
-    pdfViewer.close();
+    documentViewer.close();
   }
 
 }

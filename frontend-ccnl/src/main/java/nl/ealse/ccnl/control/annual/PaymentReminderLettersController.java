@@ -8,8 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
+import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.PDFViewer;
 import nl.ealse.ccnl.control.exception.AsyncTaskException;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -20,6 +20,7 @@ import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
+import nl.ealse.javafx.util.PdfPrintDocument;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 import org.springframework.context.event.EventListener;
@@ -41,7 +42,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
 
   private List<Member> selectedMembers;
 
-  private PDFViewer pdfViewer;
+  private DocumentViewer documentViewer;
 
   @FXML
   private Label showSepa;
@@ -64,9 +65,9 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   @Override
   protected void initialize() {
     super.initialize();
-    pdfViewer = PDFViewer.builder().withPrintButton(evt -> printPDF())
+    documentViewer = DocumentViewer.builder().withPrintButton(evt -> printPDF())
         .withCancelButton(evt -> closePDF()).build();
-    pdfViewer.setWindowTitle("Herinneringsbrief voor lid: %d (%s)");
+    documentViewer.setWindowTitle("Herinneringsbrief voor lid: %d (%s)");
   }
 
   @EventListener(condition = "#event.name('PRODUCE_REMINDER_LETTERS_BT')")
@@ -101,7 +102,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
       LetterData data = new LetterData(getLetterText().getText());
       data.getMembers().add(selectedMember);
       byte[] pdf = documentService.generatePDF(data);
-      pdfViewer.showPDF(pdf, selectedMember);
+      documentViewer.showPdf(pdf, selectedMember);
     }
   }
 
@@ -133,17 +134,17 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   @FXML
   void printPDF() {
     try {
-      PrintUtil.print(pdfViewer.getPdf());
+      PrintUtil.print(documentViewer.getDocument());
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
     }
-    pdfViewer.close();
+    documentViewer.close();
     pageController.activateLogoPage();
   }
 
   @FXML
   void closePDF() {
-    pdfViewer.close();
+    documentViewer.close();
   }
 
   private boolean overdueExists() {
@@ -210,7 +211,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     @Override
     protected String postProcess(byte[] pdf) {
       try {
-        PrintUtil.print(pdf);
+        PrintUtil.print(new PdfPrintDocument(pdf));
         return "";
       } catch (PrintException e) {
         log.error("Printen is mislukt", e);

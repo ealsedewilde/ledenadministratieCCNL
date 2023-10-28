@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -37,24 +39,27 @@ import nl.ealse.ccnl.control.exception.PDFViewerException;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.javafx.ImagesMap;
+import nl.ealse.javafx.util.ImagePrintDocument;
+import nl.ealse.javafx.util.PdfPrintDocument;
+import nl.ealse.javafx.util.PrintDocument;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
 /**
- * Simple PDF-view with paging capability.
+ * Simple PDF-viewer with paging capability.
  *
  * @author ealse
  *
  */
 @Slf4j
-public class PDFViewer extends BorderPane {
+public class DocumentViewer extends BorderPane {
 
   private static final String HEADER_TEXT = "Pagina %d van %d";
 
   private Scene scene;
 
-  private Stage pdfStage;
+  private Stage documentViewerStage;
 
   /**
    * Title of the popup window of the PDF-viewer.
@@ -69,52 +74,31 @@ public class PDFViewer extends BorderPane {
 
   private Button nextButton;
 
-  private PDDocument document;
+  private PDFRenderer renderer;
 
   private int pageNum;
 
   private int pages;
 
   @Getter
-  private byte[] pdf;
+  private PrintDocument document;
 
-  private PDFViewer() {
+  private DocumentViewer() {
     this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
         CornerRadii.EMPTY, BorderWidths.DEFAULT)));
   }
 
   /**
-   * Show the PDF page by page.
-   *
-   * @param pdf binary PDF-content
-   * @param member PDF-owner
-   */
-  public void showPDF(byte[] pdf, Member member) {
-    this.pdf = pdf;
-    try {
-      document = Loader.loadPDF(pdf);
-      pages = document.getPages().getCount();
-      if (pages == 1) {
-        initializeSinglePage();
-      } else {
-        initializeMultiPage();
-      }
-      pdfStage.show();
-      pageNum = 0;
-      showPage(member);
-    } catch (IOException e) {
-      log.error("Error rendering PDF", e);
-      throw new PDFViewerException("Error rendering PDF", e);
-    }
-  }
-  
-  /**
    * Show a PDF for the document owner.
    *
-   * @param pdf - document to show (PDF +owner)
+   * @param document - document to show (PDF +owner)
    */
-  public void showPDF(Document pdf) {
-    showPDF(pdf.getPdf(), pdf.getOwner());
+  public void showDocument(Document document) {
+    if (isPdf(document.getDocumentName())) {
+      showPdf(document.getPdf(), document.getOwner());
+    } else {
+      showImage(document.getPdf(), document.getOwner());
+    }
   }
 
   /**
@@ -123,23 +107,79 @@ public class PDFViewer extends BorderPane {
    * @param selectedFile PDF-file
    * @param member the owner of the PDF-document
    */
-  public void showPDF(File selectedFile, Member member) {
-    showPDF(toByteArray(selectedFile), member);
+  public void showDocument(File selectedFile, Member member) {
+    if (isPdf(selectedFile.getName())) {
+      showPdf(toByteArray(selectedFile), member);
+    } else {
+      showImage(toByteArray(selectedFile), member);
+    }
+  }
+
+  /**
+   * Show the PDF page by page.
+   *
+   * @param pdf binary PDF-content
+   * @param member PDF-owner
+   */
+  public void showPdf(byte[] pdf, Member member) {
+    this.document = new PdfPrintDocument(pdf);
+    try {
+      PDDocument pdfDocument = Loader.loadPDF(pdf);
+      renderer = new PDFRenderer(pdfDocument);
+      BufferedImage bufferedImage = renderer.renderImageWithDPI(0, 72);
+      pages = pdfDocument.getPages().getCount();
+      if (pages == 1) {
+        initializeSinglePage(bufferedImage.getWidth(), bufferedImage.getHeight());
+      } else {
+        initializeMultiPage(bufferedImage.getWidth(), bufferedImage.getHeight());
+      }
+      documentViewerStage.setTitle(getStageTitle(member));
+      documentViewerStage.show();
+      pageNum = 0;
+      showPage();
+    } catch (IOException e) {
+      log.error("Error rendering PDF", e);
+      throw new PDFViewerException("Error rendering PDF", e);
+    }
+  }
+
+  private void showImage(byte[] imageBytes, Member member) {
+    try {
+      Image image =
+          SwingFXUtils.toFXImage(ImageIO.read(new ByteArrayInputStream(imageBytes)), null);
+      double ratio = 841 / image.getHeight();
+      double height = image.getHeight() * ratio;
+      double width = image.getWidth() * ratio;
+      this.document = new ImagePrintDocument(image);
+      initializeSinglePage(width, height);
+      documentViewerStage.setTitle(getStageTitle(member));
+      documentViewerStage.show();
+      ImageView imageView = new ImageView(image);
+      imageView.setFitHeight(height);
+      imageView.setFitWidth(width);
+      this.setCenter(imageView);
+    } catch (IOException e) {
+      log.error("Error rendering PDF", e);
+      throw new PDFViewerException("Error rendering PDF", e);
+    }
   }
 
   /**
    * Close this PDF viewer.
    */
   public void close() {
-    pdfStage.close();
+    documentViewerStage.close();
+  }
+
+  private boolean isPdf(String documentName) {
+    return documentName.toLowerCase().endsWith(".pdf");
   }
 
   /**
    * Initialize for a single page PDF.
    */
-  private void initializeSinglePage() {
-    setDimension(23d, 70d);
-
+  private void initializeSinglePage(double width, double height) {
+    setDimension(width + 23d, height + 70d);
     this.setRight(null);
     this.setLeft(null);
     this.setTop(null);
@@ -148,8 +188,8 @@ public class PDFViewer extends BorderPane {
   /**
    * Initialize for a multi page PDF.
    */
-  private void initializeMultiPage() {
-    setDimension(141d, 100d);
+  private void initializeMultiPage(double width, double height) {
+    setDimension(width + 141d, height + 100d);
 
     this.setRight(nextButton);
     this.setLeft(prevButton);
@@ -157,24 +197,14 @@ public class PDFViewer extends BorderPane {
     prevButton.setDisable(true);
   }
 
-  private void setDimension(double w, double h) {
-    PDFRenderer renderer = new PDFRenderer(document);
-    try {
-      BufferedImage bufferedImage = renderer.renderImage(0);
-      Region parent = (Region) getParent();
-      double width = bufferedImage.getWidth() + w;
-      parent.setMinWidth(width);
-      // for whatever reason need to set both min and max  height to resize properly
-      // Strangely enough it is not neceassary for the width
-      double height = bufferedImage.getHeight() + h;
-      parent.setMinHeight(height);
-      parent.setMaxHeight(height);
-    } catch (IOException e) {
-      log.error("Error first page", e);
-      Thread.currentThread().interrupt();
-      throw new PDFViewerException("Error first page", e);
-    }
-  
+  private void setDimension(double width, double height) {
+    Region parent = (Region) getParent();
+    parent.setMinWidth(width);
+    // for whatever reason need to set both min and max height to resize properly
+    // Strangely enough it is not neceassary for the width
+    parent.setMinHeight(height);
+    parent.setMaxHeight(height);
+
   }
 
   private void previousPage() {
@@ -193,15 +223,10 @@ public class PDFViewer extends BorderPane {
     showPage();
   }
 
-  private void showPage(Member member) {
-    pdfStage.setTitle(String.format(windowTitle.toString(), member.getId(), member.getFullName()));
-    showPage();
-  }
-
   private void showPage() {
     try {
-      PDFRenderer renderer = new PDFRenderer(document);
-      BufferedImage bufferedImage = renderer.renderImage(pageNum);
+
+      BufferedImage bufferedImage = renderer.renderImageWithDPI(pageNum, 72);
       Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
       ImageView imageView = new ImageView(fxImage);
       this.setCenter(imageView);
@@ -214,6 +239,10 @@ public class PDFViewer extends BorderPane {
       throw new PDFViewerException("Error getting page", e);
     }
 
+  }
+
+  private String getStageTitle(Member member) {
+    return String.format(windowTitle.toString(), member.getId(), member.getFullName());
   }
 
   private byte[] toByteArray(File selectedFile) {
@@ -242,28 +271,28 @@ public class PDFViewer extends BorderPane {
     }
 
   }
-  
+
   /**
-   * Always obtain a PDFViewer via the builder pattern.
+   * Always obtain a DocumentViewer via the builder pattern.
    *
    * @return builder for a PDFViwer
    */
   public static Builder builder() {
     return new Builder();
   }
-  
+
   /**
-   * Builder for PDFViewer.
+   * Builder for DocumentViewer.
    */
   public static class Builder {
-    
-    private PDFViewer instance = new PDFViewer();
+
+    private DocumentViewer instance = new DocumentViewer();
     private HBox buttons = new HBox();
-    
+
     public Builder() {
       initialize();
     }
-    
+
     public void initialize() {
       VBox parent = new VBox();
       parent.setPadding(new Insets(10.d));
@@ -272,14 +301,14 @@ public class PDFViewer extends BorderPane {
       buttons.setPadding(new Insets(10d, 0d, 0d, 0d));
       buttons.setSpacing(20d);
       parent.getChildren().add(buttons);
-      
+
       instance.scene = new Scene(parent);
-      instance.pdfStage = new Stage();
-      instance.pdfStage.initModality(Modality.APPLICATION_MODAL);
-      instance.pdfStage.setAlwaysOnTop(true);
-      instance.pdfStage.getIcons().add(ImagesMap.get("Citroen.png"));
-      instance.pdfStage.setScene(instance.scene);
-      
+      instance.documentViewerStage = new Stage();
+      instance.documentViewerStage.initModality(Modality.APPLICATION_MODAL);
+      instance.documentViewerStage.setAlwaysOnTop(true);
+      instance.documentViewerStage.getIcons().add(ImagesMap.get("Citroen.png"));
+      instance.documentViewerStage.setScene(instance.scene);
+
       instance.nextButton = new PagingButton("\u00BB");
       instance.nextButton.setOnAction(e -> instance.nextPage());
       instance.prevButton = new PagingButton("\u00AB");
@@ -288,41 +317,41 @@ public class PDFViewer extends BorderPane {
       instance.header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
       BorderPane.setAlignment(instance.header, Pos.CENTER);
     }
-    
+
     public Builder withCancelButton(EventHandler<ActionEvent> handler) {
       CancelButton cb = new CancelButton();
       cb.setText("Sluiten");
       addButton(cb, handler);
       return this;
     }
-    
+
     public Builder withDeleteButton(EventHandler<ActionEvent> handler) {
       addButton(new DeleteButton(), handler);
       return this;
     }
-    
+
     public Builder withPrintButton(EventHandler<ActionEvent> handler) {
       addButton(new PrintButton(), handler);
       return this;
     }
-    
+
     public Builder withSaveButton(EventHandler<ActionEvent> handler) {
       SaveButton sb = new SaveButton();
       sb.setText("Toevoegen");
       addButton(sb, handler);
       return this;
     }
-    
+
     private void addButton(Button button, EventHandler<javafx.event.ActionEvent> handler) {
       button.setOnAction(handler);
       buttons.getChildren().add(button);
     }
 
-    
-    public PDFViewer build() {
+
+    public DocumentViewer build() {
       return instance;
     }
-    
+
   }
 
 }

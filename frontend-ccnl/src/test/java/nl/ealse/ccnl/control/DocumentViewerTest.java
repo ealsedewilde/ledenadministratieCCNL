@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-class PDFViewerTest extends FXBase {
+class DocumentViewerTest extends FXBase {
   
-  private PDFViewer sut;
+  private DocumentViewer sut;
   private Stage pdfStage;
   
   @Test
@@ -30,14 +30,14 @@ class PDFViewerTest extends FXBase {
   }
   
   private void doTest() {
-    sut.showPDF( getPdf("welkom.pdf"), member());
+    sut.showPdf( getPdf("welkom.pdf"), member());
     assertTrue(pdfStage.isShowing());
     sut.close();
     assertTrue(!pdfStage.isShowing());
   }
   
   private void prepare() {
-    sut = PDFViewer.builder().build();
+    sut = DocumentViewer.builder().build();
     sut.setWindowTitle("Welkomsbrief voor lid: %d (%s)");
     pdfStage = getStage();
   }
@@ -63,7 +63,7 @@ class PDFViewerTest extends FXBase {
   
   private Stage getStage() {
     try {
-      return (Stage) FieldUtils.readDeclaredField(sut, "pdfStage", true);
+      return (Stage) FieldUtils.readDeclaredField(sut, "documentViewerStage", true);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     }

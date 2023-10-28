@@ -32,12 +32,12 @@ public class PrintUtil {
    * <p>
    * The printer is selected via a native printer selection dialog.
    * </p>
-   * @param pdf - the document to print
+   * @param document - the document to print
    * @return - the printer used for printing
    * @throws PrintException - when printing fails
    */
-  public Optional<PrintService> print(byte[] pdf) throws PrintException {
-    return printServiceProvider.print(pdf);
+  public Optional<PrintService> print(PrintDocument document) throws PrintException {
+    return printServiceProvider.print(document);
    }
 
   /**

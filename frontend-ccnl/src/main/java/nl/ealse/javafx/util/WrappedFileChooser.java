@@ -70,7 +70,7 @@ public class WrappedFileChooser {
         new FileChooser.ExtensionFilter("MS Word-document", "*.docx")), XML(
             new FileChooser.ExtensionFilter("XML-document", "*.xml")), XLSX(
                 new FileChooser.ExtensionFilter("Microsoft Excel-werkblad", "*.xlsx")), PNG(
-                    new FileChooser.ExtensionFilter("Afbeeldingen", "*.png")), ZIP(
+                    new FileChooser.ExtensionFilter("Afbeeldingen", "*.jpeg", "*.jpg", "*.png")), ZIP(
                         new FileChooser.ExtensionFilter("Gecomprimeerd (zip) bestand", "*.zip"));
 
     @Getter

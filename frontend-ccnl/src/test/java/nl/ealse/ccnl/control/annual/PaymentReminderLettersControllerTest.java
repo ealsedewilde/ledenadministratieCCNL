@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.control.PDFViewer;
+import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToFile;
 import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToPrint;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -115,10 +115,10 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
   }
 
   private void setPdfViewer() {
-    PDFViewer pdfViewer = PDFViewer.builder().build();
-    pdfViewer.setWindowTitle("Herinneringsbrief voor lid: %d (%s)");
+    DocumentViewer documentViewer = DocumentViewer.builder().build();
+    documentViewer.setWindowTitle("Herinneringsbrief voor lid: %d (%s)");
     try {
-      FieldUtils.writeField(sut, "pdfViewer", pdfViewer, true);
+      FieldUtils.writeField(sut, "documentViewer", documentViewer, true);
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -66,6 +66,7 @@ class MemberControllerTest extends FXMLBaseTest {
   private void doTest() {
     Document document = new Document();
     byte[] pdf = getBlob("MachtigingsformulierSEPA.pdf");
+    document.setDocumentName("MachtigingsformulierSEPA.pdf");
     document.setPdf(pdf);
     document.setOwner(m);
     when(documentService.findSepaAuthorization(m)).thenReturn(Optional.of(document));

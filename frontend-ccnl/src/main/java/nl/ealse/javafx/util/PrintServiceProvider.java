@@ -5,7 +5,7 @@ import javax.print.PrintService;
 
 public interface PrintServiceProvider {
   
-  Optional<PrintService> print(byte[] pdf) throws PrintException;
+  Optional<PrintService> print(PrintDocument document) throws PrintException;
   
   void printAttachment(PrintService ps, byte[] attachment) throws PrintException;
 

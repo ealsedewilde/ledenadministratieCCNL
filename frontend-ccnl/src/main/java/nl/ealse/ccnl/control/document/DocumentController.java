@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import nl.ealse.ccnl.control.PDFViewer;
+import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -36,7 +36,7 @@ public class DocumentController {
   @FXML
   private TableView<Document> tableView;
 
-  private PDFViewer pdfViewer;
+  private DocumentViewer documentViewer;
 
 
   public DocumentController(PageController pageController, DocumentService documentService) {
@@ -46,7 +46,7 @@ public class DocumentController {
 
   @PostConstruct
   void setup() {
-    pdfViewer = PDFViewer.builder().withPrintButton(evt -> printDocument())
+    documentViewer = DocumentViewer.builder().withPrintButton(evt -> printDocument())
         .withDeleteButton(evt -> deleteDocument()).withCancelButton(evet -> closeDocument())
         .build();
   }
@@ -72,17 +72,17 @@ public class DocumentController {
     TableRow<Document> row = (TableRow<Document>) event.getSource();
     selectedDocument = row.getItem();
     if (selectedDocument != null) {
-      pdfViewer.setWindowTitle(
+      documentViewer.setWindowTitle(
           String.format("Document '%s' voor lid:", selectedDocument.getDocumentName())
               + " %d (%s)");
-      pdfViewer.showPDF(selectedDocument);
+      documentViewer.showDocument(selectedDocument);
     }
   }
 
   @FXML
   void printDocument() {
     try {
-      PrintUtil.print(pdfViewer.getPdf());
+      PrintUtil.print(documentViewer.getDocument());
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -91,14 +91,14 @@ public class DocumentController {
   @FXML
   void deleteDocument() {
     documentService.deleteDocument(selectedDocument);
-    pdfViewer.close();
+    documentViewer.close();
     fillTableView(selectedDocument.getOwner());
     pageController.showMessage("Het document is verwijderd");
   }
 
   @FXML
   void closeDocument() {
-    pdfViewer.close();
+    documentViewer.close();
   }
 
 }

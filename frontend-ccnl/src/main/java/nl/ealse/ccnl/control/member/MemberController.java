@@ -6,7 +6,7 @@ import java.util.StringJoiner;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import nl.ealse.ccnl.control.PDFViewer;
+import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.MenuController;
@@ -46,7 +46,7 @@ public class MemberController extends MemberView {
 
   private MenuChoice currentMenuChoice;
 
-  private PDFViewer pdfViewer;
+  private DocumentViewer documentViewer;
 
   // Helper to detect changes in the iban owner
   private String savedName;
@@ -68,9 +68,9 @@ public class MemberController extends MemberView {
     formController.setOnSave(e -> save());
     formController.setOnReset(e -> reset());
 
-    pdfViewer = PDFViewer.builder().withDeleteButton(e -> deletePDF())
+    documentViewer = DocumentViewer.builder().withDeleteButton(e -> deletePDF())
         .withPrintButton(e -> printPDF()).withCancelButton(e -> closePDF()).build();
-    pdfViewer.setWindowTitle("SEPA machtiging voor lid: %d (%s)");
+    documentViewer.setWindowTitle("SEPA machtiging voor lid: %d (%s)");
     
     getIbanNumber().textProperty()
     .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
@@ -174,7 +174,7 @@ public class MemberController extends MemberView {
 
   @FXML
   void showSepaAuthorization() {
-    pdfViewer.showPDF(sepaAuthorization);
+    documentViewer.showDocument(sepaAuthorization);
   }
 
   @FXML
@@ -209,7 +209,7 @@ public class MemberController extends MemberView {
   void deletePDF() {
     documentService.deleteDocument(sepaAuthorization);
     pageController.showMessage("SEPA-machtiging is verwijderd");
-    pdfViewer.close();
+    documentViewer.close();
 
     selectedMember.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
     getPaymentMethod().setValue(PaymentMethodMapper.BANK_TRANSFER);
@@ -223,7 +223,7 @@ public class MemberController extends MemberView {
   @FXML
   void printPDF() {
     try {
-      PrintUtil.print(pdfViewer.getPdf());
+      PrintUtil.print(documentViewer.getDocument());
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -231,7 +231,7 @@ public class MemberController extends MemberView {
 
   @FXML
   void closePDF() {
-    pdfViewer.close();
+    documentViewer.close();
   }
 
   private String getHeaderTextValue() {

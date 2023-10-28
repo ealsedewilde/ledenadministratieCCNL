@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.control.PDFViewer;
+import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
@@ -42,7 +42,7 @@ public class SepaAuthorizarionController {
 
   private final MemberService service;
 
-  private PDFViewer pdfViewer;
+  private DocumentViewer documentViewer;
 
   private Member selectedMember;
 
@@ -68,9 +68,9 @@ public class SepaAuthorizarionController {
 
   @PostConstruct
   void setup() {
-    pdfViewer = PDFViewer.builder().withSaveButton(e -> addSepaPDF())
+    documentViewer = DocumentViewer.builder().withSaveButton(e -> addSepaPDF())
         .withPrintButton(e -> printSepaPDF()).withCancelButton(e -> closePDFViewer()).build();
-    pdfViewer.setWindowTitle("SEPA machtiging toevoegen bij lid: %d (%s)");
+    documentViewer.setWindowTitle("SEPA machtiging toevoegen bij lid: %d (%s)");
 
     fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), PDF, PNG);
     fileChooser.setInitialDirectory(new File(sepaDirectory));
@@ -94,14 +94,14 @@ public class SepaAuthorizarionController {
   public void selectSepaAuthorization() {
     selectedFile = fileChooser.showOpenDialog();
     if (selectedFile != null) {
-      pdfViewer.showPDF(selectedFile, selectedMember);
+      documentViewer.showDocument(selectedFile, selectedMember);
     }
   }
 
   @FXML
   void printSepaPDF() {
     try {
-      PrintUtil.print(pdfViewer.getPdf());
+      PrintUtil.print(documentViewer.getDocument());
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -126,7 +126,7 @@ public class SepaAuthorizarionController {
 
   @FXML
   void closePDFViewer() {
-    pdfViewer.close();
+    documentViewer.close();
   }
 
   private byte[] toByteArray(File selectedFile) {
