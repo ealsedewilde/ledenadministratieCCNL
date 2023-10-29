@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
@@ -58,6 +59,8 @@ public class DocumentViewer extends BorderPane {
   private static final String HEADER_TEXT = "Pagina %d van %d";
 
   private Scene scene;
+  
+  private Region root;
 
   private Stage documentViewerStage;
 
@@ -179,7 +182,7 @@ public class DocumentViewer extends BorderPane {
    * Initialize for a single page PDF.
    */
   private void initializeSinglePage(double width, double height) {
-    setDimension(width + 23d, height + 70d);
+    setDimension(width + 38d, height + 85d);
     this.setRight(null);
     this.setLeft(null);
     this.setTop(null);
@@ -189,7 +192,7 @@ public class DocumentViewer extends BorderPane {
    * Initialize for a multi page PDF.
    */
   private void initializeMultiPage(double width, double height) {
-    setDimension(width + 141d, height + 100d);
+    setDimension(width + 156d, height + 115d);
 
     this.setRight(nextButton);
     this.setLeft(prevButton);
@@ -198,12 +201,11 @@ public class DocumentViewer extends BorderPane {
   }
 
   private void setDimension(double width, double height) {
-    Region parent = (Region) getParent();
-    parent.setMinWidth(width);
+    root.setMinWidth(width);
     // for whatever reason need to set both min and max height to resize properly
     // Strangely enough it is not neceassary for the width
-    parent.setMinHeight(height);
-    parent.setMaxHeight(height);
+    root.setMinHeight(height);
+    root.setMaxHeight(height);
 
   }
 
@@ -294,15 +296,18 @@ public class DocumentViewer extends BorderPane {
     }
 
     public void initialize() {
-      VBox parent = new VBox();
-      parent.setPadding(new Insets(10.d));
-      parent.getChildren().add(instance);
+      VBox content = new VBox();
+      content.setPadding(new Insets(10.d));
+      content.getChildren().add(instance);
       buttons = new HBox();
       buttons.setPadding(new Insets(10d, 0d, 0d, 0d));
       buttons.setSpacing(20d);
-      parent.getChildren().add(buttons);
+      content.getChildren().add(buttons);
 
-      instance.scene = new Scene(parent);
+      ScrollPane root = new ScrollPane();
+      instance.root = root;
+      root.setContent(content);
+      instance.scene = new Scene(root);
       instance.documentViewerStage = new Stage();
       instance.documentViewerStage.initModality(Modality.APPLICATION_MODAL);
       instance.documentViewerStage.setAlwaysOnTop(true);
