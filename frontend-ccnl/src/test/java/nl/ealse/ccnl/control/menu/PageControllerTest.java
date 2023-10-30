@@ -10,7 +10,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import nl.ealse.ccnl.test.FXBase;
 import nl.ealse.javafx.FXMLLoaderBean;
-import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,8 +45,6 @@ class PageControllerTest extends FXBase {
     sut.showErrorMessage("error");
     sut.showMessage("message");
     sut.showPermanentMessage("permanent");
-    StageReadyEvent event = mock(StageReadyEvent.class);
-    sut.onApplicationEvent(event);
   }
 
   @BeforeEach

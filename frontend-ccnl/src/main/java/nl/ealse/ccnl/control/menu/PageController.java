@@ -6,12 +6,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import lombok.Getter;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.javafx.ImagesMap;
-import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
@@ -40,9 +37,6 @@ public class PageController {
 
   @FXML
   private ImageView logo;
-
-  @Getter
-  private Stage primaryStage;
 
   private Node logoPage;
 
@@ -122,15 +116,6 @@ public class PageController {
   @Order(10)
   public void onApplicationEvent(MenuChoiceEvent event) {
     activateLogoPage();
-  }
-
-  /**
-   * Receive the primary stage. All JavaFX controllers will have a reference to this component. Thus
-   * all JavaFX controllers can lookup the primary stage when needed for modal pages.
-   */
-  @EventListener
-  public void onApplicationEvent(StageReadyEvent event) {
-    this.primaryStage = event.getStage();
   }
 
 }

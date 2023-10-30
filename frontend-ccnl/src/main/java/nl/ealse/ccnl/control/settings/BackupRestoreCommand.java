@@ -46,7 +46,7 @@ public class BackupRestoreCommand {
   
   @PostConstruct
   void setup() {
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.ZIP);
+    fileChooser = new WrappedFileChooser(FileExtension.ZIP);
     fileChooser.setInitialDirectory(new File(dbDirectory));
   }
 

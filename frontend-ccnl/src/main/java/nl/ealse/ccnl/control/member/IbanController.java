@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -56,7 +57,7 @@ public class IbanController {
     ibanNumberStage.initModality(Modality.APPLICATION_MODAL);
     ibanNumberStage.setTitle("IBAN-nummer toevoegen");
     ibanNumberStage.getIcons().add(ImagesMap.get("Citroen.png"));
-    ibanNumberStage.initOwner(pageController.getPrimaryStage());
+    ibanNumberStage.initOwner(MainStage.getStage());
     Parent p = FXMLLoaderBean.getPage("dialog/addIban", this);
     Scene dialogScene = new Scene(p, 1200, 400);
     ibanNumberStage.setScene(dialogScene);

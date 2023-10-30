@@ -4,7 +4,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.MainStage;
 import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
 
@@ -18,8 +18,8 @@ public class StageBuilder {
   private double height;
   private Parent parent;
   
-  public StageBuilder(PageController pageController) {
-    stage.initOwner(pageController.getPrimaryStage());
+  public StageBuilder() {
+    stage.initOwner(MainStage.getStage());
   }
   
   public StageBuilder fxml(String fxmlName, Object controller) {
@@ -37,7 +37,7 @@ public class StageBuilder {
    *
    * @param width - Stage widht
    * @param height - Stage height
-   * @return Th builder to build a Stage
+   * @return The builder to build a Stage
    */
   public StageBuilder size(double width, double height) {
     this.width = width;

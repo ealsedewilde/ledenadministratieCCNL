@@ -66,21 +66,6 @@ public abstract class DocumentTemplateController {
     this.templateContext = templateContext.data;
   }
 
-  protected void initialize() {
-    if (this.dialog == null) {
-      double height;
-      if (templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
-        height = 330;
-        fileChooser =
-            new WrappedFileChooser(pageController.getPrimaryStage(), templateContext.fileType);
-      } else {
-        height = 100;
-      }
-      this.dialog = new StageBuilder(pageController).fxml(templateContext.helpPage, pageController)
-          .title("Invul hulp").size(550, height).build();
-    }
-  }
-
   protected void initializeTemplates() {
     templates = documentService.findDocumentTemplates(templateContext.documentType);
     initializeTextSelection();
@@ -98,7 +83,6 @@ public abstract class DocumentTemplateController {
     selectText();
   }
 
-
   @FXML
   void selectText() {
     int ix = textSelection.getSelectionModel().getSelectedIndex();
@@ -114,6 +98,17 @@ public abstract class DocumentTemplateController {
 
   @FXML
   void textHelp() {
+    if (this.dialog == null) {
+      double height;
+      if (templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
+        height = 330;
+        fileChooser = new WrappedFileChooser(templateContext.fileType);
+      } else {
+        height = 100;
+      }
+      this.dialog = new StageBuilder().fxml(templateContext.helpPage, this).title("Invul hulp")
+          .size(550, height).build();
+    }
     if (!dialog.isShowing()) {
       dialog.show();
     }

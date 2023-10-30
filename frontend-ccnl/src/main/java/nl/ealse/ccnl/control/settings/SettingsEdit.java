@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.javafx.FXMLLoaderBean;
@@ -35,7 +36,7 @@ public class SettingsEdit extends SettingsView {
     editStage.initModality(Modality.APPLICATION_MODAL);
     editStage.setTitle("Setting wijzigen");
     editStage.getIcons().add(ImagesMap.get("Citroen.png"));
-    editStage.initOwner(pageController.getPrimaryStage());
+    editStage.initOwner(MainStage.getStage());
     Parent p = FXMLLoaderBean.getPage("settings/settingsEdit", this);
     Scene dialogScene = new Scene(p, 1200, 400);
     editStage.setScene(dialogScene);

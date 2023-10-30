@@ -6,6 +6,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
+import nl.ealse.ccnl.MainStage;
 
 /**
  * Wrapper around a {@link FileChooser}.
@@ -24,8 +25,8 @@ public class WrappedFileChooser {
    * @param primaryStage - of the javafx application
    * @param extensions  - file extensions to handle
    */
-  public WrappedFileChooser(Stage primaryStage, FileExtension... extensions) {
-    this.primaryStage = primaryStage;
+  public WrappedFileChooser(FileExtension... extensions) {
+    this.primaryStage = MainStage.getStage();
     this.fileChooserStage = new Stage();
     this.fileChooser = initFileChooser(extensions);
   }
@@ -38,6 +39,7 @@ public class WrappedFileChooser {
   private FileChooser initFileChooser(FileExtension... extensions) {
     fileChooserStage.initModality(Modality.APPLICATION_MODAL);
     fileChooserStage.initOwner(primaryStage);
+    fileChooserStage.setAlwaysOnTop(true);
     FileChooser fs = new FileChooser();
     Arrays.stream(extensions)
         .forEach(extension -> fs.getExtensionFilters().add(extension.getFilter()));

@@ -62,9 +62,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   }
   
   @FXML
-  @Override
   protected void initialize() {
-    super.initialize();
     documentViewer = DocumentViewer.builder().withPrintButton(evt -> printPDF())
         .withCancelButton(evt -> closePDF()).build();
     documentViewer.setWindowTitle("Herinneringsbrief voor lid: %d (%s)");

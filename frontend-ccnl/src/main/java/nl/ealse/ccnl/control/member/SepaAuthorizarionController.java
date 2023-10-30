@@ -72,7 +72,7 @@ public class SepaAuthorizarionController {
         .withPrintButton(e -> printSepaPDF()).withCancelButton(e -> closePDFViewer()).build();
     documentViewer.setWindowTitle("SEPA machtiging toevoegen bij lid: %d (%s)");
 
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), PDF, PNG);
+    fileChooser = new WrappedFileChooser(PDF, PNG);
     fileChooser.setInitialDirectory(new File(sepaDirectory));
 
   }

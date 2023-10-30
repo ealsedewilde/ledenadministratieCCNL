@@ -32,6 +32,7 @@ import javax.imageio.ImageIO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.button.CancelButton;
 import nl.ealse.ccnl.control.button.DeleteButton;
 import nl.ealse.ccnl.control.button.PrintButton;
@@ -309,8 +310,9 @@ public class DocumentViewer extends BorderPane {
       root.setContent(content);
       instance.scene = new Scene(root);
       instance.documentViewerStage = new Stage();
+      instance.documentViewerStage.initOwner(MainStage.getStage());
       instance.documentViewerStage.initModality(Modality.APPLICATION_MODAL);
-      instance.documentViewerStage.setAlwaysOnTop(true);
+      instance.documentViewerStage.setResizable(false);
       instance.documentViewerStage.getIcons().add(ImagesMap.get("Citroen.png"));
       instance.documentViewerStage.setScene(instance.scene);
 
