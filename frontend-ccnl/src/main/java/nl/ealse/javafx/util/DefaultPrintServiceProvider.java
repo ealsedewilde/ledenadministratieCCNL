@@ -2,7 +2,10 @@ package nl.ealse.javafx.util;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.print.Book;
 import java.awt.print.PageFormat;
+import java.awt.print.Pageable;
+import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -51,8 +54,28 @@ public class DefaultPrintServiceProvider implements PrintServiceProvider {
 
   private Optional<PrintService> printImage(ImagePrintDocument document) throws PrintException {
     PrinterJob job = PrinterJob.getPrinterJob();
-    job.setPrintable(new ImagePrintable(document.getDocument()));
+    BufferedImage image = document.getDocument();
+    Pageable pageable;
+    if (image.getWidth() > image.getHeight()) {
+      pageable = getPageable(job, image, PageFormat.LANDSCAPE);
+    } else {
+      pageable = getPageable(job, image, PageFormat.PORTRAIT);
+    }
+    job.setPageable(pageable);
     return doPrint(job);
+  }
+
+  private Pageable getPageable(PrinterJob job, BufferedImage image, int orientation) {
+    PageFormat pfd = job.defaultPage();
+    pfd.setOrientation(orientation);
+    // remove margins
+    Paper paper = pfd.getPaper();
+    paper.setImageableArea(0, 0, paper.getWidth(), paper.getHeight());
+    pfd.setPaper(paper);
+    Book book = new Book();
+    book.append(new ImagePrintable(image), job.validatePage(pfd));
+    return book;
+    
   }
 
   private Optional<PrintService> doPrint(PrinterJob job) throws PrintException {
