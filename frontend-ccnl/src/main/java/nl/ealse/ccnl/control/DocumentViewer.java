@@ -142,8 +142,9 @@ public class DocumentViewer extends BorderPane {
       pageNum = 0;
       showPage();
     } catch (IOException e) {
-      log.error("Error rendering PDF", e);
-      throw new PDFViewerException("Error rendering PDF", e);
+      String msg = "Error rendering PDF";
+      log.error(msg, e);
+      throw new PDFViewerException(msg, e);
     }
   }
 
@@ -163,8 +164,9 @@ public class DocumentViewer extends BorderPane {
       imageView.setFitWidth(width);
       this.setCenter(imageView);
     } catch (IOException e) {
-      log.error("Error rendering PDF", e);
-      throw new PDFViewerException("Error rendering PDF", e);
+      String msg = "Error rendering image";
+      log.error(msg, e);
+      throw new PDFViewerException(msg, e);
     }
   }
 

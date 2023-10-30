@@ -12,7 +12,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "nl.ealse.ccnl.ledenadministratie.model.dao", bootstrapMode = BootstrapMode.LAZY)
+@EnableJpaRepositories(basePackages = "nl.ealse.ccnl.ledenadministratie.model.dao",
+    bootstrapMode = BootstrapMode.LAZY)
 @EnableAsync
 @Import(FXMLLoaderBean.class)
 public class LedenadministratieApplication {
