@@ -45,7 +45,7 @@ class SettingsEditTest extends FXMLBaseTest {
 
   public void prepare() {
     parentController = mock(SettingsController.class);
-    sut = new SettingsEdit(parentController, getPageController());
+    sut = new SettingsEdit(parentController);
     sut.setup();
   }
 
