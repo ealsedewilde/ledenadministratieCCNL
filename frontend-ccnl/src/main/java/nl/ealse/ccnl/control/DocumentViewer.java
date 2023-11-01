@@ -40,7 +40,6 @@ import nl.ealse.ccnl.control.button.SaveButton;
 import nl.ealse.ccnl.control.exception.PDFViewerException;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.util.ImagePrintDocument;
 import nl.ealse.javafx.util.PdfPrintDocument;
 import nl.ealse.javafx.util.PrintDocument;
@@ -313,9 +312,9 @@ public class DocumentViewer extends BorderPane {
       instance.scene = new Scene(root);
       instance.documentViewerStage = new Stage();
       instance.documentViewerStage.initOwner(MainStage.getStage());
+      instance.documentViewerStage.getIcons().add(MainStage.getIcon());
       instance.documentViewerStage.initModality(Modality.APPLICATION_MODAL);
       instance.documentViewerStage.setResizable(false);
-      instance.documentViewerStage.getIcons().add(ImagesMap.get("Citroen.png"));
       instance.documentViewerStage.setScene(instance.scene);
 
       instance.nextButton = new PagingButton("\u00BB");

@@ -36,10 +36,11 @@ public class PrimaryPageStarter {
   public void onApplicationEvent(StageReadyEvent event) {
     try {
       final Stage stage = event.getStage();
-      MainStage.setStage(stage);
       stage.setTitle(applicationTitle);
       stage.getIcons().add(ImagesMap.get(applicationIcon));
       stage.setResizable(false);
+      MainStage.setStage(stage);
+
       Scene scene = new Scene(FXMLLoaderBean.getPage(MAIN_FXML));
       stage.setScene(scene);
       stage.show();

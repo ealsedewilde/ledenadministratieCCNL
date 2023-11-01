@@ -14,7 +14,6 @@ import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.javafx.FXMLLoaderBean;
-import nl.ealse.javafx.ImagesMap;
 import org.apache.commons.validator.routines.IBANValidator;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -52,7 +51,7 @@ public class IbanController {
     ibanNumberStage = new Stage();
     ibanNumberStage.initModality(Modality.APPLICATION_MODAL);
     ibanNumberStage.setTitle("IBAN-nummer toevoegen");
-    ibanNumberStage.getIcons().add(ImagesMap.get("Citroen.png"));
+    ibanNumberStage.getIcons().add(MainStage.getIcon());
     ibanNumberStage.initOwner(MainStage.getStage());
     Parent p = FXMLLoaderBean.getPage("dialog/addIban", this);
     Scene dialogScene = new Scene(p, 1200, 400);
