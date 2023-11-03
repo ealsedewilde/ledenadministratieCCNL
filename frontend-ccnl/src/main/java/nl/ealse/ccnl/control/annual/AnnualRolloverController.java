@@ -86,7 +86,7 @@ public class AnnualRolloverController {
   
   @PostConstruct
   void setup() {
-    this.fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.ZIP);
+    this.fileChooser = new WrappedFileChooser(FileExtension.ZIP);
     this.fileChooser.setInitialDirectory(new File(dbDirectory));
     this.excelParent = new File(annualDirectory);
   }

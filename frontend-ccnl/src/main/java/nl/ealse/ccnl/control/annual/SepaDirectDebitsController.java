@@ -78,9 +78,9 @@ public class SepaDirectDebitsController {
   
   @PostConstruct
   void setup() {
-    messagesStage = new StageBuilder(pageController).fxml("dialog/directDebitMessages", this)
+    messagesStage = new StageBuilder().fxml("dialog/directDebitMessages", this)
         .title("Incassomeldingen").size(600, 400).build();
-    settingsStage = new StageBuilder(pageController).fxml("dialog/directDebitsSettings", this)
+    settingsStage = new StageBuilder().fxml("dialog/directDebitsSettings", this)
         .title("Incasso instellingen").size(1000, 600).build();
     valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     valueColumn.setOnEditCommit(t -> {
@@ -92,7 +92,7 @@ public class SepaDirectDebitsController {
       t.getRowValue().setDescription(t.getNewValue());
       saveProperty(t.getRowValue());
     });
-   fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XML);
+   fileChooser = new WrappedFileChooser(FileExtension.XML);
     fileChooser.setInitialDirectory(service.getDirectDebitsDirectory());
   }
 

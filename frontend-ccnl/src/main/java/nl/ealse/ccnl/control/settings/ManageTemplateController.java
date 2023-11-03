@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -84,7 +85,7 @@ public class ManageTemplateController {
     this.dialog.setTitle("Invul hulp");
     this.dialog.getIcons().add(ImagesMap.get("info.png"));
 
-    dialog.initOwner(pageController.getPrimaryStage());
+    dialog.initOwner(MainStage.getStage());
     letterHelpScene = new Scene(FXMLLoaderBean.getPage("dialog/texthelp"), 550, 330);
     mailHelpScene = new Scene(FXMLLoaderBean.getPage("dialog/mailhelp"), 550, 150);
   }

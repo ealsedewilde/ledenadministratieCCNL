@@ -85,7 +85,7 @@ public class AddDocumentController {
         documentType.getItems().add(type.getDescription());
       }
     }
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.PDF);
+    fileChooser = new WrappedFileChooser(FileExtension.PDF);
     fileChooser.setInitialDirectory(new File(sepaDirectory));
   }
 

@@ -75,8 +75,8 @@ public class ReconciliationController {
 
   @PostConstruct
   void setup() {
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XML);
-    messagesStage = new StageBuilder(pageController).fxml("dialog/reconciliationMessages", this)
+    fileChooser = new WrappedFileChooser(FileExtension.XML);
+    messagesStage = new StageBuilder().fxml("dialog/reconciliationMessages", this)
         .title("Aflettermeldingen").size(600, 400).build();
   }
 

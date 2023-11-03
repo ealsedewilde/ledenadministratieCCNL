@@ -46,7 +46,7 @@ public class ExcelExportCommand {
 
   @PostConstruct
   void setup() {
-    fileChooser = new WrappedFileChooser(pageController.getPrimaryStage(), FileExtension.XLSX);
+    fileChooser = new WrappedFileChooser(FileExtension.XLSX);
     fileChooser.setInitialDirectory(new File(excelDirectory));
   }
 
