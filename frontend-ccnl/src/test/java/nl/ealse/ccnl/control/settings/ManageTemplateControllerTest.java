@@ -62,6 +62,7 @@ class ManageTemplateControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
+    sut.setup();
     getPageWithFxController(sut, PageName.MANAGE_TEMPLATE);
   }
 

@@ -44,7 +44,7 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
 
       sut = new Tester(pageController, documentService);
       initFXML();
-      sut.initialize();
+      sut.textHelp();
       Stage dialog = sut.getStage();
       assertNotNull(dialog);
       double height = dialog.getScene().getHeight();
@@ -67,7 +67,6 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
       sut.saveText();
       verify(documentService).persistDocumentemplate(any(DocumentTemplate.class));
 
-      sut.textHelp();
       ar.set(true);
     }, ar);
     Assertions.assertTrue(result.get());

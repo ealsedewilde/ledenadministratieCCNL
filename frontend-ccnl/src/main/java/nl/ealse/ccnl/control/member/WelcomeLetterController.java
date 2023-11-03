@@ -48,9 +48,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   }
   
   @FXML
-  @Override
   protected void initialize() {
-    super.initialize();
     initializeTemplates();
     documentViewer = DocumentViewer.builder().withPrintButton(evt -> printPDF())
         .withCancelButton(evt -> closePDF()).build();

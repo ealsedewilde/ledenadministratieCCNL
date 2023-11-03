@@ -18,10 +18,13 @@ public class StageBuilder {
   private double height;
   private Parent parent;
   
+<<<<<<< HEAD
   public StageBuilder() {
     stage.initOwner(MainStage.getStage());
   }
   
+=======
+>>>>>>> branch 'main' of git@github.com:ealsedewilde/ledenadministratieCCNL.git
   public StageBuilder fxml(String fxmlName, Object controller) {
     parent = FXMLLoaderBean.getPage(fxmlName, controller);
     return this;
@@ -53,6 +56,7 @@ public class StageBuilder {
   public Stage build() {
     stage.initModality(Modality.APPLICATION_MODAL);
     stage.setResizable(false);
+    stage.initOwner(MainStage.getStage());
     stage.getIcons().add(ImagesMap.get("info.png"));
     Scene scene = new Scene(parent, width, height);
     stage.setScene(scene);

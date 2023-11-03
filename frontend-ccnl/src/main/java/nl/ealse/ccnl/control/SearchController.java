@@ -16,8 +16,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
+import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.button.ImageCell;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageReference;
@@ -179,7 +181,11 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   public void extraInfo(MouseEvent event) {
     event.consume(); // stop further propagation to handleSelected()
     Alert alert = new Alert(AlertType.INFORMATION);
+    Stage cs = (Stage) alert.getDialogPane().getScene().getWindow();
+    cs.getIcons().add(MainStage.getIcon());
+
     alert.setTitle("Extra Info");
+    alert.setHeaderText("Niet van toepassing");
     alert.showAndWait();
   }
 

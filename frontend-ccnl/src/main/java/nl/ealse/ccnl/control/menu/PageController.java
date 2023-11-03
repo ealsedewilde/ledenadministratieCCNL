@@ -20,9 +20,6 @@ import org.springframework.stereotype.Controller;
  * the user dialog. This controller is also capable of displaying messages in the Bottom part of the
  * GridPane.
  * </p>
- * <p>
- * For convenience it provides a reference to the primary stage of this application.
- * </p>
  *
  * @author ealse
  */

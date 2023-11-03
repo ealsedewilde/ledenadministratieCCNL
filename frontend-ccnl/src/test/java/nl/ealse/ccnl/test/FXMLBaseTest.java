@@ -6,15 +6,18 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.control.menu.PageReference;
 import nl.ealse.javafx.FXMLLoadException;
 import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.ImagesMap;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
@@ -56,6 +59,16 @@ public abstract class FXMLBaseTest extends FXBase {
     doNothing().when(pc).showErrorMessage(isA(String.class));
     doNothing().when(pc).showPermanentMessage(isA(String.class));
     doNothing().when(pc).activateLogoPage();
+    initializeMainStage();
+  }
+  
+  private static void initializeMainStage() {
+    Field icon = FieldUtils.getField(MainStage.class, "icon", true);
+    try {
+      icon.set(null, ImagesMap.get("citroen.png"));
+    } catch (IllegalArgumentException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
   }
 
   /**

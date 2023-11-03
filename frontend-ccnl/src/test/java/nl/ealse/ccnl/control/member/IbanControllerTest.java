@@ -56,7 +56,7 @@ class IbanControllerTest extends FXMLBaseTest {
   }
   
   private void prepare() {
-    sut = new IbanController(eventPublisher, getPageController());
+    sut = new IbanController(eventPublisher);
     sut.setup();
   }
   

@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.settings;
 
+import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Optional;
 import javafx.fxml.FXML;
@@ -77,8 +78,8 @@ public class ManageTemplateController {
     this.documentService = documentService;
   }
 
-  @FXML
-  void initialize() {
+  @PostConstruct
+  void setup() {
     this.dialog = new Stage();
     this.dialog.initModality(Modality.APPLICATION_MODAL);
     this.dialog.setResizable(false);

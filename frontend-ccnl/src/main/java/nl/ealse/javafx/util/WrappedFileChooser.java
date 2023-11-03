@@ -16,7 +16,6 @@ import nl.ealse.ccnl.MainStage;
  */
 public class WrappedFileChooser {
 
-  private final Stage primaryStage;
   private final Stage fileChooserStage;
   private final FileChooser fileChooser;
 
@@ -26,7 +25,6 @@ public class WrappedFileChooser {
    * @param extensions  - file extensions to handle
    */
   public WrappedFileChooser(FileExtension... extensions) {
-    this.primaryStage = MainStage.getStage();
     this.fileChooserStage = new Stage();
     this.fileChooser = initFileChooser(extensions);
   }
@@ -38,8 +36,9 @@ public class WrappedFileChooser {
    */
   private FileChooser initFileChooser(FileExtension... extensions) {
     fileChooserStage.initModality(Modality.APPLICATION_MODAL);
-    fileChooserStage.initOwner(primaryStage);
-    fileChooserStage.setAlwaysOnTop(true);
+    fileChooserStage.initOwner(MainStage.getStage());
+    fileChooserStage.getIcons().add(MainStage.getIcon());
+     fileChooserStage.setAlwaysOnTop(true);
     FileChooser fs = new FileChooser();
     Arrays.stream(extensions)
         .forEach(extension -> fs.getExtensionFilters().add(extension.getFilter()));

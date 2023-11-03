@@ -61,9 +61,7 @@ public class CancelationMailController extends DocumentTemplateController {
   }
   
   @FXML
-  @Override
   protected void initialize() {
-    super.initialize();
     initializeTemplates();
     validation = new CancelMailValidation(this);
     validation.setCallback(valid -> sendButton.setDisable(!valid));
