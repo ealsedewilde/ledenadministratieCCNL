@@ -20,8 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class BaseDbConfigurator {
-  
-  private static final String INFO_STYLE = "-fx-text-fill: green;  -fx-font-size: 1em; -fx-font-weight: bold;";
+
+  private static final String INFO_STYLE =
+      "-fx-text-fill: green;  -fx-font-size: 1em; -fx-font-weight: bold;";
   private static final String ERROR_STYLE = INFO_STYLE + "-fx-text-fill: red";
 
   @FXML
@@ -29,10 +30,11 @@ public abstract class BaseDbConfigurator {
 
   @FXML
   private TextField dbName;
-  
+
   @FXML
+  @Getter
   private Label message;
-  
+
   @FXML
   private Button saveButton;
 
@@ -42,7 +44,7 @@ public abstract class BaseDbConfigurator {
 
   @Getter
   private final Stage stage;
-  
+
   protected BaseDbConfigurator(Stage stage) {
     this.stage = stage;
   }
@@ -93,7 +95,7 @@ public abstract class BaseDbConfigurator {
       message.setText("Geen (geldige) locatie geselecteerd");
     }
   }
-  
+
   @FXML
   void initialize() {
     if (dbName != null) {
@@ -150,11 +152,11 @@ public abstract class BaseDbConfigurator {
       saveButton.setDisable(true);
     }
   }
-  
+
   protected abstract Parent loadFxml(String fxmlName);
-  
+
   protected abstract Image getStageIcon();
-  
+
   protected abstract void nextAction();
 
   private boolean validInput() {

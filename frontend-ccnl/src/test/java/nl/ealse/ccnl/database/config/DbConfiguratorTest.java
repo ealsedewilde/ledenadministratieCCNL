@@ -1,5 +1,7 @@
 package nl.ealse.ccnl.database.config;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,7 +36,16 @@ class DbConfiguratorTest extends FXMLBaseTest {
   
   private void doTest() {
     sut.openDialog();
-    //sut.save();
+    assertTrue(sut.getStage().isShowing());
+    sut.getStage().close();
+    sut.configureExistingDatabase();
+    assertTrue(sut.getStage().isShowing());
+    //sut.getStage().close();
+    sut.configureNewDatabase();
+    assertTrue(sut.getStage().isShowing());
+    sut.save();
+    String msg = sut.getMessage().getText();
+    assertEquals("Geef een database locatie op Geef een databasenaam op", msg);
   }
   
   private void prepare() {

@@ -3,7 +3,7 @@ spring:
     ui:
       title: Ledenadministratie CCNL
   datasource:
-    url: jdbc:h2:../data/db
+#    url: jdbc:h2:../data/db
     driver-class-name: org.h2.Driver
     username: sa
     hikari:
