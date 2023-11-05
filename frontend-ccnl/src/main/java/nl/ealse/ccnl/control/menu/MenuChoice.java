@@ -49,7 +49,9 @@ public enum MenuChoice {
 
   IMPORT_FROM_EXCEL,
 
-  SETTINGS, MANAGE_ARCHIVE;
+  SETTINGS, MANAGE_ARCHIVE,
+  
+  DB_CONFIG(true);
 
   @Getter
   private ChoiceGroup group;

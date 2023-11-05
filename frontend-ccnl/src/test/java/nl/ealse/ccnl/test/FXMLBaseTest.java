@@ -65,7 +65,7 @@ public abstract class FXMLBaseTest extends FXBase {
   private static void initializeMainStage() {
     Field icon = FieldUtils.getField(MainStage.class, "icon", true);
     try {
-      icon.set(null, ImagesMap.get("citroen.png"));
+      icon.set(null, ImagesMap.get("Citroen.png"));
     } catch (IllegalArgumentException | IllegalAccessException e) {
       e.printStackTrace();
     }

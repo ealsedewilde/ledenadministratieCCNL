@@ -8,8 +8,10 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -38,28 +40,20 @@ public abstract class SpringJavaFXBase extends Application {
   }
 
   /**
-   * Both SpringBoot and JavaFX are ready to run. This method gets called after the init(). It will
-   * publish a StageReadyEvent to inform other components that the application is ready to run.
-   */
-  @Override
-  public void start(Stage primaryStage) throws Exception {
-    this.context.publishEvent(new StageReadyEvent(primaryStage));
-  }
-
-  /**
    * Initialize the Spring {@code ApplicationContext}. It is initialized with headless(false) so the
    * AWT {@link PrinterJob#printDialog()} can be used for printing.
    */
-  @Override
-  public void init() {
+  public ApplicationEventPublisher initSpringBoot() {
     ApplicationContextInitializer<GenericApplicationContext> initializer = applicationContext -> {
       applicationContext.registerBean(Application.class, () -> SpringJavaFXBase.this);
       applicationContext.registerBean(Parameters.class, this::getParameters);
       applicationContext.registerBean(HostServices.class, this::getHostServices);
     };
     List<String> rawParameters = getParameters().getRaw();
-    this.context = new SpringApplicationBuilder().headless(false).sources(springbootClass)
+    ConfigurableApplicationContext c = new SpringApplicationBuilder().headless(false).sources(springbootClass)
         .initializers(initializer).run(rawParameters.toArray(new String[rawParameters.size()]));
+    this.context = c;
+    return c;
   }
 
   @Override

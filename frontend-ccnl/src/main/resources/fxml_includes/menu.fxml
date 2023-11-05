@@ -120,6 +120,7 @@
         <MenuItem onAction="#manageArchive" mnemonicParsing="false"
           text="Archief opschonen" />
         <MenuItem onAction="#settings" mnemonicParsing="false" text="Instellingen" />
+        <MenuItem onAction="#dbconfig" mnemonicParsing="false" text="Wijzig database locatie" />
       </items>
     </Menu>
   </menus>

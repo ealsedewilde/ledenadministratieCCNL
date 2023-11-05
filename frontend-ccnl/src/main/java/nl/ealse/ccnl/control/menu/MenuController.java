@@ -241,4 +241,9 @@ public class MenuController {
     eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.MANAGE_ARCHIVE));
   }
 
+  @FXML
+  void dbconfig() {
+    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.DB_CONFIG));
+  }
+
 }
