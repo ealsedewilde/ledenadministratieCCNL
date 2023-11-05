@@ -18,13 +18,6 @@ public class StageBuilder {
   private double height;
   private Parent parent;
   
-<<<<<<< HEAD
-  public StageBuilder() {
-    stage.initOwner(MainStage.getStage());
-  }
-  
-=======
->>>>>>> branch 'main' of git@github.com:ealsedewilde/ledenadministratieCCNL.git
   public StageBuilder fxml(String fxmlName, Object controller) {
     parent = FXMLLoaderBean.getPage(fxmlName, controller);
     return this;
