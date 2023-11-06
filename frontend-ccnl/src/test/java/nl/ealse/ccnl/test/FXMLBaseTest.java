@@ -59,16 +59,6 @@ public abstract class FXMLBaseTest extends FXBase {
     doNothing().when(pc).showErrorMessage(isA(String.class));
     doNothing().when(pc).showPermanentMessage(isA(String.class));
     doNothing().when(pc).activateLogoPage();
-    initializeMainStage();
-  }
-  
-  private static void initializeMainStage() {
-    Field icon = FieldUtils.getField(MainStage.class, "icon", true);
-    try {
-      icon.set(null, ImagesMap.get("Citroen.png"));
-    } catch (IllegalArgumentException | IllegalAccessException e) {
-      e.printStackTrace();
-    }
   }
 
   /**

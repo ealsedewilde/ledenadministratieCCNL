@@ -8,17 +8,12 @@
 <VBox prefHeight="167.0" prefWidth="400.0" spacing="20.0"
 	xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<Button mnemonicParsing="false" onAction="#directoryChooser"
-			text="Selecteer de database locatie" />
 		<VBox>
 			<children>
-				<HBox>
-					<children>
-						<Label text="Database naam" />
-						<Label style="-fx-text-fill: red;" text=" *" />
-					</children>
-				</HBox>
-				<TextField fx:id="dbName" />
+				<Label text="Database folder" />
+				<TextField fx:id="dbFolder" disable="true"/>
+				<Label text="Database naam" />
+				<TextField fx:id="dbName" disable="true"/>
 			</children>
 		</VBox>
 		<Label fx:id="message"/>

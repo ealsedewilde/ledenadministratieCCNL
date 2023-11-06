@@ -61,6 +61,7 @@ public class CancelationMailController extends DocumentTemplateController {
   }
   
   @FXML
+  @Override
   protected void initialize() {
     initializeTemplates();
     validation = new CancelMailValidation(this);

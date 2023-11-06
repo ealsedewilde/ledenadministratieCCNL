@@ -17,7 +17,7 @@
 						<Label style="-fx-text-fill: red;" text=" *" />
 					</children>
 				</HBox>
-				<TextField fx:id="dbFolder" text="S:\ledenadministratie-ccnl\db\ccnl" />
+				<TextField fx:id="dbFolder"/>
 			</children>
 		</VBox>
 		<VBox>

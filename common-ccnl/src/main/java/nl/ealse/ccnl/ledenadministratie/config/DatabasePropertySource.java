@@ -54,7 +54,7 @@ public class DatabasePropertySource extends PropertySource<Properties> {
       initializeDbLocation();
       String userName = environment.getProperty("spring.datasource.username");
       String url = environment.getProperty(PROP_DS_URL);
-      String driverClassName = environment.getProperty("spring.datasource.driverClassName");
+      String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
       DataSource ds = DataSourceBuilder.create().username(userName).url(url)
           .driverClassName(driverClassName).build();
       try {

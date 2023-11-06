@@ -107,19 +107,20 @@
     </Menu>
     <Menu mnemonicParsing="false" text="Beheer">
       <items>
+        <MenuItem onAction="#settings" mnemonicParsing="false" text="Instellingen" />
+        <SeparatorMenuItem mnemonicParsing="false" />
         <MenuItem onAction="#manageSepaAuthorizationForm" mnemonicParsing="false"
           text="SEPA-machtiging formulier" />
         <MenuItem onAction="#manageDocumentTemplates" mnemonicParsing="false"
           text="Beheer document templates" />
-        <MenuItem onAction="#backupDatabase" mnemonicParsing="false" text="Backup Database" />
-        <MenuItem onAction="#restoreDatabase" mnemonicParsing="false"
-          text="Restore Database" />
         <SeparatorMenuItem mnemonicParsing="false" />
         <MenuItem onAction="#importFromExcel" mnemonicParsing="false"
           text="Import uit Excel" />
         <MenuItem onAction="#manageArchive" mnemonicParsing="false"
           text="Archief opschonen" />
-        <MenuItem onAction="#settings" mnemonicParsing="false" text="Instellingen" />
+        <SeparatorMenuItem mnemonicParsing="false" />
+        <MenuItem onAction="#backupDatabase" mnemonicParsing="false" text="Backup Database" />
+        <MenuItem onAction="#restoreDatabase" mnemonicParsing="false" text="Restore Database" />
         <MenuItem onAction="#dbconfig" mnemonicParsing="false" text="Wijzig database locatie" />
       </items>
     </Menu>

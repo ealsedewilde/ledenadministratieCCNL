@@ -58,7 +58,9 @@ public abstract class SpringJavaFXBase extends Application {
 
   @Override
   public void stop() throws Exception {
-    context.close();
+    if (context != null) {
+      context.close();
+    }
     Platform.exit();
   }
 

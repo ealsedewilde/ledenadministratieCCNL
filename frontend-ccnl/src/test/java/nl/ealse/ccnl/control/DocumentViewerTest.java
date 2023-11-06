@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.stage.Stage;
+import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.test.FXBase;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -30,10 +31,16 @@ class DocumentViewerTest extends FXBase {
   }
   
   private void doTest() {
-    sut.showPdf( getPdf("welkom.pdf"), member());
+    Member m = member();
+    sut.showPdf( getPdf("welkom.pdf"), m);
     assertTrue(pdfStage.isShowing());
     sut.close();
     assertTrue(!pdfStage.isShowing());
+    Document d = new Document();
+    d.setDocumentName("Citroen.png");
+    d.setPdf(getPdf("Citroen.png"));
+    d.setOwner(m);
+    sut.showDocument(d);
   }
   
   private void prepare() {

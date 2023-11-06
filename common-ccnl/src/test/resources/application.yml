@@ -1,0 +1,32 @@
+spring:
+  application:
+    ui:
+      title: Ledenadministratie CCNL
+  datasource:
+    url: jdbc:h2:mem:common
+    driver-class-name: org.h2.Driver
+    username: sa
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 1
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate.ddl-auto: none
+    open-in-view: true
+#    show-sql: true
+#    properties:
+#      jakarta.persistence.schema-generation.scripts.action: drop-and-create
+#      jakarta.persistence.schema-generation.scripts.create-target: c:/temp/create.sql
+#      jakarta.persistence.schema-generation.scripts.drop-target: c:/temp/drop.sql
+#      jakarta.persistence.schema-generation.scripts.create-source: metadata
+#      hibernate:
+#        format_sql: true
+#  h2:
+#    console:
+#      enabled: true
+  main:
+    lazy-initialization: true
+ccnl:    
+  members: 5000
+server:
+  port: 8088

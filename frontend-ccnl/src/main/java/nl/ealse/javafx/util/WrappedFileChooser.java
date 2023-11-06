@@ -21,8 +21,8 @@ public class WrappedFileChooser {
 
   /**
    * Construct an instance.
-   * @param primaryStage - of the javafx application
-   * @param extensions  - file extensions to handle
+   *
+   * @param extensions - file extensions to handle
    */
   public WrappedFileChooser(FileExtension... extensions) {
     this.fileChooserStage = new Stage();
@@ -31,6 +31,7 @@ public class WrappedFileChooser {
 
   /**
    * Initialize the wrapped {@link FileChooser} in a javafx thread.
+   *
    * @param extensions - file extensions to handle
    * @return the wrapped {@link FileChooser}
    */
@@ -38,7 +39,7 @@ public class WrappedFileChooser {
     fileChooserStage.initModality(Modality.APPLICATION_MODAL);
     fileChooserStage.initOwner(MainStage.getStage());
     fileChooserStage.getIcons().add(MainStage.getIcon());
-     fileChooserStage.setAlwaysOnTop(true);
+    fileChooserStage.setAlwaysOnTop(true);
     FileChooser fs = new FileChooser();
     Arrays.stream(extensions)
         .forEach(extension -> fs.getExtensionFilters().add(extension.getFilter()));
@@ -67,12 +68,19 @@ public class WrappedFileChooser {
   }
 
   public enum FileExtension {
-    PDF(new FileChooser.ExtensionFilter("PDF-document", "*.pdf")), DOCX(
-        new FileChooser.ExtensionFilter("MS Word-document", "*.docx")), XML(
-            new FileChooser.ExtensionFilter("XML-document", "*.xml")), XLSX(
-                new FileChooser.ExtensionFilter("Microsoft Excel-werkblad", "*.xlsx")), PNG(
-                    new FileChooser.ExtensionFilter("Afbeeldingen", "*.jpeg", "*.jpg", "*.png")), ZIP(
-                        new FileChooser.ExtensionFilter("Gecomprimeerd (zip) bestand", "*.zip"));
+    PDF(new FileChooser.ExtensionFilter("PDF-document", "*.pdf")),
+
+    DOCX(new FileChooser.ExtensionFilter("MS Word-document", "*.docx")),
+
+    XML(new FileChooser.ExtensionFilter("XML-document", "*.xml")),
+
+    XLSX(new FileChooser.ExtensionFilter("Microsoft Excel-werkblad", "*.xlsx")),
+
+    PNG(new FileChooser.ExtensionFilter("Afbeeldingen", "*.jpeg", "*.jpg", "*.png")),
+
+    ZIP(new FileChooser.ExtensionFilter("Gecomprimeerd (zip) bestand", "*.zip")),
+
+    DB(new FileChooser.ExtensionFilter("Database bestand", "*.mv.db"));
 
     @Getter
     private final FileChooser.ExtensionFilter filter;

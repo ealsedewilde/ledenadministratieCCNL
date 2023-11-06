@@ -3,5 +3,6 @@
 **/.checkstyle
 **/.classpath
 **/.project
+/frontend-ccnl/db.properties
 /data/
 /site/

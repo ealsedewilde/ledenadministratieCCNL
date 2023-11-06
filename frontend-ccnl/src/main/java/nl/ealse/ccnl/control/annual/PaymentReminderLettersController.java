@@ -62,6 +62,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   }
   
   @FXML
+  @Override
   protected void initialize() {
     documentViewer = DocumentViewer.builder().withPrintButton(evt -> printPDF())
         .withCancelButton(evt -> closePDF()).build();

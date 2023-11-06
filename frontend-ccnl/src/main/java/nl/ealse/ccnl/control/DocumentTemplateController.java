@@ -67,17 +67,9 @@ public abstract class DocumentTemplateController {
   }
 
   protected void initialize() {
-    if (this.dialog == null) {
-      double height;
-      if (templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
-        height = 330;
-        fileChooser =
-            new WrappedFileChooser(templateContext.fileType);
-      } else {
-        height = 100;
-      }
-      //this.dialog = new StageBuilder().fxml(templateContext.helpPage, this)
-      //    .title("Invul hulp").size(550, height).build();
+    if (this.dialog == null
+        && templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
+      fileChooser = new WrappedFileChooser(templateContext.fileType);
     }
   }
 

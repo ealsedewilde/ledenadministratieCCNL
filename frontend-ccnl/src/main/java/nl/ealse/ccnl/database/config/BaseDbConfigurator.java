@@ -12,11 +12,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
 @Slf4j
 public abstract class BaseDbConfigurator {
@@ -37,10 +38,6 @@ public abstract class BaseDbConfigurator {
 
   @FXML
   private Button saveButton;
-
-  private String folder;
-
-  private DirectoryChooser directoryChooser;
 
   @Getter
   private final Stage stage;
@@ -64,36 +61,42 @@ public abstract class BaseDbConfigurator {
 
   @FXML
   void configureExistingDatabase() {
-    Parent page = loadFxml("db/dbconfigExisting");
+    Stage chooserStage = new Stage();
+    chooserStage.initModality(Modality.APPLICATION_MODAL);
+    chooserStage.initOwner(stage);
+    chooserStage.getIcons().add(getStageIcon());
+    FileChooser fs = new FileChooser();
+    fs.getExtensionFilters().add(FileExtension.DB.getFilter());
+    File file = fs.showOpenDialog(chooserStage);
+    Parent page;
+    if (file != null) {
+      page = loadFxml("db/dbconfigExisting");
+
+      File dir = file.getParentFile();
+      dbFolder.setText(dir.getAbsolutePath());
+      String fileName = file.getName();
+      int ix = fileName.indexOf(".mv.db");
+      dbName.setText(fileName.substring(0, ix));
+    } else {
+      page = loadFxml("db/dbconfigNew");
+      message.setStyle(ERROR_STYLE);
+      message.setText("Geen (geldige) database geselecteerd");
+    }
+    stage.setTitle("Locatie bestaande database configureren");
     Scene scene = new Scene(page);
     stage.setScene(scene);
-    stage.setTitle("Locatie bestaande database configureren");
     stage.show();
   }
 
   @FXML
   void configureNewDatabase() {
     Parent page = loadFxml("db/dbconfigNew");
+    dbFolder.setText("S:\\ledenadministratie-ccnl\\db\\ccnl");
+    dbName.setText("ccnl");
     Scene scene = new Scene(page);
     stage.setScene(scene);
     stage.setTitle("Locatie nieuwe database configureren");
     stage.show();
-  }
-
-  @FXML
-  void directoryChooser() {
-    Stage chooserStage = new Stage();
-    chooserStage.initModality(Modality.APPLICATION_MODAL);
-    chooserStage.initOwner(stage);
-    chooserStage.getIcons().add(getStageIcon());
-    File dir = directoryChooser.showDialog(chooserStage);
-    if (dir != null && dir.exists() && dir.isDirectory()) {
-      setDbName(dir);
-      folder = dir.getAbsolutePath();
-    } else {
-      message.setStyle(ERROR_STYLE);
-      message.setText("Geen (geldige) locatie geselecteerd");
-    }
   }
 
   @FXML
@@ -110,27 +113,11 @@ public abstract class BaseDbConfigurator {
         message.setText("");
       });
     }
-    directoryChooser = new DirectoryChooser();
-  }
-
-  private void setDbName(File dir) {
-    String name = dbName.getText();
-    if (name == null || name.isBlank()) {
-      dir.list((directory, fileName) -> {
-        int ix = fileName.lastIndexOf(".mv.db");
-        if (ix == -1) {
-          return false;
-        }
-        dbName.setText(fileName.substring(0, ix));
-        return true;
-      });
-    }
   }
 
   @FXML
   void saveNew() {
-    folder = dbFolder.getText();
-    File dir = new File(folder);
+    File dir = new File(dbFolder.getText());
     dir.mkdirs();
     save();
   }
@@ -177,13 +164,11 @@ public abstract class BaseDbConfigurator {
 
   private boolean validDbName() {
     String name = dbName.getText();
-    if (name == null || name.isBlank()) {
-      return false;
-    }
-    return true;
+    return name == null || name.isBlank();
   }
 
   private boolean validFolder() {
+    String folder = dbFolder.getText();
     if (folder != null) {
       folder = folder.replace('\\', '/');
       File dir = new File(folder);
@@ -194,8 +179,8 @@ public abstract class BaseDbConfigurator {
   }
 
   private String configureDatabaseLocation() {
-    String dbLocation =
-        new StringBuilder().append(folder).append("/").append(dbName.getText()).toString();
+    String dbLocation = new StringBuilder().append(dbFolder.getText()).append("/")
+        .append(dbName.getText()).toString();
     return DbProperties.writeFile(dbLocation);
   }
 
