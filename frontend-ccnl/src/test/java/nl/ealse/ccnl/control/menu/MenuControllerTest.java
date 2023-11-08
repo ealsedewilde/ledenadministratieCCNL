@@ -3,12 +3,7 @@ package nl.ealse.ccnl.control.menu;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
-import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
-import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
-import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,16 +18,6 @@ class MenuControllerTest {
 
   private ArgumentCaptor<MenuChoiceEvent> menu =
       ArgumentCaptor.forClass(MenuChoiceEvent.class);
-  private ArgumentCaptor<MemberSeLectionEvent> ams =
-      ArgumentCaptor.forClass(MemberSeLectionEvent.class);
-  private ArgumentCaptor<PartnerSelectionEvent> aps =
-      ArgumentCaptor.forClass(PartnerSelectionEvent.class);
-  private ArgumentCaptor<ExternalClubSelectionEvent> acs =
-      ArgumentCaptor.forClass(ExternalClubSelectionEvent.class);
-  private ArgumentCaptor<ExternalOtherSelectionEvent> aos =
-      ArgumentCaptor.forClass(ExternalOtherSelectionEvent.class);
-  private ArgumentCaptor<InternalRelationSelectionEvent> ais =
-      ArgumentCaptor.forClass(InternalRelationSelectionEvent.class);
   private ArgumentCaptor<MenuChoiceEvent> am = ArgumentCaptor.forClass(MenuChoiceEvent.class);
 
   @Test
@@ -353,6 +338,14 @@ class MenuControllerTest {
     verify(springContext, atLeastOnce()).publishEvent(am.capture());
     MenuChoiceEvent event = am.getValue();
     Assertions.assertEquals(MenuChoice.MANAGE_ARCHIVE, event.getMenuChoice());
+  }
+
+  @Test
+  void DbConfig() {
+    sut.dbconfig();
+    verify(springContext, atLeastOnce()).publishEvent(am.capture());
+    MenuChoiceEvent event = am.getValue();
+    Assertions.assertEquals(MenuChoice.DB_CONFIG, event.getMenuChoice());
   }
 
   @BeforeAll

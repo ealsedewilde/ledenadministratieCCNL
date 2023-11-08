@@ -24,9 +24,9 @@
 		<fop.version>2.9</fop.version>
 		<pdfbox.version>3.0.0</pdfbox.version>
 		<checkstyle.version>10.6.0</checkstyle.version>
-		<sonar.exclusions>**/SpringJavaFXBase.*, **/LedenadministratieApplication.*,
+		<sonar.exclusions>**/SpringJavaFXBase.*,**/LedenadministratieApplication.*,
 			**/JavaFXApplication.*,**/PrintUtil.*</sonar.exclusions>
-		<sonar.coverage.exclusions>**/database.config/*.*</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/database/config/*.*,**/DbConfigController.*</sonar.coverage.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>
 			${project.basedir}/../jacoco/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>

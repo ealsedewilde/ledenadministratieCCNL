@@ -13,13 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
 @Slf4j
+@Getter
 public abstract class BaseDbConfigurator {
 
   private static final String INFO_STYLE =
@@ -33,14 +33,14 @@ public abstract class BaseDbConfigurator {
   private TextField dbName;
 
   @FXML
-  @Getter
   private Label message;
 
   @FXML
   private Button saveButton;
 
-  @Getter
   private final Stage stage;
+  
+  private Alert info;
 
   protected BaseDbConfigurator(Stage stage) {
     this.stage = stage;
@@ -61,13 +61,8 @@ public abstract class BaseDbConfigurator {
 
   @FXML
   void configureExistingDatabase() {
-    Stage chooserStage = new Stage();
-    chooserStage.initModality(Modality.APPLICATION_MODAL);
-    chooserStage.initOwner(stage);
-    chooserStage.getIcons().add(getStageIcon());
-    FileChooser fs = new FileChooser();
-    fs.getExtensionFilters().add(FileExtension.DB.getFilter());
-    File file = fs.showOpenDialog(chooserStage);
+    FileChooser fs = fileChooser();
+    File file = fs.showOpenDialog(stage);
     Parent page;
     if (file != null) {
       page = loadFxml("db/dbconfigExisting");
@@ -86,6 +81,12 @@ public abstract class BaseDbConfigurator {
     Scene scene = new Scene(page);
     stage.setScene(scene);
     stage.show();
+  }
+  
+  protected FileChooser fileChooser() {
+    FileChooser fs = new FileChooser();
+    fs.getExtensionFilters().add(FileExtension.DB.getFilter());
+    return fs;
   }
 
   @FXML
@@ -127,7 +128,7 @@ public abstract class BaseDbConfigurator {
     if (validInput()) {
       String msg = configureDatabaseLocation();
       saveButton.setDisable(true);
-      Alert info = new Alert(AlertType.INFORMATION);
+      info = new Alert(AlertType.INFORMATION);
       info.setHeaderText(msg);
       info.setTitle("Database locatie");
       Stage cs = (Stage) info.getDialogPane().getScene().getWindow();
@@ -164,7 +165,7 @@ public abstract class BaseDbConfigurator {
 
   private boolean validDbName() {
     String name = dbName.getText();
-    return name == null || name.isBlank();
+    return name != null && !name.isBlank();
   }
 
   private boolean validFolder() {

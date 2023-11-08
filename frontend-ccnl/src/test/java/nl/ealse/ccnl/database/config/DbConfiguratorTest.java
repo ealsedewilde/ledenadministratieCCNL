@@ -2,31 +2,42 @@ package nl.ealse.ccnl.database.config;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.javafx.ImagesMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-@Disabled
 class DbConfiguratorTest extends FXMLBaseTest {
 
   private static ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
   private static ApplicationContext context = mock(ApplicationContext.class);
   private static PageController pageController = mock(PageController.class);
   private DbConfigurator sut;
+  private Stage stage;
+  
+  private static String next;
+  
+  private static boolean fileSelected = true;
 
   @Test
-  void testViewer() {
+  void testDbConfig() {
     AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -39,26 +50,88 @@ class DbConfiguratorTest extends FXMLBaseTest {
   private void doTest() {
     sut.openDialog();
     assertTrue(sut.getStage().isShowing());
-    sut.getStage().close();
+    stage.close();
+    
     sut.configureExistingDatabase();
+    assertEquals("c:\\temp\\db", sut.getDbFolder().getText());
+    assertEquals("test", sut.getDbName().getText());
     assertTrue(sut.getStage().isShowing());
-    sut.getStage().close();
-    sut.configureNewDatabase();
-    assertTrue(sut.getStage().isShowing());
-    sut.save();
+    stage.close();
+    
+    fileSelected = false;
+    sut.configureExistingDatabase();
     String msg = sut.getMessage().getText();
-    assertEquals("Geef een database locatie op Geef een databasenaam op", msg);
+    assertEquals("Geen (geldige) database geselecteerd", msg);
+    assertTrue(sut.getStage().isShowing());
+    stage.close();
+    
+    sut.configureNewDatabase();
+    assertEquals("S:\\ledenadministratie-ccnl\\db\\ccnl", sut.getDbFolder().getText());
+    assertEquals("ccnl", sut.getDbName().getText());
+    assertTrue(sut.getStage().isShowing());
+    stage.close();
+    
+    File dbProps = new File("db.properties");
+    if (dbProps.exists()) {
+      dbProps.delete();
+    }
+    clickButton();
+    sut.save();
+    msg = sut.getMessage().getText();
+    assertEquals("", msg);
+    assertEquals("nextAction", next);
+    assertTrue(dbProps.exists());
+    dbProps.delete();
   }
 
   private void prepare() {
-    sut = spy(new DbConfigurator(new Stage(), stage -> {
-    }));
-    doNothing().when(sut).nextAction();
+    stage = new Stage();
+    sut = new TestDbConfigurator(stage);
   }
 
   @BeforeAll
   static void setup() {
     when(context.getEnvironment()).thenReturn(environment);
     when(context.getBean("pageController")).thenReturn(pageController);
+  }
+
+  private void clickButton() {
+    Platform.runLater(() -> {
+      Button ok = getButton();
+      ok.fire();
+    });
+  }
+  private Button getButton() {
+    Alert info = sut.getInfo();
+    DialogPane pane = info.getDialogPane();
+    ButtonType yes = pane.getButtonTypes().get(0);
+    return (Button) pane.lookupButton(yes);
+  }
+
+  private static class TestDbConfigurator extends DbConfigurator {
+
+    public TestDbConfigurator(Stage primaryStage) {
+      super(primaryStage, stage -> {});
+    }
+
+    @Override
+    protected FileChooser fileChooser() {
+      FileChooser fs = mock(FileChooser.class);
+      if (fileSelected) {
+        File file = new File("c:/temp/db/test.mv.db");
+        when(fs.showOpenDialog(isA(Stage.class))).thenReturn(file);
+      }
+      return fs;
+    }
+
+    @Override
+    protected Image getStageIcon() {
+      return ImagesMap.get("Citroen.png");
+    }
+
+    @Override
+    protected void nextAction() {
+      next = "nextAction";
+    }
   }
 }
