@@ -1,9 +1,9 @@
 package nl.ealse.ccnl.ledenadministratie.config;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -31,8 +31,8 @@ public class DatabaseLocation extends Properties {
   private void initialize() {
     if (DB_LOCATION_FILE.exists()) {
       Properties dbProperties = new Properties();
-      try (InputStream is = new FileInputStream(DB_LOCATION_FILE)) {
-        dbProperties.load(is);
+      try (StringReader reader = new StringReader(readDbLocation())) {
+        dbProperties.load(reader);
         String dbLocation = dbProperties.getProperty("db.locatie");
         if (dbLocation != null) {
           if (dbLocation.startsWith("jdbc:h2:mem")) {
@@ -50,6 +50,20 @@ public class DatabaseLocation extends Properties {
       }
     }
 
+  }
+  
+  private String readDbLocation() throws IOException {
+    StringBuilder sb = new StringBuilder();
+    char[] buffer = new char[2048];
+    try (FileReader reader = new FileReader(DB_LOCATION_FILE)) {
+      int result = reader.read(buffer);
+      while (result != -1) {
+        sb.append(buffer, 0, result);
+        result = reader.read(buffer);
+      }
+      return sb.toString().replace('\\', '/'); 
+    }
+    
   }
 
   @Override
