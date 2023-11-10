@@ -9,10 +9,10 @@
 
 <VBox stylesheets="@../../css/main.css" maxHeight="-Infinity" maxWidth="-Infinity"
   minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" xmlns="http://javafx.com/javafx/8"
-  xmlns:fx="http://javafx.com/fxml/1" spacing="20">
+  xmlns:fx="http://javafx.com/fxml/1" spacing="20" style="-fx-padding: 0.0 0.0 0.0 15.0;">
   <children>
     <Label styleClass="header" text="Instelling wijzigen" />
-    <HBox spacing="10" prefWidth="1200.0">
+    <HBox spacing="10">
       <children>
         <HBox>
           <children>

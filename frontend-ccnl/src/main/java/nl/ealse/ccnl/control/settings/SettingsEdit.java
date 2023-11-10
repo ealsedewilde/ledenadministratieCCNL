@@ -30,11 +30,11 @@ public class SettingsEdit extends SettingsView {
   void setup() {
     editStage = new Stage();
     editStage.initModality(Modality.APPLICATION_MODAL);
-    editStage.setTitle("Setting wijzigen");
+    editStage.setTitle("Instelling wijzigen");
     editStage.getIcons().add(MainStage.getIcon());
     editStage.initOwner(MainStage.getStage());
     Parent p = FXMLLoaderBean.getPage("settings/settingsEdit", this);
-    Scene dialogScene = new Scene(p, 1200, 400);
+    Scene dialogScene = new Scene(p, 1105, 400);
     editStage.setScene(dialogScene);
   }
 
