@@ -21,6 +21,7 @@ import nl.ealse.javafx.ImagesMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -35,6 +36,9 @@ class DbConfiguratorTest extends FXMLBaseTest {
   private static String next;
   
   private static boolean fileSelected = true;
+  
+  @TempDir
+  File tempDir;
 
   @Test
   void testDbConfig() {
@@ -66,12 +70,13 @@ class DbConfiguratorTest extends FXMLBaseTest {
     stage.close();
     
     sut.configureNewDatabase();
-    assertEquals("S:\\ledenadministratie-ccnl\\db\\ccnl", sut.getDbFolder().getText());
+    assertEquals("S:\\ledenadministratie-ccnl\\db", sut.getDbFolder().getText());
     assertEquals("ccnl", sut.getDbName().getText());
     assertTrue(sut.getStage().isShowing());
     stage.close();
     
     File dbProps = new File("db.properties");
+    sut.getDbFolder().setText(tempDir.getAbsolutePath());
     if (dbProps.exists()) {
       dbProps.delete();
     }
@@ -97,15 +102,14 @@ class DbConfiguratorTest extends FXMLBaseTest {
 
   private void clickButton() {
     Platform.runLater(() -> {
-      Button ok = getButton();
-      ok.fire();
+      Alert info = sut.getInfo();
+      if (info != null) {
+        DialogPane pane = info.getDialogPane();
+        ButtonType yes = pane.getButtonTypes().get(0);
+        Button ok =  (Button) pane.lookupButton(yes);
+        ok.fire();
+      }
     });
-  }
-  private Button getButton() {
-    Alert info = sut.getInfo();
-    DialogPane pane = info.getDialogPane();
-    ButtonType yes = pane.getButtonTypes().get(0);
-    return (Button) pane.lookupButton(yes);
   }
 
   private static class TestDbConfigurator extends DbConfigurator {

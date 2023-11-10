@@ -92,7 +92,7 @@ public abstract class BaseDbConfigurator {
   @FXML
   void configureNewDatabase() {
     Parent page = loadFxml("db/dbconfigNew");
-    dbFolder.setText("S:\\ledenadministratie-ccnl\\db\\ccnl");
+    dbFolder.setText("S:\\ledenadministratie-ccnl\\db");
     dbName.setText("ccnl");
     Scene scene = new Scene(page);
     stage.setScene(scene);
@@ -173,14 +173,17 @@ public abstract class BaseDbConfigurator {
     if (folder != null) {
       folder = folder.replace('\\', '/');
       File dir = new File(folder);
-      dir.mkdirs();
       return dir.exists();
     }
     return false;
   }
 
   private String configureDatabaseLocation() {
-    String dbLocation = new StringBuilder().append(dbFolder.getText()).append("/")
+    String folder = dbFolder.getText();
+    if (folder.endsWith("\\")) {
+      folder = folder.substring(0, folder.length() - 1);
+    }
+    String dbLocation = new StringBuilder().append(folder).append("/")
         .append(dbName.getText()).toString();
     return DbProperties.writeFile(dbLocation);
   }
