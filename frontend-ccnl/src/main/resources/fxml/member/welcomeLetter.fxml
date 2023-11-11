@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import nl.ealse.ccnl.control.button.*?>
 
-<GridPane minHeight="650.0" xmlns="http://javafx.com/javafx/8"
-  xmlns:fx="http://javafx.com/fxml/1"
+<GridPane minHeight="640.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" style="-fx-padding: 0.0 0.0 0.0 0.0;"
   fx:controller="nl.ealse.ccnl.control.member.WelcomeLetterController">
   <columnConstraints>
-    <ColumnConstraints percentWidth="60.0" />
+    <ColumnConstraints percentWidth="65.0" />
     <ColumnConstraints />
   </columnConstraints>
   <children>
@@ -32,6 +32,10 @@
     <TextArea fx:id="letterText" minHeight="390.0" minWidth="350.0" GridPane.rowIndex="2" />
 
     <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+		  <columnConstraints>
+		    <ColumnConstraints percentWidth="50.0" />
+		    <ColumnConstraints />
+		  </columnConstraints>
       <children>
         <Label text="Brief bij SEPA-machtiging" />
         <CheckBox fx:id="addSepa" mnemonicParsing="false" GridPane.columnIndex="1" />
@@ -44,8 +48,8 @@
         <TextField fx:id="textId" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <Label fx:id="textIdE" text="Invullen a.u.b." styleClass="required" visible="false"
           GridPane.columnIndex="2" GridPane.rowIndex="1" />
-        <Button onAction="#saveText" mnemonicParsing="false" text="Tekst Opslaan"
-          GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <SaveButton onAction="#saveText" mnemonicParsing="false" prefWidth="200.0"
+          text="Tekst Opslaan" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       </children>
     </GridPane>
 

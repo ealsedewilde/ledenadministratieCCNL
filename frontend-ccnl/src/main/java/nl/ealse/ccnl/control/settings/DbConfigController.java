@@ -29,9 +29,9 @@ public class DbConfigController extends BaseDbConfigurator{
    */
   @EventListener(condition = "#event.name('DB_CONFIG')")
   public void dbConfig(MenuChoiceEvent event) {
-    if (!getStage().isShowing()) {
-      getStage().initOwner(MainStage.getStage());
-      getStage().initModality(Modality.APPLICATION_MODAL);
+    if (!getConfigStage().isShowing()) {
+      getConfigStage().initOwner(MainStage.getStage());
+      getConfigStage().initModality(Modality.APPLICATION_MODAL);
     }
     openDialog();
   }
@@ -48,7 +48,7 @@ public class DbConfigController extends BaseDbConfigurator{
 
   @Override
   protected void nextAction() {
-    getStage().close();
+    getConfigStage().close();
     pageController.showMessage("Database locatie is aangepast; actief na herstart");
   }
 

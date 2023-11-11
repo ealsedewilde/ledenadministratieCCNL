@@ -38,31 +38,34 @@ public abstract class BaseDbConfigurator {
   @FXML
   private Button saveButton;
 
-  private final Stage stage;
+  private final Stage primaryStage;
+  
+  private Stage configStage;
   
   private Alert info;
 
   protected BaseDbConfigurator(Stage stage) {
-    this.stage = stage;
+    this.primaryStage = stage;
   }
 
   /**
    * Configure the initial database location.
    */
   public void openDialog() {
-    stage.setTitle("Database locatie configureren");
-    stage.getIcons().add(getStageIcon());
+    configStage = new Stage();
+    configStage.setTitle("Database locatie configureren");
+    configStage.getIcons().add(getStageIcon());
 
     Parent page = loadFxml("db/dbconfig");
     Scene scene = new Scene(page);
-    stage.setScene(scene);
-    stage.show();
+    configStage.setScene(scene);
+    configStage.show();
   }
 
   @FXML
   void configureExistingDatabase() {
     FileChooser fs = fileChooser();
-    File file = fs.showOpenDialog(stage);
+    File file = fs.showOpenDialog(configStage);
     Parent page;
     if (file != null) {
       page = loadFxml("db/dbconfigExisting");
@@ -77,10 +80,10 @@ public abstract class BaseDbConfigurator {
       message.setStyle(ERROR_STYLE);
       message.setText("Geen (geldige) database geselecteerd");
     }
-    stage.setTitle("Locatie bestaande database configureren");
+    primaryStage.setTitle("Locatie bestaande database configureren");
     Scene scene = new Scene(page);
-    stage.setScene(scene);
-    stage.show();
+    configStage.setScene(scene);
+    configStage.show();
   }
   
   protected FileChooser fileChooser() {
@@ -95,9 +98,9 @@ public abstract class BaseDbConfigurator {
     dbFolder.setText("S:\\ledenadministratie-ccnl\\db");
     dbName.setText("ccnl");
     Scene scene = new Scene(page);
-    stage.setScene(scene);
-    stage.setTitle("Locatie nieuwe database configureren");
-    stage.show();
+    configStage.setScene(scene);
+    configStage.setTitle("Locatie nieuwe database configureren");
+    configStage.show();
   }
 
   @FXML

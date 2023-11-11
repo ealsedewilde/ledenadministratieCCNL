@@ -5,8 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import nl.ealse.ccnl.control.button.*?>
 
-<GridPane minHeight="650.0" xmlns="http://javafx.com/javafx/8"
-  xmlns:fx="http://javafx.com/fxml/1"
+<GridPane minHeight="640.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1" style="-fx-padding: 0.0 0.0 0.0 0.0;"
   fx:controller="nl.ealse.ccnl.control.member.CancelationMailController">
   <columnConstraints>
     <ColumnConstraints percentWidth="60.0" />
@@ -34,11 +34,15 @@
 
     <VBox spacing="20" GridPane.rowIndex="2">
       <children>
-        <TextArea fx:id="letterText" minHeight="390.0" minWidth="350.0" />
+        <TextArea fx:id="letterText" minHeight="350.0" prefWidth="350.0" />
       </children>
     </VBox>
 
     <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+		  <columnConstraints>
+		    <ColumnConstraints percentWidth="45.0" />
+		    <ColumnConstraints />
+		  </columnConstraints>
       <children>
         <HBox GridPane.rowIndex="1">
           <children>
@@ -49,7 +53,7 @@
         <TextField fx:id="textId" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <Label fx:id="textIdE" text="Invullen a.u.b." styleClass="required" visible="false"
           GridPane.columnIndex="2" GridPane.rowIndex="1" />
-        <SaveButton onAction="#saveText" mnemonicParsing="false"
+        <SaveButton onAction="#saveText" mnemonicParsing="false" prefWidth="200.0"
           text="Mail-tekst Opslaan" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       </children>
     </GridPane>
@@ -64,7 +68,7 @@
                 <Label style="-fx-text-fill: red;" text=" *" />
               </children>
             </HBox>
-            <TextField fx:id="toMailAddress" minWidth="405" />
+            <TextField fx:id="toMailAddress" prefWidth="405" />
             <CheckBox fx:id="saveMailAddress" text="mail opslaan" />
             <Label fx:id="toMailAddressE" text="Invullen a.u.b." styleClass="required"
               visible="false" />

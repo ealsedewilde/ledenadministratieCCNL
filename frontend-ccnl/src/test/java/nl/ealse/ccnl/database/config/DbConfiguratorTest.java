@@ -53,26 +53,26 @@ class DbConfiguratorTest extends FXMLBaseTest {
 
   private void doTest() {
     sut.openDialog();
-    assertTrue(sut.getStage().isShowing());
+    assertTrue(sut.getConfigStage().isShowing());
     stage.close();
     
     sut.configureExistingDatabase();
     assertEquals("c:\\temp\\db", sut.getDbFolder().getText());
     assertEquals("test", sut.getDbName().getText());
-    assertTrue(sut.getStage().isShowing());
+    assertTrue(sut.getConfigStage().isShowing());
     stage.close();
     
     fileSelected = false;
     sut.configureExistingDatabase();
     String msg = sut.getMessage().getText();
     assertEquals("Geen (geldige) database geselecteerd", msg);
-    assertTrue(sut.getStage().isShowing());
+    assertTrue(sut.getConfigStage().isShowing());
     stage.close();
     
     sut.configureNewDatabase();
     assertEquals("S:\\ledenadministratie-ccnl\\db", sut.getDbFolder().getText());
     assertEquals("ccnl", sut.getDbName().getText());
-    assertTrue(sut.getStage().isShowing());
+    assertTrue(sut.getConfigStage().isShowing());
     stage.close();
     
     File dbProps = new File("db.properties");

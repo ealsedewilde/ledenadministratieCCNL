@@ -54,7 +54,7 @@
 	
 }
 
-GridPane,AddressController {
+GridPane {
 	-fx-hgap: 10.0;
 	-fx-vgap: 10.0;
 	-fx-padding: 0.0 20.0 0.0 20.0;

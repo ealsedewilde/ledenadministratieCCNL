@@ -40,7 +40,8 @@ public class DbConfigurator extends BaseDbConfigurator {
 
   @Override
   protected void nextAction() {
-    nextActionConsumer.accept(getStage());
+    getConfigStage().close();
+    nextActionConsumer.accept(getPrimaryStage());
     
   }
 }

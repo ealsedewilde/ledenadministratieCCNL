@@ -63,7 +63,6 @@
                 <addModule>javafx.graphics</addModule>
                 <addModule>javafx.swing</addModule>
               </addModules>
-              <!--<compress>2</compress>-->
               <noHeaderFiles>true</noHeaderFiles>
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
