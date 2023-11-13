@@ -3,6 +3,7 @@ package nl.ealse.ccnl.database.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -14,10 +15,12 @@ import nl.ealse.javafx.ImagesMap;
 public class DbConfigurator extends BaseDbConfigurator {
 
   private static final String FXML_TEMPLATE = "/fxml/%s.fxml";
+
+  private final Stage primaryStage;
   private final Consumer<Stage> nextActionConsumer;
 
   public DbConfigurator(Stage primaryStage, Consumer<Stage> consumer) {
-    super(primaryStage);
+    this.primaryStage = primaryStage;
     this.nextActionConsumer = consumer;
   }
 
@@ -40,8 +43,13 @@ public class DbConfigurator extends BaseDbConfigurator {
 
   @Override
   protected void nextAction() {
-    getConfigStage().close();
-    nextActionConsumer.accept(getPrimaryStage());
-    
+    getMessage().setStyle(INFO_STYLE);
+    getMessage().setText("Even geduld a.u.b.");
+
+    Platform.runLater(() -> {
+      nextActionConsumer.accept(primaryStage);
+      getConfigStage().close();
+    });
+
   }
 }

@@ -6,7 +6,7 @@
 <?import nl.ealse.ccnl.control.button.*?>
 
 <GridPane minHeight="650.0" xmlns="http://javafx.com/javafx/8"
-  xmlns:fx="http://javafx.com/fxml/1"
+  xmlns:fx="http://javafx.com/fxml/1" style="-fx-padding: 0.0 0.0 0.0 0.0;"
   fx:controller="nl.ealse.ccnl.control.annual.PaymentReminderLettersController">
   <columnConstraints>
     <ColumnConstraints percentWidth="60.0" />

@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.settings;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.database.config.BaseDbConfigurator;
@@ -18,7 +17,6 @@ public class DbConfigController extends BaseDbConfigurator{
   private final PageController pageController;
 
   public DbConfigController(PageController pageController) {
-    super(new Stage());
     this.pageController = pageController;
   }
 

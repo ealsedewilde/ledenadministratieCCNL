@@ -22,7 +22,7 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 @Getter
 public abstract class BaseDbConfigurator {
 
-  private static final String INFO_STYLE =
+  protected static final String INFO_STYLE =
       "-fx-text-fill: green;  -fx-font-size: 1em; -fx-font-weight: bold;";
   private static final String ERROR_STYLE = INFO_STYLE + "-fx-text-fill: red";
 
@@ -37,22 +37,15 @@ public abstract class BaseDbConfigurator {
 
   @FXML
   private Button saveButton;
-
-  private final Stage primaryStage;
   
-  private Stage configStage;
+  private final Stage configStage = new Stage();
   
   private Alert info;
-
-  protected BaseDbConfigurator(Stage stage) {
-    this.primaryStage = stage;
-  }
 
   /**
    * Configure the initial database location.
    */
   public void openDialog() {
-    configStage = new Stage();
     configStage.setTitle("Database locatie configureren");
     configStage.getIcons().add(getStageIcon());
 
@@ -80,7 +73,7 @@ public abstract class BaseDbConfigurator {
       message.setStyle(ERROR_STYLE);
       message.setText("Geen (geldige) database geselecteerd");
     }
-    primaryStage.setTitle("Locatie bestaande database configureren");
+    configStage.setTitle("Locatie bestaande database configureren");
     Scene scene = new Scene(page);
     configStage.setScene(scene);
     configStage.show();
@@ -211,7 +204,7 @@ public abstract class BaseDbConfigurator {
         String prop = PREFIX + dbLocation;
         writer.write(prop, 0, prop.length());
         writer.close();
-        return "Configuratie is opgeslagen";
+        return "Database configuratie is opgeslagen";
       } catch (IOException e) {
         log.error("Error writing file", e);
         return "Kan configuratie niet opslaan";
