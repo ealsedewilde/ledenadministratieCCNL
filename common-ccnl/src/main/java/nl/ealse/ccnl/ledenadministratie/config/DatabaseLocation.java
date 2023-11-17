@@ -16,7 +16,7 @@ import java.util.Properties;
 @SuppressWarnings("serial")
 public class DatabaseLocation extends Properties {
 
-  private static final File DB_LOCATION_FILE = new File("db.properties");
+  public static final File DB_LOCATION_FILE = new File("db.properties");
 
   private String databaseUrl;
 
@@ -61,7 +61,7 @@ public class DatabaseLocation extends Properties {
         sb.append(buffer, 0, result);
         result = reader.read(buffer);
       }
-      return sb.toString().replace('\\', '/'); 
+      return sb.toString().replace(File.separatorChar, '/'); 
     }
     
   }

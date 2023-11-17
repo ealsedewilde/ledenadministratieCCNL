@@ -1,8 +1,8 @@
 package nl.ealse.ccnl;
 
-import java.io.File;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.database.config.DbConfigurator;
+import nl.ealse.ccnl.database.config.DbProperties;
 import nl.ealse.javafx.SpringJavaFXBase;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -24,17 +24,20 @@ public class JavaFXApplication extends SpringJavaFXBase {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
-    File dbPropertyFile = new File("db.properties");
-    if (dbPropertyFile.exists()) {
-      ApplicationEventPublisher publisher = initSpringBoot();
-      publisher.publishEvent(new StageReadyEvent(primaryStage));
+    if (DbProperties.exists()) {
+      startApplication(primaryStage);
     } else {
-      DbConfigurator dbConfig = new DbConfigurator(primaryStage, stage -> {
-        ApplicationEventPublisher context = initSpringBoot();
-        context.publishEvent(new StageReadyEvent(stage));
+      DbConfigurator dbConfig = new DbConfigurator(() -> {
+        startApplication(primaryStage);
+        return null;
       });
       dbConfig.openDialog();
     }
+  }
+  
+  private void startApplication(Stage primaryStage) {
+    ApplicationEventPublisher publisher = initSpringBoot();
+    publisher.publishEvent(new StageReadyEvent(primaryStage));
   }
 
 }

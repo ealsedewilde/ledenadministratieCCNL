@@ -2,12 +2,11 @@ package nl.ealse.ccnl.database.config;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.javafx.ImagesMap;
 
@@ -16,12 +15,10 @@ public class DbConfigurator extends BaseDbConfigurator {
 
   private static final String FXML_TEMPLATE = "/fxml/%s.fxml";
 
-  private final Stage primaryStage;
-  private final Consumer<Stage> nextActionConsumer;
+  private final Supplier<Void> nextActionSupplier;
 
-  public DbConfigurator(Stage primaryStage, Consumer<Stage> consumer) {
-    this.primaryStage = primaryStage;
-    this.nextActionConsumer = consumer;
+  public DbConfigurator(Supplier<Void> supplier) {
+    this.nextActionSupplier = supplier;
   }
 
   @Override
@@ -44,10 +41,10 @@ public class DbConfigurator extends BaseDbConfigurator {
   @Override
   protected void nextAction() {
     getMessage().setStyle(INFO_STYLE);
-    getMessage().setText("Even geduld a.u.b.");
+    getMessage().setText("De applicatie start; even geduld a.u.b.");
 
     Platform.runLater(() -> {
-      nextActionConsumer.accept(primaryStage);
+      nextActionSupplier.get();
       getConfigStage().close();
     });
 

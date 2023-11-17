@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -43,7 +42,7 @@ public abstract class SpringJavaFXBase extends Application {
    * Initialize the Spring {@code ApplicationContext}. It is initialized with headless(false) so the
    * AWT {@link PrinterJob#printDialog()} can be used for printing.
    */
-  public ApplicationEventPublisher initSpringBoot() {
+  protected ApplicationEventPublisher initSpringBoot() {
     ApplicationContextInitializer<GenericApplicationContext> initializer = applicationContext -> {
       applicationContext.registerBean(Application.class, () -> SpringJavaFXBase.this);
       applicationContext.registerBean(Parameters.class, this::getParameters);

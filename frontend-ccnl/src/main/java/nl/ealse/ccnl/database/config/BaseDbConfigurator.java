@@ -1,8 +1,7 @@
 package nl.ealse.ccnl.database.config;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.nio.file.FileSystem;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -179,38 +178,9 @@ public abstract class BaseDbConfigurator {
     if (folder.endsWith("\\")) {
       folder = folder.substring(0, folder.length() - 1);
     }
-    String dbLocation = new StringBuilder().append(folder).append("/")
+    String dbLocation = new StringBuilder().append(folder).append(File.separator)
         .append(dbName.getText()).toString();
     return DbProperties.writeFile(dbLocation);
-  }
-
-  private static final class DbProperties {
-    private static final File DB_PROPERTIES = new File("db.properties");
-    private static final String PREFIX = "db.locatie = ";
-    private static final String COMMENT = """
-        # locatie (pad) en naam van database
-        ####################################
-        # Bijvoorbeeld: db.locatie = pad/dbName"
-        #
-        # Het pad mag een volledig pad zijn of een relatief pad."
-        # Bij een relatief pad: relatief t.o.v. de Map waarin deze applicatie is geplaatst"
-        # Let op: de database mag NIET in de Map van de applicatie worden geplaatst!
-        """;
-
-    private static String writeFile(String dbLocation) {
-      try {
-        FileWriter writer = new FileWriter(DB_PROPERTIES);
-        writer.write(COMMENT, 0, COMMENT.length());
-        String prop = PREFIX + dbLocation;
-        writer.write(prop, 0, prop.length());
-        writer.close();
-        return "Database configuratie is opgeslagen";
-      } catch (IOException e) {
-        log.error("Error writing file", e);
-        return "Kan configuratie niet opslaan";
-      }
-    }
-
   }
 
 }

@@ -115,7 +115,7 @@ class DbConfiguratorTest extends FXMLBaseTest {
   private static class TestDbConfigurator extends DbConfigurator {
 
     public TestDbConfigurator(Stage primaryStage) {
-      super(primaryStage, stage -> {});
+      super(() -> null);
     }
 
     @Override
