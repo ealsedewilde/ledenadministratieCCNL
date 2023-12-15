@@ -8,7 +8,6 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.test.util.ExcelPropertiesFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -20,14 +19,11 @@ class LedenbestandTest {
   
   private Ledenbestand sut;
   
-  private CCNLColumnProperties ccnlColumnProperties;
-  
   @Test
   void testLedenbestand() {
-    ccnlColumnProperties = ExcelPropertiesFactory.newExcelProperties();
     File f = new File(tempDir, "ledenTest.xlsx");
     try {
-      sut = new Ledenbestand(f, ccnlColumnProperties);
+      sut = new Ledenbestand(f);
       sut.addMemberHeading();
       sut.addMember(member());
       

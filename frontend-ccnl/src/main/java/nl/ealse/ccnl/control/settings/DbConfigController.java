@@ -3,34 +3,35 @@ package nl.ealse.ccnl.control.settings;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
+import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.database.config.BaseDbConfigurator;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.javafx.FXMLLoaderBean;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class DbConfigController extends BaseDbConfigurator{
+  
+  @Getter
+  private static final DbConfigController instance = new DbConfigController();
   
   private final PageController pageController;
 
-  public DbConfigController(PageController pageController) {
-    this.pageController = pageController;
-  }
+  private DbConfigController() {
+    this.pageController = PageController.getInstance();
+    getConfigStage().initOwner(MainStage.getStage());
+    getConfigStage().initModality(Modality.APPLICATION_MODAL);
+ }
 
   /**
    * Reconfigure the database location.
    *
    * @param event
    */
-  @EventListener(condition = "#event.name('DB_CONFIG')")
+  @EventListener(menuChoice = MenuChoice.DB_CONFIG)
   public void dbConfig(MenuChoiceEvent event) {
-    if (!getConfigStage().isShowing()) {
-      getConfigStage().initOwner(MainStage.getStage());
-      getConfigStage().initModality(Modality.APPLICATION_MODAL);
-    }
     openDialog();
   }
 

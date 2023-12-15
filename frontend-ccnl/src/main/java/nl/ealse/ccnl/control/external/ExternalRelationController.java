@@ -29,9 +29,8 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
 
   protected MenuChoice currentMenuChoice;
 
-  protected ExternalRelationController(PageController pageController,
-      ExternalRelationService<T> externalRelationService) {
-    this.pageController = pageController;
+  protected ExternalRelationController(ExternalRelationService<T> externalRelationService) {
+    this.pageController = PageController.getInstance();
     this.externalRelationService = externalRelationService;
     this.externalRelationValidation = new ExternalRelationValidation(this);
   }
@@ -57,7 +56,7 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
     enrich();
     enrichAddress();
     ViewModel.viewToModel(this, model);
-    externalRelationService.persistExternalRelation(model);
+    externalRelationService.save(model);
     pageController.showMessage(getSaveText());
     pageController.activateLogoPage();
   }

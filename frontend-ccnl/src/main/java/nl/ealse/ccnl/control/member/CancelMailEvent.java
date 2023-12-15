@@ -1,14 +1,14 @@
 package nl.ealse.ccnl.control.member;
 
+import java.util.EventObject;
 import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import org.springframework.context.ApplicationEvent;
 
 /**
  * Trigger mail handling in case of a canceled memebership.
  */
 @SuppressWarnings("serial")
-public class CancelMailEvent extends ApplicationEvent {
+public class CancelMailEvent extends EventObject {
   
   @Getter
   private final transient Member member;

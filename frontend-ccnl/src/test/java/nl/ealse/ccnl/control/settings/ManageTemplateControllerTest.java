@@ -1,36 +1,29 @@
 package nl.ealse.ccnl.control.settings;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TextField;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
 
 class ManageTemplateControllerTest extends FXMLBaseTest {
-
-  private static ApplicationContext context;
-  private static DocumentService service;
-  private static PageController pageController;
-
 
   private ManageTemplateController sut;
   private TextField templateId;
 
   @Test
   void testController() {
-    sut = new ManageTemplateController(pageController, service, context);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -52,26 +45,26 @@ class ManageTemplateControllerTest extends FXMLBaseTest {
     sut.textHelp();
 
     sut.save();
-    verify(pageController, never()).showMessage("Document template is toegevoegd");
+    verify(getPageController(), never()).showMessage("Document template is toegevoegd");
     templateId.setText("test");
     sut.save();
-    verify(pageController).showMessage("Document template is toegevoegd");
+    verify(getPageController()).showMessage("Document template is toegevoegd");
 
     sut.delete();
-    pageController.showMessage("Document template is verwijderd");
+    verify(getPageController()).showMessage("Document template is verwijderd");
   }
 
   private void prepare() {
-    sut.setup();
+    sut = ManageTemplateController.getInstance();
     getPageWithFxController(sut, PageName.MANAGE_TEMPLATE);
+    getPageWithFxController(TemplatesController.getInstance(), PageName.TEMPLATES_OVERVIEW);
+
   }
 
   @BeforeAll
   static void setup() {
-   
-    pageController = mock(PageController.class);
-    context = mock(ApplicationContext.class);
-    service = mock(DocumentService.class);
+    MockProvider.mock(DocumentService.class);
+    EventProcessor.getInstance().initialize();
   }
 
   private void initTemplateId() {

@@ -31,16 +31,13 @@ public class DirectDebitTransactionInformationBuilder {
 
   private static final LocalDate START_MANDATE = LocalDate.of(2009, 11, 01);
 
-  private final IncassoProperties properties;
-
   /**
    * Het op te bouwen object.
    */
   private DirectDebitTransactionInformation9 transactie = new DirectDebitTransactionInformation9();
 
-  public DirectDebitTransactionInformationBuilder(IncassoProperties properties) {
-    this.properties = properties;
-    init(properties);
+  public DirectDebitTransactionInformationBuilder() {
+    init();
   }
 
   /**
@@ -97,7 +94,7 @@ public class DirectDebitTransactionInformationBuilder {
     reden.setEndToEndId("lid " + lidnummer.toString());
     transactie.setPmtId(reden);
     RemittanceInformation5 referentie = new RemittanceInformation5();
-    referentie.getUstrd().add(properties.getIncassoReden());
+    referentie.getUstrd().add(IncassoProperties.getIncassoReden());
     transactie.setRmtInf(referentie);
     transactie.setDrctDbtTx(getMandaat(lidnummer));
     return this;
@@ -113,7 +110,7 @@ public class DirectDebitTransactionInformationBuilder {
   private DirectDebitTransaction6 getMandaat(Integer lidnummer) {
     DirectDebitTransaction6 ddtx = new DirectDebitTransaction6();
     MandateRelatedInformation6 mandaat = new MandateRelatedInformation6();
-    mandaat.setMndtId(String.format(properties.getMachtigingReferentie(), lidnummer));
+    mandaat.setMndtId(String.format(IncassoProperties.getMachtigingReferentie(), lidnummer));
     mandaat.setDtOfSgntr(DateUtil.toXMLDate(START_MANDATE));
     ddtx.setMndtRltdInf(mandaat);
     return ddtx;
@@ -132,13 +129,13 @@ public class DirectDebitTransactionInformationBuilder {
   /**
    * Initialisatie van vaste gegevens.
    */
-  private void init(IncassoProperties properties) {
+  private void init() {
     ActiveOrHistoricCurrencyAndAmount bedraginfo = new ActiveOrHistoricCurrencyAndAmount();
     bedraginfo.setCcy("EUR");
-    bedraginfo.setValue(properties.getIncassoBedrag());
+    bedraginfo.setValue(IncassoProperties.getIncassoBedrag());
     transactie.setInstdAmt(bedraginfo);
     RemittanceInformation5 referentie = new RemittanceInformation5();
-    referentie.getUstrd().add(properties.getIncassoReden());
+    referentie.getUstrd().add(IncassoProperties.getIncassoReden());
     transactie.setRmtInf(referentie);
     transactie.setChrgBr(ChargeBearerType1Code.SLEV);
   }

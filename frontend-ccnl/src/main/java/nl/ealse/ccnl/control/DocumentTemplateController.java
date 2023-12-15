@@ -12,14 +12,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 /**
  * Super class for all Controller that require a DocumentTemplate.
@@ -29,11 +28,9 @@ import org.springframework.lang.Nullable;
  */
 public abstract class DocumentTemplateController {
 
-  private final PageController pageController;
-
-  private final DocumentService documentService;
-
   private final DocumentTemplateContextData templateContext;
+  @Getter(value = AccessLevel.PROTECTED)
+  private WrappedFileChooser fileChooser;
 
   private Stage dialog;
 
@@ -54,32 +51,24 @@ public abstract class DocumentTemplateController {
   @Getter
   private TextArea letterText;
 
-  @Getter(value = AccessLevel.PROTECTED)
-  private WrappedFileChooser fileChooser;
-
   private List<DocumentTemplate> templates;
 
-  protected DocumentTemplateController(PageController pageController,
-      DocumentService documentService, DocumentTemplateContext templateContext) {
-    this.pageController = pageController;
-    this.documentService = documentService;
+  protected DocumentTemplateController(DocumentTemplateContext templateContext) {
     this.templateContext = templateContext.data;
-  }
-
-  protected void initialize() {
-    if (this.dialog == null
-        && templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
-      fileChooser = new WrappedFileChooser(templateContext.fileType);
+    if (this.templateContext.fileType != null) {
+      this.fileChooser = new WrappedFileChooser(this.templateContext.fileType);
+      this.fileChooser.setInitialDirectory(
+          () -> DatabaseProperties.getProperty("ccnl.directory.workdir", "c:/temp"));
     }
   }
 
   protected void initializeTemplates() {
-    templates = documentService.findDocumentTemplates(templateContext.documentType);
+    templates = getDocumentService().findDocumentTemplates(templateContext.documentType);
     initializeTextSelection();
   }
 
   protected void initializeTemplates(boolean withSepa) {
-    templates = documentService.findDocumentTemplates(templateContext.documentType, withSepa);
+    templates = getDocumentService().findDocumentTemplates(templateContext.documentType, withSepa);
     initializeTextSelection();
   }
 
@@ -109,7 +98,6 @@ public abstract class DocumentTemplateController {
       double height;
       if (templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
         height = 330;
-        fileChooser = new WrappedFileChooser(templateContext.fileType);
       } else {
         height = 100;
       }
@@ -135,10 +123,14 @@ public abstract class DocumentTemplateController {
       template.setTemplateID(id);
       template.setTemplate(letterText.getText());
       template.setIncludeSepaForm(addSepa.isSelected());
-      documentService.persistDocumentemplate(template);
-      pageController.showMessage("DocumentTemplate is opgeslagen");
+      getDocumentService().persistDocumentemplate(template);
+      getPageController().showMessage("DocumentTemplate is opgeslagen");
     }
   }
+
+  protected abstract PageController getPageController();
+
+  protected abstract DocumentService getDocumentService();
 
   /**
    * Context for the three sub classes of the DocumentTemplateController.
@@ -169,11 +161,8 @@ public abstract class DocumentTemplateController {
    */
   @AllArgsConstructor
   private static class DocumentTemplateContextData {
-    @NonNull
     final String helpPage;
-    @Nullable
     final FileExtension fileType;
-    @NonNull
     final DocumentTemplateType documentType;
   }
 }

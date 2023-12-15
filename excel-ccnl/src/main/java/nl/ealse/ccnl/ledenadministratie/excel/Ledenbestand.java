@@ -24,8 +24,8 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 
 public class Ledenbestand extends CCNLBestand {
 
-  public Ledenbestand(File bestand, CCNLColumnProperties properties) throws IOException {
-    super(bestand, properties);
+  public Ledenbestand(File bestand) throws IOException {
+    super(bestand);
     addSheet(SheetDefinition.LEDEN);
   }
 
@@ -34,7 +34,7 @@ public class Ledenbestand extends CCNLBestand {
     List<ColumnDefinition> list = new ArrayList<>();
     list.addAll(Arrays.asList(LidColumnDefinition.values()));
     list.addAll(Arrays.asList(AdresColumnDefinition.values()));
-    list.forEach(c -> addCell(c.heading(), getProperties().getKolomnummer(c)));
+    list.forEach(c -> addCell(c.heading(), CCNLColumnProperties.getKolomnummer(c)));
   }
 
   /**
@@ -50,7 +50,7 @@ public class Ledenbestand extends CCNLBestand {
     List<ColumnDefinition> list = new ArrayList<>();
     list.addAll(Arrays.asList(ClubColumnDefinition.values()));
     list.addAll(Arrays.asList(AdresColumnDefinition.values()));
-    list.forEach(c -> addCell(c.heading(), getProperties().getKolomnummer(c)));
+    list.forEach(c -> addCell(c.heading(), CCNLColumnProperties.getKolomnummer(c)));
   }
 
   public void addClub(ExternalRelationClub club) {
@@ -62,7 +62,7 @@ public class Ledenbestand extends CCNLBestand {
     List<ColumnDefinition> list = new ArrayList<>();
     list.addAll(Arrays.asList(PartnerColumnDefinition.values()));
     list.addAll(Arrays.asList(AdresColumnDefinition.values()));
-    list.forEach(c -> addCell(c.heading(), getProperties().getKolomnummer(c)));
+    list.forEach(c -> addCell(c.heading(), CCNLColumnProperties.getKolomnummer(c)));
   }
 
   public void addExternalRelation(ExternalRelation relation) {
@@ -74,7 +74,7 @@ public class Ledenbestand extends CCNLBestand {
     List<ColumnDefinition> list = new ArrayList<>();
     list.addAll(Arrays.asList(InternColumnDefinition.values()));
     list.addAll(Arrays.asList(AdresColumnDefinition.values()));
-    list.forEach(c -> addCell(c.heading(), getProperties().getKolomnummer(c)));
+    list.forEach(c -> addCell(c.heading(), CCNLColumnProperties.getKolomnummer(c)));
   }
 
   public void addInternalRelation(InternalRelation relation) {

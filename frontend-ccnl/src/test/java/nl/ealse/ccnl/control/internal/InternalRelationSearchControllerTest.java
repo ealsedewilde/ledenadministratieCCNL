@@ -27,7 +27,7 @@ class InternalRelationSearchControllerTest extends FXMLBaseTest{
   }
   
   private void prepare() {
-    sut = new InternalRelationSearchController(null, null, null);
+    sut = InternalRelationSearchController.getInstance();
   }
   
   private void testController() {

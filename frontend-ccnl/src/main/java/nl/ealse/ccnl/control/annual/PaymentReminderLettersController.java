@@ -6,14 +6,18 @@ import java.io.IOException;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.exception.AsyncTaskException;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
@@ -23,12 +27,11 @@ import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.javafx.util.PdfPrintDocument;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class PaymentReminderLettersController extends DocumentTemplateController {
+  
+  @Getter
+  private static final PaymentReminderLettersController instance = new PaymentReminderLettersController();
 
   private final PageController pageController;
 
@@ -50,26 +53,23 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   @FXML
   private Label headerText;
 
-  public PaymentReminderLettersController(DocumentService documentService,
-      MemberService memberService, PageController pageController,
-      MemberLetterHandler memberLetterHandler, TaskExecutor executor) {
-    super(pageController, documentService, DocumentTemplateContext.PAYMENT_REMINDER);
-    this.pageController = pageController;
-    this.documentService = documentService;
-    this.memberService = memberService;
-    this.memberLetterHandler = memberLetterHandler;
-    this.executor = executor;
+  private PaymentReminderLettersController() {
+    super(DocumentTemplateContext.PAYMENT_REMINDER);
+    this.pageController = PageController.getInstance();
+    this.documentService = DocumentService.getInstance();
+    this.memberService = MemberService.getInstance();
+    this.memberLetterHandler = MemberLetterHandler.getInstance();
+    this.executor = TaskExecutor.getInstance();
   }
   
   @FXML
-  @Override
   protected void initialize() {
     documentViewer = DocumentViewer.builder().withPrintButton(evt -> printPDF())
         .withCancelButton(evt -> closePDF()).build();
     documentViewer.setWindowTitle("Herinneringsbrief voor lid: %d (%s)");
   }
 
-  @EventListener(condition = "#event.name('PRODUCE_REMINDER_LETTERS_BT')")
+  @EventListener(menuChoice = MenuChoice.PRODUCE_REMINDER_LETTERS_BT)
   public void remindersBT(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.BANK_TRANSFER);
@@ -77,7 +77,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     headerText.setText("Herinneringsbrief leden met Overboeking");
   }
 
-  @EventListener(condition = "#event.name('PRODUCE_REMINDER_LETTERS_DD')")
+  @EventListener(menuChoice = MenuChoice.PRODUCE_REMINDER_LETTERS_DD)
   public void remindersDD(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.DIRECT_DEBIT);
@@ -218,6 +218,16 @@ public class PaymentReminderLettersController extends DocumentTemplateController
       }
     }
 
+  }
+
+  @Override
+  protected PageController getPageController() {
+    return pageController;
+  }
+
+  @Override
+  protected DocumentService getDocumentService() {
+    return documentService;
   }
 
 }

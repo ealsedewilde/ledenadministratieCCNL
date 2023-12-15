@@ -4,9 +4,12 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
+import nl.ealse.ccnl.service.relation.ExternalClubService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalClubSearchControllerTest extends FXMLBaseTest {
@@ -27,7 +30,7 @@ class ExternalClubSearchControllerTest extends FXMLBaseTest {
   }
   
   private void prepare() {
-    sut = new ExternalClubSearchController(null, null, null);
+    sut = ExternalClubSearchController.getInstance();
   }
   
   private void testController() {
@@ -43,5 +46,10 @@ class ExternalClubSearchControllerTest extends FXMLBaseTest {
     Assertions.assertEquals("Club nr.", sut.columnName(0));
     Assertions.assertEquals("Gevonden Clubs", sut.resultHeaderText(null));
   }
+
+  @BeforeAll
+  static void setup() {
+    MockProvider.mock(ExternalClubService.class);
+  };
 
 }

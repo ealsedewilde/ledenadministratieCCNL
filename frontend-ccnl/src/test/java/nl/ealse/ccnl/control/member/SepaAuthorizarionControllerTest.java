@@ -6,7 +6,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -15,19 +15,15 @@ import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 class SepaAuthorizarionControllerTest extends FXMLBaseTest {
 
-  private static IbanController ibanController;
-  private static DocumentService documentService;
-  private static MemberService memberService;
   private static WrappedFileChooser fileChooser;
 
   private SepaAuthorizarionController sut;
@@ -58,10 +54,7 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = spy(new SepaAuthorizarionController(getPageController(), ibanController, documentService,
-        memberService));
-    setDirectory();
-    sut.setup();
+    sut = spy(SepaAuthorizarionController.getInstance());
     doNothing().when(sut).closePDFViewer();
     setFile();
     setFileChooser();
@@ -69,16 +62,12 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    documentService = mock(DocumentService.class);
-    memberService = mock(MemberService.class);
+    MockProvider.mock(DocumentService.class);
+    MockProvider.mock(MemberService.class);
     fileChooser = mock(WrappedFileChooser.class);
-    Resource r = new ClassPathResource("MachtigingsformulierSEPA.pdf");
-    try {
-      File f = r.getFile();
-      when(fileChooser.showOpenDialog()).thenReturn(f);
-    } catch (IOException e) {
-      Assertions.fail(e.getMessage());
-    }
+    URL url = SepaAuthorizarionController.class.getResource("/MachtigingsformulierSEPA.pdf");
+    File f = new File(url.getFile());
+    when(fileChooser.showOpenDialog()).thenReturn(f);
   }
 
 
@@ -92,11 +81,11 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest {
 
 
   private void setFile() {
-    ClassPathResource r = new ClassPathResource("welkom.pdf");
+    URL url = SepaAuthorizarionController.class.getResource("/welkom.pdf");
+    File f = new File(url.getFile());
     try {
-      File f = r.getFile();
       FieldUtils.writeField(sut, "selectedFile", f, true);
-    } catch (Exception e) {
+    } catch (IllegalAccessException e) {
       e.printStackTrace();
     }
   }
@@ -104,14 +93,6 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest {
   private void setFileChooser() {
     try {
       FieldUtils.writeField(sut, "fileChooser", fileChooser, true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-  
-  private void setDirectory() {
-    try {
-      FieldUtils.writeField(sut, "sepaDirectory", "C:/temp", true);
     } catch (Exception e) {
       e.printStackTrace();
     }

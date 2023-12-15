@@ -15,21 +15,15 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.ImagesMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 class DbConfiguratorTest extends FXMLBaseTest {
 
-  private static ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
-  private static ApplicationContext context = mock(ApplicationContext.class);
-  private static PageController pageController = mock(PageController.class);
   private DbConfigurator sut;
   private Stage stage;
   
@@ -81,7 +75,7 @@ class DbConfiguratorTest extends FXMLBaseTest {
       dbProps.delete();
     }
     clickButton();
-    sut.save();
+    sut.saveNew();
     msg = sut.getMessage().getText();
     assertEquals("", msg);
     assertEquals("nextAction", next);
@@ -96,8 +90,6 @@ class DbConfiguratorTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    when(context.getEnvironment()).thenReturn(environment);
-    when(context.getBean("pageController")).thenReturn(pageController);
   }
 
   private void clickButton() {

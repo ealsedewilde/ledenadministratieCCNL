@@ -13,30 +13,29 @@ import org.apache.poi.ss.usermodel.Row;
 public class InternalRelationExport {
 
   public Row addInternalRelation(CCNLBestand targetFile, InternalRelation intern) {
-    CCNLColumnProperties properties = targetFile.getProperties();
     Row row = targetFile.addRow();
     targetFile.addCell(intern.getRelationNumber(),
-        properties.getKolomnummer(InternColumnDefinition.INTERN_NUMMER));
-    targetFile.addCell(properties.getProperty("blad_prefix"),
-        properties.getKolomnummer(InternColumnDefinition.INTERN_PREFIX));
-    targetFile.addCell(properties.getProperty("blad_aanhef"),
-        properties.getKolomnummer(InternColumnDefinition.INTERN_AANHEF));
+        CCNLColumnProperties.getKolomnummer(InternColumnDefinition.INTERN_NUMMER));
+    targetFile.addCell(CCNLColumnProperties.getProperty("blad_prefix"),
+        CCNLColumnProperties.getKolomnummer(InternColumnDefinition.INTERN_PREFIX));
+    targetFile.addCell(CCNLColumnProperties.getProperty("blad_aanhef"),
+        CCNLColumnProperties.getKolomnummer(InternColumnDefinition.INTERN_AANHEF));
     targetFile.addCell(intern.getTitle(),
-        properties.getKolomnummer(InternColumnDefinition.INTERN_FUNCTIE));
+        CCNLColumnProperties.getKolomnummer(InternColumnDefinition.INTERN_FUNCTIE));
     targetFile.addCell(intern.getContactName(),
-        properties.getKolomnummer(InternColumnDefinition.INTERN_CONTACTPERSOON));
+        CCNLColumnProperties.getKolomnummer(InternColumnDefinition.INTERN_CONTACTPERSOON));
     targetFile.addCell(intern.getAddress().getStreetAndNumber(),
-        properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
     targetFile.addCell(intern.getAddress().getPostalCode(),
-        properties.getKolomnummer(AdresColumnDefinition.POSTCODE));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.POSTCODE));
     targetFile.addCell(intern.getAddress().getCity(),
-        properties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
     targetFile.addCell(intern.getAddress().getCountry(),
-        properties.getKolomnummer(AdresColumnDefinition.LAND));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.LAND));
     targetFile.addCell(intern.getTelephoneNumber(),
-        properties.getKolomnummer(InternColumnDefinition.INTERN_TELEFOON));
+        CCNLColumnProperties.getKolomnummer(InternColumnDefinition.INTERN_TELEFOON));
     targetFile.addCell(DateUtil.toDate(intern.getModificationDate()),
-        properties.getKolomnummer(InternColumnDefinition.INTERN_MUTATIEDATUM));
+        CCNLColumnProperties.getKolomnummer(InternColumnDefinition.INTERN_MUTATIEDATUM));
     return row;
   }
 

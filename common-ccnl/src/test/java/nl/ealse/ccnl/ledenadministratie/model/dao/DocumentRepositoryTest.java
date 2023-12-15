@@ -10,21 +10,16 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.ledenadministratie.test.JpaTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 
-class DocumentRepositoryTest extends JpaTestBase {
+class DocumentRepositoryTest {
 
-  private static final String DOC_NAME = "Lid 0030.pdf";
+  private static final String DOC_NAME = "/Lid 0030.pdf";
 
-  @Autowired
-  private DocumentRepository dao;
+  private DocumentRepository dao = DocumentRepository.getInstance();
 
-  @Autowired
-  private MemberRepository memberDao;
+  private MemberRepository memberDao = MemberRepository.getInstance();
 
   @Test
   void findByOwnerAndDocumentTypeTest() {
@@ -51,8 +46,7 @@ class DocumentRepositoryTest extends JpaTestBase {
   }
 
   private byte[] getPDF() {
-    ClassPathResource pdf = new ClassPathResource(DOC_NAME);
-    try (InputStream is = pdf.getInputStream()) {
+    try (InputStream is = getClass().getResourceAsStream(DOC_NAME)) {
       return is.readAllBytes();
 
     } catch (IOException e) {
@@ -74,7 +68,7 @@ class DocumentRepositoryTest extends JpaTestBase {
     member.setLastName("Wolf");
     member.setLastNamePrefix("van der");
     member.setMemberInfo("Some additional text");
-    member.setMemberNumber(1473);
+    member.setMemberNumber(1474);
     member.setMemberSince(LocalDate.of(2000, 6, 1));
     member.setMemberStatus(MembershipStatus.ACTIVE);
     member.setPaymentMethod(PaymentMethod.DIRECT_DEBIT);

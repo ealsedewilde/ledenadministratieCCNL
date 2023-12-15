@@ -4,19 +4,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import lombok.Getter;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class SettingsController extends SettingsView {
-
-  private final ApplicationEventPublisher eventPublisher;
+  
+  @Getter
+  private static final SettingsController instance = new SettingsController();
 
   private final PageController pageController;
 
@@ -25,11 +26,9 @@ public class SettingsController extends SettingsView {
   @FXML
   private TableView<Setting> tableView;
 
-  public SettingsController(SettingsService service, PageController pageController,
-      ApplicationEventPublisher eventPublisher) {
-    this.eventPublisher = eventPublisher;
-    this.pageController = pageController;
-    this.service = service;
+  private SettingsController() {
+    this.pageController = PageController.getInstance();
+    this.service = SettingsService.getInstance();
   }
 
   @FXML
@@ -41,18 +40,18 @@ public class SettingsController extends SettingsView {
       setting.setValue(getValue().getText());
       setting.setDescription(getDescription().getText());
       service.save(setting);
-      refresh("Instelling is opgeslagen; actief na herstart");
+      refresh("Instelling is opgeslagen");
     }
   }
 
   public void update(Setting selectedSettings, String oldId) {
     service.save(selectedSettings, oldId);
-    refresh("Instelling is bijgewerkt; actief na herstart");
+    refresh("Instelling is bijgewerkt");
   }
 
   public void delete(Setting selectedSettings) {
     service.delete(selectedSettings);
-    refresh("Instelling is verwijderd; actief na herstart");
+    refresh("Instelling is verwijderd");
   }
 
   private void refresh(String message) {
@@ -68,10 +67,10 @@ public class SettingsController extends SettingsView {
     TableRow<Setting> row = (TableRow<Setting>) event.getSource();
     Setting setting = row.getItem();
     SettingSelectionEvent se = new SettingSelectionEvent(this, setting);
-    eventPublisher.publishEvent(se);
+    EventPublisher.publishEvent(se);
   }
 
-  @EventListener(condition = "#event.name('SETTINGS')")
+  @EventListener(menuChoice = MenuChoice.SETTINGS)
   public void findSettings(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.SETTINGS);
     tableView.getItems().clear();

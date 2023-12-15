@@ -37,7 +37,6 @@ import nl.ealse.ccnl.control.button.CancelButton;
 import nl.ealse.ccnl.control.button.DeleteButton;
 import nl.ealse.ccnl.control.button.PrintButton;
 import nl.ealse.ccnl.control.button.SaveButton;
-import nl.ealse.ccnl.control.exception.PDFViewerException;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.javafx.util.ImagePrintDocument;

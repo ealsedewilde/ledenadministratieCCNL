@@ -5,9 +5,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
+import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class PartnerSearchControllerTest extends FXMLBaseTest {
@@ -26,7 +29,7 @@ class PartnerSearchControllerTest extends FXMLBaseTest {
   }
   
   private void prepare() {
-    sut = new PartnerSearchController(null, null, null);
+    sut = PartnerSearchController.getInstance();
   }
 
   private void testSearch() {
@@ -43,6 +46,11 @@ class PartnerSearchControllerTest extends FXMLBaseTest {
     Map<String, SearchItem> itemMap = sut.getSearchItemValues();
     Assertions.assertEquals(5, itemMap.size());
   }
+
+  @BeforeAll
+  static void setup() {
+    MockProvider.mock(CommercialPartnerService.class);
+  };
 
 
 }

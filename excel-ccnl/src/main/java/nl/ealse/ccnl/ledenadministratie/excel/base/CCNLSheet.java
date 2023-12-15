@@ -3,8 +3,6 @@ package nl.ealse.ccnl.ledenadministratie.excel.base;
 import java.io.EOFException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import lombok.Getter;
-import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,8 +17,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 public abstract class CCNLSheet<T extends CCNLRow> implements Iterable<T> {
 
   private final Sheet sheet;
-  @Getter
-  private final CCNLColumnProperties properties;
 
   private Row headerRow;
 
@@ -28,9 +24,8 @@ public abstract class CCNLSheet<T extends CCNLRow> implements Iterable<T> {
 
   private int ix = 0;
 
-  protected CCNLSheet(Sheet sheet, CCNLColumnProperties properties) {
+  protected CCNLSheet(Sheet sheet) {
     this.sheet = sheet;
-    this.properties = properties;
     if (sheet != null) {
       init();
     }

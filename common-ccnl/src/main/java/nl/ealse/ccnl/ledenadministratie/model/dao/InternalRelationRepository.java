@@ -1,34 +1,67 @@
 package nl.ealse.ccnl.ledenadministratie.model.dao;
 
+import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface InternalRelationRepository extends JpaRepository<InternalRelation, Integer> {
+public class InternalRelationRepository extends BaseRepository<InternalRelation> {
+  @Getter
+  private static InternalRelationRepository instance = new InternalRelationRepository();
+  
+  private InternalRelationRepository() {
+    super(InternalRelation.class);
+  }
 
-  Optional<InternalRelation> findInternalRelationByTitleIgnoreCase(String title);
+  @Override
+  protected Object getPrimaryKey(InternalRelation entity) {
+    return entity.getRelationNumber();
+  }
 
+  public Optional<InternalRelation> findInternalRelationByTitleIgnoreCase(String title) {
+    List<InternalRelation> result =
+        executeQuery("SELECT M FROM InternalRelation M WHERE LOWER(M.title) = LOWER(?1)", title);
+    if (result.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(result.get(0));
+  }
 
-  @Query("Select m.relationNumber from InternalRelation m")
-  List<Number> getAllRelationNumbers();
+  public List<Number> getAllRelationNumbers() {
+    TypedQuery<Number> query =
+        getEntityManager().createQuery("Select m.relationNumber from InternalRelation m", Number.class);
+    return query.getResultList();
+  }
 
-  @Query("Select m.title from InternalRelation m")
-  List<String> getAllTitles();
+  public List<String> getAllTitles() {
+    TypedQuery<String> query =
+        getEntityManager().createQuery("Select m.title from InternalRelation m", String.class);
+    return query.getResultList();
+  }
 
-  @Query("SELECT M FROM InternalRelation M WHERE LOWER(M.address.street) LIKE LOWER(concat(?1, '%'))")
-  List<InternalRelation> findInternalRelationsByAddress(String searchValue);
+  public List<InternalRelation> findInternalRelationsByAddress(String searchValue) {
+    return executeQuery(
+        "SELECT M FROM InternalRelation M WHERE LOWER(M.address.street) LIKE LOWER(concat(?1, '%'))",
+        searchValue);
+  }
 
-  @Query("SELECT M FROM InternalRelation M WHERE LOWER(M.address.city) LIKE LOWER(concat(?1, '%'))")
-  List<InternalRelation> findInternalRelationsByCity(String searchValue);
+  public List<InternalRelation> findInternalRelationsByCity(String searchValue) {
+    return executeQuery(
+        "SELECT M FROM InternalRelation M WHERE LOWER(M.address.city) LIKE LOWER(concat(?1, '%'))",
+        searchValue);
+  }
 
-  @Query("SELECT M FROM InternalRelation M WHERE LOWER(M.title) LIKE LOWER(concat(?1, '%'))")
-  List<InternalRelation> findInternalRelationsByTitle(String searchValue);
+  public List<InternalRelation> findInternalRelationsByTitle(String searchValue) {
+    return executeQuery(
+        "SELECT M FROM InternalRelation M WHERE LOWER(M.title) LIKE LOWER(concat(?1, '%'))",
+        searchValue);
+  }
 
-  @Query("SELECT M FROM InternalRelation M WHERE LOWER(M.address.postalCode) = LOWER(?1)")
-  List<InternalRelation> findInternalRelationsByPostalCode(String searchValue);
+  public List<InternalRelation> findInternalRelationsByPostalCode(String searchValue) {
+    return executeQuery(
+        "SELECT M FROM InternalRelation M WHERE LOWER(M.address.postalCode) = LOWER(?1)",
+        searchValue);
+  }
 
 }

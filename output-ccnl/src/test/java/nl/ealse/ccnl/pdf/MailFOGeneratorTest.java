@@ -21,8 +21,7 @@ class MailFOGeneratorTest {
 
   @Test
   void testMailFOGenerator() {
-    MailFOGenerator generator = new MailFOGenerator();
-    FOContent content = generator.generateFO(to, null, subject, text);
+    FOContent content = MailFOGenerator.generateFO(to, null, subject, text);
     String cs = content.toString();
     boolean ok = cs.indexOf(subject) > -1;
     Assertions.assertTrue(ok);

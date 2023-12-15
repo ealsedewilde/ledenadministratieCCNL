@@ -1,29 +1,24 @@
 package nl.ealse.ccnl.control.magazine;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class InvalidAddressControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
-  private static MemberService service;
-
   private InvalidAddressController sut;
 
   @Test
   void testController() {
-    sut = new InvalidAddressController(pageController, service);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -39,19 +34,19 @@ class InvalidAddressControllerTest extends FXMLBaseTest {
     sut.onApplicationEvent(event);
 
     sut.addressInvalid();
-    verify(pageController).showMessage("Wijziging opgeslagen");
+    verify(getPageController()).showMessage("Wijziging opgeslagen");
     sut.cancel();
   }
 
   private void prepare() {
+    sut = InvalidAddressController.getInstance();
     getPageWithFxController(sut, PageName.MAGAZINE_INVALID_ADDRESS);
   }
 
   @BeforeAll
   static void setup() {
    
-    pageController = mock(PageController.class);
-    service = mock(MemberService.class);
+    MockProvider.mock(MemberService.class);
   }
 
   private Member member() {

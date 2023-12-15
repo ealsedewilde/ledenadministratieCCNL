@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.club;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -10,24 +9,22 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.service.relation.ExternalClubService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalClubControllerTest extends FXMLBaseTest {
 
-  private static ExternalClubService service;
-
   private ExternalClubController sut;
   private ExternalRelationClub club;
 
   @Test
   void testController() {
-    sut = new ExternalClubController(getPageController(), service);
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut.setup();
+      sut = ExternalClubController.getInstance();
       doTest();
       ar.set(true);
     }, ar);
@@ -48,7 +45,7 @@ class ExternalClubControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    service = mock(ExternalClubService.class);
+    MockProvider.mock(ExternalClubService.class);
   };
 
   private ExternalRelationClub club() {

@@ -1,6 +1,6 @@
 package nl.ealse.ccnl.control.member;
 
-import jakarta.annotation.PostConstruct;
+import java.util.function.Supplier;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -10,22 +10,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
-import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.javafx.FXMLLoaderBean;
 import org.apache.commons.validator.routines.IBANValidator;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
 /**
  * Controls the popup for adding a missing IBAN-number.
  */
-@Controller
 public class IbanController {
-
-  private final ApplicationEventPublisher eventPublisher;
+  
+  @Getter
+  private static final IbanController instance = new IbanController();
 
   @FXML
   private Label memberInfo;
@@ -41,13 +39,14 @@ public class IbanController {
   private Member selectedMember;
 
   private Stage ibanNumberStage;
-
-  public IbanController(ApplicationEventPublisher eventPublisher) {
-    this.eventPublisher = eventPublisher;
+  
+  private IbanController() {
+    setup();
   }
+  
+  private Supplier<Void> nextAction;
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     ibanNumberStage = new Stage();
     ibanNumberStage.initModality(Modality.APPLICATION_MODAL);
     ibanNumberStage.setTitle("IBAN-nummer toevoegen");
@@ -63,10 +62,6 @@ public class IbanController {
     ibanNumber.textProperty().addListener(new IbanNumberListener(ibanNumberE));
   }
 
-  public void show() {
-    ibanNumberStage.show();
-  }
-
   @FXML
   void save() {
     String iban = ibanNumber.getText().toUpperCase();
@@ -74,7 +69,7 @@ public class IbanController {
       ibanNumberE.setVisible(false);
       ibanNumberStage.close();
       selectedMember.setIbanNumber(iban);
-      eventPublisher.publishEvent(new IbanNumberAddedEvent(this));
+      nextAction.get();
     } else if (iban == null || iban.isBlank()) {
       ibanNumberE.setText("IBAN-nummer is verplicht");
       ibanNumberE.setVisible(true);
@@ -85,14 +80,16 @@ public class IbanController {
   }
 
 
-  @EventListener(condition = "#event.name('PAYMENT_AUTHORIZATION')")
-  public void onApplicationEvent(MemberSeLectionEvent event) {
-    this.selectedMember = event.getSelectedEntity();
+  @EventListener
+  public void onApplicationEvent(AddIbanNumberEvent event) {
+    this.nextAction = event.getNextAction();
+    this.selectedMember = event.getMember();
     memberInfo.setText(String.format("Lid %d (%s)", selectedMember.getMemberNumber(),
         selectedMember.getFullName()));
     ibanNumber.setText("");
     ibanNumberE.setText(null);
     ibanNumberE.setVisible(false);
+    ibanNumberStage.show();
   }
 
   private static class IbanNumberListener implements ChangeListener<String> {

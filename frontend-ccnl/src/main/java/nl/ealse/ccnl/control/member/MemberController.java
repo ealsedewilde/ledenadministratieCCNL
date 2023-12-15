@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.control.member;
 
-import jakarta.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.StringJoiner;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -13,6 +13,8 @@ import nl.ealse.ccnl.control.menu.MenuController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
@@ -23,20 +25,17 @@ import nl.ealse.ccnl.view.MemberView;
 import nl.ealse.javafx.mapping.ViewModel;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class MemberController extends MemberView {
+  
+  @Getter
+  private static final MemberController instance = new MemberController();
 
   private final PageController pageController;
 
   private final MemberService service;
 
   private final DocumentService documentService;
-  
-  private final ApplicationEventPublisher eventPublisher;
 
   private Member model;
 
@@ -53,16 +52,14 @@ public class MemberController extends MemberView {
 
   private MemberFormController formController;
 
-  public MemberController(PageController pageController, MemberService service,
-      DocumentService documentService, ApplicationEventPublisher eventPublisher) {
-    this.pageController = pageController;
-    this.service = service;
-    this.documentService = documentService;
-    this.eventPublisher = eventPublisher;
+  private MemberController() {
+    this.pageController = PageController.getInstance();
+    this.service = MemberService.getInstance();
+    this.documentService = DocumentService.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     formController = new MemberFormController(this);
     formController.initializeForm();
     formController.setOnSave(e -> save());
@@ -85,7 +82,7 @@ public class MemberController extends MemberView {
    * Initializes the Model. For a new Member the event was fired by {@link MenuController} For an
    * existing Member the {@link SearchController} fires the event.
    */
-  @EventListener(condition = "#event.name('NEW_MEMBER')")
+  @EventListener(menuChoice = MenuChoice.NEW_MEMBER)
   public void newMember(MenuChoiceEvent event) {
     this.selectedMember = new Member();
     selectedMember.setMemberNumber(service.getFreeNumber());
@@ -98,7 +95,7 @@ public class MemberController extends MemberView {
    * Initializes the Model. For a new Member the event was fired by {@link MenuController} For an
    * existing Member the {@link SearchController} fires the event.
    */
-  @EventListener(condition = "#event.name('AMEND_MEMBER')")
+  @EventListener(menuChoice = MenuChoice.AMEND_MEMBER)
   public void amendMember(MemberSeLectionEvent event) {
     this.selectedMember = event.getSelectedEntity();
     handleEvent(event);
@@ -194,12 +191,12 @@ public class MemberController extends MemberView {
       model.getAddress().setAddressInvalid(false);
     }
 
-    service.persistMember(model);
+    service.save(model);
     pageController.showMessage("Lidgegevens opgeslagen");
 
     if (currentMenuChoice == MenuChoice.NEW_MEMBER) {
       // next page
-      eventPublisher.publishEvent(new WelcomeletterEvent(this, selectedMember));
+      EventPublisher.publishEvent(new WelcomeletterEvent(this, model));
     } else {
       pageController.activateLogoPage();
     }
@@ -213,7 +210,7 @@ public class MemberController extends MemberView {
 
     selectedMember.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
     getPaymentMethod().setValue(PaymentMethodMapper.BANK_TRANSFER);
-    service.persistMember(selectedMember);
+    service.save(selectedMember);
 
     sepaAuthorization = null;
     getSepaButton().setVisible(false);

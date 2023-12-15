@@ -1,29 +1,40 @@
 package nl.ealse.ccnl.control.menu;
 
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mockStatic;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventPublisher;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.springframework.context.ApplicationContext;
+import org.mockito.MockedStatic;
 
 class MenuControllerTest {
 
-  private static ApplicationContext springContext;
+  private MockedStatic<EventPublisher> context;
 
   private static MenuController sut;
 
   private ArgumentCaptor<MenuChoiceEvent> menu =
       ArgumentCaptor.forClass(MenuChoiceEvent.class);
-  private ArgumentCaptor<MenuChoiceEvent> am = ArgumentCaptor.forClass(MenuChoiceEvent.class);
 
+  @BeforeEach
+  void init() {
+    context = mockStatic(EventPublisher.class);
+  }
+  
+  @AfterEach
+  void clear() {
+    context.close();
+  }
+  
   @Test
   void newMember() {
     sut.newMember();
-    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
     MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_MEMBER, event.getMenuChoice());
   }
@@ -31,31 +42,31 @@ class MenuControllerTest {
   @Test
   void amendMember() {
     sut.amendMember();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.AMEND_MEMBER, event.getMenuChoice());
   }
 
   @Test
   void cancelMembership() {
     sut.cancelMembership();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.CANCEL_MEMBERSHIP, event.getMenuChoice());
   }
 
   @Test
   void paymentAuthorization() {
     sut.paymentAuthorization();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.PAYMENT_AUTHORIZATION, event.getMenuChoice());
   }
 
   @Test
   void newPartner() {
     sut.newPartner();
-    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
     MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_PARTNER, event.getMenuChoice());
   }
@@ -63,23 +74,23 @@ class MenuControllerTest {
   @Test
   void amendPartner() {
     sut.amendPartner();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.AMEND_PARTNER, event.getMenuChoice());
   }
 
   @Test
   void deletePartner() {
     sut.deletePartner();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.DELETE_PARTNER, event.getMenuChoice());
   }
 
   @Test
   void newExternalClub() {
     sut.newExternalClub();
-    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
     MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_EXTERNAL_CLUB, event.getMenuChoice());
   }
@@ -87,23 +98,23 @@ class MenuControllerTest {
   @Test
   void amendExternalClub() {
     sut.amendExternalClub();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.AMEND_EXTERNAL_CLUB, event.getMenuChoice());
   }
 
   @Test
   void deleteExternalClub() {
     sut.deleteExternalClub();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.DELETE_EXTERNAL_CLUB, event.getMenuChoice());
   }
 
   @Test
   void newExternalRelation() {
     sut.newExternalRelation();
-    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
     MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_EXTERNAL_RELATION, event.getMenuChoice());
   }
@@ -111,23 +122,23 @@ class MenuControllerTest {
   @Test
   void amendExternalRelation() {
     sut.amendExternalRelation();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.AMEND_EXTERNAL_RELATION, event.getMenuChoice());
   }
 
   @Test
   void deleteExternalRelation() {
     sut.deleteExternalRelation();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.DELETE_EXTERNAL_RELATION, event.getMenuChoice());
   }
 
   @Test
   void newInternalRelation() {
     sut.newInternalRelation();
-    verify(springContext, atLeastOnce()).publishEvent(menu.capture());
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
     MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.NEW_INTERNAL_RELATION, event.getMenuChoice());
   }
@@ -135,223 +146,222 @@ class MenuControllerTest {
   @Test
   void amendInternalRelation() {
     sut.amendInternalRelation();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.AMEND_INTERNAL_RELATION, event.getMenuChoice());
   }
 
   @Test
   void deleteInternalRelation() {
     sut.deleteInternalRelation();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.DELETE_INTERNAL_RELATION, event.getMenuChoice());
   }
 
   @Test
   void magazineAddressList() {
     sut.magazineAddressList();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.MAGAZINE_ADDRESS_LIST, event.getMenuChoice());
   }
 
   @Test
   void cardAddressList() {
     sut.cardAddressList();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.CARD_ADDRESS_LIST, event.getMenuChoice());
   }
 
   @Test
   void magazineInvalidAddress() {
     sut.magazineInvalidAddress();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.MAGAZINE_INVALID_ADDRESS, event.getMenuChoice());
   }
 
   @Test
   void addDocument() {
     sut.addDocument();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.ADD_DOCUMENT, event.getMenuChoice());
   }
 
   @Test
   void excelAll() {
     sut.excelAll();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.REPORT_ALL_DATA, event.getMenuChoice());
   }
 
   @Test
   void excelNew() {
     sut.excelNew();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.REPORT_NEW_MEMBERS, event.getMenuChoice());
   }
 
   @Test
   void excelCancelation() {
     sut.excelCancelation();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.REPORT_CANCELLED_MEMBERS, event.getMenuChoice());
   }
 
   @Test
   void excelOverdue() {
     sut.excelOverdue();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.REPORT_OVERDUE_MEMBERS, event.getMenuChoice());
   }
 
   @Test
   void excelArchive() {
     sut.excelArchive();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.REPORT_ARCHIVE, event.getMenuChoice());
   }
 
   @Test
   void viewDocument() {
     sut.viewDocument();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.VIEW_DOCUMENT, event.getMenuChoice());
   }
 
   @Test
   void resetPayments() {
     sut.resetPayments();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.RESET_PAYMENTS, event.getMenuChoice());
   }
 
   @Test
   void directDebits() {
     sut.directDebits();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.PRODUCE_DIRECT_DEBITS_FILE, event.getMenuChoice());
   }
 
   @Test
   void reconcilePayments() {
     sut.reconcilePayments();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.RECONCILE_PAYMENTS, event.getMenuChoice());
   }
 
   @Test
   void reminderReport() {
     sut.reminderReport();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.PRODUCE_REMINDER_REPORT, event.getMenuChoice());
   }
 
   @Test
   void makeReminderLettersDD() {
     sut.makeReminderLettersDirectDebit();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.PRODUCE_REMINDER_LETTERS_DD, event.getMenuChoice());
   }
 
   @Test
   void makeReminderLettersBT() {
     sut.makeReminderLettersBankTranfer();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.PRODUCE_REMINDER_LETTERS_BT, event.getMenuChoice());
   }
 
   @Test
   void yearly() {
     sut.yearly();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.ANNUAL_ROLLOVER, event.getMenuChoice());
   }
 
   @Test
   void manageSepaAuthorizationForm() {
     sut.manageSepaAuthorizationForm();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.UPLOAD_SEPA_FORM, event.getMenuChoice());
   }
 
   @Test
   void manageDocumentTemplates() {
     sut.manageDocumentTemplates();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.TEMPLATES_OVERVIEW, event.getMenuChoice());
   }
 
   @Test
   void backupDatabase() {
     sut.backupDatabase();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.MANAGE_BACKUP_DATABASE, event.getMenuChoice());
   }
 
   @Test
   void restoreDatabase() {
     sut.restoreDatabase();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.MANAGE_RESTORE_DATABASE, event.getMenuChoice());
   }
 
   @Test
   void importFromExcel() {
     sut.importFromExcel();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.IMPORT_FROM_EXCEL, event.getMenuChoice());
   }
 
   @Test
   void settings() {
     sut.settings();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.SETTINGS, event.getMenuChoice());
   }
 
   @Test
   void manageArchive() {
     sut.manageArchive();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.MANAGE_ARCHIVE, event.getMenuChoice());
   }
 
   @Test
   void DbConfig() {
     sut.dbconfig();
-    verify(springContext, atLeastOnce()).publishEvent(am.capture());
-    MenuChoiceEvent event = am.getValue();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
     Assertions.assertEquals(MenuChoice.DB_CONFIG, event.getMenuChoice());
   }
 
   @BeforeAll
   static void setup() {
-    springContext = mock(ApplicationContext.class);
-    sut = new MenuController(springContext);
+     sut = MenuController.getInstance();
   }
 
 }

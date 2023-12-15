@@ -20,19 +20,19 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 
 public class Adresbestand extends CCNLBestand {
 
-  public Adresbestand(File bestand, CCNLColumnProperties properties) throws IOException {
-    super(bestand, properties);
+  public Adresbestand(File bestand) throws IOException {
+    super(bestand);
     addSheet("Adressen");
   }
 
   public void addHeading() {
     addRow();
     List<ColumnDefinition> list = new ArrayList<>();
-    for (int ix = 0 ; ix < 4 ; ix++) {
+    for (int ix = 0; ix < 4; ix++) {
       list.add(LidColumnDefinition.values()[ix]);
     }
     list.addAll(Arrays.asList(AdresColumnDefinition.values()));
-    list.forEach(c -> addCell(c.heading(), getProperties().getKolomnummer(c)));
+    list.forEach(c -> addCell(c.heading(), CCNLColumnProperties.getKolomnummer(c)));
   }
 
   public void addMember(Member member) {

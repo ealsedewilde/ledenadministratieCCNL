@@ -3,7 +3,6 @@ package nl.ealse.ccnl;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

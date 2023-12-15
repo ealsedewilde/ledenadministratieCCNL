@@ -3,12 +3,11 @@ package nl.ealse.ccnl.service.excelexport;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.excel.Archiefbestand;
-import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.dao.ArchiveRepository;
-import org.springframework.stereotype.Service;
 
 /**
  * Export all data to Excel.
@@ -16,18 +15,17 @@ import org.springframework.stereotype.Service;
  * @author ealse
  *
  */
-@Service
 @Slf4j
 public class ExportArchiveService {
+  
+  @Getter
+  private static ExportArchiveService instance = new ExportArchiveService();
 
   private final ArchiveRepository archiveRepository;
-  private final CCNLColumnProperties properties;
 
-  public ExportArchiveService(ArchiveRepository archiveRepository,
-      CCNLColumnProperties properties) {
+  private ExportArchiveService() {
     log.info("Service created");
-    this.archiveRepository = archiveRepository;
-    this.properties = properties;
+    this.archiveRepository = ArchiveRepository.getInstance();
   }
 
   /**
@@ -37,7 +35,7 @@ public class ExportArchiveService {
    * @throws IOException in case generating the file fails 
    */
   public void export(File selectedFile) throws IOException {
-    try (Archiefbestand targetFile = new Archiefbestand(selectedFile, properties)) {
+    try (Archiefbestand targetFile = new Archiefbestand(selectedFile)) {
       List<ArchivedMember> archiveMembers = archiveRepository.findAllByYearAndMemberNumber();
       int year = 0;
       for (ArchivedMember member : archiveMembers) {

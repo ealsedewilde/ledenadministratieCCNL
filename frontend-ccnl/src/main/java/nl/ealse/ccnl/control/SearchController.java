@@ -25,9 +25,9 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageReference;
 import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.javafx.FXMLLoaderBean;
-import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * Super class for all controllers for searching a relation in the database.
@@ -62,9 +62,6 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   @FXML
   private TableColumn<T, Void> buttonColumn;
 
-
-  private final ApplicationEventPublisher eventPublisher;
-
   @Getter
   private final Map<String, SearchItem> searchItemValues = new LinkedHashMap<>();
 
@@ -77,8 +74,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   
   private Parent parent;
 
-  protected SearchController(ApplicationEventPublisher eventPublisher) {
-    this.eventPublisher = eventPublisher;
+  protected SearchController() {
     this.parent = FXMLLoaderBean.getPage("search/search", this);
   }
 
@@ -203,7 +199,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
       TableRow<T> row = (TableRow<T>) event.getSource();
       selectedEntity = row.getItem();
     }
-    eventPublisher.publishEvent(newEntitySelectionEvent(currentMenuChoice));
+    EventPublisher.publishEvent(newEntitySelectionEvent(currentMenuChoice));
   }
 
   private boolean validate(SearchItem searchItem, String searchValue) {

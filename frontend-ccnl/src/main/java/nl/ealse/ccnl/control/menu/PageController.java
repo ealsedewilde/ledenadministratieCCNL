@@ -7,11 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
+import lombok.Getter;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.javafx.ImagesMap;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Controller;
 
 /**
  * Controller of the main page of the application.
@@ -23,8 +22,10 @@ import org.springframework.stereotype.Controller;
  *
  * @author ealse
  */
-@Controller
 public class PageController {
+  
+  @Getter
+  private static PageController instance = new PageController();
 
   @FXML
   private BorderPane mainPage;
@@ -38,6 +39,8 @@ public class PageController {
   private Node logoPage;
 
   private PauseTransition delay;
+  
+  private PageController() {}
 
   @FXML
   void initialize() {
@@ -109,8 +112,7 @@ public class PageController {
    * be replaced by the logo. This must be done before handling the command, hence the @Order.
    * </p>
    */
-  @EventListener(condition = "#event.command()")
-  @Order(10)
+  @EventListener(command = true)
   public void onApplicationEvent(MenuChoiceEvent event) {
     activateLogoPage();
   }

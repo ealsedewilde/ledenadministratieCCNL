@@ -14,8 +14,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 /**
  * Opvragen BIC-codes voor Nederlandse banken.
@@ -82,9 +80,8 @@ public class BicResolver {
       log.info("Gebruikt BIC-code bestand: " + BIC_LIST_FILE.getAbsolutePath());
       return new FileInputStream(BIC_LIST_FILE);
     }
-    Resource bicLijst = new ClassPathResource(FILE_NAME);
     log.info("Gebruikt intern BIC-code bestand"); 
-    return bicLijst.getInputStream();
+    return BicResolver.class.getResourceAsStream("/" + FILE_NAME);
   }
 
   private void closeWorkbook(Workbook workbook) {

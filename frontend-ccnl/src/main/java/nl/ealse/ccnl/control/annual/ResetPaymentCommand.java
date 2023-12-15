@@ -1,21 +1,23 @@
 package nl.ealse.ccnl.control.annual;
 
-import jakarta.annotation.PostConstruct;
 import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.service.ReconciliationService;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class ResetPaymentCommand {
+  
+  @Getter
+  private static final ResetPaymentCommand instance = new ResetPaymentCommand();
 
   private final PageController pageController;
 
@@ -23,13 +25,13 @@ public class ResetPaymentCommand {
   
   private Alert confirmation;
 
-  public ResetPaymentCommand(PageController pageController, ReconciliationService reconciliationService) {
-    this.pageController = pageController;
-    this.reconciliationService = reconciliationService;
+  private ResetPaymentCommand() {
+    this.pageController = PageController.getInstance();
+    this.reconciliationService = ReconciliationService.getInstance();
+    setup();
   }
   
-  @PostConstruct
-  void setup() {
+  private void setup() {
     ButtonType yes = new ButtonType("Definitief Wissen", ButtonData.YES);
     ButtonType no = new ButtonType("Annuleren", ButtonData.NO);
     confirmation = new Alert(AlertType.CONFIRMATION, "", yes, no);
@@ -39,7 +41,7 @@ public class ResetPaymentCommand {
     cs.getIcons().add(MainStage.getIcon());
   }
 
-  @EventListener(condition = "#event.name('RESET_PAYMENTS')")
+  @EventListener(menuChoice = MenuChoice.RESET_PAYMENTS)
   public void executeCommand(MenuChoiceEvent event) {
     Optional<ButtonType> result = confirmation.showAndWait();
     if (result.isPresent()) {

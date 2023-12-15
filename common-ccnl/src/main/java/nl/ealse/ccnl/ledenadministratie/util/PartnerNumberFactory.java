@@ -1,17 +1,22 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
-import org.springframework.stereotype.Component;
 
-@Component
 public class PartnerNumberFactory extends NumberFactory {
 
-  public PartnerNumberFactory(ExternalRelationPartnerRepository dao) {
+  @Getter
+  private static PartnerNumberFactory instance = new PartnerNumberFactory();
+
+  private final ExternalRelationPartnerRepository dao =
+      ExternalRelationPartnerRepository.getInstance();
+
+  private PartnerNumberFactory() {
     super(99, 8500);
-    initialize(dao);
+    initialize();
   }
 
-  private void initialize(ExternalRelationPartnerRepository dao) {
+  private void initialize() {
     super.initialize(dao.getAllRelationNumbers());
 
   }

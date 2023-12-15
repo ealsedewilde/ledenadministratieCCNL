@@ -3,6 +3,7 @@ package nl.ealse.ccnl.control.annual;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,28 +17,26 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.annual.ReconciliationController.ReconcileTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.TestExecutor;
+import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.core.task.TaskExecutor;
 
 class ReconciliationControllerTest extends FXMLBaseTest {
-  private static PageController pageController;
   private static ReconciliationService service;
   private static WrappedFileChooser fileChooser;
-  private static TaskExecutor executor = new TestExecutor<ReconcileTask>();
 
   @TempDir
   File tempDir;
@@ -46,7 +45,6 @@ class ReconciliationControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    sut = new ReconciliationController(pageController, service, executor);
     File reconcileFile = new File(tempDir, "reconcile.xml");
     when(fileChooser.showOpenDialog()).thenReturn(reconcileFile);
     final AtomicBoolean ar = new AtomicBoolean();
@@ -72,22 +70,24 @@ class ReconciliationControllerTest extends FXMLBaseTest {
     verify(service, times(2)).allFiles();
 
     sut.selectFile();
-    verify(pageController, never()).showErrorMessage(any(String.class));
+    verify(getPageController(), never()).showErrorMessage(any(String.class));
 
     sut.reconcilePayments();
-    verify(pageController).showMessage("Betalingen zijn verwerkt");
+    verify(getPageController()).showMessage("Betalingen zijn verwerkt");
 
   }
 
   private void prepare() {
-    sut.setup();
+    reset(getPageController());
+    sut = ReconciliationController.getInstance();
     getPageWithFxController(sut, PageName.RECONCILE_PAYMENTS);
+
   }
 
   @BeforeAll
   static void setup() {
-    pageController = mock(PageController.class);
-    service = mock(ReconciliationService.class);
+    service = MockProvider.mock(ReconciliationService.class);
+
 
     try {
       when(service.saveFile(any(File.class))).thenReturn(true);
@@ -100,6 +100,7 @@ class ReconciliationControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
     fileChooser = mock(WrappedFileChooser.class);
+    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
   }
 
   private void setFileChooser() {
@@ -125,5 +126,14 @@ class ReconciliationControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
   }
+  private static class TestTaskExcecutor extends TaskExecutor {
+    private static TaskExecutor executor = new TestExecutor<ReconcileTask>();
 
+    @Override
+    public void execute(Runnable task) {
+      executor.execute(task);
+      
+    }
+   
+  }
 }

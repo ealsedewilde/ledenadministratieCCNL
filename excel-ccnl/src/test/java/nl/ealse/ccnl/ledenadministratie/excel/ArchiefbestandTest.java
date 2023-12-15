@@ -6,7 +6,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.MemberBase;
-import nl.ealse.ccnl.test.util.ExcelPropertiesFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -18,14 +17,11 @@ class ArchiefbestandTest {
   
   private Archiefbestand sut;
   
-  private CCNLColumnProperties ccnlColumnProperties;
-  
   @Test
   void testArchiefbestand() {
-    ccnlColumnProperties = ExcelPropertiesFactory.newExcelProperties();
     File f = new File(tempDir, "archiefTest.xlsx");
     try {
-      sut = new Archiefbestand(f, ccnlColumnProperties);
+      sut = new Archiefbestand(f);
       sut.addSheet("test");
       sut.addHeading();
       sut.addMember(member());

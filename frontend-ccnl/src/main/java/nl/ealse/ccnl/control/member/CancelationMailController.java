@@ -2,6 +2,7 @@ package nl.ealse.ccnl.control.member;
 
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NAME;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NUMBER;
+import jakarta.mail.MessagingException;
 import java.util.StringJoiner;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,26 +13,28 @@ import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
+import nl.ealse.ccnl.mail.support.MailMessage;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.MailService;
 import nl.ealse.ccnl.service.relation.MemberService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class CancelationMailController extends DocumentTemplateController {
+  
+  @Getter
+  private static final CancelationMailController instance = new CancelationMailController();
 
   private final PageController pageController;
 
   private final MemberService memberService;
+  
+  private final DocumentService documentService;
 
   private final MailService mailService;
 
-  @Value("${ccnl.mail.subject:}")
-  private String mailSubject;
+  private String mailSubject = DatabaseProperties.getProperty("ccnl.mail.subject");
 
   private Member selectedMember;
 
@@ -52,16 +55,15 @@ public class CancelationMailController extends DocumentTemplateController {
   private CancelMailValidation validation;
 
 
-  public CancelationMailController(PageController pageController, DocumentService documentService,
-      MailService mailService, MemberService memberService) {
-    super(pageController, documentService, DocumentTemplateContext.MEMBERSHIP_CANCELATION_MAIL);
-    this.pageController = pageController;
-    this.memberService = memberService;
-    this.mailService = mailService;
+  private CancelationMailController() {
+    super(DocumentTemplateContext.MEMBERSHIP_CANCELATION_MAIL);
+    this.pageController = PageController.getInstance();
+    this.memberService = MemberService.getInstance();
+    this.documentService = DocumentService.getInstance();
+    this.mailService = MailService.getInstance();
   }
   
   @FXML
-  @Override
   protected void initialize() {
     initializeTemplates();
     validation = new CancelMailValidation(this);
@@ -82,14 +84,18 @@ public class CancelationMailController extends DocumentTemplateController {
     String mailAddress = toMailAddress.getText();
     if (saveMailAddress.isSelected()) {
       selectedMember.setEmail(mailAddress);
-      memberService.persistMember(selectedMember);
+      memberService.save(selectedMember);
     }
     String mailContent = generateText();
-    SimpleMailMessage mailMessage =
-        mailService.sendMail(mailAddress, mailSubject, mailContent);
-    mailService.saveMail(selectedMember, mailMessage);
+    MailMessage mailMessage;
+    try {
+      mailMessage = mailService.sendMail(mailAddress, mailSubject, mailContent);
+      mailService.saveMail(selectedMember, mailMessage);
+      pageController.showMessage("Email is verzonden naar: " + mailAddress);
+    } catch (MessagingException e) {
+      pageController.showErrorMessage("Email is verzending is mislukt: " + e.getMessage());
+    }
     pageController.activateLogoPage();
-    pageController.showMessage("Email is verzonden naar: " + mailAddress);
   }
 
   @FXML
@@ -120,6 +126,16 @@ public class CancelationMailController extends DocumentTemplateController {
       j.add(line);
     }
     return j.toString();
+  }
+
+  @Override
+  protected PageController getPageController() {
+    return pageController;
+  }
+
+  @Override
+  protected DocumentService getDocumentService() {
+    return documentService;
   }
 
 }

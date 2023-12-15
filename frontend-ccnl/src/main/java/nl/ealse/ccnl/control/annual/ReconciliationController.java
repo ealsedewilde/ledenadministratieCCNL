@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.annual;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,26 +15,29 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.StageBuilder;
 import nl.ealse.ccnl.control.button.ButtonCell;
 import nl.ealse.ccnl.control.button.DeleteButton;
-import nl.ealse.ccnl.control.exception.AsyncTaskException;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Controller;
 
-@Controller
 @Slf4j
 public class ReconciliationController {
+  
+  @Getter
+  private static final ReconciliationController instance = new ReconciliationController();
 
   private final PageController pageController;
 
@@ -66,21 +68,20 @@ public class ReconciliationController {
 
   private Stage messagesStage;
 
-  public ReconciliationController(PageController pageController, ReconciliationService service,
-      TaskExecutor executor) {
-    this.pageController = pageController;
-    this.service = service;
-    this.executor = executor;
+  private ReconciliationController() {
+    this.pageController = PageController.getInstance();
+    this.service = ReconciliationService.getInstance();
+    this.executor = TaskExecutor.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XML);
     messagesStage = new StageBuilder().fxml("dialog/reconciliationMessages", this)
         .title("Aflettermeldingen").size(600, 400).build();
   }
 
-  @EventListener(condition = "#event.name('RECONCILE_PAYMENTS')")
+  @EventListener(menuChoice = MenuChoice.RECONCILE_PAYMENTS)
   public void onApplicationEvent(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.RECONCILE_PAYMENTS);
     tableView.getItems().clear();

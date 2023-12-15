@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.control.settings;
 
+import java.util.EventObject;
 import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
-import org.springframework.context.ApplicationEvent;
 
 @SuppressWarnings("serial")
-public class TemplateSelectionEvent extends ApplicationEvent {
+public class TemplateSelectionEvent extends EventObject {
 
   @Getter
   private final boolean newTemplate;

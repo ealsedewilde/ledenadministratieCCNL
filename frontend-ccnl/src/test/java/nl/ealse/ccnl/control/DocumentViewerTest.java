@@ -11,8 +11,6 @@ import nl.ealse.ccnl.test.FXBase;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 class DocumentViewerTest extends FXBase {
   
@@ -32,13 +30,13 @@ class DocumentViewerTest extends FXBase {
   
   private void doTest() {
     Member m = member();
-    sut.showPdf( getPdf("welkom.pdf"), m);
+    sut.showPdf( getPdf("/welkom.pdf"), m);
     assertTrue(pdfStage.isShowing());
     sut.close();
     assertTrue(!pdfStage.isShowing());
     Document d = new Document();
     d.setDocumentName("Citroen.png");
-    d.setPdf(getPdf("Citroen.png"));
+    d.setPdf(getPdf("/Citroen.png"));
     d.setOwner(m);
     sut.showDocument(d);
   }
@@ -51,8 +49,7 @@ class DocumentViewerTest extends FXBase {
   
   private byte[] getPdf(String name) {
     byte[] b = null;
-    Resource r = new ClassPathResource(name);
-    try (InputStream is = r.getInputStream()) {
+    try (InputStream is = getClass().getResourceAsStream(name)) {
       b = is.readAllBytes();
     } catch (IOException e) {
       e.printStackTrace();

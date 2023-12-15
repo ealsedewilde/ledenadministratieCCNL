@@ -1,32 +1,29 @@
 package nl.ealse.ccnl.control.club;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.service.relation.ExternalClubService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalClubDeleteControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
-  private static ExternalClubService service;
-
   private ExternalClubDeleteController sut;
   private ExternalRelationClub club;
 
   @Test
   void testController() {
-    sut = new ExternalClubDeleteController(pageController, service);
+    sut = ExternalClubDeleteController.getInstance();
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -43,17 +40,16 @@ class ExternalClubDeleteControllerTest extends FXMLBaseTest {
     sut.onApplicationEvent(event);
 
     sut.delete();
-    verify(pageController).showMessage("Gegevens zijn verwijderd");
+    verify(getPageController()).showMessage("Gegevens zijn verwijderd");
   }
 
   @BeforeAll
   static void setup() {
-   
-    pageController = mock(PageController.class);
-    service = mock(ExternalClubService.class);
+    MockProvider.mock(ExternalClubService.class);
   };
 
   private void prepare() {
+    reset(getPageController());
     getPageWithFxController(sut, PageName.EXTERNAL_CLUB_DELETE);
   }
 

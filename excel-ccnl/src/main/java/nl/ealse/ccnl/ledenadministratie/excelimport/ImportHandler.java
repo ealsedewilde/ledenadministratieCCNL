@@ -1,5 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.excelimport;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLWorkbook;
 import nl.ealse.ccnl.ledenadministratie.excel.base.SheetDefinition;
 import nl.ealse.ccnl.ledenadministratie.excel.base.SheetNotFoundException;
@@ -12,45 +14,68 @@ import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationOtherRepositor
 import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import nl.ealse.ccnl.ledenadministratie.util.TransactionUtil;
 
-@Component
 public class ImportHandler {
+
+  @Getter
+  private static ImportHandler instance = new ImportHandler();
 
   private final MemberRepository memberRepository;
   private final ExternalRelationClubRepository clubRepository;
   private final ExternalRelationOtherRepository otherRepository;
   private final ExternalRelationPartnerRepository partnerRepository;
   private final InternalRelationRepository internalRepository;
-
-  public ImportHandler(MemberRepository memberRepository,
-      ExternalRelationClubRepository clubRepository, InternalRelationRepository internalRepository,
-      ExternalRelationOtherRepository otherRepository,
-      ExternalRelationPartnerRepository partnerRepository) {
-    this.memberRepository = memberRepository;
-    this.clubRepository = clubRepository;
-    this.otherRepository = otherRepository;
-    this.partnerRepository = partnerRepository;
-    this.internalRepository = internalRepository;
+  
+  private ImportHandler() {
+    this.memberRepository = MemberRepository.getInstance();
+    this.clubRepository = ExternalRelationClubRepository.getInstance();
+    this.otherRepository = ExternalRelationOtherRepository.getInstance();
+    this.partnerRepository = ExternalRelationPartnerRepository.getInstance();
+    this.internalRepository = InternalRelationRepository.getInstance();
+  }
+  
+  public void importFromExcel(CCNLWorkbook workbook, ImportSelection selection) throws SheetNotFoundException {
+    ProcessType importType = selection.getImportType().getProcessType();
+    TransactionUtil.inTransction(() -> {
+      if (selection.isMembers()) {
+        importMembersFromExcel(workbook, importType);
+      }
+      if (selection.isPartners()) {
+        importPartnersFromExcel(workbook, importType);
+      }
+      if (selection.isClubs()) {
+        importClubsFromExcel(workbook, importType);
+      }
+      if (selection.isExternal()) {
+        importExternalRelationsFromExcel(workbook, importType);
+      }
+      if (selection.isInternal()) {
+        importInternalRelationsFromExcel(workbook, importType);
+      }
+    });
+    
   }
 
-  @Transactional
-  public void importMembersFromExcel(CCNLWorkbook workbook, ProcessType importType) throws SheetNotFoundException {
+  private void importMembersFromExcel(CCNLWorkbook workbook, ProcessType importType)
+      throws SheetNotFoundException {
     final MemberImport importHandler = new MemberImport(memberRepository, importType);
     boolean sheetFound = handleLedenSheet(workbook, SheetDefinition.LEDEN, importHandler);
     // The sequence of following actions is important.
     // If a member exists on multiple Excel-sheets then the
     // most relevant state must be handled last to reflect the correct state.
-    sheetFound = handleLedenSheet(workbook, SheetDefinition.OPZEGGEN_VOLGEND_JAAR, importHandler) || sheetFound;
+    sheetFound = handleLedenSheet(workbook, SheetDefinition.OPZEGGEN_VOLGEND_JAAR, importHandler)
+        || sheetFound;
     sheetFound = handleLedenSheet(workbook, SheetDefinition.OPZEGGERS, importHandler) || sheetFound;
-    sheetFound = handleLedenSheet(workbook, SheetDefinition.NIET_BETAALD, importHandler) || sheetFound;
+    sheetFound =
+        handleLedenSheet(workbook, SheetDefinition.NIET_BETAALD, importHandler) || sheetFound;
     sheetFound = handleLedenSheet(workbook, SheetDefinition.RETOUR, importHandler) || sheetFound;
-    
+
     if (sheetFound) {
       importHandler.finalizeImport();
     } else {
-      throw new SheetNotFoundException("In het Excel bestand geen tabbladnaam gevonden m.b.t. leden");
+      throw new SheetNotFoundException(
+          "In het Excel bestand geen tabbladnaam gevonden m.b.t. leden");
     }
   }
 
@@ -84,8 +109,7 @@ public class ImportHandler {
 
   }
 
-  @Transactional
-  public void importPartnersFromExcel(CCNLWorkbook workbook, ProcessType importType)
+  private void importPartnersFromExcel(CCNLWorkbook workbook, ProcessType importType)
       throws SheetNotFoundException {
     CCNLPartnerSheet partners = workbook.getSheet(SheetDefinition.RELATIES, CCNLPartnerSheet.class);
     final CommercialPartnerImport importHandler =
@@ -98,8 +122,7 @@ public class ImportHandler {
     importHandler.finalizeImport();
   }
 
-  @Transactional
-  public void importClubsFromExcel(CCNLWorkbook workbook, ProcessType importType)
+  private void importClubsFromExcel(CCNLWorkbook workbook, ProcessType importType)
       throws SheetNotFoundException {
     CCNLClubSheet clubs = workbook.getSheet(SheetDefinition.CLUBS, CCNLClubSheet.class);
     final ExternalClubImport importHandler = new ExternalClubImport(clubRepository, importType);
@@ -107,8 +130,7 @@ public class ImportHandler {
     importHandler.finalizeImport();
   }
 
-  @Transactional
-  public void importExternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType)
+  private void importExternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType)
       throws SheetNotFoundException {
     CCNLPartnerSheet partners = workbook.getSheet(SheetDefinition.RELATIES, CCNLPartnerSheet.class);
     final OtherExternalRelationImport importHandler =
@@ -121,8 +143,7 @@ public class ImportHandler {
     importHandler.finalizeImport();
   }
 
-  @Transactional
-  public void importInternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType)
+  private void importInternalRelationsFromExcel(CCNLWorkbook workbook, ProcessType importType)
       throws SheetNotFoundException {
     CCNLInternSheet functies = workbook.getSheet(SheetDefinition.INTERN, CCNLInternSheet.class);
     InternalRelationImport importHandler =
@@ -131,5 +152,18 @@ public class ImportHandler {
     importHandler.finalizeImport();
   }
 
+  @Getter
+  @AllArgsConstructor
+  public static class ImportSelection {
+
+    private boolean members;
+    private boolean partners;
+    private boolean clubs;
+    private boolean external;
+    private boolean internal;
+
+    private ImportType importType;
+
+  }
 
 }

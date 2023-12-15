@@ -4,15 +4,12 @@ import java.util.List;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
-import nl.ealse.ccnl.ledenadministratie.test.JpaTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-class DocumentTemplateRepositoryTest extends JpaTestBase {
+class DocumentTemplateRepositoryTest {
 
-  @Autowired
-  private DocumentTemplateRepository dao;
+  private DocumentTemplateRepository dao = DocumentTemplateRepository.getInstance();
 
   @Test
   void doTest() {

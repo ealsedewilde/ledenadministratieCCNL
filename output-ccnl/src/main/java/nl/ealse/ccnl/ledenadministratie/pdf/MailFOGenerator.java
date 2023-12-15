@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.output.GeneratorException;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.StringSnippet;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
+@UtilityClass
 @Slf4j
 public class MailFOGenerator {
 
@@ -23,7 +23,7 @@ public class MailFOGenerator {
   private static final String SUBJECT_TOKEN = "{{mail.subject}}";
   private static final String CONTENT_TOKEN = "{{mail.content}}";
 
-  private final Resource template = new ClassPathResource("mailTemplate.fo");
+  private static final String TEMPLATE = "/mailTemplate.fo";
 
   public FOContent generateFO(String to, String cc, String subject, String text) {
     if (cc == null) {
@@ -54,8 +54,8 @@ public class MailFOGenerator {
   private FOContent initializeFOContent(String to, String cc, String subject) {
     FOContent content = new FOContent();
     StringJoiner sj = new StringJoiner("\n");
-    try (BufferedReader reader = new BufferedReader(
-        new InputStreamReader(template.getInputStream(), StandardCharsets.UTF_8))) {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+        MailFOGenerator.class.getResourceAsStream(TEMPLATE), StandardCharsets.UTF_8))) {
       String line = reader.readLine();
       while (line != null && line.indexOf(CONTENT_TOKEN) == -1) {
         line = inspectLine(line, to, cc, subject);

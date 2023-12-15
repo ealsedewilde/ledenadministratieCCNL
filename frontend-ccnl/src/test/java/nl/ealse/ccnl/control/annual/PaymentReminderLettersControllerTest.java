@@ -12,11 +12,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToFile;
 import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToPrint;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
@@ -31,33 +32,19 @@ import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.TestExecutor;
+import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.task.TaskExecutor;
 
 class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
   private static DocumentService documentService;
   private static MemberService memberService;
-  private static MemberLetterHandler memberLetterHandler;
   private static WrappedFileChooser fileChooser;
-  private static TaskExecutor toFileEexecutor = new TestExecutor<PdfToFile>();
-  private static TaskExecutor toPrintEexecutor = new TestExecutor<PdfToPrint>();
-  private static TaskExecutor executor = (task -> {
-    if (task instanceof PdfToFile) {
-      toFileEexecutor.execute(task);
-    } else {
-      toPrintEexecutor.execute(task);
-    }
-  });
 
 
   @TempDir
@@ -74,8 +61,6 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = new PaymentReminderLettersController(documentService, memberService, pageController,
-          memberLetterHandler, executor);
       prepare();
       doTest();
       ar.set(true);
@@ -94,13 +79,14 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
     verify(documentService).generatePDF(any(LetterData.class));
     sut.saveLettersToFile();
     verify(documentService).generatePDF(any(FOContent.class), any(LetterData.class));
-    verify(pageController).showMessage("Bestand is aangemaakt");
+    verify(getPageController()).showMessage("Bestand is aangemaakt");
     sut.printLetters();
-    verify(pageController).showMessage("");
+    verify(getPageController()).showMessage("");
     sut.printPDF();
   }
 
   private void prepare() {
+    sut = PaymentReminderLettersController.getInstance();
     getPageWithFxController(sut, PageName.PAYMENT_REMINDER_LETTERS);
     setPdfViewer();
     setFileChooser();
@@ -126,9 +112,7 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    pageController = mock(PageController.class);
-
-    documentService = mock(DocumentService.class);
+    documentService = MockProvider.mock(DocumentService.class);
     List<Document> letters = new ArrayList<>();
     when(documentService.findDocuments(any(Member.class), any(DocumentType.class)))
         .thenReturn(letters);
@@ -137,7 +121,7 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
     templates.add(documentTemplate(false));
     when(documentService.findDocumentTemplates(any(DocumentTemplateType.class), any(boolean.class)))
         .thenReturn(templates);
-    byte[] pdf = getBlob("welkom.pdf");
+    byte[] pdf = getBlob("/welkom.pdf");
     when(documentService.generatePDF(anyString())).thenReturn(pdf);
     when(documentService.generatePDF(any(LetterData.class))).thenReturn(pdf);
     when(documentService.generatePDF(any(FOContent.class), any(LetterData.class))).thenReturn(pdf);
@@ -145,10 +129,11 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
     List<Member> members = new ArrayList<>();
     members.add(member());
-    memberService = mock(MemberService.class);
+    memberService = MockProvider.mock(MemberService.class);
     when(memberService.findMembersCurrentYearNotPaid(any(PaymentMethod.class))).thenReturn(members);
-    memberLetterHandler = new MemberLetterHandler(documentService);
+
     fileChooser = mock(WrappedFileChooser.class);
+    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
   }
 
   private static DocumentTemplate documentTemplate(boolean sepa) {
@@ -173,8 +158,7 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
   private static byte[] getBlob(String name) {
     byte[] b = null;
-    Resource r = new ClassPathResource(name);
-    try (InputStream is = r.getInputStream()) {
+    try (InputStream is = PaymentReminderLettersControllerTest.class.getResourceAsStream(name)) {
       b = is.readAllBytes();
     } catch (IOException e) {
       e.printStackTrace();
@@ -182,5 +166,19 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
     return b;
   }
 
+  private static class TestTaskExcecutor extends TaskExecutor {
 
+    private static TaskExecutor toFileEexecutor = new TestExecutor<PdfToFile>();
+    private static TaskExecutor toPrintEexecutor = new TestExecutor<PdfToPrint>();
+
+    @Override
+    public void execute(Runnable task) {
+      if (task instanceof PdfToFile) {
+        toFileEexecutor.execute(task);
+      } else {
+        toPrintEexecutor.execute(task);
+      }
+    }
+
+  }
 }

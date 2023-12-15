@@ -1,7 +1,15 @@
 package nl.ealse.ccnl.database.config;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.nio.file.FileSystem;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.StringJoiner;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,6 +23,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
 @Slf4j
@@ -36,9 +46,9 @@ public abstract class BaseDbConfigurator {
 
   @FXML
   private Button saveButton;
-  
+
   private final Stage configStage = new Stage();
-  
+
   private Alert info;
 
   /**
@@ -77,7 +87,7 @@ public abstract class BaseDbConfigurator {
     configStage.setScene(scene);
     configStage.show();
   }
-  
+
   protected FileChooser fileChooser() {
     FileChooser fs = new FileChooser();
     fs.getExtensionFilters().add(FileExtension.DB.getFilter());
@@ -115,13 +125,21 @@ public abstract class BaseDbConfigurator {
   void saveNew() {
     File dir = new File(dbFolder.getText());
     dir.mkdirs();
-    save();
+    String dbLocation = handleSave();
+    if (dbLocation != null) {
+      initializeDatabase(DatabaseLocation.initialize(dbLocation));
+    }
   }
 
   @FXML
   void save() {
+    handleSave();
+  }
+
+  private String handleSave() {
     if (validInput()) {
-      String msg = configureDatabaseLocation();
+      String dbLocation = configureDatabaseLocation();
+      String msg = DbProperties.writeFile(dbLocation);
       saveButton.setDisable(true);
       info = new Alert(AlertType.INFORMATION);
       info.setHeaderText(msg);
@@ -131,8 +149,10 @@ public abstract class BaseDbConfigurator {
       cs.setAlwaysOnTop(true);
       info.showAndWait();
       nextAction();
+      return dbLocation;
     } else {
       saveButton.setDisable(true);
+      return null;
     }
   }
 
@@ -178,9 +198,77 @@ public abstract class BaseDbConfigurator {
     if (folder.endsWith("\\")) {
       folder = folder.substring(0, folder.length() - 1);
     }
-    String dbLocation = new StringBuilder().append(folder).append(File.separator)
-        .append(dbName.getText()).toString();
-    return DbProperties.writeFile(dbLocation);
+    return new StringBuilder().append(folder).append(File.separator).append(dbName.getText())
+        .toString();
+  }
+
+  private void initializeDatabase(String dbLocation) {
+    try (Connection connection = getConnection(dbLocation)) {
+      checkAndLoad(connection);
+    } catch (SQLException e1) {
+      log.error("Failed to close connection", e1);
+    }
+
+  }
+
+  public void checkAndLoad(Connection connection) {
+    try (PreparedStatement preparedStatement =
+        connection.prepareStatement("SELECT count(*) FROM SETTING")) {
+      preparedStatement.getResultSet();
+    } catch (SQLException e) {
+      initialLoad(connection);
+    }
+  }
+
+  private Connection getConnection(String dbLocation) {
+    try {
+      Class.forName(ApplicationProperties.getProperty("database.driver"));
+      return DriverManager.getConnection(dbLocation,
+          ApplicationProperties.getProperty("database.user"),
+          ApplicationProperties.getProperty("database.password", ""));
+    } catch (ClassNotFoundException | SQLException e) {
+      log.error("Failed to initialize connection", e);
+      throw new DatabaseException("Failed to initialize connection", e);
+    }
+  }
+  
+  private void initialLoad(Connection connection)  {
+    try {
+      loadInitSql(connection);
+    } catch (SQLException e) {
+      log.error("Failed to initialize database", e);
+      throw new DatabaseException("Failed to initialize database", e);
+    }
+  }
+  
+  private void loadInitSql(Connection connection) throws SQLException {
+    Statement st = null;
+    try (BufferedReader reader =
+        new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/init.sql")))) {
+      String line = reader.readLine();
+      StringJoiner sj = new StringJoiner(" ");
+      connection.setAutoCommit(false);
+      st = connection.createStatement();
+      while (line != null) {
+        line = line.trim();
+        sj.add(line);
+        if (line.endsWith(";")) {
+          st.execute(sj.toString());
+          sj = new StringJoiner(" ");
+        }
+        line = reader.readLine();
+      }
+      connection.commit();
+    } catch (IOException e) {
+      connection.rollback();
+      log.error("Unable to start: Error reading init.sql", e);
+      throw new DatabaseException("Error reading init.sql", e);
+    } finally {
+      if (st != null) {
+        st.close();
+      }
+    }
+    
   }
 
 }

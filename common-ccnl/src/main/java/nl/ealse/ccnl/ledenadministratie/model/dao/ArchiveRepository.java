@@ -1,20 +1,34 @@
 package nl.ealse.ccnl.ledenadministratie.model.dao;
 
+import jakarta.persistence.Query;
 import java.util.List;
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
-public interface ArchiveRepository extends JpaRepository<ArchivedMember, Integer> {
+public class ArchiveRepository extends BaseRepository<ArchivedMember> {
 
-  @Transactional
-  @Modifying
-  @Query("DELETE FROM ArchivedMember A WHERE A.id.archiveYear <= ?1")
-  void deleteObseleteArchivedMembers(Integer year);
+  @Getter
+  private static ArchiveRepository instance = new ArchiveRepository();
 
-  @Query("SELECT A FROM ArchivedMember A ORDER BY A.id.archiveYear DESC, A.id.memberNumber ASC")
-  List<ArchivedMember> findAllByYearAndMemberNumber();
+  private ArchiveRepository() {
+    super(ArchivedMember.class);
+  }
+
+  public void deleteObseleteArchivedMembers(Integer year) {
+    Query query =
+        getEntityManager().createQuery("DELETE FROM ArchivedMember A WHERE A.id.archiveYear <= ?1");
+    query.setParameter(1, year);
+    query.executeUpdate();
+  }
+
+  public List<ArchivedMember> findAllByYearAndMemberNumber() {
+    return executeQuery(
+        "SELECT A FROM ArchivedMember A ORDER BY A.id.archiveYear DESC, A.id.memberNumber ASC");
+  }
+
+  @Override
+  protected Object getPrimaryKey(ArchivedMember entity) {
+    return entity.getId();
+  }
 
 }

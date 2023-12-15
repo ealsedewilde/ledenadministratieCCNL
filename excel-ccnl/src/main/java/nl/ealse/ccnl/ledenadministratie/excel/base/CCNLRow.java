@@ -28,13 +28,11 @@ public abstract class CCNLRow {
   private final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
   private final Row row;
-  private final CCNLColumnProperties properties;
 
   private final CellStyle dateStyle;
 
-  protected CCNLRow(Row row, CCNLColumnProperties properties) throws EOFException {
+  protected CCNLRow(Row row) throws EOFException {
     this.row = row;
-    this.properties = properties;
     this.dateStyle = initDateStyle();
   }
 
@@ -47,7 +45,7 @@ public abstract class CCNLRow {
   }
 
   public Cell getCell(ColumnDefinition kolom) {
-    return row.getCell(properties.getKolomnummer(kolom));
+    return row.getCell(CCNLColumnProperties.getKolomnummer(kolom));
   }
 
   protected String getValue(Cell cell) {

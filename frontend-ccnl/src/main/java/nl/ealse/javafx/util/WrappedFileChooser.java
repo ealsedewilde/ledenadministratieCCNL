@@ -2,6 +2,7 @@ package nl.ealse.javafx.util;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.function.Supplier;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -18,6 +19,7 @@ public class WrappedFileChooser {
 
   private final Stage fileChooserStage;
   private final FileChooser fileChooser;
+  private Supplier<String> directorySupplier;
 
   /**
    * Construct an instance.
@@ -46,8 +48,14 @@ public class WrappedFileChooser {
     return fs;
   }
 
-  public void setInitialDirectory(File directory) {
-    if (directory != null) {
+  public void setInitialDirectory(Supplier<String> dirSupplier) {
+    this.directorySupplier = dirSupplier;
+  }
+
+  private void configureInitialDirectory() {
+    String name = directorySupplier.get();
+    if (name != null) {
+      File directory = new File(name);
       fileChooser.setInitialDirectory(directory);
       if (!directory.exists()) {
         directory.mkdirs();
@@ -60,10 +68,12 @@ public class WrappedFileChooser {
   }
 
   public File showOpenDialog() {
+    configureInitialDirectory();
     return fileChooser.showOpenDialog(fileChooserStage);
   }
 
   public File showSaveDialog() {
+    configureInitialDirectory();
     return fileChooser.showSaveDialog(fileChooserStage);
   }
 

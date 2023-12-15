@@ -3,7 +3,6 @@ package nl.ealse.ccnl.ledenadministratie.excel.club;
 import java.io.EOFException;
 import java.util.StringJoiner;
 import lombok.Getter;
-import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLAdres;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -22,8 +21,8 @@ public class CCNLClub extends CCNLAdres implements Comparable<CCNLClub> {
 
   private String naam;
 
-  public CCNLClub(Row row, CCNLColumnProperties properties) throws EOFException {
-    super(row, properties);
+  public CCNLClub(Row row) throws EOFException {
+    super(row);
     initClub();
   }
 

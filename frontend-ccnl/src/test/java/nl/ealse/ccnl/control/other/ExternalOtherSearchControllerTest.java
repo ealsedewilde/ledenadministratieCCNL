@@ -5,9 +5,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
+import nl.ealse.ccnl.service.relation.ExternalOtherService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalOtherSearchControllerTest extends FXMLBaseTest {
@@ -26,7 +29,7 @@ class ExternalOtherSearchControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = new ExternalOtherSearchController(null, null, null);
+    sut = ExternalOtherSearchController.getInstance();
   }
 
   private void testSearch() {
@@ -45,5 +48,9 @@ class ExternalOtherSearchControllerTest extends FXMLBaseTest {
     Assertions.assertEquals(5, itemMap.size());
   }
 
+  @BeforeAll
+  static void setup() {
+    MockProvider.mock(ExternalOtherService.class);
+  };
 
 }

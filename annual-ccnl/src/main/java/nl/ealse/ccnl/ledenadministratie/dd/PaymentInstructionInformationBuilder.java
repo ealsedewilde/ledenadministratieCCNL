@@ -35,8 +35,8 @@ public class PaymentInstructionInformationBuilder {
   private PaymentInstructionInformation4 paymentInstructionInformation =
       new PaymentInstructionInformation4();
 
-  public PaymentInstructionInformationBuilder(IncassoProperties properties) {
-    init(properties);
+  public PaymentInstructionInformationBuilder() {
+    init();
   }
 
   /**
@@ -103,10 +103,10 @@ public class PaymentInstructionInformationBuilder {
   /**
    * Vaste gegevens initiëren.
    */
-  private void init(IncassoProperties properties) {
+  private void init() {
 
     paymentInstructionInformation.setBtchBookg(true);
-    paymentInstructionInformation.setPmtInfId(properties.getMessageId());
+    paymentInstructionInformation.setPmtInfId(IncassoProperties.getMessageId());
     paymentInstructionInformation.setPmtMtd(PaymentMethod2Code.DD);
     PaymentTypeInformation20 paymentTypeInformation20 = new PaymentTypeInformation20();
     ServiceLevel8Choice serviceLevel8Choice = new ServiceLevel8Choice();
@@ -116,28 +116,28 @@ public class PaymentInstructionInformationBuilder {
     localInstrument2Choice.setCd("CORE");
     paymentTypeInformation20.setLclInstrm(localInstrument2Choice);
     // paymentTypeInformation20.setSeqTp(SequenceType1Code.OOFF); // eenmalige INCASSO
-    paymentTypeInformation20.setSeqTp(SequenceType1Code.valueOf(properties.getMachtigingType()));
+    paymentTypeInformation20.setSeqTp(SequenceType1Code.valueOf(IncassoProperties.getMachtigingType()));
     // paymentTypeInformation20.setSeqTp(SequenceType1Code.FRST); // eerste van een serie
     // paymentTypeInformation20.setSeqTp(SequenceType1Code.RCUR); // herhaalde INCASSO
     paymentInstructionInformation.setPmtTpInf(paymentTypeInformation20);
 
     PartyIdentification32 creditor = new PartyIdentification32();
-    creditor.setNm(properties.getNaam());
+    creditor.setNm(IncassoProperties.getNaam());
     paymentInstructionInformation.setCdtr(creditor);
 
     CashAccount16 ibanRekening = new CashAccount16();
     AccountIdentification4Choice ibanNummer = new AccountIdentification4Choice();
-    ibanNummer.setIBAN(properties.getIbanNummer());
+    ibanNummer.setIBAN(IncassoProperties.getIbanNummer());
     ibanRekening.setId(ibanNummer);
     paymentInstructionInformation.setCdtrAcct(ibanRekening);
 
     BranchAndFinancialInstitutionIdentification4 bic =
         new BranchAndFinancialInstitutionIdentification4();
     FinancialInstitutionIdentification7 finId = new FinancialInstitutionIdentification7();
-    finId.setBIC(BicResolver.getBicCode(properties.getIbanNummer()));
+    finId.setBIC(BicResolver.getBicCode(IncassoProperties.getIbanNummer()));
     bic.setFinInstnId(finId);
     paymentInstructionInformation.setCdtrAgt(bic);
-    paymentInstructionInformation.setCdtrSchmeId(buildSchemaId(properties));
+    paymentInstructionInformation.setCdtrSchmeId(buildSchemaId());
   }
 
   /**
@@ -145,16 +145,16 @@ public class PaymentInstructionInformationBuilder {
    *
    * @return opgebouwde Incassant Id informatie
    */
-  private PartyIdentification32 buildSchemaId(IncassoProperties properties) {
+  private PartyIdentification32 buildSchemaId() {
     PartyIdentification32 schemaId = new PartyIdentification32();
-    schemaId.setNm(properties.getNaam());
+    schemaId.setNm(IncassoProperties.getNaam());
 
     Party6Choice id = new Party6Choice();
     PersonIdentification5 personId = new PersonIdentification5();
     id.setPrvtId(personId);
     GenericPersonIdentification1 genId = new GenericPersonIdentification1();
     personId.getOthr().add(genId);
-    genId.setId(properties.getIncassantId());
+    genId.setId(IncassoProperties.getIncassantId());
     PersonIdentificationSchemeName1Choice schemaName = new PersonIdentificationSchemeName1Choice();
     schemaName.setPrtry("SEPA");
     genId.setSchmeNm(schemaName);

@@ -9,28 +9,28 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.exception.AsyncTaskException;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.excelimport.ImportHandler.ImportSelection;
+import nl.ealse.ccnl.ledenadministratie.excelimport.ImportType;
 import nl.ealse.ccnl.service.excelimport.ImportService;
-import nl.ealse.ccnl.service.excelimport.ImportService.ImportSelection;
-import nl.ealse.ccnl.service.excelimport.ImportType;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Controller;
 
-@Controller
 @Slf4j
 public class ExcelImportController {
 
-  @Value("${ccnl.directory.excel:c:/temp}")
-  private String excelDirectory;
+  @Getter
+  private static final ExcelImportController instance = new ExcelImportController();
 
   private final PageController pageController;
 
@@ -68,17 +68,17 @@ public class ExcelImportController {
 
   private File selectedFile;
 
-  public ExcelImportController(PageController pageController, ImportService importService,
-      TaskExecutor executor) {
-    this.pageController = pageController;
-    this.importService = importService;
-    this.executor = executor;
+  private ExcelImportController() {
+    this.pageController = PageController.getInstance();
+    this.importService = ImportService.getInstance();
+    this.executor = TaskExecutor.getInstance();
+    setup();
   }
 
-  @FXML
-  void initialize() {
+  private void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
-    fileChooser.setInitialDirectory(new File(excelDirectory));
+    fileChooser.setInitialDirectory(
+        () -> DatabaseProperties.getProperty("ccnl.directory.excel", "c:/temp"));
   }
 
   @FXML
@@ -136,7 +136,7 @@ public class ExcelImportController {
     executor.execute(asyncTask);
   }
 
-  @EventListener(condition = "#event.name('IMPORT_FROM_EXCEL')")
+  @EventListener(menuChoice = MenuChoice.IMPORT_FROM_EXCEL)
   public void onApplicationEvent(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.EXCEL_IMPORT);
     selectedFile = null;
@@ -167,7 +167,7 @@ public class ExcelImportController {
 
     @Override
     protected String call() {
-      try { 
+      try {
         importService.importFromExcel(selectedFile, selection);
         return "Import succesvol uitgevoerd";
       } catch (Exception e) {

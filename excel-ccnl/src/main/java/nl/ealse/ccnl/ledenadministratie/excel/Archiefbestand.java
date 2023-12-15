@@ -14,8 +14,8 @@ import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 
 public class Archiefbestand extends CCNLBestand {
 
-  public Archiefbestand(File bestand, CCNLColumnProperties properties) throws IOException {
-    super(bestand, properties);
+  public Archiefbestand(File bestand) throws IOException {
+    super(bestand);
   }
 
   public void addHeading() {
@@ -23,7 +23,7 @@ public class Archiefbestand extends CCNLBestand {
     List<ColumnDefinition> list = new ArrayList<>();
     list.addAll(Arrays.asList(LidColumnDefinition.values()));
     list.addAll(Arrays.asList(AdresColumnDefinition.values()));
-    list.forEach(c -> addCell(c.heading(), getProperties().getKolomnummer(c)));
+    list.forEach(c -> addCell(c.heading(), CCNLColumnProperties.getKolomnummer(c)));
   }
 
   public void addMember(ArchivedMember member) {

@@ -5,12 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.dao.ArchiveRepository;
-import nl.ealse.ccnl.test.util.ExcelPropertiesFactory;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,13 +27,10 @@ class ExportArchiveServiceTest {
   @Mock
   private ArchiveRepository archiveRepository;
   
-  private CCNLColumnProperties properties;
-  
   private ExportArchiveService sut;
   
   @Test
   void testService() {
-    sut = new ExportArchiveService(archiveRepository, properties);
     try {
       File f = new File(tempDir, "archief.xlsx");
       sut.export(f);
@@ -46,7 +42,8 @@ class ExportArchiveServiceTest {
   
   @BeforeEach
   void before() {
-    properties = ExcelPropertiesFactory.newExcelProperties();
+    archiveRepository = MockProvider.mock(ArchiveRepository.class);
+    sut = ExportArchiveService.getInstance();
     setup();
   }
    

@@ -22,9 +22,8 @@ public abstract class ExternalRelationDeleteController<T extends ExternalRelatio
   @Setter(value = AccessLevel.PROTECTED)
   private T selectedEntity;
 
-  protected ExternalRelationDeleteController(PageController pageController,
-      ExternalRelationService<T> service) {
-    this.pageController = pageController;
+  protected ExternalRelationDeleteController(ExternalRelationService<T> service) {
+    this.pageController = PageController.getInstance();
     this.service = service;
   }
 

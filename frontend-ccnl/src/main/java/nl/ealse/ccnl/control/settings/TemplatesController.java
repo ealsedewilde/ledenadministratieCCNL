@@ -7,21 +7,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import lombok.Getter;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class TemplatesController {
-
-  private final ApplicationEventPublisher eventPublisher;
+  
+  @Getter
+  private static final TemplatesController instance = new TemplatesController();
 
   private final PageController pageController;
 
@@ -36,14 +37,12 @@ public class TemplatesController {
   @FXML
   private TextArea templateText;
 
-  public TemplatesController(DocumentService documentService,
-      ApplicationEventPublisher eventPublisher, PageController pageController) {
-    this.eventPublisher = eventPublisher;
-    this.pageController = pageController;
-    this.documentService = documentService;
+  private TemplatesController() {
+     this.pageController = PageController.getInstance();
+    this.documentService = DocumentService.getInstance();
   }
 
-  @EventListener(condition = "#event.name('TEMPLATES_OVERVIEW')")
+  @EventListener(menuChoice = MenuChoice.TEMPLATES_OVERVIEW)
   public void onApplicationEvent(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.TEMPLATES_OVERVIEW);
     List<DocumentTemplate> templates = documentService.findAllDocumentTemplates();
@@ -59,7 +58,7 @@ public class TemplatesController {
     if (selectedTemplate != null) {
       TemplateSelectionEvent templateEvent =
           new TemplateSelectionEvent(this, selectedTemplate, false);
-      eventPublisher.publishEvent(templateEvent);
+      EventPublisher.publishEvent(templateEvent);
     }
   }
 
@@ -84,7 +83,7 @@ public class TemplatesController {
     id.setDocumentTemplateType(type);
     template.setTemplateID(id);
     TemplateSelectionEvent event = new TemplateSelectionEvent(this, template, true);
-    eventPublisher.publishEvent(event);
+    EventPublisher.publishEvent(event);
 
   }
 

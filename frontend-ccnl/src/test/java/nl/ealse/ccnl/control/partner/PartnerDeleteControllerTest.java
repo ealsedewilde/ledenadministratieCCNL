@@ -1,32 +1,28 @@
 package nl.ealse.ccnl.control.partner;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class PartnerDeleteControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
-  private static CommercialPartnerService service;
-
   private PartnerDeleteController sut;
   private ExternalRelationPartner partner;
 
   @Test
   void testController() {
-    sut = new PartnerDeleteController(pageController, service);
     partner = externalRelationPartner();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -38,22 +34,23 @@ class PartnerDeleteControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
+    reset(getPageController());
     PartnerSelectionEvent event =
         new PartnerSelectionEvent(sut, MenuChoice.DELETE_PARTNER, partner);
     sut.onApplicationEvent(event);
 
     sut.delete();
-    verify(pageController).showMessage("Gegevens zijn verwijderd");
+    verify(getPageController()).showMessage("Gegevens zijn verwijderd");
   }
 
   @BeforeAll
   static void setup() {
    
-    pageController = mock(PageController.class);
-    service = mock(CommercialPartnerService.class);
+    MockProvider.mock(CommercialPartnerService.class);
   };
 
   private void prepare() {
+    sut = PartnerDeleteController.getInstance();
     getPageWithFxController(sut, PageName.PARTNER_DELETE);
   }
 

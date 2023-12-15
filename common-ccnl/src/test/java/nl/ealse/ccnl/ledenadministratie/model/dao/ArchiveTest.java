@@ -8,19 +8,14 @@ import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.ledenadministratie.test.JpaTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-class ArchiveTest extends JpaTestBase {
-
-  @Autowired
-  private MemberRepository memberRepository;
-
-  @Autowired
-  private ArchiveRepository archivedMemberRepository;
-
+class ArchiveTest {
+  
+  private MemberRepository memberRepository = MemberRepository.getInstance();
+  private ArchiveRepository archivedMemberRepository = ArchiveRepository.getInstance();
+  
   @Test
   void testArchive() {
     Member member = memberRepository.saveAndFlush(initializedModel());
@@ -38,10 +33,11 @@ class ArchiveTest extends JpaTestBase {
     Assertions.assertEquals(1, archiveList.size());
     ArchivedMember am = archiveList.get(0);
     Assertions.assertEquals("2804 TV", am.getMember().getAddress().getPostalCode());
-    boolean eq = archivedMember.equals(am);
-    Assertions.assertFalse(eq);
+    boolean eq = archivedMember.getId().equals(am.getId());
+    Assertions.assertTrue(eq);
+    
   }
-
+  
   private Member initializedModel() {
     Member member = new Member();
     Address address = new Address();
@@ -64,6 +60,7 @@ class ArchiveTest extends JpaTestBase {
 
     return member;
   }
+
 
 
 }

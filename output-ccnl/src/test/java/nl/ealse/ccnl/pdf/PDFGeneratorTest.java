@@ -17,11 +17,9 @@ class PDFGeneratorTest {
     LetterData data = new LetterData(getContent());
     data.getMembers().add(m);
     data.getMembers().add(m);
-    FOGenerator foGenerator = new FOGenerator();
-    FOContent content = foGenerator.generateFO(data);
+    FOContent content = FOGenerator.generateFO(data);
     System.out.println(content.toString());
-    PDFGenerator generator = new PDFGenerator();
-    byte[] pdf = generator.generatePDF(content, data);
+    byte[] pdf = PDFGenerator.generatePDF(content, data);
     Assertions.assertTrue(pdf.length > 5400);
   }
 

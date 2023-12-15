@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -21,8 +20,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public abstract class CCNLBestand implements AutoCloseable {
 
   private final File file;
-  @Getter
-  private final CCNLColumnProperties properties;
 
   protected Workbook workbook;
 
@@ -36,14 +33,13 @@ public abstract class CCNLBestand implements AutoCloseable {
 
   private CellStyle currencyStyle;
 
-  protected CCNLBestand(File bestand, CCNLColumnProperties properties) {
+  protected CCNLBestand(File bestand) {
     this.file = bestand;
-    this.properties = properties;
     init();
   }
 
   public Sheet addSheet(SheetDefinition sheetDef) {
-    String sheetName = properties.getProperty(sheetDef.name().toLowerCase());
+    String sheetName = CCNLColumnProperties.getProperty(sheetDef.name().toLowerCase());
     currentSheet = workbook.createSheet(sheetName);
     currentRow = null;
     return currentSheet;

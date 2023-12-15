@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
@@ -15,21 +15,17 @@ import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.MemberCont
 import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.Transaction;
 import nl.ealse.ccnl.ledenadministratie.payment.filter.FilterChain;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
-import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
 public class PaymentHandler {
+  
+  @Getter
+  private static PaymentHandler instance = new PaymentHandler();
 
   private final MemberRepository dao;
-  private final MemberShipFee memberShipFee;
-  private final IncassoProperties incassoProperties;
 
-  public PaymentHandler(MemberRepository dao, IncassoProperties incassoProperties,
-      MemberShipFee memberShipFee) {
-    this.dao = dao;
-    this.memberShipFee = memberShipFee;
-    this.incassoProperties = incassoProperties;
+  private PaymentHandler() {
+    this.dao = MemberRepository.getInstance();
   }
 
   public List<String> handlePayments(List<PaymentFile> paymentFiles, LocalDate referenceDate,
@@ -37,8 +33,8 @@ public class PaymentHandler {
     List<Member> members = dao.findMemberByMemberStatus(MembershipStatus.ACTIVE);
 
     final ReconciliationContext rc =
-        ReconciliationContext.newInstance(members, incassoProperties, includeDD);
-    final FilterChain filterChain = new FilterChain(members, referenceDate, memberShipFee);
+        ReconciliationContext.newInstance(members, includeDD);
+    final FilterChain filterChain = new FilterChain(members, referenceDate);
 
     final List<IngBooking> bookingList = new ArrayList<>();
 
@@ -76,7 +72,7 @@ public class PaymentHandler {
       mc.getTransactions().add(t);
     });
 
-    BigDecimal refAmount = BigDecimal.valueOf(memberShipFee.getOverboeken());
+    BigDecimal refAmount = BigDecimal.valueOf(MemberShipFee.getOverboeken());
     rc.getContexts().values().forEach(mc -> {
       Optional<Member> member = dao.findById(mc.getNumber());
       if (member.isPresent()) {

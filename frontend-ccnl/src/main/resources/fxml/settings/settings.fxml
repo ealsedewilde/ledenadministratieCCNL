@@ -9,14 +9,14 @@
 <?import nl.ealse.ccnl.control.settings.SettingsRowFactory?>
 
 <VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1005.0" xmlns="http://javafx.com/javafx/8"
   xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="nl.ealse.ccnl.control.settings.SettingsController">
   <children>
     <Label styleClass="header" text="Instellingen" />
     <Separator prefWidth="Infinity" />
     <Label styleClass="subHeader" text="Nieuwe instelling toevoegen" />
-    <HBox spacing="10" prefHeight="100.0" prefWidth="1275.0">
+    <HBox spacing="10" prefHeight="100.0" prefWidth="1005.0">
       <children>
         <HBox>
           <children>
@@ -44,8 +44,12 @@
             <Label fx:id="valueE" text="Invullen a.u.b." styleClass="required" visible="false" />
           </children>
         </VBox>
+      </children>
+    </HBox>
+    <HBox spacing="10" prefHeight="100.0" prefWidth="1005.0">
+      <children>
         <Label text="Omschrijving:" />
-        <TextField fx:id="description" prefWidth="250.0" />
+        <TextField fx:id="description" prefWidth="545.0" />
         <SaveButton onAction="#save" />
       </children>
     </HBox>
@@ -53,7 +57,7 @@
     <Separator prefWidth="Infinity" />
 
     <Label styleClass="subHeader" text="Huidige instellingen (klik op een rij om te wijzigen)" />
-    <TableView fx:id="tableView" prefHeight="600.0" maxWidth="1240.0">
+    <TableView fx:id="tableView" prefHeight="600.0" maxWidth="985.0">
       <placeholder>
         <Label text="Geen gegevens gevonden" />
       </placeholder>

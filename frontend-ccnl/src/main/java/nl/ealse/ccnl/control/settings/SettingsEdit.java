@@ -1,19 +1,20 @@
 package nl.ealse.ccnl.control.settings;
 
-import jakarta.annotation.PostConstruct;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.javafx.FXMLLoaderBean;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class SettingsEdit extends SettingsView {
+  
+  @Getter
+  private static final SettingsEdit instance = new SettingsEdit();
 
   private final SettingsController controller;
 
@@ -22,12 +23,12 @@ public class SettingsEdit extends SettingsView {
   private Stage editStage;
 
 
-  public SettingsEdit(SettingsController parentController) {
-    this.controller = parentController;
+  private SettingsEdit() {
+    this.controller = SettingsController.getInstance();
+    setup();
   }
   
-  @PostConstruct
-  void setup() {
+  private void setup() {
     editStage = new Stage();
     editStage.initModality(Modality.APPLICATION_MODAL);
     editStage.setTitle("Instelling wijzigen");

@@ -1,32 +1,32 @@
 package nl.ealse.ccnl.control.club;
 
 import java.util.Map;
+import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
+import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.ExternalClubService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class ExternalClubSearchController
     extends ExternalRelationSearchController<ExternalRelationClub> {
+  
+  @Getter
+  private static final ExternalClubSearchController instance = new ExternalClubSearchController();
 
   private final PageController pageController;
 
-  public ExternalClubSearchController(ApplicationEventPublisher eventPublisher,
-      ExternalRelationService<ExternalRelationClub> externalRelationService,
-      PageController pageController) {
-    super(eventPublisher, externalRelationService);
-    this.pageController = pageController;
+  private ExternalClubSearchController() {
+    super(ExternalClubService.getInstance());
+    this.pageController = PageController.getInstance();
   }
 
-  @EventListener(condition = "#event.group('SEARCH_CLUB')")
+  @EventListener(choiceGroup = ChoiceGroup.SEARCH_CLUB)
   public void searchClub(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);

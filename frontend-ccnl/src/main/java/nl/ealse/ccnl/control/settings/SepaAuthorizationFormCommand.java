@@ -1,25 +1,24 @@
 package nl.ealse.ccnl.control.settings;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 @Slf4j
 public class SepaAuthorizationFormCommand {
 
-  @Value("${ccnl.directory.sepa:c:/temp}")
-  private String sepaDirectory;
+  @Getter
+  private static final SepaAuthorizationFormCommand instance = new SepaAuthorizationFormCommand();
 
   private WrappedFileChooser fileChooser;
 
@@ -27,20 +26,20 @@ public class SepaAuthorizationFormCommand {
 
   private final DocumentService documentService;
 
-  public SepaAuthorizationFormCommand(PageController pageController,
-      DocumentService documentService) {
-    this.pageController = pageController;
-    this.documentService = documentService;
-  }
-  
-  @PostConstruct
-  void setup() {
-    fileChooser = new WrappedFileChooser(FileExtension.PDF);
-    fileChooser.setInitialDirectory(new File(sepaDirectory).getParentFile());
-    
+  private SepaAuthorizationFormCommand() {
+    this.pageController = PageController.getInstance();
+    this.documentService = DocumentService.getInstance();
+    setup();
   }
 
-  @EventListener(condition = "#event.name('UPLOAD_SEPA_FORM')")
+  void setup() {
+    fileChooser = new WrappedFileChooser(FileExtension.PDF);
+    fileChooser.setInitialDirectory(
+        () -> DatabaseProperties.getProperty("ccnl.directory.sepa", "c:/temp"));
+
+  }
+
+  @EventListener(menuChoice = MenuChoice.UPLOAD_SEPA_FORM)
   public void executeCommand(MenuChoiceEvent event) {
     File selectedFile = fileChooser.showOpenDialog();
     if (selectedFile != null) {

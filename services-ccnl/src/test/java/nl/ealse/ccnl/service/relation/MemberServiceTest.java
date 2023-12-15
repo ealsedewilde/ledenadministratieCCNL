@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.service.relation;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
@@ -12,24 +13,16 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
   
-  @Mock
-  private MemberNumberFactory memberNumberFactory;
+  private static MemberRepository dao;
   
-  @Mock
-  private MemberRepository dao;
-  
-  @InjectMocks
-  private MemberService sut;
+  private static MemberService sut;
   
   
   @Test
@@ -48,6 +41,7 @@ class MemberServiceTest {
   
   @Test
   void testSearchNumber() {
+    reset(dao);
     String searchValue ="1234";
     sut.searchMember(SearchItem.NUMBER, searchValue);
     verify(dao).findById(any(Integer.class));
@@ -87,7 +81,7 @@ class MemberServiceTest {
   @Test
   void testGetFreeNumber() {
     sut.getFreeNumber();
-    verify(memberNumberFactory).getNewNumber();
+    verify(MemberNumberFactory.getInstance()).getNewNumber();
   }
   
   @Test
@@ -106,8 +100,16 @@ class MemberServiceTest {
   @Test
   void testPersistMember() {
     Member m = new Member();
-    sut.persistMember(m);
+    sut.save(m);
     verify(dao).save(m);
+  }
+  
+  @BeforeAll
+  static void setup() {
+    MockProvider.mock(MemberNumberFactory.class);
+    dao = MockProvider.mock(MemberRepository.class);
+    sut = MemberService.getInstance();
+    
   }
 
   

@@ -1,30 +1,29 @@
 package nl.ealse.ccnl.control.excel;
 
 import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_ARCHIVE;
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.exception.AsyncTaskException;
+import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.service.excelexport.ExportArchiveService;
 import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Controller;
 
-@Controller
 @Slf4j
 public class ExcelExportCommand {
 
-  @Value("${ccnl.directory.excel:c:/temp}")
-  private String excelDirectory;
+  @Getter
+  private static final ExcelExportCommand instance = new ExcelExportCommand();
 
   private final PageController pageController;
 
@@ -36,28 +35,27 @@ public class ExcelExportCommand {
 
   private WrappedFileChooser fileChooser;
 
-  public ExcelExportCommand(PageController pageController, TaskExecutor executor,
-      ExportArchiveService archiveService, ExportService service) {
-    this.pageController = pageController;
-    this.archiveService = archiveService;
-    this.service = service;
-    this.executor = executor;
+  private ExcelExportCommand() {
+    this.pageController = PageController.getInstance();
+    this.archiveService = ExportArchiveService.getInstance();
+    this.service = ExportService.getInstance();
+    this.executor = TaskExecutor.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
-    fileChooser.setInitialDirectory(new File(excelDirectory));
+    fileChooser.setInitialDirectory(() ->
+        DatabaseProperties.getProperty("ccnl.directory.excel", "c:/temp"));
   }
 
-  @EventListener(condition = "#event.group('REPORTS')")
+  @EventListener(choiceGroup = ChoiceGroup.REPORTS)
   public void executeCommand(MenuChoiceEvent event) {
     File exportFile = fileChooser.showSaveDialog();
     if (exportFile != null) {
       pageController.showPermanentMessage("MS Excel-werkblad wordt aangemaakt; even geduld a.u.b.");
       if (event.getMenuChoice() == REPORT_ARCHIVE) {
-        AsyncArchiveTask asyncArchiveTask =
-            new AsyncArchiveTask(this, exportFile);
+        AsyncArchiveTask asyncArchiveTask = new AsyncArchiveTask(this, exportFile);
         executor.execute(asyncArchiveTask);
       } else {
         AsyncExportTask asyncExportTask =

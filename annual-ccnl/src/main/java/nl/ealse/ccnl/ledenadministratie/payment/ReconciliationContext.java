@@ -24,17 +24,17 @@ public class ReconciliationContext {
   private final Map<Integer, MemberContext> contexts = new HashMap<>();
   private final List<String> messages = new ArrayList<>();
 
-  private ReconciliationContext(List<Member> members, IncassoProperties incassoProperties,
-      boolean includeDD) {
-    Transaction t = new Transaction(incassoProperties.getIncassoBedrag(),
-        incassoProperties.getIncassoDatum(), BookingType.RDDT, incassoProperties.getIncassoReden());
+  private ReconciliationContext(List<Member> members, boolean includeDD) {
+    Transaction t = new Transaction(IncassoProperties.getIncassoBedrag(),
+        IncassoProperties.getIncassoDatum(), BookingType.RDDT,
+        IncassoProperties.getIncassoReden());
     members.forEach(m -> {
       MemberContext mc = new MemberContext(m.getMemberNumber());
       if (m.getPaymentMethod() == PaymentMethod.DIRECT_DEBIT && includeDD) {
         if (m.getPaymentDate() == null) {
           log.debug("Er is geen incasso uitgevoerd voor lid " + m.getMemberNumber());
-        } else if (m.getPaymentDate().equals(incassoProperties.getIncassoDatum())) {
-          mc.setDirectDebit(incassoProperties.getIncassoDatum());
+        } else if (m.getPaymentDate().equals(IncassoProperties.getIncassoDatum())) {
+          mc.setDirectDebit(IncassoProperties.getIncassoDatum());
           mc.getTransactions().add(t);
         }
       }
@@ -42,9 +42,8 @@ public class ReconciliationContext {
     });
   }
 
-  public static ReconciliationContext newInstance(List<Member> members,
-      IncassoProperties incassoProperties, boolean includeDD) {
-    return new ReconciliationContext(members, incassoProperties, includeDD);
+  public static ReconciliationContext newInstance(List<Member> members, boolean includeDD) {
+    return new ReconciliationContext(members, includeDD);
   }
 
   public MemberContext getMemberContext(Integer lidnummer) {
@@ -120,7 +119,8 @@ public class ReconciliationContext {
 
   @Data
   public static class Transaction implements Comparable<Transaction> {
-    private static final BookingType[] BTM = {BookingType.RDDT, BookingType.IDDT, BookingType.RCDT, BookingType.RDDT, BookingType.IRCT};
+    private static final BookingType[] BTM =
+        {BookingType.RDDT, BookingType.IDDT, BookingType.RCDT, BookingType.RDDT, BookingType.IRCT};
     private final BigDecimal amount;
     private final LocalDate transactionDate;
     private final BookingType bookingType;

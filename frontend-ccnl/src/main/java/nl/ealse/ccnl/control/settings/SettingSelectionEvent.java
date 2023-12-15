@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.control.settings;
 
+import java.util.EventObject;
 import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
-import org.springframework.context.ApplicationEvent;
 
 @SuppressWarnings("serial")
-public class SettingSelectionEvent extends ApplicationEvent {
+public class SettingSelectionEvent extends EventObject {
   
   @Getter
   private final transient Setting selectedSetting;

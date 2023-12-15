@@ -1,50 +1,51 @@
 package nl.ealse.ccnl.control.club;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.service.relation.ExternalRelationService;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
+import nl.ealse.ccnl.service.relation.ExternalClubService;
 
-@Controller
 public class ExternalClubController extends ExternalRelationController<ExternalRelationClub> {
+
+  @Getter
+  private static final ExternalClubController instance = new ExternalClubController();
+
   private final PageController pageController;
 
   @Getter
   private FormController formController;
 
-  public ExternalClubController(PageController pageController,
-      ExternalRelationService<ExternalRelationClub> externalRelationService) {
-    super(pageController, externalRelationService);
-    this.pageController = pageController;
+  private ExternalClubController() {
+    super(ExternalClubService.getInstance());
+    this.pageController = PageController.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     formController = new ClubFormController(this);
     formController.initializeForm();
     formController.setOnSave(e -> save());
     formController.setOnReset(e -> reset());
   }
 
-  @EventListener(condition = "#event.name('NEW_EXTERNAL_CLUB')")
+  @EventListener(menuChoice = MenuChoice.NEW_EXTERNAL_CLUB)
   public void newClub(MenuChoiceEvent event) {
     this.selectedExternalRelation = new ExternalRelationClub();
     handleClub(event);
   }
 
-  @EventListener(condition = "#event.name('AMEND_EXTERNAL_CLUB')")
+  @EventListener(menuChoice = MenuChoice.AMEND_EXTERNAL_CLUB)
   public void amendClub(ExternalClubSelectionEvent event) {
     this.selectedExternalRelation = event.getSelectedEntity();
     handleClub(event);
   }
-  
+
   private void handleClub(MenuChoiceEvent event) {
     pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);

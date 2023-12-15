@@ -3,15 +3,12 @@ package nl.ealse.ccnl.ledenadministratie.model.dao;
 import java.util.Optional;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.ledenadministratie.test.JpaTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-class InternalRelationTest extends JpaTestBase {
+class InternalRelationTest {
 
-  @Autowired
-  private InternalRelationRepository repository;
+  private InternalRelationRepository repository = InternalRelationRepository.getInstance();
 
   @Test
   void testByTitle() {

@@ -1,18 +1,23 @@
 package nl.ealse.ccnl.service;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.annual.AnnualRollover;
-import org.springframework.stereotype.Service;
 
-@Service
+/**
+ * Perform the rollover to the next memebership year.
+ */
 @Slf4j
 public class AnnualRolloverService {
+  
+  @Getter
+  private static AnnualRolloverService instance = new AnnualRolloverService();
 
   private final AnnualRollover rollover;
 
-  public AnnualRolloverService(AnnualRollover rollover) {
+  private AnnualRolloverService() {
     log.info("Service created");
-    this.rollover = rollover;
+    this.rollover = AnnualRollover.getInstance();
   }
 
   public void annualRollover() {

@@ -1,32 +1,28 @@
 package nl.ealse.ccnl.control.internal;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class InternalRelationDeleteControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
-  private static InternalRelationService service;
-
   private InternalRelationDeleteController sut;
   private InternalRelation club;
 
   @Test
   void testController() {
-    sut = new InternalRelationDeleteController(service, pageController);
     club = internalRelation();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -43,17 +39,18 @@ class InternalRelationDeleteControllerTest extends FXMLBaseTest {
     sut.onApplicationEvent(event);
 
     sut.delete();
-    verify(pageController).showMessage("Gegevens zijn verwijderd");
+    verify(getPageController()).showMessage("Gegevens zijn verwijderd");
   }
 
   @BeforeAll
   static void setup() {
    
-    pageController = mock(PageController.class);
-    service = mock(InternalRelationService.class);
+    MockProvider.mock(InternalRelationService.class);
   };
 
   private void prepare() {
+    reset(getPageController());
+    sut = InternalRelationDeleteController.getInstance();
     getPageWithFxController(sut, PageName.INTERNAL_RELATION_DELETE);
   }
 

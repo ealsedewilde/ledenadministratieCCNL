@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
@@ -18,13 +19,12 @@ import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.PaymentFileRepository;
 import nl.ealse.ccnl.ledenadministratie.payment.PaymentHandler;
 import nl.ealse.ccnl.ledenadministratie.util.XmlValidator;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
 public class ReconciliationService {
+  
+  @Getter
+  private static ReconciliationService instance = new ReconciliationService();
 
   private static final Set<MembershipStatus> STATUSES =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
@@ -33,14 +33,13 @@ public class ReconciliationService {
   private final MemberRepository memberDao;
   private final PaymentHandler reconciliationHandler;
 
-  private final Resource xsd = new ClassPathResource("camt.053.001.02.xsd");
+  private static final String XSD = "/camt.053.001.02.xsd";
 
-  public ReconciliationService(PaymentFileRepository dao, PaymentHandler reconciliationHandler,
-      MemberRepository memberDao) {
+  private ReconciliationService() {
     log.info("Service created");
-    this.dao = dao;
-    this.memberDao = memberDao;
-    this.reconciliationHandler = reconciliationHandler;
+    this.dao = PaymentFileRepository.getInstance();
+    this.memberDao = MemberRepository.getInstance();
+    this.reconciliationHandler = PaymentHandler.getInstance();
   }
 
   public void deleteAllFiles() {
@@ -49,7 +48,7 @@ public class ReconciliationService {
 
   public boolean saveFile(File file) throws IOException {
     String xml = getXml(file);
-    if (XmlValidator.validate(xsd, xml)) {
+    if (XmlValidator.validate(XSD, xml)) {
       PaymentFile paymentFile = new PaymentFile();
       paymentFile.setFileName(file.getName());
       paymentFile.setXml(xml);

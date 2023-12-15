@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -12,29 +13,27 @@ import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.model.dao.ArchiveRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import nl.ealse.ccnl.ledenadministratie.util.TransactionUtil;
 
 /**
  * Rollover to a new membership year.
  *
  * @author ealse
  */
-@Component
 public class AnnualRollover {
 
-  private final ArchiveRepository archiveRepository;
+  @Getter
+  private static AnnualRollover instance = new AnnualRollover();
+  private final ArchiveRepository archiveRepository = ArchiveRepository.getInstance();
+
+  private static final EnumSet<MembershipStatus> statuses = EnumSet.of(MembershipStatus.INACTIVE,
+      MembershipStatus.LAST_YEAR_MEMBERSHIP, MembershipStatus.OVERDUE);
 
   private final MemberRepository memberRepository;
 
-  private final EnumSet<MembershipStatus> statuses = EnumSet.of(MembershipStatus.INACTIVE,
-      MembershipStatus.LAST_YEAR_MEMBERSHIP, MembershipStatus.OVERDUE);
-
-  public AnnualRollover(ArchiveRepository archiveRepository, MemberRepository memberRepository) {
-    this.archiveRepository = archiveRepository;
-    this.memberRepository = memberRepository;
+  private AnnualRollover() {
+    this.memberRepository = MemberRepository.getInstance();
   }
-
   /**
    * Rollover to a new membership year.
    * <p>
@@ -47,8 +46,11 @@ public class AnnualRollover {
    * The member card status is reset for all remaining members.
    * </p>
    */
-  @Transactional
   public void rollover() {
+    TransactionUtil.inTransction(this::doRollover);
+  }
+
+  private void doRollover() {
     final List<Member> membersToRemove = memberRepository.findMembersByStatuses(statuses);
     final List<ArchivedMember> archiveList = new ArrayList<>();
     for (Iterator<Member> itr = membersToRemove.iterator(); itr.hasNext();) {
@@ -59,7 +61,7 @@ public class AnnualRollover {
         // This is a very unusual situation
         itr.remove();
       } else {
-         ArchiveId archiveId = new ArchiveId();
+        ArchiveId archiveId = new ArchiveId();
         archiveId.setArchiveYear(LocalDate.now().getYear());
         archiveId.setMemberNumber(member.getMemberNumber());
         ArchivedMember archivedMember = new ArchivedMember();
@@ -80,7 +82,6 @@ public class AnnualRollover {
         member.setMemberStatus(MembershipStatus.OVERDUE);
       }
     }
-
   }
 
 }

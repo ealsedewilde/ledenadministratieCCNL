@@ -3,35 +3,30 @@ package nl.ealse.ccnl.control.document;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.io.IOException;
+import java.io.File;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 class AddDocumentControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
-  private static DocumentService documentService;
   private static WrappedFileChooser fileChooser;
 
   private AddDocumentController sut;
 
   @Test
   void testController() {
-    sut = new AddDocumentController(pageController, documentService);
-    sepaDirectory();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -50,38 +45,26 @@ class AddDocumentControllerTest extends FXMLBaseTest {
     sut.searchDocument();
 
     sut.addDocument();
-    verify(pageController).showMessage("Document is toegevoegd");
+    verify(getPageController()).showMessage("Document is toegevoegd");
   }
 
   private void prepare() {
+    sut = AddDocumentController.getInstance();
     getPageWithFxController(sut, PageName.ADD_DOCUMENT);
   }
 
   @BeforeAll
   static void setup() {
    
-    pageController = mock(PageController.class);
-    documentService = mock(DocumentService.class);
+    MockProvider.mock(DocumentService.class);
     fileChooser = mock(WrappedFileChooser.class);
-    Resource r = new ClassPathResource("MachtigingsformulierSEPA.pdf");
-    try {
-      when(fileChooser.showOpenDialog()).thenReturn(r.getFile());
-    } catch (IOException e) {
-      Assertions.fail(e.getMessage());
-    }
+    URL url = DocumentController.class.getResource("/MachtigingsformulierSEPA.pdf");
+    when(fileChooser.showOpenDialog()).thenReturn(new File(url.getFile()));
   }
 
   private void setFileChooser() {
     try {
       FieldUtils.writeField(sut, "fileChooser", fileChooser, true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void sepaDirectory() {
-    try {
-      FieldUtils.writeField(sut, "sepaDirectory", "C:/temp", true);
     } catch (Exception e) {
       e.printStackTrace();
     }

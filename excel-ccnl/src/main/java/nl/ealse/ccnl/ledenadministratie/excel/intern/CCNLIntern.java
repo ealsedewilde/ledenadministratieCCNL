@@ -4,7 +4,6 @@ import java.io.EOFException;
 import java.util.Date;
 import java.util.StringJoiner;
 import lombok.Getter;
-import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLAdres;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -29,8 +28,8 @@ public class CCNLIntern extends CCNLAdres implements Comparable<CCNLIntern> {
 
   private String naam;
 
-  public CCNLIntern(Row row, CCNLColumnProperties properties) throws EOFException {
-    super(row, properties);
+  public CCNLIntern(Row row) throws EOFException {
+    super(row);
     init();
   }
 

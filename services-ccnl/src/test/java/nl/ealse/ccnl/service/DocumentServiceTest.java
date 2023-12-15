@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
@@ -15,24 +16,18 @@ import nl.ealse.ccnl.ledenadministratie.model.dao.DocumentRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.DocumentTemplateRepository;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 class DocumentServiceTest {
   
-  @Mock
-  private DocumentRepository dao;
+  private static DocumentRepository dao;
   
-  @Mock
-  private DocumentTemplateRepository templateDao;
+  private static DocumentTemplateRepository templateDao;
   
-  @InjectMocks
-  private DocumentService sut;
+  private static DocumentService sut;
   
   @Test
   void findDocumentsTest() {
@@ -81,6 +76,7 @@ class DocumentServiceTest {
   
   @Test
   void saveSepaAuthorizationFormTest() {
+    reset(dao);
     List<Document> documents = new ArrayList<>();
     when(dao.findByDocumentType(DocumentType.SEPA_AUTHORIZATION_FORM)).thenReturn(documents);
     String name = "sepa.pdf";
@@ -92,10 +88,9 @@ class DocumentServiceTest {
   @Test
   void findDocumentTemplateTest() {
     DocumentTemplateID id = new DocumentTemplateID();
-    List<DocumentTemplate> templates = new ArrayList<>();
-    when(templateDao.findByTemplateID(id)).thenReturn(templates);
+    when(templateDao.findById(id)).thenReturn(Optional.of(new DocumentTemplate()));
     Optional<DocumentTemplate> result = sut.findDocumentTemplate(id);
-    Assertions.assertFalse(result.isPresent());
+    Assertions.assertTrue(result.isPresent());
   }
   
   @Test
@@ -103,6 +98,13 @@ class DocumentServiceTest {
     LetterData data = new LetterData("content");
     FOContent content = sut.generateFO(data);
     Assertions.assertEquals(3, content.getContentSnippets().size());
+  }
+  
+  @BeforeAll
+  static void setup() {
+    dao = MockProvider.mock(DocumentRepository.class);
+    templateDao = MockProvider.mock(DocumentTemplateRepository.class);
+    sut = DocumentService.getInstance();
   }
 
 }

@@ -23,13 +23,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class CCNLWorkbook implements AutoCloseable {
 
   private final File bestand;
-  private final CCNLColumnProperties properties;
 
   protected Workbook workbook;
 
-  public CCNLWorkbook(File bestand, CCNLColumnProperties properties) {
+  public CCNLWorkbook(File bestand) {
     this.bestand = bestand;
-    this.properties = properties;
     init();
   }
 
@@ -38,15 +36,15 @@ public class CCNLWorkbook implements AutoCloseable {
   }
 
   public <T extends CCNLSheet<? extends CCNLRow>> T getSheet(SheetDefinition sheet, Class<T> type) throws SheetNotFoundException {
-    String sheetName = properties.getProperty(sheet.name().toLowerCase());
+    String sheetName = CCNLColumnProperties.getProperty(sheet.name().toLowerCase());
     Sheet excelSheet = workbook.getSheet(sheetName);
     if (excelSheet  == null) {
       throw new SheetNotFoundException(String.format("Excel tabblad '%s' niet gevonden in Excel bestand",  sheetName));
     }
     try {
       return type
-          .getConstructor(Sheet.class, CCNLColumnProperties.class)
-          .newInstance(excelSheet, properties);
+          .getConstructor(Sheet.class)
+          .newInstance(excelSheet);
     } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
         | InvocationTargetException | NoSuchMethodException | SecurityException e) {
       throw new CCNLRuntimeException(e);

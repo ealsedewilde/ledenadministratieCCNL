@@ -1,25 +1,26 @@
 package nl.ealse.ccnl.control.partner;
 
+import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationDeleteController;
-import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.javafx.mapping.ViewModel;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class PartnerDeleteController
     extends ExternalRelationDeleteController<ExternalRelationPartner> {
+  
+  @Getter
+  private static final PartnerDeleteController instance = new PartnerDeleteController();
 
-  public PartnerDeleteController(PageController pageController,
-      ExternalRelationService<ExternalRelationPartner> service) {
-    super(pageController, service);
+  private PartnerDeleteController() {
+    super(CommercialPartnerService.getInstance());
   }
 
-  @EventListener(condition = "#event.name('DELETE_PARTNER')")
+  @EventListener(menuChoice = MenuChoice.DELETE_PARTNER)
   public void onApplicationEvent(PartnerSelectionEvent event) {
     getPageController().setActivePage(PageName.PARTNER_DELETE);
     setSelectedEntity(event.getSelectedEntity());

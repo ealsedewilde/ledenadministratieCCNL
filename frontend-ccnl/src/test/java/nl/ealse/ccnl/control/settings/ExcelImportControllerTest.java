@@ -3,39 +3,33 @@ package nl.ealse.ccnl.control.settings;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.io.IOException;
+import java.io.File;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.excelimport.ImportService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.TestExecutor;
+import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.task.TaskExecutor;
 
 class ExcelImportControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
-  private static ImportService importService;
   private static WrappedFileChooser fileChooser;
-  private static TaskExecutor executor = new TestExecutor<ExcelImportController.AsyncTask>();
 
   private ExcelImportController sut;
 
   @Test
   void testImport() {
-    sut = new ExcelImportController(pageController, importService, executor);
-    setDirectory();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -61,33 +55,22 @@ class ExcelImportControllerTest extends FXMLBaseTest {
     sut.importTab(ae);
 
     sut.importFile();
-    verify(pageController).showMessage("Import succesvol uitgevoerd");
+    verify(getPageController()).showMessage("Import succesvol uitgevoerd");
   }
 
   private void prepare() {
+    sut = ExcelImportController.getInstance();
     getPageWithFxController(sut, PageName.EXCEL_IMPORT);
   }
 
   @BeforeAll
   static void setup() {
    
-    pageController = mock(PageController.class);
-    importService = mock(ImportService.class);
+    MockProvider.mock(ImportService.class);
     fileChooser = mock(WrappedFileChooser.class);
-    Resource r = new ClassPathResource("leden.xlsx");
-    try {
-      when(fileChooser.showOpenDialog()).thenReturn(r.getFile());
-    } catch (IOException e) {
-      Assertions.fail(e.getMessage());
-    }
-  }
-
-  private void setDirectory() {
-    try {
-      FieldUtils.writeField(sut, "excelDirectory", "C:/temp", true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    URL url  = ExcelImportController.class.getResource("/leden.xlsx");
+    when(fileChooser.showOpenDialog()).thenReturn(new File(url.getFile()));
+    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
   }
 
   private void setFileChooser() {
@@ -98,5 +81,15 @@ class ExcelImportControllerTest extends FXMLBaseTest {
     }
   }
 
+  private static class TestTaskExcecutor extends TaskExecutor {
+
+    private static nl.ealse.ccnl.TaskExecutor executor = new TestExecutor<ExcelImportController.AsyncTask>();
+    
+    @Override
+    public void execute(Runnable task) {
+      executor.execute(task);
+    }
+   
+  }
 
 }

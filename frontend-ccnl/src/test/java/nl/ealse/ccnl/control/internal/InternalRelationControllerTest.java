@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.internal;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -11,6 +10,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,19 +18,14 @@ import org.junit.jupiter.api.Test;
 
 class InternalRelationControllerTest extends FXMLBaseTest {
 
-  private static InternalRelationService internalRelationService;
-
-
   private InternalRelationController sut;
   private InternalRelation rel;
 
   @Test
   void testController() {
-    sut = new InternalRelationController(getPageController(), internalRelationService);
     rel = internalRelation();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut.setup();
       doTest();
       ar.set(true);
     }, ar);
@@ -38,6 +33,7 @@ class InternalRelationControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
+    sut = InternalRelationController.getInstance();
     InternalRelationSelectionEvent event =
         new InternalRelationSelectionEvent(sut, MenuChoice.AMEND_INTERNAL_RELATION, rel);
     sut.amendRelation(event);
@@ -53,7 +49,7 @@ class InternalRelationControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    internalRelationService = mock(InternalRelationService.class);
+    MockProvider.mock(InternalRelationService.class);
   }
 
   private InternalRelation internalRelation() {

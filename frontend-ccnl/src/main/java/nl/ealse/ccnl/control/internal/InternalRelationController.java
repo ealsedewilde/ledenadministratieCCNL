@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.internal;
 
-import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import javafx.fxml.FXML;
@@ -9,16 +8,18 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationView;
 import nl.ealse.javafx.mapping.ViewModel;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class InternalRelationController extends InternalRelationView {
+  
+  @Getter
+  private static final InternalRelationController instance = new InternalRelationController();
+  
   private final PageController pageController;
 
   private final InternalRelationService internalRelationService;
@@ -31,27 +32,26 @@ public class InternalRelationController extends InternalRelationView {
 
   private FormController formController;
 
-  public InternalRelationController(PageController pageController,
-      InternalRelationService internalRelationService) {
-    this.pageController = pageController;
-    this.internalRelationService = internalRelationService;
+  private InternalRelationController() {
+    this.pageController = PageController.getInstance();
+    this.internalRelationService = InternalRelationService.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     formController = new InternalRelationFormController(this);
     formController.initializeForm();
     formController.setOnSave(e -> save());
     formController.setOnReset(e -> reset());
   }
 
-  @EventListener(condition = "#event.name('NEW_INTERNAL_RELATION')")
+  @EventListener(menuChoice = MenuChoice.NEW_INTERNAL_RELATION)
   public void newRelation(MenuChoiceEvent event) {
     this.selectedInternalRelation = new InternalRelation();
     handleRelation(event);
   }
 
-  @EventListener(condition = "#event.name('AMEND_INTERNAL_RELATION')")
+  @EventListener(menuChoice = MenuChoice.AMEND_INTERNAL_RELATION)
   public void amendRelation(InternalRelationSelectionEvent event) {
     this.selectedInternalRelation = event.getSelectedEntity();
     handleRelation(event);
@@ -108,7 +108,7 @@ public class InternalRelationController extends InternalRelationView {
     ViewModel.viewToModel(this, model);
     RelationNumberValue rn = RelationNumberValue.fromLabel(model.getTitle());
     model.setRelationNumber(rn.getRelationNumber());
-    internalRelationService.persistInternalRelation(model);
+    internalRelationService.save(model);
     pageController.showMessage("Functiegegevens opgeslagen");
     pageController.activateLogoPage();
   }

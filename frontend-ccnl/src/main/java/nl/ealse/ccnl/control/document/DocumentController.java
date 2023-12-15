@@ -1,26 +1,28 @@
 package nl.ealse.ccnl.control.document;
 
-import jakarta.annotation.PostConstruct;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentViewer;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class DocumentController {
+  
+  @Getter
+  private static final DocumentController instance = new DocumentController();
 
   private final PageController pageController;
 
@@ -39,19 +41,19 @@ public class DocumentController {
   private DocumentViewer documentViewer;
 
 
-  public DocumentController(PageController pageController, DocumentService documentService) {
-    this.pageController = pageController;
-    this.documentService = documentService;
+  private DocumentController() {
+    this.pageController = PageController.getInstance();
+    this.documentService = DocumentService.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     documentViewer = DocumentViewer.builder().withPrintButton(evt -> printDocument())
         .withDeleteButton(evt -> deleteDocument()).withCancelButton(evet -> closeDocument())
         .build();
   }
 
-  @EventListener(condition = "#event.name('VIEW_DOCUMENT')")
+  @EventListener(menuChoice = MenuChoice.VIEW_DOCUMENT)
   public void viewDocument(MemberSeLectionEvent event) {
     pageController.setActivePage(PageName.VIEW_DOCUMENTS);
     Member member = event.getSelectedEntity();

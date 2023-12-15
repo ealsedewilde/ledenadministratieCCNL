@@ -1,45 +1,46 @@
 package nl.ealse.ccnl.control.partner;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.service.relation.ExternalRelationService;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
+import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 
-@Controller
 public class PartnerController extends ExternalRelationController<ExternalRelationPartner> {
+  
+  @Getter
+  private static final PartnerController instance = new PartnerController();
+  
   private final PageController pageController;
 
   @Getter
   private FormController formController;
 
-  public PartnerController(PageController pageController,
-      ExternalRelationService<ExternalRelationPartner> partnerService) {
-    super(pageController, partnerService);
-    this.pageController = pageController;
+  private PartnerController() {
+    super(CommercialPartnerService.getInstance());
+    this.pageController = PageController.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     formController = new PartnerFormController(this);
     formController.initializeForm();
     formController.setOnSave(e -> save());
     formController.setOnReset(e -> reset());
   }
 
-  @EventListener(condition = "#event.name('NEW_PARTNER')")
+  @EventListener(menuChoice = MenuChoice.NEW_PARTNER)
   public void newPartner(MenuChoiceEvent event) {
     this.selectedExternalRelation = new ExternalRelationPartner();
     handlePartner(event);
   }
 
-  @EventListener(condition = "#event.name('AMEND_PARTNER')")
+  @EventListener(menuChoice = MenuChoice.AMEND_PARTNER)
   public void amendPartner(PartnerSelectionEvent event) {
     this.selectedExternalRelation = event.getSelectedEntity();
     handlePartner(event);

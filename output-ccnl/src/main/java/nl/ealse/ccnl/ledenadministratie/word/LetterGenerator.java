@@ -28,7 +28,6 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFHyperlinkRun;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * docx-document Generator. Instances of this class are not reusable.
@@ -39,7 +38,7 @@ public class LetterGenerator {
   /**
    * The letter template to use.
    */
-  private static final String TEMPLATE = "letterTemplate.docx";
+  private static final String TEMPLATE = "/letterTemplate.docx";
 
   private static final String HYPERLINK_STYLE = "Hyperlink";
   private static final String LIST_STYLE = "Lijstalinea";
@@ -268,8 +267,7 @@ public class LetterGenerator {
    * Read the template for the letter.
    */
   private void initialize() {
-    ClassPathResource documentResource = new ClassPathResource(TEMPLATE);
-    try (InputStream is = documentResource.getInputStream()) {
+    try (InputStream is = getClass().getResourceAsStream(TEMPLATE)) {
       doc = new XWPFDocument(is);
       for (XWPFParagraph element : doc.getParagraphs()) {
         String token = element.getText();

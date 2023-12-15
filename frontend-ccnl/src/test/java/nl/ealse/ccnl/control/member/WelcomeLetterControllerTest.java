@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
@@ -20,52 +19,35 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.ccnl.test.PrintCount;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 class WelcomeLetterControllerTest extends FXMLBaseTest {
 
   @TempDir
   File tempDir;
 
-  private PageController pageController;
-  private DocumentService documentService;
-  private WrappedFileChooser fileChooser;
+  private static DocumentService documentService;
+  private static WrappedFileChooser fileChooser;
+  private static byte[] pdf;
+  private static byte[] docx;
 
   private WelcomeLetterController controller;
 
-  private byte[] pdf;
-
-  private byte[] docx;
 
   @Test
   void doTest() {
 
-    pageController = mock(PageController.class);
-
-    documentService = mock(DocumentService.class);
-    when(documentService.generatePDF(any(LetterData.class))).thenReturn(pdf);
-    when(documentService.generateWordDocument(any(LetterData.class))).thenReturn(docx);
-    List<Document> documents = new ArrayList<>();
-    when(documentService.findDocuments(any(Member.class), eq(DocumentType.WELCOME_LETTER)))
-        .thenReturn(documents);
-
-    fileChooser = mock(WrappedFileChooser.class);
-    File exportFile = new File(tempDir, "test.docx");
-    when(fileChooser.showSaveDialog()).thenReturn(exportFile);
-
-
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      controller = new WelcomeLetterController(pageController, documentService);
-
+      prepare();
       Member m = new Member();
       m.setMemberNumber(4444);
       m.setInitials("Pietje");
@@ -77,7 +59,6 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
       a.setCity("Plaats");
       WelcomeletterEvent event = new WelcomeletterEvent(controller, m);
       controller.onApplicationEvent(event);
-      prepare();
       controller.onApplicationEvent(event);
       controller.showLetterExample();
       controller.saveletter();
@@ -96,9 +77,24 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
+    controller = WelcomeLetterController.getInstance();
     getPageWithFxController(controller, PageName.WELCOME_LETTER);
     controller.getLetterText().setText("Beste <<naam>>, \n Welkom bij Citroën Club Nederland.");
+    fileChooser = mock(WrappedFileChooser.class);
+    File exportFile = new File(tempDir, "test.docx");
+    when(fileChooser.showSaveDialog()).thenReturn(exportFile);
     setFileChooser();
+  }
+  @BeforeAll
+  static void setup() {
+    pdf = getBlob("/welkom.pdf");
+    docx = getBlob("/welkom.docx");
+    documentService = MockProvider.mock(DocumentService.class);
+    when(documentService.generatePDF(any(LetterData.class))).thenReturn(pdf);
+    when(documentService.generateWordDocument(any(LetterData.class))).thenReturn(docx);
+    List<Document> documents = new ArrayList<>();
+    when(documentService.findDocuments(any(Member.class), eq(DocumentType.WELCOME_LETTER)))
+        .thenReturn(documents);
   }
 
   private void setFileChooser() {
@@ -111,14 +107,11 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
 
   @BeforeEach
   protected void getPDF() {
-    pdf = getBlob("welkom.pdf");
-    docx = getBlob("welkom.docx");
   }
 
-  protected byte[] getBlob(String name) {
+  private static byte[] getBlob(String name) {
     byte[] b = null;
-    Resource r = new ClassPathResource(name);
-    try (InputStream is = r.getInputStream()) {
+    try (InputStream is = WelcomeLetterController.class.getResourceAsStream(name)) {
       b = is.readAllBytes();
     } catch (IOException e) {
       e.printStackTrace();

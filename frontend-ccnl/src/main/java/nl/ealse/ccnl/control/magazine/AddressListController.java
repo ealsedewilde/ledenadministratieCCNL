@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.magazine;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -8,26 +7,29 @@ import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.exception.AsyncTaskException;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 import nl.ealse.ccnl.service.excelexport.ExportAddressService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Controller;
 
-@Controller
 @Slf4j
 public class AddressListController {
+
+  @Getter
+  private static final AddressListController instance = new AddressListController();
 
   private static final String MAGAZINE_FILE_NAME = "adressen_clubblad_%s.xlsx";
   private static final String CARD_FILE_NAME = "adressen_lidmaatschap_%d.xlsx";
@@ -36,9 +38,6 @@ public class AddressListController {
 
   private static final String SETTING_GROUP = "ccnl.magazine";
   private static final String SETTING_KEY = "number";
-
-  @Value("${ccnl.directory.magazine:c:/temp}")
-  private String magazineDirectory;
 
   private final PageController pageController;
 
@@ -55,15 +54,21 @@ public class AddressListController {
   @FXML
   private Label magazineNumberE;
 
-  public AddressListController(SettingsService service, PageController pageController,
-      ExportAddressService magazineService, TaskExecutor executor) {
-    this.pageController = pageController;
-    this.magazineService = magazineService;
-    this.service = service;
-    this.executor = executor;
+  public AddressListController() {
+    this.pageController = PageController.getInstance();
+    this.magazineService = ExportAddressService.getInstance();
+    this.service = SettingsService.getInstance();
+    this.executor = TaskExecutor.getInstance();
+    setup();
   }
 
-  @EventListener(condition = "#event.name('MAGAZINE_ADDRESS_LIST')")
+  void setup() {
+    fileChooser = new WrappedFileChooser(FileExtension.XLSX);
+    fileChooser.setInitialDirectory(() ->
+        DatabaseProperties.getProperty("ccnl.directory.magazine", "c:/temp"));
+  }
+
+  @EventListener(menuChoice = MenuChoice.MAGAZINE_ADDRESS_LIST)
   public void addressList(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.MAGAZINE_ADDRESS_LIST);
     Optional<Setting> previousNumber = service.getSetting(Optional.of(SETTING_GROUP), SETTING_KEY);
@@ -77,28 +82,23 @@ public class AddressListController {
 
   }
 
-  @EventListener(condition = "#event.name('CARD_ADDRESS_LIST')")
+  @EventListener(menuChoice = MenuChoice.CARD_ADDRESS_LIST)
   public void cardList(MenuChoiceEvent event) {
     AsyncCardAddressListTask asyncTask =
         new AsyncCardAddressListTask(pageController, magazineService);
     generateFile(String.format(CARD_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
 
-  @EventListener(condition = "#event.name('MEMBER_LIST_BY_NUMBER')")
+  @EventListener(menuChoice = MenuChoice.MEMBER_LIST_BY_NUMBER)
   public void memberListByNumber(MenuChoiceEvent event) {
     MemberListTask asyncTask = new MemberListTask(pageController, magazineService, false);
     generateFile(String.format(MEMBER_FILE_NUMBER, LocalDate.now().getYear()), asyncTask);
   }
 
-  @EventListener(condition = "#event.name('MEMBER_LIST_BY_NAME')")
+  @EventListener(menuChoice = MenuChoice.MEMBER_LIST_BY_NAME)
   public void memberListByName(MenuChoiceEvent event) {
     MemberListTask asyncTask = new MemberListTask(pageController, magazineService, true);
     generateFile(String.format(MEMBER_FILE_NAME, LocalDate.now().getYear()), asyncTask);
-  }
-  @PostConstruct
-  void setup() {
-    fileChooser = new WrappedFileChooser(FileExtension.XLSX);
-    fileChooser.setInitialDirectory(new File(magazineDirectory));
   }
 
   private void generateFile(String fileName, FileTask task) {

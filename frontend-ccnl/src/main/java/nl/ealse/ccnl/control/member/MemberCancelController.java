@@ -2,30 +2,31 @@ package nl.ealse.ccnl.control.member;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import lombok.Getter;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.mappers.MembershipStatusMapper;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberCancelView;
 import nl.ealse.javafx.mapping.ViewModel;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
 /**
  * Controller for membership canceling.
  */
-@Controller
 public class MemberCancelController extends MemberCancelView {
+  
+  @Getter
+  static MemberCancelController instance = new MemberCancelController();
 
   private final PageController pageController;
 
   private final MemberService service;
-
-  private final ApplicationEventPublisher eventPublisher;
 
   private final MembershipStatusMapper membershipStatusMapper = new MembershipStatusMapper();
 
@@ -35,11 +36,9 @@ public class MemberCancelController extends MemberCancelView {
   @FXML
   private Label initialsLabel;
 
-  public MemberCancelController(MemberService service, PageController pageController,
-      ApplicationEventPublisher eventPublisher) {
-    this.pageController = pageController;
-    this.service = service;
-    this.eventPublisher = eventPublisher;
+  private MemberCancelController() {
+    this.pageController = PageController.getInstance();
+    this.service = MemberService.getInstance();
   }
 
 
@@ -52,17 +51,17 @@ public class MemberCancelController extends MemberCancelView {
   void save() {
     MembershipStatus status = membershipStatusMapper.getPropertyFromJavaFx(getMemberStatus());
     selectedMember.setMemberStatus(status);
-    service.persistMember(selectedMember);
+    service.save(selectedMember);
     pageController.showMessage("Lidgegevens opgeslagen");
 
     if (status == MembershipStatus.LAST_YEAR_MEMBERSHIP) {
-      eventPublisher.publishEvent(new CancelMailEvent(this, selectedMember));
+      EventPublisher.publishEvent(new CancelMailEvent(this, selectedMember));
     } else {
       pageController.activateLogoPage();
     }
   }
 
-  @EventListener(condition = "#event.name('CANCEL_MEMBERSHIP')")
+  @EventListener(menuChoice = MenuChoice.CANCEL_MEMBERSHIP)
   public void onApplicationEvent(MemberSeLectionEvent event) {
     this.selectedMember = event.getSelectedEntity();
     pageController.setActivePage(PageName.MEMBER_CANCEL);

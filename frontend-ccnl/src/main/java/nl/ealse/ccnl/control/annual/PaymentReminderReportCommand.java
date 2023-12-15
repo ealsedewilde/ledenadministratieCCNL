@@ -1,27 +1,26 @@
 package nl.ealse.ccnl.control.annual;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.exception.AsyncTaskException;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Controller;
 
-@Controller
 @Slf4j
 public class PaymentReminderReportCommand {
 
-  @Value("${ccnl.directory.excel:c:/temp}")
-  private String reportDirectory;
+  @Getter
+  private static final PaymentReminderReportCommand instance = new PaymentReminderReportCommand();
 
   private final PageController pageController;
 
@@ -31,20 +30,20 @@ public class PaymentReminderReportCommand {
 
   private WrappedFileChooser fileChooser;
 
-  public PaymentReminderReportCommand(ExportService exportService,
-      PageController pageController, TaskExecutor executor) {
-    this.pageController = pageController;
-    this.exportService = exportService;
-    this.executor = executor;
+  private PaymentReminderReportCommand() {
+    this.pageController = PageController.getInstance();
+    this.exportService = ExportService.getInstance();
+    this.executor = TaskExecutor.getInstance();
+    setup();
   }
 
-  @PostConstruct
   void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
-    fileChooser.setInitialDirectory(new File(reportDirectory));
+    fileChooser.setInitialDirectory(() ->
+        DatabaseProperties.getProperty("ccnl.directory.excel", "c:/temp"));
   }
 
-  @EventListener(condition = "#event.name('PRODUCE_REMINDER_REPORT')")
+  @EventListener(menuChoice = MenuChoice.PRODUCE_REMINDER_REPORT)
   public void executeCommand(MenuChoiceEvent event) {
     File reportFile = fileChooser.showSaveDialog();
     if (reportFile != null) {

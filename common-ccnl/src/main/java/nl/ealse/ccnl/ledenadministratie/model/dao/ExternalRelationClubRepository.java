@@ -1,16 +1,29 @@
 package nl.ealse.ccnl.ledenadministratie.model.dao;
 
+import jakarta.persistence.TypedQuery;
 import java.util.List;
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-public interface ExternalRelationClubRepository
+public class ExternalRelationClubRepository
     extends ExternalRelationRepository<ExternalRelationClub> {
+  @Getter
+  private static ExternalRelationClubRepository instance =
+      new ExternalRelationClubRepository();
+  
+  private ExternalRelationClubRepository() {
+    super(ExternalRelationClub.class);
+  }
 
-  @Query("Select m.relationNumber from ExternalRelationClub m")
-  List<Number> getAllRelationNumbers();
+  @Override
+  protected Object getPrimaryKey(ExternalRelationClub entity) {
+    return entity.getRelationNumber();
+  }
 
+  public List<Number> getAllRelationNumbers() {
+    TypedQuery<Number> query = getEntityManager()
+        .createQuery("Select m.relationNumber from ExternalRelationClub m", Number.class);
+    return query.getResultList();
+  }
 
 }

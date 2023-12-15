@@ -2,15 +2,12 @@ package nl.ealse.ccnl.ledenadministratie.model.dao;
 
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.ledenadministratie.test.JpaTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-class CommercialPartnerTest extends JpaTestBase {
+class CommercialPartnerTest {
 
-  @Autowired
-  private ExternalRelationPartnerRepository repository;
+  private ExternalRelationPartnerRepository repository = ExternalRelationPartnerRepository.getInstance();
 
   @Test
   void newCommercialpartner() {

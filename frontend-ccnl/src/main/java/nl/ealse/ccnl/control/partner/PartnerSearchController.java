@@ -1,32 +1,32 @@
 package nl.ealse.ccnl.control.partner;
 
 import java.util.Map;
+import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
+import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class PartnerSearchController
     extends ExternalRelationSearchController<ExternalRelationPartner> {
+  
+  @Getter
+  private static final PartnerSearchController instance = new PartnerSearchController();
 
   private final PageController pageController;
 
-  public PartnerSearchController(ApplicationEventPublisher eventPublisher,
-      ExternalRelationService<ExternalRelationPartner> partnerService,
-      PageController pageController) {
-    super(eventPublisher, partnerService);
-    this.pageController = pageController;
+  private PartnerSearchController() {
+    super(CommercialPartnerService.getInstance());
+    this.pageController = PageController.getInstance();
   }
 
-  @EventListener(condition = "#event.group('SEARCH_PARTNER')")
+  @EventListener(choiceGroup = ChoiceGroup.SEARCH_PARTNER)
   public void searchPartner(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);

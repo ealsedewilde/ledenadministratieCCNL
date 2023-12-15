@@ -1,56 +1,92 @@
 package nl.ealse.ccnl.ledenadministratie.model.dao;
 
+import jakarta.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface MemberRepository extends JpaRepository<Member, Integer> {
+public class MemberRepository extends BaseRepository<Member> {
 
-  @Query("Select m.memberNumber from Member m")
-  List<Number> getAllMemberNumbers();
+  @Getter
+  private static MemberRepository instance = new MemberRepository();
+  
+  private MemberRepository() {
+    super(Member.class);
+  }
 
-  @Query("SELECT M FROM Member M WHERE M.currentYearPaid = FALSE AND "
-      + "M.memberStatus = nl.ealse.ccnl.ledenadministratie.model.MembershipStatus.ACTIVE AND "
-      + "M.paymentMethod IN ?1 ORDER BY M.memberNumber")
-  List<Member> findMembersCurrentYearNotPaid(Set<PaymentMethod> paymentMethods);
+  public List<Number> getAllMemberNumbers() {
+    TypedQuery<Number> query =
+        getEntityManager().createQuery("SELECT m.memberNumber FROM Member m", Number.class);
+    return query.getResultList();
+  }
 
-  List<Member> findMemberByMemberStatus(MembershipStatus status);
+  public List<Member> findMembersCurrentYearNotPaid(Set<PaymentMethod> paymentMethods) {
+    return executeQuery("SELECT M FROM Member M WHERE M.currentYearPaid = FALSE AND "
+        + "M.memberStatus = nl.ealse.ccnl.ledenadministratie.model.MembershipStatus.ACTIVE AND "
+        + "M.paymentMethod IN ?1 ORDER BY M.memberNumber", paymentMethods);
+  }
 
-  @Query("SELECT M FROM Member M WHERE M.memberStatus IN ?1 ORDER BY M.memberNumber")
-  List<Member> findMembersByStatuses(Set<MembershipStatus> statuses);
+  public List<Member> findMemberByMemberStatus(MembershipStatus status) {
+    return executeQuery("SELECT M FROM Member M WHERE M.memberStatus IN ?1", status);
+  }
 
-  List<Member> findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(
-      PaymentMethod paymentMethod, MembershipStatus status, boolean currentYearPaid);
+  public List<Member> findMembersByStatuses(Set<MembershipStatus> statuses) {
+    return executeQuery("SELECT M FROM Member M WHERE M.memberStatus IN ?1 ORDER BY M.memberNumber",
+        statuses);
+  }
 
-  @Query("SELECT M FROM Member M WHERE M.paymentMethod IN ?1")
-  List<Member> findMembersByPaymentMethods(Set<PaymentMethod> paymentMethods);
+  public List<Member> findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(
+      PaymentMethod paymentMethod, MembershipStatus status, boolean currentYearPaid) {
+    return executeQuery(
+        "SELECT M FROM Member M WHERE M.paymentMethod = ?1 AND M.memberStatus = ?2 AND M.currentYearPaid = ?3",
+        paymentMethod, status, currentYearPaid);
+  }
 
+  public List<Member> findMembersByPaymentMethods(Set<PaymentMethod> paymentMethods) {
+    return executeQuery("SELECT M FROM Member M WHERE M.paymentMethod IN ?1", paymentMethods);
+  }
 
-  @Query("Select M from Member M where M.memberSince >= ?1")
-  List<Member> findNewMembers(LocalDate refDate);
+  public List<Member> findNewMembers(LocalDate refDate) {
+    return executeQuery("Select M from Member M where M.memberSince >= ?1", refDate);
+  }
+
+  public List<Member> findMembersByStatusesOrderByName(Set<MembershipStatus> statuses) {
+    return executeQuery("SELECT M FROM Member M WHERE M.memberStatus IN ?1 ORDER BY M.lastName",
+        statuses);
+  }
 
   // Start search queries
 
-  @Query("SELECT M FROM Member M WHERE LOWER(M.address.street) LIKE LOWER(concat(?1, '%'))")
-  List<Member> findMembersByAddress(String searchValue);
+  public List<Member> findMembersByAddress(String searchValue) {
+    return executeQuery(
+        "SELECT M FROM Member M WHERE LOWER(M.address.street) LIKE LOWER(concat(?1, '%'))",
+        searchValue);
+  }
 
-  @Query("SELECT M FROM Member M WHERE LOWER(M.address.city) LIKE LOWER(concat(?1, '%'))")
-  List<Member> findMembersByCity(String searchValue);
+  public List<Member> findMembersByCity(String searchValue) {
+    return executeQuery(
+        "SELECT M FROM Member M WHERE LOWER(M.address.city) LIKE LOWER(concat(?1, '%'))",
+        searchValue);
+  }
 
-  @Query("SELECT M FROM Member M WHERE LOWER(M.lastName) LIKE LOWER(concat(?1, '%'))")
-  List<Member> findMembersByName(String searchValue);
+  public List<Member> findMembersByName(String searchValue) {
+    return executeQuery(
+        "SELECT M FROM Member M WHERE LOWER(M.lastName) LIKE LOWER(concat(?1, '%'))", searchValue);
+  }
 
-  @Query("SELECT M FROM Member M WHERE LOWER(M.address.postalCode) LIKE LOWER(concat(?1, '%'))")
-  List<Member> findMembersByPostalCode(String searchValue);
-  
-  @Query("SELECT M FROM Member M WHERE M.memberStatus IN ?1 ORDER BY M.lastName")
-  List<Member> findMembersByStatusesOrderByName(Set<MembershipStatus> statuses);
-  
+  public List<Member> findMembersByPostalCode(String searchValue) {
+    return executeQuery(
+        "SELECT M FROM Member M WHERE LOWER(M.address.postalCode) LIKE LOWER(concat(?1, '%'))",
+        searchValue);
+  }
+
+  @Override
+  protected Object getPrimaryKey(Member entity) {
+    return entity.getMemberNumber();
+  }
+
 }

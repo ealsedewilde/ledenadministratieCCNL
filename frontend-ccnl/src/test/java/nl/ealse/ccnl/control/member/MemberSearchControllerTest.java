@@ -3,6 +3,8 @@ package nl.ealse.ccnl.control.member;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
@@ -13,24 +15,24 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventProcessor;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
+import org.mockito.MockedStatic;
 
 class MemberSearchControllerTest extends FXMLBaseTest {
 
-  private static ApplicationContext springContext;
   private static MemberService service;
-  private static PageController pageController;
   private static Member m;
 
   private static SearchItem si = SearchItem.NUMBER;
@@ -53,9 +55,11 @@ class MemberSearchControllerTest extends FXMLBaseTest {
       TableRow<Member> row = new TableRow<>();
       row.setItem(m);
       when(me.getSource()).thenReturn(row);
-      sut.handleSelected(me);
-      verify(springContext).publishEvent(any(MemberSeLectionEvent.class));
-
+      try (MockedStatic<EventPublisher> context = mockStatic(EventPublisher.class)) {
+        sut.handleSelected(me);
+        context.verify(() -> EventPublisher.publishEvent(any(MemberSeLectionEvent.class)), times(1));
+      }
+ 
       searchField("1234");
       sut.search();
       searchCriterium(3);
@@ -69,20 +73,20 @@ class MemberSearchControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = new MemberSearchController(springContext, service, pageController);
+    sut = MemberSearchController.getInstance();
+ 
   }
 
 
   @BeforeAll
   static void setup() {
-    springContext = mock(ApplicationContext.class);
-    service = mock(MemberService.class);
-    pageController = mock(PageController.class);
+    service = MockProvider.mock(MemberService.class);
     m = member();
     List<Member> members = new ArrayList<>();
     members.add(m);
     when(service.searchMember(any(SearchItem.class), anyString())).thenReturn(members);
     when(service.searchMemberWithoutSepa(any(SearchItem.class), anyString())).thenReturn(members);
+    EventProcessor.getInstance().initialize();
   }
 
   private static Member member() {

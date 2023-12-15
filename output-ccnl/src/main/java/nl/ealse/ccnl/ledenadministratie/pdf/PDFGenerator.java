@@ -11,6 +11,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
+import lombok.experimental.UtilityClass;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.output.GeneratorException;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
@@ -19,15 +20,12 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.xml.sax.SAXException;
 
+@UtilityClass
 public class PDFGenerator {
 
   private static final TransformerFactory factory = TransformerFactory.newInstance();
 
-  private final FopFactory fopFactory;
-
-  public PDFGenerator() {
-    this.fopFactory = FopFactoryProvider.getFopFactory();
-  }
+  private static final FopFactory fopFactory = FopFactoryProvider.getFopFactory();
 
   public byte[] generatePDF(FOContent content, LetterData data) {
     StringBuilder sb = new StringBuilder();

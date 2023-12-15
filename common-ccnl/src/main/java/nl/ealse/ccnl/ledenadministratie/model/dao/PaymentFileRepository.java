@@ -1,11 +1,28 @@
 package nl.ealse.ccnl.ledenadministratie.model.dao;
 
 import java.util.List;
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PaymentFileRepository extends JpaRepository<PaymentFile, String> {
+public class PaymentFileRepository extends BaseRepository<PaymentFile> {
+  @Getter
+  private static PaymentFileRepository instance = new PaymentFileRepository();
+  
+  private PaymentFileRepository() {
+    super(PaymentFile.class);
+  }
 
-  List<PaymentFile> findAllByOrderByFileName();
+  @Override
+  protected Object getPrimaryKey(PaymentFile entity) {
+     return entity.getFileName();
+  }
+  
+  public List<PaymentFile> findAllByOrderByFileName() {
+    return executeQuery("SELECT F FROM PaymentFile F ORDER BY F.fleName ASC");
+  }
+
+  public void deleteAll() {
+    deleteAll(findAll());
+  }
 
 }

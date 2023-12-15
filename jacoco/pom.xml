@@ -1,13 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>nl.ealse.ccnl</groupId>
-		<artifactId>ledenadministratieCCNL</artifactId>
-		<version>4.0.0</version>
-	</parent>
-	<artifactId>jacoco</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>nl.ealse.ccnl</groupId>
+    <artifactId>ledenadministratieCCNL</artifactId>
+    <version>6.0.0</version>
+  </parent>
+  <artifactId>jacoco</artifactId>
 	<packaging>pom</packaging>
 	<build>
 		<plugins>
@@ -54,12 +52,6 @@
 		<dependency>
 			<groupId>nl.ealse.ccnl</groupId>
 			<artifactId>services-ccnl</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>nl.ealse.ccnl</groupId>
-			<artifactId>javafx-springboot</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

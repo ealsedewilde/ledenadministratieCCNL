@@ -2,7 +2,9 @@ package nl.ealse.ccnl.service;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -12,37 +14,27 @@ import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.PaymentFileRepository;
 import nl.ealse.ccnl.ledenadministratie.payment.PaymentHandler;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
-@ExtendWith(MockitoExtension.class)
 class ReconciliationServiceTest {
   
   private static final Set<MembershipStatus> STATUSES =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
 
   
-  @Mock
-  private PaymentFileRepository dao;
-  @Mock
-  private MemberRepository memberDao;
-  @Mock
-  private PaymentHandler reconciliationHandler;
+  private static PaymentFileRepository dao;
+  private static MemberRepository memberDao;
 
-  @InjectMocks
-  private ReconciliationService sut;
+  private static ReconciliationService sut;
   
   @Test
   void saveFileTest() {
-    Resource r = new ClassPathResource("booking.xml");
+    URL url = ReconciliationService.class.getResource("/booking.xml");
     try {
-      boolean result = sut.saveFile(r.getFile());
+      boolean result = sut.saveFile(new File(url.getFile()));
       Assertions.assertTrue(result);
     } catch (IOException e) {
       Assertions.fail(e.getMessage());
@@ -58,6 +50,12 @@ class ReconciliationServiceTest {
     verify(dao).deleteAll();
   }
   
-  
+  @BeforeAll
+  static void setup() {
+    dao = MockProvider.mock(PaymentFileRepository.class);
+    memberDao = MockProvider.mock(MemberRepository.class);
+    MockProvider.mock(PaymentHandler.class);
+    sut = ReconciliationService.getInstance();
+  }
 
 }

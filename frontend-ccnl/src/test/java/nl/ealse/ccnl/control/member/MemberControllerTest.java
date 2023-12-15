@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.member;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.IOException;
@@ -18,20 +17,16 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 class MemberControllerTest extends FXMLBaseTest {
 
   private static DocumentService documentService;
   private static MemberService service;
-  private static ApplicationEventPublisher eventPublisher;
-
+ 
   private MemberController controller;
   private FormController formController;
   private Member m;
@@ -39,15 +34,8 @@ class MemberControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
 
-    service = mock(MemberService.class);
-    documentService = mock(DocumentService.class);
     final AtomicBoolean ar = new AtomicBoolean();
-    m = getMember();
     AtomicBoolean result = runFX(() -> {
-      controller =
-          new MemberController(getPageController(), service, documentService, eventPublisher);
-      controller.setup();
-      formController = getFormController();
       prepare();
       doTest();
       testFormController();
@@ -65,7 +53,7 @@ class MemberControllerTest extends FXMLBaseTest {
 
   private void doTest() {
     Document document = new Document();
-    byte[] pdf = getBlob("MachtigingsformulierSEPA.pdf");
+    byte[] pdf = getBlob("/MachtigingsformulierSEPA.pdf");
     document.setDocumentName("MachtigingsformulierSEPA.pdf");
     document.setPdf(pdf);
     document.setOwner(m);
@@ -80,7 +68,7 @@ class MemberControllerTest extends FXMLBaseTest {
     formController.previousPage();
     formController.previousPage();
     controller.save();
-    verify(service).persistMember(any(Member.class));
+    verify(service).save(any(Member.class));
 
     controller.showSepaAuthorization();
     controller.printPDF();
@@ -92,14 +80,14 @@ class MemberControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
+    m = getMember();
+    service = MockProvider.mock(MemberService.class);
+    documentService = MockProvider.mock(DocumentService.class);
     when(documentService.findSepaAuthorization(m)).thenReturn(Optional.empty());
+    controller = MemberController.getInstance();
+    formController = getFormController();
   }
-  @BeforeAll
-  static void setup() {
-    eventPublisher = mock(ApplicationEventPublisher.class);
-    service = mock(MemberService.class);
-    documentService = mock(DocumentService.class);
-  }
+  
 
   private Member getMember() {
     Member m = new Member();
@@ -118,8 +106,7 @@ class MemberControllerTest extends FXMLBaseTest {
 
   protected byte[] getBlob(String name) {
     byte[] b = null;
-    Resource r = new ClassPathResource(name);
-    try (InputStream is = r.getInputStream()) {
+    try (InputStream is = MemberController.class.getResourceAsStream(name)) {
       b = is.readAllBytes();
     } catch (IOException e) {
       e.printStackTrace();

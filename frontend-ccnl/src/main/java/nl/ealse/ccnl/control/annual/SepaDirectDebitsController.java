@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.annual;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.util.List;
 import javafx.fxml.FXML;
@@ -11,30 +10,35 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.StageBuilder;
-import nl.ealse.ccnl.control.exception.AsyncTaskException;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.service.SepaDirectDebitService;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
 import nl.ealse.ccnl.service.SepaDirectDebitService.MappingResult;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Controller;
 
 /**
  * Controller for genereting DirectDebits file.
  */
-@Controller
 @Slf4j
 public class SepaDirectDebitsController {
+  
+  @Getter
+  private static final SepaDirectDebitsController instance = new SepaDirectDebitsController();
+  
   private final PageController pageController;
 
   private final SepaDirectDebitService service;
@@ -69,15 +73,14 @@ public class SepaDirectDebitsController {
   @FXML
   private TableColumn<FlatProperty, String> descriptionColumn;
 
-  public SepaDirectDebitsController(SepaDirectDebitService service, PageController pageController,
-      TaskExecutor executor) {
-    this.pageController = pageController;
-    this.service = service;
-    this.executor = executor;
+  private SepaDirectDebitsController() {
+    this.pageController = PageController.getInstance();
+    this.service = SepaDirectDebitService.getInstance();
+    this.executor = TaskExecutor.getInstance();
+    setup();
   }
   
-  @PostConstruct
-  void setup() {
+  private void setup() {
     messagesStage = new StageBuilder().fxml("dialog/directDebitMessages", this)
         .title("Incassomeldingen").size(600, 400).build();
     settingsStage = new StageBuilder().fxml("dialog/directDebitsSettings", this)
@@ -93,10 +96,10 @@ public class SepaDirectDebitsController {
       saveProperty(t.getRowValue());
     });
    fileChooser = new WrappedFileChooser(FileExtension.XML);
-    fileChooser.setInitialDirectory(service.getDirectDebitsDirectory());
+    fileChooser.setInitialDirectory(IncassoProperties::getIncassoDirectory);
   }
 
-  @EventListener(condition = "#event.name('PRODUCE_DIRECT_DEBITS_FILE')")
+  @EventListener(menuChoice = MenuChoice.PRODUCE_DIRECT_DEBITS_FILE)
   public void onApplicationEvent(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.DIRECT_DEBITS);
     generateButton.setDisable(true);
@@ -152,7 +155,7 @@ public class SepaDirectDebitsController {
     } else {
       errorMessageLabel.setVisible(false);
       if (FlatPropertyKey.DD_DIR == newValue.getFpk()) {
-        fileChooser.setInitialDirectory(new File(newValue.getValue()));
+        fileChooser.setInitialDirectory(newValue::getValue);
       }
     }
   }

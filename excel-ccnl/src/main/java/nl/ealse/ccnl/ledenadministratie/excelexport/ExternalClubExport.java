@@ -12,24 +12,23 @@ import org.apache.poi.ss.usermodel.Row;
 public class ExternalClubExport {
 
   public Row addExternalRelation(CCNLBestand targetFile, ExternalRelationClub club) {
-    CCNLColumnProperties properties = targetFile.getProperties();
     Row row = targetFile.addRow();
     targetFile.addCell(club.getRelationNumber(),
-        properties.getKolomnummer(ClubColumnDefinition.CLUB_NUMMER));
+        CCNLColumnProperties.getKolomnummer(ClubColumnDefinition.CLUB_NUMMER));
     targetFile.addCell(club.getRelationName(),
-        properties.getKolomnummer(ClubColumnDefinition.CLUB_NAAM));
+        CCNLColumnProperties.getKolomnummer(ClubColumnDefinition.CLUB_NAAM));
     targetFile.addCell(club.getContactNamePrefix(),
-        properties.getKolomnummer(ClubColumnDefinition.CLUB_AANHEF));
+        CCNLColumnProperties.getKolomnummer(ClubColumnDefinition.CLUB_AANHEF));
     targetFile.addCell(club.getContactName(),
-        properties.getKolomnummer(ClubColumnDefinition.CLUB_CONTACTPERSOON));
+        CCNLColumnProperties.getKolomnummer(ClubColumnDefinition.CLUB_CONTACTPERSOON));
     targetFile.addCell(club.getAddress().getStreetAndNumber(),
-        properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
     targetFile.addCell(club.getAddress().getPostalCode(),
-        properties.getKolomnummer(AdresColumnDefinition.POSTCODE));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.POSTCODE));
     targetFile.addCell(club.getAddress().getCity(),
-        properties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
     targetFile.addCell(club.getAddress().getCountry(),
-        properties.getKolomnummer(AdresColumnDefinition.LAND));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.LAND));
     return row;
   }
 

@@ -14,8 +14,6 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 class MailPDFTest {
 
@@ -27,11 +25,9 @@ class MailPDFTest {
     fopFactory = FopFactoryProvider.getFopFactory();
   }
 
-  private final Resource template = new ClassPathResource("test.fo");
-
   @Test
   void testMail() {
-    try (InputStream is = template.getInputStream()) {
+    try (InputStream is = getClass().getResourceAsStream("/test.fo")) {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       Fop fop = fopFactory.newFop(MIME_PDF, out);
 

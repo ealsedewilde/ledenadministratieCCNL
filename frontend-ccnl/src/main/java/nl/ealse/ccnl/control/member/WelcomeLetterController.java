@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Optional;
 import javafx.fxml.FXML;
 import javax.print.PrintService;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -20,12 +22,12 @@ import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.PdfPrintDocument;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 @Slf4j
 public class WelcomeLetterController extends DocumentTemplateController {
+  
+  @Getter
+  private static final WelcomeLetterController instance = new WelcomeLetterController();
 
   private final PageController pageController;
 
@@ -35,10 +37,10 @@ public class WelcomeLetterController extends DocumentTemplateController {
 
   private DocumentViewer documentViewer;
 
-  public WelcomeLetterController(PageController pageController, DocumentService documentService) {
-    super(pageController, documentService, DocumentTemplateContext.WELCOME_LETTER);
-    this.pageController = pageController;
-    this.documentService = documentService;
+  private WelcomeLetterController() {
+    super(DocumentTemplateContext.WELCOME_LETTER);
+    this.pageController = PageController.getInstance();
+    this.documentService = DocumentService.getInstance();
   }
 
   @EventListener
@@ -48,7 +50,6 @@ public class WelcomeLetterController extends DocumentTemplateController {
   }
   
   @FXML
-  @Override
   protected void initialize() {
     initializeTemplates();
     documentViewer = DocumentViewer.builder().withPrintButton(evt -> printPDF())
@@ -143,6 +144,16 @@ public class WelcomeLetterController extends DocumentTemplateController {
   @FXML
   void closePDF() {
     documentViewer.close();
+  }
+
+  @Override
+  protected PageController getPageController() {
+    return pageController;
+  }
+
+  @Override
+  protected DocumentService getDocumentService() {
+    return documentService;
   }
 
 }

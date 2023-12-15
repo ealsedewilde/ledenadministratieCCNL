@@ -10,26 +10,26 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
 @Slf4j
-@Controller
 public class AddDocumentController {
 
-  @Value("${ccnl.directory.sepa:c:/temp}")
-  private String sepaDirectory;
+  @Getter
+  private static final AddDocumentController instance = new AddDocumentController();
 
   private final PageController pageController;
 
@@ -59,12 +59,20 @@ public class AddDocumentController {
   private WrappedFileChooser fileChooser;
 
 
-  public AddDocumentController(PageController pageController, DocumentService documentService) {
-    this.pageController = pageController;
-    this.documentService = documentService;
+  private AddDocumentController() {
+    this.pageController = PageController.getInstance();
+    this.documentService = DocumentService.getInstance();
+    setup();
   }
 
-  @EventListener(condition = "#event.name('ADD_DOCUMENT')")
+  private void setup() {
+    fileChooser = new WrappedFileChooser(FileExtension.PDF);
+    fileChooser.setInitialDirectory(() ->
+        DatabaseProperties.getProperty("ccnl.directory.sepa", "c:/temp"));
+  }
+
+
+  @EventListener(menuChoice = MenuChoice.ADD_DOCUMENT)
   public void addDocument(MemberSeLectionEvent event) {
     pageController.setActivePage(PageName.ADD_DOCUMENT);
     this.selectedMember = event.getSelectedEntity();
@@ -74,7 +82,7 @@ public class AddDocumentController {
     documentDescription.setText(null);
     selectedFile = null;
     saveButton.setDisable(true);
-    
+
     fileName.setText(null);
   }
 
@@ -85,8 +93,6 @@ public class AddDocumentController {
         documentType.getItems().add(type.getDescription());
       }
     }
-    fileChooser = new WrappedFileChooser(FileExtension.PDF);
-    fileChooser.setInitialDirectory(new File(sepaDirectory));
   }
 
   @FXML

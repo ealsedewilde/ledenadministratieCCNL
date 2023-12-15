@@ -5,30 +5,29 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
-import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
 public class MemberService {
-
-  private final MemberNumberFactory memberNumberFactory;
+  
+  @Getter
+  private static MemberService instance = new MemberService();
 
   private final MemberRepository dao;
 
-  public MemberService(MemberNumberFactory memberNumberFactory, MemberRepository dao) {
+  private MemberService() {
     log.info("Service created");
-    this.memberNumberFactory = memberNumberFactory;
-    this.dao = dao;
+    this.dao = MemberRepository.getInstance();
   }
 
   public Integer getFreeNumber() {
-    return memberNumberFactory.getNewNumber();
+    return MemberNumberFactory.getInstance().getNewNumber();
   }
 
   @Transactional
@@ -73,7 +72,7 @@ public class MemberService {
     return dao.findById(memberNumber);
   }
 
-  public void persistMember(Member member) {
+  public void save(Member member) {
     dao.save(member);
   }
 

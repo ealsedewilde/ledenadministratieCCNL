@@ -1,25 +1,20 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 @Slf4j
 class XmlValidatorTest {
 
-  private final Resource xsd = new ClassPathResource("camt.053.001.02.xsd");
+  private final String xsd = "/camt.053.001.02.xsd";
 
   @Test
   void validationTest() {
     try {
-      File xml = new ClassPathResource("booking.xml").getFile();
-      String xmlString = getXml(xml);
+      String xmlString = getXml("/booking.xml");
       boolean result = XmlValidator.validate(xsd, xmlString);
       Assertions.assertTrue(result);
     } catch (IOException e) {
@@ -29,19 +24,21 @@ class XmlValidatorTest {
 
   }
 
-  private String getXml(File file) throws IOException {
+  private String getXml(String fileName) throws IOException {
     StringBuilder sb = new StringBuilder();
-    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-      String line = reader.readLine();
-      while (line != null) {
-        sb.append(line);
-        line = reader.readLine();
+    byte[] buffer = new byte[512];
+    try (InputStream is = getClass().getResourceAsStream(fileName)) {
+      int len = is.read(buffer);
+      while (len > 0) {
+        String s = new String(buffer, 0, len);
+        sb.append(s);
+        len = is.read(buffer);
       }
+      return sb.toString();
     } catch (IOException e) {
       log.error("Error reading file", e);
       throw e;
     }
-    return sb.toString();
   }
 
 

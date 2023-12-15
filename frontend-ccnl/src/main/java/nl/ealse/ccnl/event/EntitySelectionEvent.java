@@ -28,7 +28,7 @@ public class EntitySelectionEvent<T> extends MenuChoiceEvent {
    * This type of event is never a group event.
    */
   @Override
-  public boolean group(String groupName) {
+  public boolean hasGroup() {
     return false;
   }
 

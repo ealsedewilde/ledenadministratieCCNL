@@ -5,34 +5,26 @@ import static org.mockito.Mockito.verify;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.util.ClubNumberFactory;
+import nl.ealse.ccnl.test.MockProvider;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 class ExternalClubServiceTest {
   
-  @Mock
-  private ExternalRelationClubRepository clubDao;
+  private static ExternalRelationClubRepository clubDao;
   
-  @Mock
-  private ClubNumberFactory numberFactory;
-  
-  @InjectMocks
-  private ExternalClubService sut;
+  private static ExternalClubService sut;
   
   @Test
   void testGetFreeNumber() {
     sut.getFreeNumber();
-    verify(numberFactory).getNewNumber();
+    verify(ClubNumberFactory.getInstance()).getNewNumber();
   }
   
   @Test
   void testPersistExternalRelation() {
     ExternalRelationClub club = new ExternalRelationClub();
-    sut.persistExternalRelation(club);
+    sut.save(club);
     verify(clubDao).save(club);
   }
   
@@ -76,6 +68,14 @@ class ExternalClubServiceTest {
     String searchValue ="foo";
     sut.searchExternalRelation(SearchItem.STREET, searchValue);
     verify(clubDao).findExternalRelationsByAddress(searchValue);
+  }
+  
+  @BeforeAll
+  static void setup() {
+    MockProvider.mock(ClubNumberFactory.class);
+    clubDao = MockProvider.mock(ExternalRelationClubRepository.class);
+    sut = ExternalClubService.getInstance();
+    
   }
 
 }

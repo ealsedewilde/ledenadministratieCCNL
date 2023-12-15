@@ -2,6 +2,7 @@ package nl.ealse.ccnl.service;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
@@ -16,24 +17,21 @@ import nl.ealse.ccnl.ledenadministratie.pdf.FOGenerator;
 import nl.ealse.ccnl.ledenadministratie.pdf.PDFGenerator;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.ledenadministratie.word.LetterGenerator;
-import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
 public class DocumentService {
+  
+  @Getter
+  private static DocumentService instance = new DocumentService();
 
   private final DocumentRepository dao;
 
   private final DocumentTemplateRepository templateDao;
 
-  private final FOGenerator fo = new FOGenerator();
-  private final PDFGenerator generator = new PDFGenerator();
-
-
-  public DocumentService(DocumentRepository dao, DocumentTemplateRepository templateDao) {
+  private DocumentService() {
     log.info("Service created");
-    this.dao = dao;
-    this.templateDao = templateDao;
+    this.dao = DocumentRepository.getInstance();
+    this.templateDao = DocumentTemplateRepository.getInstance();
   }
 
   public List<Document> findDocuments(Member owner) {
@@ -97,12 +95,7 @@ public class DocumentService {
   }
 
   public Optional<DocumentTemplate> findDocumentTemplate(DocumentTemplateID id) {
-    List<DocumentTemplate> result = templateDao.findByTemplateID(id);
-    if (result.isEmpty()) {
-      return Optional.empty();
-    } else {
-      return Optional.of(result.get(0));
-    }
+    return templateDao.findById(id);
   }
 
   public void persistDocumentemplate(DocumentTemplate template) {
@@ -119,19 +112,19 @@ public class DocumentService {
   }
 
   public byte[] generatePDF(LetterData data) {
-    return generator.generatePDF(fo.generateFO(data), data);
+    return PDFGenerator.generatePDF(FOGenerator.generateFO(data), data);
   }
 
   public byte[] generatePDF(FOContent foContent, LetterData data) {
-    return generator.generatePDF(foContent, data);
+    return PDFGenerator.generatePDF(foContent, data);
   }
 
   public byte[] generatePDF(String fo) {
-    return generator.generatePDF(fo);
+    return PDFGenerator.generatePDF(fo);
   }
 
   public FOContent generateFO(LetterData data) {
-    return fo.generateFO(data);
+    return FOGenerator.generateFO(data);
   }
 
 }

@@ -1,32 +1,27 @@
 package nl.ealse.ccnl.control.other;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalOtherService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalOtherDeleteControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
-  private static ExternalOtherService service;
-
   private ExternalOtherDeleteController sut;
   private ExternalRelationOther relation;
 
   @Test
   void testController() {
-    sut = new ExternalOtherDeleteController(pageController, service);
     relation = externalRelationOther();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -43,17 +38,16 @@ class ExternalOtherDeleteControllerTest extends FXMLBaseTest {
     sut.onApplicationEvent(event);
 
     sut.delete();
-    verify(pageController).showMessage("Gegevens zijn verwijderd");
+    verify(getPageController()).showMessage("Gegevens zijn verwijderd");
   }
 
   @BeforeAll
   static void setup() {
-   
-    pageController = mock(PageController.class);
-    service = mock(ExternalOtherService.class);
+    MockProvider.mock(ExternalOtherService.class);
   };
 
   private void prepare() {
+    sut = ExternalOtherDeleteController.getInstance();
     getPageWithFxController(sut, PageName.EXTERNAL_RELATION_DELETE);
   }
 

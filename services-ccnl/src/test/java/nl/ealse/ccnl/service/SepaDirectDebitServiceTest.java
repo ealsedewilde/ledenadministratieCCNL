@@ -2,47 +2,39 @@ package nl.ealse.ccnl.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import jakarta.persistence.EntityManager;
 import java.io.File;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.EntityManager;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoPropertiesprovider;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoResult;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigBooleanEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigDateEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEntry;
+import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
 import nl.ealse.ccnl.service.SepaDirectDebitService.MappingResult;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mockito;
 
-@ExtendWith(MockitoExtension.class)
 class SepaDirectDebitServiceTest {
   
   private static DirectDebitConfig config;
   
-  @Mock
-  private SepaIncassoGenerator generator;
+  private static EntityManager em;
   
-  @Mock
-  private EntityManager em;
+  private static SepaIncassoGenerator generator;
   
-  @InjectMocks
-  private SepaDirectDebitService sut;
+  private static SepaDirectDebitService sut;
   
   @Test
   void getPropertiesTest() {
@@ -63,13 +55,6 @@ class SepaDirectDebitServiceTest {
     } catch (IncassoException e) {
       Assertions.fail(e.getMessage());
     }
-  }
-  
-  @Test
-  void getDirectDebitsDirectoryTest() {
-    when(em.find(DirectDebitConfig.class, 1)).thenReturn(config);
-    File result = sut.getDirectDebitsDirectory();
-    Assertions.assertEquals("ddDir", result.getName());
   }
   
   @Test
@@ -154,65 +139,18 @@ class SepaDirectDebitServiceTest {
     verify(em, never()).clear();
   }
   
+  @BeforeEach
+  void resetEntityManager() {
+    reset(em);
+  }
+  
   @BeforeAll
   static void initConfig() {
-    config = new DirectDebitConfig();
-    DDConfigStringEntry auth = new DDConfigStringEntry();
-    auth.setValue("value");
-    auth.setDescription("description");
-    config.setAuthorization(auth);
-    
-    DDConfigStringEntry authType = new DDConfigStringEntry();
-    authType.setValue("value");
-    authType.setDescription("description");
-    config.setAuthorizationType(authType);
-    
-    DDConfigStringEntry clubName = new DDConfigStringEntry();
-    clubName.setValue("value");
-    clubName.setDescription("description");
-    config.setClubName(clubName);
-    
-    DDConfigAmountEntry amount = new DDConfigAmountEntry();
-    amount.setValue(BigDecimal.TEN);
-    amount.setDescription("description");
-    config.setDirectDebitAmount(amount);
-    
-    DDConfigDateEntry date = new DDConfigDateEntry();
-    date.setValue(LocalDate.of(2020, 12, 5));
-    date.setDescription("description");
-    config.setDirectDebitDate(date);
-    
-    DDConfigStringEntry desc = new DDConfigStringEntry();
-    desc.setValue("value");
-    desc.setDescription("description");
-    config.setDirectDebitDescription(desc);
-    
-    DDConfigStringEntry ddDir = new DDConfigStringEntry();
-    ddDir.setValue("ddDir");
-    ddDir.setDescription("description");
-    config.setDirectDebitDir(ddDir);
-    
-    DDConfigStringEntry ddId = new DDConfigStringEntry();
-    ddId.setValue("value");
-    ddId.setDescription("description");
-    config.setDirectDebitId(ddId);
-    
-    DDConfigStringEntry iban = new DDConfigStringEntry();
-    iban.setValue("value");
-    iban.setDescription("description");
-    config.setIbanNumber(iban);
-    
-    DDConfigStringEntry msg = new DDConfigStringEntry();
-    msg.setValue("value");
-    msg.setDescription("description");
-    config.setMessageId(msg);
-    
-    DDConfigBooleanEntry test = new DDConfigBooleanEntry();
-    test.setValue(true);
-    test.setDescription("description");
-    config.setTestRun(test);
-    
-    
+    config = new IncassoPropertiesprovider().getProperties();
+    config.getDirectDebitDir().setValue("C:/xtemp");
+    em = EntityManagerProvider.getEntityManager();
+    generator = MockProvider.mock(SepaIncassoGenerator.class);
+    sut = SepaDirectDebitService.getInstance();
   }
 
 }

@@ -4,15 +4,18 @@ import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.service.ArchiveService;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class ManageArchiveController {
+  
+  @Getter
+  private static final ManageArchiveController instance = new ManageArchiveController();
 
   private final PageController pageController;
 
@@ -24,9 +27,9 @@ public class ManageArchiveController {
   @FXML
   private Label referenceYearE;
 
-  public ManageArchiveController(ArchiveService service, PageController pageController) {
-    this.pageController = pageController;
-    this.service = service;
+  private ManageArchiveController() {
+    this.pageController = PageController.getInstance();
+    this.service = ArchiveService.getInstance();
   }
 
   @FXML
@@ -59,7 +62,7 @@ public class ManageArchiveController {
     return true;
   }
 
-  @EventListener(condition = "#event.name('MANAGE_ARCHIVE')")
+  @EventListener(menuChoice = MenuChoice.MANAGE_ARCHIVE)
   public void onApplicationEvent(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.MANAGE_ARCHIVE);
     referenceYearE.setVisible(false);

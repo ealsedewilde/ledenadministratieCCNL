@@ -3,7 +3,6 @@ package nl.ealse.ccnl.service;
 import jakarta.persistence.EntityManager;
 import java.io.File;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -13,6 +12,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoResult;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
@@ -21,22 +21,21 @@ import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigBooleanE
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigDateEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEntry;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
 
-@Service
 @Slf4j
 public class SepaDirectDebitService {
+
+  @Getter
+  private static SepaDirectDebitService instance = new SepaDirectDebitService();
 
   private static final DateTimeFormatter DT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
   private final SepaIncassoGenerator generator;
-  private final EntityManager em;
 
-  public SepaDirectDebitService(SepaIncassoGenerator generator, EntityManager em) {
+  private  SepaDirectDebitService() {
     log.info("Service created");
-    this.generator = generator;
-    this.em = em;
+    this.generator = SepaIncassoGenerator.getInstance();
   }
 
   public List<String> generateSepaDirectDebitFile(File targetFile) throws IncassoException {
@@ -47,14 +46,9 @@ public class SepaDirectDebitService {
     return result.getMessages();
   }
 
-  public File getDirectDebitsDirectory() {
-    DirectDebitConfig config = em.find(DirectDebitConfig.class, 1);
-    return new File(config.getDirectDebitDir().getValue());
-  }
-
   public List<FlatProperty> getProperties() {
     List<FlatProperty> propertyList = new ArrayList<>();
-    DirectDebitConfig config = em.find(DirectDebitConfig.class, 1);
+    DirectDebitConfig config = IncassoProperties.getConfig();
     if (config != null) {
       propertyList.add(new FlatProperty(FlatPropertyKey.DD_DIR, config.getDirectDebitDir()));
       propertyList.add(new FlatProperty(FlatPropertyKey.DD_AMOUNT, config.getDirectDebitAmount()));
@@ -72,8 +66,8 @@ public class SepaDirectDebitService {
     return propertyList;
   }
 
-  @Transactional
   public MappingResult saveProperty(FlatProperty prop) {
+    EntityManager em = EntityManagerProvider.getEntityManager();
     DirectDebitConfig config = em.find(DirectDebitConfig.class, 1);
     MappingResult result = new MappingResult();
     switch (prop.fpk) {
@@ -99,18 +93,21 @@ public class SepaDirectDebitService {
         break;
       case DD_AMOUNT:
         DDConfigAmountEntry a = config.getDirectDebitAmount();
-        // Value is in unknown charset. 
+        // Value is in unknown charset.
         char[] cs = prop.getValue().toCharArray();
+        // We must remove all characters before the first digit
         int ix = 0;
-        //We must remove all characters before the first digit
-        while (!Character.isDigit(cs[ix++])); 
+        while (!Character.isDigit(cs[ix])) {
+          ix++;
+        }
         // The substring method will produce a normal String
-        String amount = prop.getValue().substring(--ix);
-         try {
+        String amount = prop.getValue().substring(ix);
+        try {
           a.setValue(BigDecimal.valueOf(AmountFormatter.parse(amount)));
         } catch (NumberFormatException nfe) {
           result.setValid(false);
-          result.setErrorMessage(String.format("'%s' kan niet worden omgezet naar een bedrag", amount));
+          result.setErrorMessage(
+              String.format("'%s' kan niet worden omgezet naar een bedrag", amount));
         }
         a.setDescription(prop.getDescription());
         break;

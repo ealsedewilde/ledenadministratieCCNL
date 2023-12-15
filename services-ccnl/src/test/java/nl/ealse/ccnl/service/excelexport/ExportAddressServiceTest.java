@@ -1,13 +1,11 @@
 package nl.ealse.ccnl.service.excelexport;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
@@ -17,7 +15,7 @@ import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationOtherRepositor
 import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import nl.ealse.ccnl.test.util.ExcelPropertiesFactory;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,25 +26,15 @@ class ExportAddressServiceTest {
   private static final EnumSet<MembershipStatus> statuses =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
 
-  private static ExternalRelationPartnerRepository commercialPartnerRepository;
-  private static ExternalRelationClubRepository externalRelationClubRepository;
-  private static ExternalRelationOtherRepository externalRelationOtherRepository;
-  private static InternalRelationRepository internalRelationRepository;
   private static MemberRepository memberRepository;
 
+  private static ExportAddressService sut;
 
   @TempDir
   File tempDir;
 
-  private CCNLColumnProperties excelProperties;
-  private ExportAddressService sut;
-
   @Test
   void testService() {
-    excelProperties = ExcelPropertiesFactory.newExcelProperties();
-    sut = new ExportAddressService(memberRepository, commercialPartnerRepository,
-        internalRelationRepository, externalRelationClubRepository, externalRelationOtherRepository,
-        excelProperties);
     try {
       File cardFile = new File(tempDir, "card.xlsx");
       sut.generateCardAddressFile(cardFile);
@@ -62,21 +50,21 @@ class ExportAddressServiceTest {
       Assertions.assertTrue(onNameFile.exists());
 
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
 
   @BeforeAll
   static void setup() {
-    commercialPartnerRepository = mock(ExternalRelationPartnerRepository.class);
-    externalRelationClubRepository = mock(ExternalRelationClubRepository.class);
-    externalRelationOtherRepository = mock(ExternalRelationOtherRepository.class);
-    internalRelationRepository = mock(InternalRelationRepository.class);
-    memberRepository = mock(MemberRepository.class);
+    MockProvider.mock(ExternalRelationPartnerRepository.class);
+    MockProvider.mock(ExternalRelationClubRepository.class);
+    MockProvider.mock(ExternalRelationOtherRepository.class);
+    MockProvider.mock(InternalRelationRepository.class);
+    memberRepository = MockProvider.mock(MemberRepository.class);
     List<Member> members = new ArrayList<>();
     members.add(member());
     when(memberRepository.findMembersByStatuses(statuses)).thenReturn(members);
+    sut = ExportAddressService.getInstance();
   }
 
 

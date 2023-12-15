@@ -21,8 +21,8 @@ public class DocumentBuilder {
    */
   private Document document = new Document();
 
-  public DocumentBuilder(IncassoProperties properties) {
-    init(properties);
+  public DocumentBuilder() {
+    init();
   }
 
   /**
@@ -92,7 +92,7 @@ public class DocumentBuilder {
   /**
    * Vaste gegevens initiëren.
    */
-  private void init(IncassoProperties properties) {
+  private void init() {
     CustomerDirectDebitInitiationV02 customerDirectDebitInitiationV02 =
         new CustomerDirectDebitInitiationV02();
     document.setCstmrDrctDbtInitn(customerDirectDebitInitiationV02);
@@ -100,7 +100,7 @@ public class DocumentBuilder {
     GroupHeader39 groupHeader39 = new GroupHeader39();
     customerDirectDebitInitiationV02.setGrpHdr(groupHeader39);
     PartyIdentification32 initiatingParty = new PartyIdentification32();
-    initiatingParty.setNm(properties.getNaam());
+    initiatingParty.setNm(IncassoProperties.getNaam());
     groupHeader39.setInitgPty(initiatingParty);
   }
 

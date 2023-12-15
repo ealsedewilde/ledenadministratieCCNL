@@ -3,21 +3,24 @@ package nl.ealse.ccnl.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.ledenadministratie.model.dao.SettingRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import nl.ealse.ccnl.ledenadministratie.util.TransactionUtil;
 
-@Service
 @Slf4j
 public class SettingsService {
+  
+  @Getter
+  private static SettingsService instance = new SettingsService();
 
   private final SettingRepository dao;
 
-  public SettingsService(SettingRepository dao) {
+  private SettingsService() {
     log.info("Service created");
-    this.dao = dao;
+    this.dao = SettingRepository.getInstance();
   }
 
   public List<Setting> findByOrderBySettingsGroupAscKeyAsc() {
@@ -34,19 +37,24 @@ public class SettingsService {
   }
 
   public void save(Setting setting) {
+    setting.prePersist();
     dao.save(setting);
+    DatabaseProperties.reload();
   }
 
-  @Transactional
   public void save(Setting setting, String oldId) {
+    setting.prePersist();
     String newId = setting.getId();
-    if (!newId.equals(oldId)) {
-      Optional<Setting> old = dao.findById(oldId);
-      if (old.isPresent()) {
-        dao.delete(old.get());
+    TransactionUtil.inTransction(() -> {
+      if (!newId.equals(oldId)) {
+        Optional<Setting> old = dao.findById(oldId);
+        if (old.isPresent()) {
+          dao.delete(old.get());
+        }
       }
-    }
-    dao.save(setting);
+      dao.save(setting);
+      DatabaseProperties.reload();
+    });
   }
 
   public void delete(Setting setting) {

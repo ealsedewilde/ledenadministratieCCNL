@@ -1,32 +1,31 @@
 package nl.ealse.ccnl.control.member;
 
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationEventPublisher;
+import org.mockito.MockedStatic;
 
 class MemberCancelControllerTest extends FXMLBaseTest {
-
-  private static MemberService memberService;
-  private static ApplicationEventPublisher eventPublisher;
 
   private MemberCancelController sut;
   private Member m;
 
   @Test
   void testController() {
-    sut = new MemberCancelController(memberService, getPageController(), eventPublisher);
+    sut = MemberCancelController.getInstance();
     m = member();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -38,21 +37,23 @@ class MemberCancelControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    MemberSeLectionEvent event = new MemberSeLectionEvent(sut, MenuChoice.CANCEL_MEMBERSHIP, m);
-    sut.onApplicationEvent(event);
-    Assertions.assertEquals(MembershipStatus.LAST_YEAR_MEMBERSHIP, m.getMemberStatus());
-    sut.save();
-    verify(eventPublisher).publishEvent(isA(CancelMailEvent.class));
+    try (MockedStatic<EventPublisher> context = mockStatic(EventPublisher.class)) {
+      MemberSeLectionEvent event = new MemberSeLectionEvent(sut, MenuChoice.CANCEL_MEMBERSHIP, m);
+      sut.onApplicationEvent(event);
+      Assertions.assertEquals(MembershipStatus.LAST_YEAR_MEMBERSHIP, m.getMemberStatus());
+      sut.save();
+      context.verify(() -> EventPublisher.publishEvent(isA(CancelMailEvent.class)), times(1));
+    }
   }
 
   private void prepare() {
+    sut = MemberCancelController.getInstance();
     getPageWithFxController(sut, PageName.MEMBER_CANCEL);
   }
 
   @BeforeAll
   static void setup() {
-    eventPublisher = mock(ApplicationEventPublisher.class);
-    memberService = mock(MemberService.class);
+    MockProvider.mock(MemberService.class);
   }
 
   private static Member member() {

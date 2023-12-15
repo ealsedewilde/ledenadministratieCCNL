@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.annual;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
@@ -8,9 +7,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.service.ReconciliationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,20 +17,16 @@ import org.junit.jupiter.api.Test;
 
 class ResetPaymentControllerTest extends FXMLBaseTest {
 
-  private static ReconciliationService service;
-  private static PageController pageController;
-
   private ResetPaymentCommand sut;
 
   @Test
   void testController() {
-    sut = new ResetPaymentCommand(pageController, service);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut.setup();
+      sut = ResetPaymentCommand.getInstance();
       clickButton();
       sut.executeCommand(null);
-      verify(pageController).showMessage("Alle betaalgegevens zijn gewist");
+      verify(getPageController()).showMessage("Alle betaalgegevens zijn gewist");
       ar.set(true);
     }, ar);
     Assertions.assertTrue(result.get());
@@ -39,8 +34,7 @@ class ResetPaymentControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    pageController = mock(PageController.class);
-    service = mock(ReconciliationService.class);
+     MockProvider.mock(ReconciliationService.class);
   }
 
   /**
@@ -61,7 +55,6 @@ class ResetPaymentControllerTest extends FXMLBaseTest {
       ButtonType yes = pane.getButtonTypes().get(0);
       return (Button) pane.lookupButton(yes);
     } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
       return null;
     }

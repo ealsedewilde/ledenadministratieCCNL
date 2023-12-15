@@ -1,22 +1,20 @@
 package nl.ealse.ccnl.ledenadministratie.dd;
 
-import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import java.io.File;
 import java.util.List;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dd.model.Document;
 import nl.ealse.ccnl.ledenadministratie.dd.model.ObjectFactory;
-import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.model.dao.DocumentRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import org.springframework.stereotype.Component;
 
 
 /**
@@ -26,21 +24,17 @@ import org.springframework.stereotype.Component;
  *
  */
 @Slf4j
-@Component
-@Transactional
 public class SepaIncassoGenerator {
+  
+  @Getter
+  private static SepaIncassoGenerator instance = new SepaIncassoGenerator();
 
-  private final IncassoProperties incassoProperties;
-  private final CCNLColumnProperties excelProperties;
   private final MemberRepository dao;
   private final DocumentRepository documentDao;
 
-  public SepaIncassoGenerator(CCNLColumnProperties excelProperties,
-      IncassoProperties incassoProperties, MemberRepository dao, DocumentRepository documentDao) {
-    this.incassoProperties = incassoProperties;
-    this.excelProperties = excelProperties;
-    this.dao = dao;
-    this.documentDao = documentDao;
+  private SepaIncassoGenerator() {
+    this.dao = MemberRepository.getInstance();
+    this.documentDao = DocumentRepository.getInstance();
   }
 
   /**
@@ -53,8 +47,7 @@ public class SepaIncassoGenerator {
    */
   public SepaIncassoResult generateSepaDirectDebitFile(File targetFile, File controlExcelFile)
       throws IncassoException {
-    incassoProperties.load();
-    SepaIncassoContext context = new SepaIncassoContext(incassoProperties, excelProperties);
+    SepaIncassoContext context = new SepaIncassoContext();
     SepaIncassoDocumentGenerator documentGenerator =
         new SepaIncassoDocumentGenerator(context);
     List<Member> members = dao.findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(

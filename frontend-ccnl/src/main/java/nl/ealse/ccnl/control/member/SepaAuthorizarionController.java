@@ -2,15 +2,19 @@ package nl.ealse.ccnl.control.member;
 
 import static nl.ealse.javafx.util.WrappedFileChooser.FileExtension.PDF;
 import static nl.ealse.javafx.util.WrappedFileChooser.FileExtension.PNG;
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.fxml.FXML;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentViewer;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.event.support.EventPublisher;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -20,21 +24,15 @@ import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 import nl.ealse.javafx.util.WrappedFileChooser;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
 /**
  * Add SEPA authorization document for Direct Debits.
  */
-@Controller
 @Slf4j
 public class SepaAuthorizarionController {
 
-  @Value("${ccnl.directory.sepa:c:/temp}")
-  private String sepaDirectory;
-
-  private final IbanController ibanController;
+  @Getter
+  private static final SepaAuthorizarionController instance = new SepaAuthorizarionController();
 
   private final PageController pageController;
 
@@ -58,30 +56,30 @@ public class SepaAuthorizarionController {
    * @param documentService
    * @param service
    */
-  public SepaAuthorizarionController(PageController pageController, IbanController ibanController,
-      DocumentService documentService, MemberService service) {
-    this.pageController = pageController;
-    this.ibanController = ibanController;
-    this.documentService = documentService;
-    this.service = service;
+  private SepaAuthorizarionController() {
+    this.pageController = PageController.getInstance();
+    this.documentService = DocumentService.getInstance();
+    this.service = MemberService.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     documentViewer = DocumentViewer.builder().withSaveButton(e -> addSepaPDF())
         .withPrintButton(e -> printSepaPDF()).withCancelButton(e -> closePDFViewer()).build();
     documentViewer.setWindowTitle("SEPA machtiging toevoegen bij lid: %d (%s)");
 
     fileChooser = new WrappedFileChooser(PDF, PNG);
-    fileChooser.setInitialDirectory(new File(sepaDirectory));
+    fileChooser.setInitialDirectory(
+        () -> DatabaseProperties.getProperty("ccnl.directory.sepa", "c:/temp"));
 
   }
 
-  @EventListener(condition = "#event.name('PAYMENT_AUTHORIZATION')")
+  @EventListener(menuChoice = MenuChoice.PAYMENT_AUTHORIZATION)
   public void onApplicationEvent(MemberSeLectionEvent event) {
     this.selectedMember = event.getSelectedEntity();
     if (selectedMember.getIbanNumber() == null) {
-      ibanController.show();
+      EventPublisher
+          .publishEvent(new AddIbanNumberEvent(selectedMember, this::selectSepaAuthorization));
     } else {
       selectSepaAuthorization();
     }
@@ -90,12 +88,12 @@ public class SepaAuthorizarionController {
   /**
    * Start adding SEPA authorization document.
    */
-  @EventListener(value = IbanNumberAddedEvent.class)
-  public void selectSepaAuthorization() {
+  public Void selectSepaAuthorization() {
     selectedFile = fileChooser.showOpenDialog();
     if (selectedFile != null) {
       documentViewer.showDocument(selectedFile, selectedMember);
     }
+    return null;
   }
 
   @FXML
@@ -121,7 +119,7 @@ public class SepaAuthorizarionController {
     closePDFViewer();
 
     selectedMember.setPaymentMethod(PaymentMethod.DIRECT_DEBIT);
-    service.persistMember(selectedMember);
+    service.save(selectedMember);
   }
 
   @FXML

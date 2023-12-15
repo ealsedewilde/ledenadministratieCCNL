@@ -1,7 +1,5 @@
 package nl.ealse.ccnl.control.menu;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -14,12 +12,9 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
 
 class PageControllerTest extends FXBase {
   private static final String MAIN_FXML = "main";
-
-  private static ApplicationContext springContext;
 
   private PageController sut;
 
@@ -49,26 +44,13 @@ class PageControllerTest extends FXBase {
 
   @BeforeEach
   void setup() {
-    springContext = mock(ApplicationContext.class);
-    setFxmlDirectory(new FXMLLoaderBean(springContext));
-    sut = new PageController();
-    when(springContext.getBean(PageController.class)).thenReturn(sut);
-    MenuController mc = new MenuController(springContext);
-    when(springContext.getBean(MenuController.class)).thenReturn(mc);
+    sut = PageController.getInstance();
   }
 
   private void setBorderPane(BorderPane pane) {
     try {
       FieldUtils.writeField(sut, "mainPage", pane, true);
       FieldUtils.writeField(sut, "mainInfo", new Label(), true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void setFxmlDirectory(FXMLLoaderBean flb) {
-    try {
-      FieldUtils.writeField(flb, "fxmlDirectory", "fxml/", true);
     } catch (Exception e) {
       e.printStackTrace();
     }

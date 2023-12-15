@@ -12,24 +12,23 @@ import org.apache.poi.ss.usermodel.Row;
 public class CommercialPartnerAddressExport {
 
   public Row addExternalRelation(CCNLBestand targetFile, ExternalRelation partner) {
-    CCNLColumnProperties properties = targetFile.getProperties();
     Row row = targetFile.addRow();
     targetFile.addCell(partner.getRelationNumber(),
-        properties.getKolomnummer(PartnerColumnDefinition.PARTNER_NUMMER));
+        CCNLColumnProperties.getKolomnummer(PartnerColumnDefinition.PARTNER_NUMMER));
     targetFile.addCell(partner.getRelationName(),
-        properties.getKolomnummer(PartnerColumnDefinition.PARTNER_NAAM));
+        CCNLColumnProperties.getKolomnummer(PartnerColumnDefinition.PARTNER_NAAM));
     targetFile.addCell(partner.getContactNamePrefix(),
-        properties.getKolomnummer(PartnerColumnDefinition.PARTNER_AANHEF));
+        CCNLColumnProperties.getKolomnummer(PartnerColumnDefinition.PARTNER_AANHEF));
     targetFile.addCell(partner.getContactName(),
-        properties.getKolomnummer(PartnerColumnDefinition.PARTNER_CONTACTPERSOON));
+        CCNLColumnProperties.getKolomnummer(PartnerColumnDefinition.PARTNER_CONTACTPERSOON));
     targetFile.addCell(partner.getAddress().getStreetAndNumber(),
-        properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
     targetFile.addCell(partner.getAddress().getPostalCode(),
-        properties.getKolomnummer(AdresColumnDefinition.POSTCODE));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.POSTCODE));
     targetFile.addCell(partner.getAddress().getCity(),
-        properties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
     targetFile.addCell(partner.getAddress().getCountry(),
-        properties.getKolomnummer(AdresColumnDefinition.LAND));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.LAND));
     return row;
   }
 

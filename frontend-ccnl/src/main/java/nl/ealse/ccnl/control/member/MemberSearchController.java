@@ -2,33 +2,32 @@ package nl.ealse.ccnl.control.member;
 
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 import nl.ealse.ccnl.control.SearchController;
+import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-
-@Controller
 public class MemberSearchController extends SearchController<Member, MemberSeLectionEvent> {
+  
+  @Getter
+  private static final MemberSearchController instance = new MemberSearchController();
 
   private final PageController pageController;
   private final MemberService service;
 
-  public MemberSearchController(ApplicationEventPublisher eventPublisher, MemberService service,
-      PageController pageController) {
-    super(eventPublisher);
-    this.pageController = pageController;
-    this.service = service;
+  private MemberSearchController() {
+    this.pageController = PageController.getInstance();
+    this.service = MemberService.getInstance();
   }
 
-  @EventListener(condition = "#event.group('SEARCH_MEMBER')")
+  @EventListener(choiceGroup = ChoiceGroup.SEARCH_MEMBER)
   public void searchMember(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);

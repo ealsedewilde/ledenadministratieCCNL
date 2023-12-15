@@ -1,12 +1,26 @@
 package nl.ealse.ccnl.ledenadministratie.model.dao;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface SettingRepository extends JpaRepository<Setting, String> {
+@Slf4j
+public class SettingRepository extends BaseRepository<Setting> {
+  @Getter
+  private static SettingRepository instance = new SettingRepository();
+  
+  private SettingRepository() {
+    super(Setting.class);
+  }
 
-  List<Setting> findByOrderBySettingsGroupAscKeyAsc();
+  @Override
+  protected Object getPrimaryKey(Setting entity) {
+    return entity.getId();
+  }
+  
+  public  List<Setting> findByOrderBySettingsGroupAscKeyAsc() {
+    return executeQuery("SELECT S FROM Setting S ORDER BY S.settingsGroup, S.key ASC");
+  }
+
 }

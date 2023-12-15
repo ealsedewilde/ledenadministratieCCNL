@@ -1,25 +1,26 @@
 package nl.ealse.ccnl.control.club;
 
+import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationDeleteController;
-import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.ExternalClubService;
 import nl.ealse.javafx.mapping.ViewModel;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class ExternalClubDeleteController
     extends ExternalRelationDeleteController<ExternalRelationClub> {
+  
+  @Getter
+  private static ExternalClubDeleteController instance = new ExternalClubDeleteController();
 
-  public ExternalClubDeleteController(PageController pageController,
-      ExternalRelationService<ExternalRelationClub> service) {
-    super(pageController, service);
+  private ExternalClubDeleteController() {
+    super(ExternalClubService.getInstance());
   }
 
-  @EventListener(condition = "#event.name('DELETE_EXTERNAL_CLUB')")
+  @EventListener(menuChoice = MenuChoice.DELETE_EXTERNAL_CLUB)
   public void onApplicationEvent(ExternalClubSelectionEvent event) {
     getPageController().setActivePage(PageName.EXTERNAL_CLUB_DELETE);
     setSelectedEntity(event.getSelectedEntity());

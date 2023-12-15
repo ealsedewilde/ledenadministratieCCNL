@@ -5,24 +5,21 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.annual.PaymentReminderReportCommand.ReminderTask;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.service.excelexport.ExportService;
-import nl.ealse.ccnl.test.FXBase;
-import nl.ealse.ccnl.test.TestExecutor;
+import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.task.TaskExecutor;
 
-class PaymentReminderReportControllerTest  extends FXBase {
+class PaymentReminderReportControllerTest  extends FXMLBaseTest {
   
-  private static PageController pageController;
-  private static ExportService exportService;
   private static WrappedFileChooser fileChooser;
-  private static TaskExecutor executor = new TestExecutor<ReminderTask>();
   
   private PaymentReminderReportCommand sut;
   
@@ -30,12 +27,11 @@ class PaymentReminderReportControllerTest  extends FXBase {
   void test() {
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = new PaymentReminderReportCommand(exportService, pageController, executor);
-      reportDirectory();
+      sut = PaymentReminderReportCommand.getInstance();
       sut.setup();
       setFileChooser();
       sut.executeCommand(null);
-      verify(pageController).showMessage("Herinneringen overzicht is aangemaakt");
+      verify(getPageController()).showMessage("Herinneringen overzicht is aangemaakt");
       ar.set(true);
     }, ar);
     Assertions.assertTrue(result.get());
@@ -44,20 +40,12 @@ class PaymentReminderReportControllerTest  extends FXBase {
   
   @BeforeAll
   static void setup() {
-    pageController = mock(PageController.class);
-    exportService = mock(ExportService.class);
+    MockProvider.mock(ExportService.class);
     fileChooser = mock(WrappedFileChooser.class);
     when(fileChooser.showSaveDialog()).thenReturn(new File("reminders.xlsx"));
+    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
   }
 
-
-  private void reportDirectory() {
-    try {
-      FieldUtils.writeField(sut, "reportDirectory", "C:/temp", true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
 
   private void setFileChooser() {
     try {
@@ -66,5 +54,18 @@ class PaymentReminderReportControllerTest  extends FXBase {
       e.printStackTrace();
     }
   }
+  
+  private static class TestTaskExcecutor extends TaskExecutor {
+    
+    private static TaskExecutor executor = new TestExecutor<ReminderTask>();
+
+    @Override
+    public void execute(Runnable task) {
+      executor.execute(task);
+      
+    }
+   
+  }
+
 
 }

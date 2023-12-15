@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.annual;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -8,42 +7,41 @@ import java.time.format.DateTimeFormatter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.exception.AsyncTaskException;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.service.AnnualRolloverService;
 import nl.ealse.ccnl.service.BackupRestoreService;
 import nl.ealse.ccnl.service.excelexport.ExportArchiveService;
 import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Controller;
 
 /**
  * Controller for the annual rollover the the new club year.
  */
-@Controller
 @Slf4j
 public class AnnualRolloverController {
+
+  @Getter
+  private static final AnnualRolloverController instance = new AnnualRolloverController();
 
   private static final DateTimeFormatter formatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss");
 
+  private static final String DEFAULT_DIR = "c:/temp";
+
   private static final String BACKUP_FILE_NAME = "rollover_backup-%s";
   private static final String MEMBER_FILE_NAME = "rollover_leden-%s.xlsx";
   private static final String ARCHIVE_FILE_NAME = "rollover_archief-%s.xlsx";
-
-  @Value("${ccnl.directory.db:c:/temp}")
-  private String dbDirectory;
-
-  @Value("${ccnl.directory.annual:c:/temp}")
-  private String annualDirectory;
 
   private final PageController pageController;
 
@@ -59,8 +57,6 @@ public class AnnualRolloverController {
 
   private WrappedFileChooser fileChooser;
 
-  private File excelParent;
-
   @FXML
   private Button backupButton;
 
@@ -73,22 +69,20 @@ public class AnnualRolloverController {
   @FXML
   private Label step4;
 
-  public AnnualRolloverController(PageController pageController, BackupRestoreService backupService,
-      ExportService exportService, AnnualRolloverService rolloverService,
-      ExportArchiveService archiveService, TaskExecutor executor) {
-    this.pageController = pageController;
-    this.backupService = backupService;
-    this.rolloverService = rolloverService;
-    this.exportService = exportService;
-    this.archiveService = archiveService;
-    this.executor = executor;
+  private AnnualRolloverController() {
+    this.pageController = PageController.getInstance();
+    this.backupService = BackupRestoreService.getInstance();
+    this.rolloverService = AnnualRolloverService.getInstance();
+    this.exportService = ExportService.getInstance();
+    this.archiveService = ExportArchiveService.getInstance();
+    this.executor = TaskExecutor.getInstance();
+    setup();
   }
-  
-  @PostConstruct
-  void setup() {
+
+  private void setup() {
     this.fileChooser = new WrappedFileChooser(FileExtension.ZIP);
-    this.fileChooser.setInitialDirectory(new File(dbDirectory));
-    this.excelParent = new File(annualDirectory);
+    this.fileChooser.setInitialDirectory(
+        () -> DatabaseProperties.getProperty("ccnl.directory.db", DEFAULT_DIR));
   }
 
   /**
@@ -130,7 +124,7 @@ public class AnnualRolloverController {
     executor.execute(asyncTask);
   }
 
-  @EventListener(condition = "#event.name('ANNUAL_ROLLOVER')")
+  @EventListener(menuChoice = MenuChoice.ANNUAL_ROLLOVER)
   public void onApplicationEvent(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.ANNUAL_ROLLOVER);
     backupButton.setDisable(false);
@@ -197,7 +191,9 @@ public class AnnualRolloverController {
       String memberFileName =
           String.format(MEMBER_FILE_NAME, formatter.format(LocalDateTime.now()));
       try {
-        controller.exportService.exportALL(new File(controller.excelParent, memberFileName));
+        File excelParent =
+            new File(DatabaseProperties.getProperty("ccnl.directory.annual", DEFAULT_DIR));
+        controller.exportService.exportALL(new File(excelParent, memberFileName));
       } catch (IOException e) {
         log.error("Could not write Excel document", e);
         throw new AsyncTaskException("Schrijven leden MS Excel-werkblad is mislukt");
@@ -208,7 +204,9 @@ public class AnnualRolloverController {
       String archiveFileName =
           String.format(ARCHIVE_FILE_NAME, formatter.format(LocalDateTime.now()));
       try {
-        controller.archiveService.export(new File(controller.excelParent, archiveFileName));
+        File excelParent =
+            new File(DatabaseProperties.getProperty("ccnl.directory.annual", DEFAULT_DIR));
+        controller.archiveService.export(new File(excelParent, archiveFileName));
       } catch (IOException e) {
         log.error("Could not write Excel document", e);
         throw new AsyncTaskException("Schrijven archief MS Excel-werkblad is mislukt");

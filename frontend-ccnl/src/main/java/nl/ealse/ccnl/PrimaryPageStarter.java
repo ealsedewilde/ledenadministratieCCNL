@@ -3,13 +3,12 @@ package nl.ealse.ccnl;
 import java.awt.SplashScreen;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
 import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
-import nl.ealse.javafx.SpringJavaFXBase.StageReadyEvent;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 /**
  * Manage the primary scene {@code Scene} handling of this application.
@@ -17,17 +16,17 @@ import org.springframework.stereotype.Component;
  * @author ealse
  *
  */
-@Component
 @Slf4j
 public class PrimaryPageStarter {
+  
+  @Getter
+  private static final PrimaryPageStarter instance = new PrimaryPageStarter();
 
   private static final String MAIN_FXML = "main";
 
-  @Value("${fxml.title}")
-  private String applicationTitle;
+  private String applicationTitle = ApplicationProperties.getProperty("fxml.title");
 
-  @Value("${fxml.icon}")
-  private String applicationIcon;
+  private String applicationIcon = ApplicationProperties.getProperty("fxml.icon");
 
   /**
    * initialize the primary scene of the application.

@@ -1,23 +1,26 @@
 package nl.ealse.ccnl.control.member;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
+import nl.ealse.ccnl.service.DocumentService;
+import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
+import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationEventPublisher;
 
 class IbanControllerTest extends FXMLBaseTest {
-  
-  private static ApplicationEventPublisher eventPublisher;
+  private static WrappedFileChooser fileChooser;
   
   private IbanController sut;
   private Member m;
@@ -36,8 +39,7 @@ class IbanControllerTest extends FXMLBaseTest {
     Assertions.assertTrue(result.get());  }
   
   private void doTest() {
-    MemberSeLectionEvent event =
-        new MemberSeLectionEvent(this, MenuChoice.PAYMENT_AUTHORIZATION, m);
+    AddIbanNumberEvent event = new AddIbanNumberEvent(m, this::nextAction);
     sut.onApplicationEvent(event);
     initialize();
 
@@ -56,14 +58,19 @@ class IbanControllerTest extends FXMLBaseTest {
   }
   
   private void prepare() {
-    sut = new IbanController(eventPublisher);
-    sut.setup();
+    sut = IbanController.getInstance();
+    setFileChooser();
   }
   
   @BeforeAll
   static void setup() {
-    eventPublisher = mock(ApplicationEventPublisher.class);
+    MockProvider.mock(DocumentService.class);
+    MockProvider.mock(MemberService.class);
+    EventProcessor.getInstance().initialize();
+    fileChooser = mock(WrappedFileChooser.class);
+    when(fileChooser.showSaveDialog()).thenReturn(new File("welkom.pdf"));
   }
+
   
   private static Member member() {
     Member m = new Member();
@@ -74,6 +81,14 @@ class IbanControllerTest extends FXMLBaseTest {
     return m;
   }
 
+  private void setFileChooser() {
+    try {
+      FieldUtils.writeField(SepaAuthorizarionController.getInstance(), "fileChooser", fileChooser, true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
   private void initialize() {
     try {
       ibanNumber = (TextField) FieldUtils.readDeclaredField(sut, "ibanNumber", true);
@@ -81,6 +96,10 @@ class IbanControllerTest extends FXMLBaseTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+  
+  private Void nextAction() {
+    return null;
   }
   
 

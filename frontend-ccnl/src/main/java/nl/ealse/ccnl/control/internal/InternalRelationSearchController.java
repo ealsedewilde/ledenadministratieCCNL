@@ -2,33 +2,33 @@ package nl.ealse.ccnl.control.internal;
 
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 import nl.ealse.ccnl.control.SearchController;
+import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class InternalRelationSearchController
     extends SearchController<InternalRelation, InternalRelationSelectionEvent> {
+  
+  @Getter
+  private static final InternalRelationSearchController instance = new InternalRelationSearchController();
 
   private final PageController pageController;
   private final InternalRelationService internalRelationService;
 
-  public InternalRelationSearchController(ApplicationEventPublisher eventPublisher,
-      InternalRelationService internalRelationService, PageController pageController) {
-    super(eventPublisher);
-    this.pageController = pageController;
-    this.internalRelationService = internalRelationService;
+  private InternalRelationSearchController() {
+    this.pageController = PageController.getInstance();
+    this.internalRelationService = InternalRelationService.getInstance();
   }
 
-  @EventListener(condition = "#event.group('SEARCH_INTERNAL')")
+  @EventListener(choiceGroup = ChoiceGroup.SEARCH_INTERNAL)
   public void searchInternalRelation(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);

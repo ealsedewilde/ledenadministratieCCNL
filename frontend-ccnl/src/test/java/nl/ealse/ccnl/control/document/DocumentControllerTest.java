@@ -13,23 +13,20 @@ import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 class DocumentControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
   private static DocumentService documentService;
   private static MouseEvent mouseEvent;
   private static Document document;
@@ -38,11 +35,9 @@ class DocumentControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    sut = new DocumentController(pageController, documentService);
-    AtomicBoolean ar = new AtomicBoolean();
+     AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
-      sut.setup();
       doTest();
       ar.set(true);
     }, ar);
@@ -53,16 +48,17 @@ class DocumentControllerTest extends FXMLBaseTest {
     Member m = member();
     MemberSeLectionEvent event = new MemberSeLectionEvent(sut, MenuChoice.VIEW_DOCUMENT, m);
     sut.viewDocument(event);
-    verify(pageController).setActivePage(PageName.VIEW_DOCUMENTS);
+    verify(getPageController()).setActivePage(PageName.VIEW_DOCUMENTS);
     sut.selectDocument(mouseEvent);
     sut.printDocument();
     sut.deleteDocument();
-    verify(pageController).showMessage("Het document is verwijderd");
+    verify(getPageController()).showMessage("Het document is verwijderd");
     sut.closeDocument();
   }
 
 
   private void prepare() {
+    sut = DocumentController.getInstance();
     getPageWithFxController(sut, PageName.VIEW_DOCUMENTS);
     setPdfViewer();
     TableRow<Document> row = new TableRow<>();
@@ -83,9 +79,7 @@ class DocumentControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-
-    pageController = mock(PageController.class);
-    documentService = mock(DocumentService.class);
+    documentService = MockProvider.mock(DocumentService.class);
     document = document();
     List<Document> documents = new ArrayList<>();
     documents.add(document);
@@ -108,15 +102,14 @@ class DocumentControllerTest extends FXMLBaseTest {
   private static Document document() {
     Document d = new Document();
     d.setDocumentName("MachtigingsformulierSEPA.pdf");
-    d.setPdf(getBlob("MachtigingsformulierSEPA.pdf"));
+    d.setPdf(getBlob("/MachtigingsformulierSEPA.pdf"));
     d.setOwner(member());
     return d;
   }
 
   private static byte[] getBlob(String name) {
     byte[] b = null;
-    Resource r = new ClassPathResource(name);
-    try (InputStream is = r.getInputStream()) {
+    try (InputStream is = DocumentController.class.getResourceAsStream(name)) {
       b = is.readAllBytes();
     } catch (IOException e) {
       e.printStackTrace();

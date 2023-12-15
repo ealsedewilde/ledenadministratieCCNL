@@ -5,26 +5,23 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
+import nl.ealse.ccnl.TaskExecutor;
+import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.service.BackupRestoreService;
-import nl.ealse.ccnl.test.FXBase;
-import nl.ealse.ccnl.test.TestExecutor;
+import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.task.TaskExecutor;
 
-class BackupRestoreControllerTest extends FXBase {
+class BackupRestoreControllerTest extends FXMLBaseTest {
 
-  private static PageController pageController;
   private static BackupRestoreService service;
   private static WrappedFileChooser fileChooser;
-  private static TaskExecutor backupExecutor = new TestExecutor<BackupRestoreCommand.BackupTask>();
-  private static TaskExecutor restoreExecutor = new TestExecutor<BackupRestoreCommand.RestoreTask>();
   private static File zip = new File("dummy.zip");
 ;
 
@@ -34,6 +31,7 @@ class BackupRestoreControllerTest extends FXBase {
   void testBackupController() {
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
+      prepare();
       backup();
       ar.set(true);
     }, ar);
@@ -42,9 +40,9 @@ class BackupRestoreControllerTest extends FXBase {
 
   @Test
   void testRestoreController() {
-    sut = new BackupRestoreCommand(pageController, service, restoreExecutor);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
+      prepare();
       restore();
       ar.set(true);
     }, ar);
@@ -52,47 +50,39 @@ class BackupRestoreControllerTest extends FXBase {
   }
 
   private void backup() {
-    dbDirectory();
-    sut.setup();
     setFileChooser();
 
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_BACKUP_DATABASE);
     sut.backup(event);
-    verify(pageController).showMessage("Backup is aangemaakt");
+    verify(getPageController()).showMessage("Backup is aangemaakt");
   }
 
   private void restore() {
-    dbDirectory();
-    sut.setup();
     setFileChooser();
 
     MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_RESTORE_DATABASE);
     
     when(service.restoreDatabase(zip)).thenReturn(Boolean.TRUE);
     sut.restore(event);
-    verify(pageController).showMessage("Backup is teruggezet");
+    verify(getPageController()).showMessage("Backup is teruggezet");
 
     when(service.restoreDatabase(zip)).thenReturn(Boolean.FALSE);
     sut.restore(event);
-    verify(pageController).showErrorMessage("Onjuist bestand; Terugzetten backup is mislukt");
+    verify(getPageController()).showErrorMessage("Onjuist bestand; Terugzetten backup is mislukt");
    }
 
+  private void prepare() {
+    sut = BackupRestoreCommand.getInstance();
+  }
+  
   @BeforeAll
   static void setup() {
     fileChooser = mock(WrappedFileChooser.class);
     when(fileChooser.showSaveDialog()).thenReturn(zip);
     when(fileChooser.showOpenDialog()).thenReturn(zip);
-    pageController = mock(PageController.class);
-    service = mock(BackupRestoreService.class);
+    service = MockProvider.mock(BackupRestoreService.class);
     when(service.restoreDatabase(zip)).thenReturn(Boolean.FALSE);
-  }
-
-  private void dbDirectory() {
-    try {
-      FieldUtils.writeField(sut, "dbDirectory", "C:/temp", true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
   }
 
 
@@ -104,5 +94,20 @@ class BackupRestoreControllerTest extends FXBase {
     }
   }
 
+  private static class TestTaskExcecutor extends TaskExecutor {
+    private static TaskExecutor backupExecutor = new TestExecutor<BackupRestoreCommand.BackupTask>();
+    private static TaskExecutor restoreExecutor = new TestExecutor<BackupRestoreCommand.RestoreTask>();
+
+    
+    @Override
+    public void execute(Runnable task) {
+    if ( task instanceof BackupRestoreCommand.BackupTask) {
+      backupExecutor.execute(task);
+    } else {
+      restoreExecutor.execute(task);
+    }
+    }
+   
+  }
 
 }

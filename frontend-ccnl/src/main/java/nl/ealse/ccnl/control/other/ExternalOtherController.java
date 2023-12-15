@@ -1,45 +1,46 @@
 package nl.ealse.ccnl.control.other;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationController;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
-import nl.ealse.ccnl.service.relation.ExternalRelationService;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
+import nl.ealse.ccnl.service.relation.ExternalOtherService;
 
-@Controller
 public class ExternalOtherController extends ExternalRelationController<ExternalRelationOther> {
+  
+  @Getter
+  private static final ExternalOtherController instance = new ExternalOtherController();
+  
   private final PageController pageController;
 
   @Getter
   private FormController formController;
 
-  public ExternalOtherController(PageController pageController,
-      ExternalRelationService<ExternalRelationOther> externalRelationService) {
-    super(pageController, externalRelationService);
-    this.pageController = pageController;
+  private ExternalOtherController() {
+    super(ExternalOtherService.getInstance());
+    this.pageController = PageController.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     formController = new ExternalOtherFormController(this);
     formController.initializeForm();
     formController.setOnSave(e -> save());
     formController.setOnReset(e -> reset());
   }
 
-  @EventListener(condition = "#event.name('NEW_EXTERNAL_RELATION')")
+  @EventListener(menuChoice = MenuChoice.NEW_EXTERNAL_RELATION)
   public void newRelation(MenuChoiceEvent event) {
     this.selectedExternalRelation = new ExternalRelationOther();
     handleRelation(event);
   }
 
-  @EventListener(condition = "#event.name('AMEND_EXTERNAL_RELATION')")
+  @EventListener(menuChoice = MenuChoice.AMEND_EXTERNAL_RELATION)
   public void amendRelation(ExternalOtherSelectionEvent event) {
     this.selectedExternalRelation = event.getSelectedEntity();
     handleRelation(event);

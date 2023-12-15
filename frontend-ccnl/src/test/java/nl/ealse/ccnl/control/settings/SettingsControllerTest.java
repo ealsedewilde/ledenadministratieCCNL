@@ -2,7 +2,9 @@ package nl.ealse.ccnl.control.settings;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
@@ -13,17 +15,18 @@ import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
+import org.mockito.MockedStatic;
 
 class SettingsControllerTest extends FXMLBaseTest {
 
-  private static ApplicationContext context;
   private static SettingsService service;
   private static MouseEvent mouseEvent;
 
@@ -46,24 +49,27 @@ class SettingsControllerTest extends FXMLBaseTest {
     MenuChoiceEvent event = new MenuChoiceEvent(this, MenuChoice.SETTINGS);
     sut.findSettings(event);
 
-    sut.editSetting(mouseEvent);
-    verify(context).publishEvent(any(SettingSelectionEvent.class));
-
+    try (MockedStatic<EventPublisher> context = mockStatic(EventPublisher.class)) {
+      sut.editSetting(mouseEvent);
+      context.verify(() -> EventPublisher.publishEvent(any(SettingSelectionEvent.class)));
+    }
+ 
     sut.save();
-    verify(getPageController(), never()).showMessage("Instelling is opgeslagen; actief na herstart");
+    verify(getPageController(), never()).showMessage("Instelling is opgeslagen");
     setInput();
     sut.save();
-    verify(getPageController()).showMessage("Instelling is opgeslagen; actief na herstart");
+    verify(getPageController()).showMessage("Instelling is opgeslagen");
 
+    reset(getPageController());
     sut.delete(setting());
-    verify(getPageController()).showMessage("Instelling is verwijderd; actief na herstart");
+    verify(getPageController()).showMessage("Instelling is verwijderd");
 
     sut.update(setting(), "foo");
-    verify(getPageController()).showMessage("Instelling is bijgewerkt; actief na herstart");
+    verify(getPageController()).showMessage("Instelling is bijgewerkt");
   }
 
   private void prepare() {
-    sut = new SettingsController(service, getPageController(), context);
+    sut = SettingsController.getInstance();
     getPageWithFxController(sut, PageName.SETTINGS);
     TableRow<Setting> row = new TableRow<>();
     row.setItem(setting);
@@ -72,8 +78,7 @@ class SettingsControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    context = mock(ApplicationContext.class);
-    service = mock(SettingsService.class);
+    service = MockProvider.mock(SettingsService.class);
     setting = setting();
     List<Setting> settings = new ArrayList<>();
     settings.add(setting);

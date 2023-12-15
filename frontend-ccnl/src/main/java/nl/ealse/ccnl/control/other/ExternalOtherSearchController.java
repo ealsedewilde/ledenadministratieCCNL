@@ -1,32 +1,32 @@
 package nl.ealse.ccnl.control.other;
 
 import java.util.Map;
+import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
+import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
-import nl.ealse.ccnl.service.relation.ExternalRelationService;
+import nl.ealse.ccnl.service.relation.ExternalOtherService;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class ExternalOtherSearchController
     extends ExternalRelationSearchController<ExternalRelationOther> {
+  
+  @Getter
+  private static final ExternalOtherSearchController instance = new ExternalOtherSearchController();
 
   private final PageController pageController;
 
-  protected ExternalOtherSearchController(ApplicationEventPublisher eventPublisher,
-      ExternalRelationService<ExternalRelationOther> externalOtherService,
-      PageController pageController) {
-    super(eventPublisher, externalOtherService);
-    this.pageController = pageController;
+  private ExternalOtherSearchController() {
+    super(ExternalOtherService.getInstance());
+    this.pageController = PageController.getInstance();
   }
 
-  @EventListener(condition = "#event.group('SEARCH_EXTERNAL')")
+  @EventListener(choiceGroup = ChoiceGroup.SEARCH_EXTERNAL)
   public void search(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);

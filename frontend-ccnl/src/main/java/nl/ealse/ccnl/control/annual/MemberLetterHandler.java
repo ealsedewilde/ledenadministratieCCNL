@@ -1,20 +1,22 @@
 package nl.ealse.ccnl.control.annual;
 
 import java.util.List;
+import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.service.DocumentService;
-import org.springframework.stereotype.Component;
 
-@Component
 public class MemberLetterHandler {
+  
+  @Getter
+  private static final MemberLetterHandler instance = new MemberLetterHandler();
 
   private final DocumentService documentService;
 
-  public MemberLetterHandler(DocumentService documentService) {
-    this.documentService = documentService;
+  public MemberLetterHandler() {
+    this.documentService = DocumentService.getInstance();
   }
 
   public void addLetterToMembers(FOContent foContent, List<Member> members) {

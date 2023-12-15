@@ -27,8 +27,6 @@ import org.junit.jupiter.api.Test;
 
 class DocumentTemplateControllerTest extends FXMLBaseTest {
 
-  private PageController pageController;
-
   private DocumentService documentService;
 
   private Tester sut;
@@ -39,10 +37,9 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
     Platform.setImplicitExit(false);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      pageController = mock(PageController.class);
       documentService = mock(DocumentService.class);
 
-      sut = new Tester(pageController, documentService);
+      sut = new Tester(getPageController(), documentService);
       initFXML();
       sut.textHelp();
       Stage dialog = sut.getStage();
@@ -87,9 +84,14 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
 
 
   public static class Tester extends DocumentTemplateController {
+    
+    private final PageController pageController;
+    private final DocumentService documentService;
 
     public Tester(PageController pageController, DocumentService documentService) {
-      super(pageController, documentService, DocumentTemplateContext.PAYMENT_REMINDER);
+      super(DocumentTemplateContext.PAYMENT_REMINDER);
+      this.pageController = pageController;
+      this.documentService =documentService;
     }
     
     public Stage getStage() {
@@ -99,6 +101,16 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
         e.printStackTrace();
       }
       return null;
+    }
+
+    @Override
+    protected PageController getPageController() {
+      return pageController;
+    }
+
+    @Override
+    protected DocumentService getDocumentService() {
+      return documentService;
     }
 
   }

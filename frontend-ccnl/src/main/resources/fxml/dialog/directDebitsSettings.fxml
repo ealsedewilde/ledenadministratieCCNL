@@ -32,7 +32,7 @@
       </columns>
     </TableView>
     <Label fx:id="errorMessageLabel" styleClass="required" visible="false"/>
-    <Label text="(*) klik op een veld om te wijzigen" />
+    <Label text="(*) klik op een veld om te wijzigen en sluit af met enter" />
     <CancelButton text="Sluiten" onAction="#closeSettings" />
   </children>
   <padding>

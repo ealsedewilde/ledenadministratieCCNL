@@ -1,25 +1,24 @@
 package nl.ealse.ccnl.service;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import java.util.Optional;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.ledenadministratie.model.dao.SettingRepository;
+import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
+import nl.ealse.ccnl.test.MockProvider;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 class SettingsServiceTest {
   
-  @Mock
-  private SettingRepository dao;
+  private static SettingRepository dao;
   
-  @InjectMocks
-  private SettingsService sut;
+  private static SettingsService sut;
   
   @Test
   void getSettingTest() {
@@ -38,7 +37,16 @@ class SettingsServiceTest {
     when(dao.findById(oldId)).thenReturn(old);
     setting.prePersist(); // simulate @PrePersist, @PreUpdate
     sut.save(setting, oldId);
-    verify(dao).delete(setting);
+    verify(dao).save(setting);
+  }
+  
+  @BeforeAll
+  static void setup() {
+    EntityManager em = EntityManagerProvider.getEntityManager();
+    EntityTransaction t = mock(EntityTransaction.class);
+    when(em.getTransaction()).thenReturn(t);
+    dao = MockProvider.mock(SettingRepository.class);
+    sut = SettingsService.getInstance();
   }
 
 }

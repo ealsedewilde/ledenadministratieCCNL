@@ -5,6 +5,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utility to handle euros with decimal separator.
+ */
 @UtilityClass
 public class AmountFormatter {
   
@@ -27,8 +30,9 @@ public class AmountFormatter {
   /**
    * The String amount from the database seems sometimes have
    * a problem with the decimal separator when using a DecimalFormat.
-   * @param amount
-   * @return
+   *
+   * @param amount - string with decimals
+   * @return amount as double
    */
   public double parse(String amount) throws NumberFormatException {
     StringBuilder sb = new StringBuilder();

@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
 import nl.ealse.ccnl.ledenadministratie.excel.Ledenbestand;
 import nl.ealse.ccnl.ledenadministratie.excel.base.SheetDefinition;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -17,7 +17,6 @@ import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationOtherRepositor
 import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import org.springframework.stereotype.Service;
 
 /**
  * Export all data to Excel.
@@ -25,30 +24,25 @@ import org.springframework.stereotype.Service;
  * @author ealse
  *
  */
-@Service
 @Slf4j
 public class ExportService {
+  
+  @Getter
+  private static ExportService instance = new ExportService();
 
   private final ExternalRelationPartnerRepository commercialPartnerRepository;
   private final ExternalRelationClubRepository externalRelationClubRepository;
   private final ExternalRelationOtherRepository externalRelationOtherRepository;
   private final InternalRelationRepository internalRelationRepository;
   private final MemberRepository memberRepository;
-  private final CCNLColumnProperties properties;
 
-  public ExportService(MemberRepository memberRepository,
-      ExternalRelationPartnerRepository commercialPartnerRepository,
-      InternalRelationRepository internalRelationRepository,
-      ExternalRelationClubRepository externalRelationClubRepository,
-      ExternalRelationOtherRepository externalRelationOtherRepository,
-      CCNLColumnProperties properties) {
+  private ExportService() {
     log.info("Service created");
-    this.commercialPartnerRepository = commercialPartnerRepository;
-    this.externalRelationClubRepository = externalRelationClubRepository;
-    this.externalRelationOtherRepository = externalRelationOtherRepository;
-    this.internalRelationRepository = internalRelationRepository;
-    this.memberRepository = memberRepository;
-    this.properties = properties;
+    this.commercialPartnerRepository = ExternalRelationPartnerRepository.getInstance();
+    this.externalRelationClubRepository = ExternalRelationClubRepository.getInstance();
+    this.externalRelationOtherRepository = ExternalRelationOtherRepository.getInstance();
+    this.internalRelationRepository = InternalRelationRepository.getInstance();
+    this.memberRepository = MemberRepository.getInstance();
   }
 
   /**
@@ -58,7 +52,7 @@ public class ExportService {
    * @throws IOException in case generating the file fails
    */
   public void exportALL(File selectedFile) throws IOException {
-    try (Ledenbestand targetFile = new Ledenbestand(selectedFile, properties)) {
+    try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
       List<Member> activeMembers = memberRepository.findMembersByStatuses(
           EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP));
@@ -121,7 +115,7 @@ public class ExportService {
   }
 
   public void exportNew(File selectedFile) throws IOException {
-    try (Ledenbestand targetFile = new Ledenbestand(selectedFile, properties)) {
+    try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
       LocalDate refDate = LocalDate.now();
       refDate = refDate.withDayOfYear(1);
@@ -130,7 +124,7 @@ public class ExportService {
   }
 
   public void exportCancelled(File selectedFile) throws IOException {
-    try (Ledenbestand targetFile = new Ledenbestand(selectedFile, properties)) {
+    try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
       List<Member> lastYearMembers =
           memberRepository.findMemberByMemberStatus(MembershipStatus.LAST_YEAR_MEMBERSHIP);
@@ -139,7 +133,7 @@ public class ExportService {
   }
 
   public void exportOverdue(File selectedFile) throws IOException {
-    try (Ledenbestand targetFile = new Ledenbestand(selectedFile, properties)) {
+    try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
       List<Member> lastYearMembers =
           memberRepository.findMemberByMemberStatus(MembershipStatus.OVERDUE);
@@ -148,7 +142,7 @@ public class ExportService {
   }
 
   public void paymentReminderReport(File selectedFile) throws IOException {
-    try (Ledenbestand targetFile = new Ledenbestand(selectedFile, properties)) {
+    try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
       EnumSet<PaymentMethod> paymentMethods = EnumSet.of(PaymentMethod.BANK_TRANSFER, PaymentMethod.DIRECT_DEBIT);
       List<Member> selectedMembers = memberRepository.findMembersCurrentYearNotPaid(paymentMethods);

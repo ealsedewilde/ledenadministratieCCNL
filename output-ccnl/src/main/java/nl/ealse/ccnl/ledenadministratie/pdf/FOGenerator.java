@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
 import lombok.Data;
+import lombok.experimental.UtilityClass;
 import nl.ealse.ccnl.ledenadministratie.output.GeneratorException;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData.Token;
@@ -23,13 +24,12 @@ import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.NameSnippet;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.NumberSnippet;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.StringSnippet;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 /**
  *
  * @author ealse
  */
+@UtilityClass
 public class FOGenerator {
 
   private static final String CONTENT_START = "<fo:page-sequence";
@@ -75,7 +75,7 @@ public class FOGenerator {
           </fo:list-item-body>
       </fo:list-item>""";
 
-  private final Resource template = new ClassPathResource("letterTemplate.fo");
+  private static final String TEMPLATE = "/letterTemplate.fo";
 
   private static final String NAW_TOKEN = "{{naw}}";
   private static final String CONTENT_TOKEN = "{{inhoud}}";
@@ -84,8 +84,9 @@ public class FOGenerator {
     FOContent content = new FOContent();
     LineContext context = new LineContext();
     StringJoiner sj = context.newStringJoiner();
-    try (BufferedReader reader = new BufferedReader(
-        new InputStreamReader(template.getInputStream(), StandardCharsets.UTF_8))) {
+    try (BufferedReader reader =
+        new BufferedReader(new InputStreamReader(FOGenerator.class.getResourceAsStream(TEMPLATE),
+            StandardCharsets.UTF_8))) {
       String line = reader.readLine();
       while (line != null && line.indexOf(CONTENT_START) == -1) {
         sj.add(line);

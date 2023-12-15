@@ -32,14 +32,14 @@
 			<children>
 				<Separator prefWidth="850.0" />
 				<Label fx:id="resultHeader" styleClass="header" />
-				<TableView fx:id="tableView" maxWidth="920">
+				<TableView fx:id="tableView" maxWidth="820">
 					<columns>
 						<TableColumn style="-fx-alignment: CENTER-RIGHT;" maxWidth="100.0">
 							<cellValueFactory>
 								<PropertyValueFactory property="id" />
 							</cellValueFactory>
 						</TableColumn>
-						<TableColumn text="Naam" prefWidth="260.0">
+						<TableColumn text="Naam" prefWidth="200.0">
 							<cellValueFactory>
 								<PropertyValueFactory property="fullName" />
 							</cellValueFactory>
@@ -59,7 +59,7 @@
 								<AddressPropertyValueFactory property="city" />
 							</cellValueFactory>
 						</TableColumn>
-						<TableColumn fx:id="buttonColumn" prefWidth="25" />
+						<TableColumn fx:id="buttonColumn" maxWidth="25" />
 					</columns>
 				</TableView>
 			</children>

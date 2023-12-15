@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.excel.Adresbestand;
 import nl.ealse.ccnl.ledenadministratie.excel.CCNLColumnProperties;
@@ -16,7 +17,6 @@ import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationOtherRepositor
 import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import org.springframework.stereotype.Service;
 
 /**
  * Export all data to Excel.
@@ -24,9 +24,11 @@ import org.springframework.stereotype.Service;
  * @author ealse
  *
  */
-@Service
 @Slf4j
 public class ExportAddressService {
+  
+  @Getter
+  private static ExportAddressService instance = new ExportAddressService();
 
   private static final EnumSet<MembershipStatus> statuses =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
@@ -37,21 +39,13 @@ public class ExportAddressService {
   private final InternalRelationRepository internalRelationRepository;
   private final MemberRepository memberRepository;
 
-  private final CCNLColumnProperties properties;
-
-  public ExportAddressService(MemberRepository memberRepository,
-      ExternalRelationPartnerRepository commercialPartnerRepository,
-      InternalRelationRepository internalRelationRepository,
-      ExternalRelationClubRepository externalRelationClubRepository,
-      ExternalRelationOtherRepository externalRelationOtherRepository,
-      CCNLColumnProperties properties) {
+  private ExportAddressService() {
     log.info("Service created");
-    this.commercialPartnerRepository = commercialPartnerRepository;
-    this.externalRelationClubRepository = externalRelationClubRepository;
-    this.externalRelationOtherRepository = externalRelationOtherRepository;
-    this.internalRelationRepository = internalRelationRepository;
-    this.memberRepository = memberRepository;
-    this.properties = properties;
+    this.commercialPartnerRepository = ExternalRelationPartnerRepository.getInstance();
+    this.externalRelationClubRepository = ExternalRelationClubRepository.getInstance();
+    this.externalRelationOtherRepository = ExternalRelationOtherRepository.getInstance();
+    this.internalRelationRepository = InternalRelationRepository.getInstance();
+    this.memberRepository = MemberRepository.getInstance();
   }
 
   /**
@@ -62,7 +56,7 @@ public class ExportAddressService {
    * @throws IOException - in case generating the file fails 
    */
   public Adresbestand generateMagazineAddressFile(File addressFile) throws IOException {
-    try (Adresbestand targetFile = new Adresbestand(addressFile, properties)) {
+    try (Adresbestand targetFile = new Adresbestand(addressFile)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
       activeMembers.forEach(member -> {
@@ -87,7 +81,7 @@ public class ExportAddressService {
   }
 
   public Adresbestand generateCardAddressFile(File addressFile) throws IOException {
-    try (Adresbestand targetFile = new Adresbestand(addressFile, properties)) {
+    try (Adresbestand targetFile = new Adresbestand(addressFile)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
       activeMembers.forEach(member -> {
@@ -100,7 +94,7 @@ public class ExportAddressService {
   }
 
   public Adresbestand generateMemberListFileByNumber(File addressFile) throws IOException {
-    try (Adresbestand targetFile = new Adresbestand(addressFile, properties)) {
+    try (Adresbestand targetFile = new Adresbestand(addressFile)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
       activeMembers.forEach(targetFile::addMember);
@@ -109,7 +103,7 @@ public class ExportAddressService {
   }
 
   public Adresbestand generateMemberListFileByName(File addressFile) throws IOException {
-    try (Adresbestand targetFile = new Adresbestand(addressFile, properties)) {
+    try (Adresbestand targetFile = new Adresbestand(addressFile)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatusesOrderByName(statuses);
       activeMembers.forEach(targetFile::addMember);
@@ -119,11 +113,11 @@ public class ExportAddressService {
 
   private void extraMagazines(Adresbestand targetFile) {
     int nummerLedenadministratie =
-        Integer.parseInt(properties.getProperty("nummer_ledenadministratie"));
+        Integer.parseInt(CCNLColumnProperties.getProperty("nummer_ledenadministratie"));
     Optional<InternalRelation> ledenadministratie =
         internalRelationRepository.findById(nummerLedenadministratie);
     if (ledenadministratie.isPresent()) {
-      int aantalBladen = Integer.parseInt(properties.getProperty("aantal_bladen"));
+      int aantalBladen = Integer.parseInt(CCNLColumnProperties.getProperty("aantal_bladen"));
       for (int ix = 0; ix < aantalBladen; ix++) {
         targetFile.addInternalRelation(ledenadministratie.get());
       }

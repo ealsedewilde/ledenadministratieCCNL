@@ -11,22 +11,21 @@ import nl.ealse.ccnl.ledenadministratie.model.MemberBase;
 public class MemberBaseAddressExport {
 
   void addMember(CCNLBestand targetFile, MemberBase member) {
-    CCNLColumnProperties properties = targetFile.getProperties();
     targetFile.addRow();
     targetFile.addCell(member.getInitials(),
-        properties.getKolomnummer(LidColumnDefinition.VOORLETTERS));
+        CCNLColumnProperties.getKolomnummer(LidColumnDefinition.VOORLETTERS));
     targetFile.addCell(member.getLastNamePrefix(),
-        properties.getKolomnummer(LidColumnDefinition.TUSSENVOEGSEL));
+        CCNLColumnProperties.getKolomnummer(LidColumnDefinition.TUSSENVOEGSEL));
     targetFile.addCell(member.getLastName(),
-        properties.getKolomnummer(LidColumnDefinition.ACHTERNAAM));
+        CCNLColumnProperties.getKolomnummer(LidColumnDefinition.ACHTERNAAM));
     targetFile.addCell(member.getAddress().getStreetAndNumber(),
-        properties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.STRAAT_HUISNUMMER));
     targetFile.addCell(member.getAddress().getPostalCode(),
-        properties.getKolomnummer(AdresColumnDefinition.POSTCODE));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.POSTCODE));
     targetFile.addCell(member.getAddress().getCity(),
-        properties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.WOONPLAATS));
     targetFile.addCell(member.getAddress().getCountry(),
-        properties.getKolomnummer(AdresColumnDefinition.LAND));
+        CCNLColumnProperties.getKolomnummer(AdresColumnDefinition.LAND));
   }
 
 }

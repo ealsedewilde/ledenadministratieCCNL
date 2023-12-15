@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.other;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -10,24 +9,22 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalOtherService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalOtherControllerTest extends FXMLBaseTest {
 
-  private static ExternalOtherService service;
-
   private ExternalOtherController sut;
   private ExternalRelationOther relation;
 
   @Test
   void testController() {
-    sut = new ExternalOtherController(getPageController(), service);
-    sut.setup();
     relation = externalRelationOther();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
+      sut = ExternalOtherController.getInstance();
       doTest();
       ar.set(true);
     }, ar);
@@ -48,7 +45,7 @@ class ExternalOtherControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    service = mock(ExternalOtherService.class);
+    MockProvider.mock(ExternalOtherService.class);
   };
 
   private ExternalRelationOther externalRelationOther() {

@@ -13,8 +13,7 @@ import java.util.Properties;
  *
  * @author ealse
  */
-@SuppressWarnings("serial")
-public class DatabaseLocation extends Properties {
+public class DatabaseLocation {
 
   public static final File DB_LOCATION_FILE = new File("db.properties");
 
@@ -34,22 +33,27 @@ public class DatabaseLocation extends Properties {
       try (StringReader reader = new StringReader(readDbLocation())) {
         dbProperties.load(reader);
         String dbLocation = dbProperties.getProperty("db.locatie");
-        if (dbLocation != null) {
-          if (dbLocation.startsWith("jdbc:h2:mem")) {
-            databaseUrl = dbLocation;
-          } else if (new File(dbLocation).isAbsolute()) {
-            databaseUrl = "jdbc:h2:" + dbLocation;
-          } else if (dbLocation.startsWith("/")) {
-            databaseUrl = "jdbc:h2:.." + dbLocation;
-          } else {
-            databaseUrl = "jdbc:h2:../" + dbLocation;
-          }
-        }
+        databaseUrl = initialize(dbLocation);
       } catch (IOException e) {
         throw new DatabasePropertyException("Error initializing database location", e);
       }
     }
 
+  }
+
+  public static String initialize(String dbLocation) {
+    if (dbLocation != null) {
+      if (dbLocation.startsWith("jdbc:h2:mem")) {
+        return dbLocation;
+      } else if (new File(dbLocation).isAbsolute()) {
+        return "jdbc:h2:" + dbLocation;
+      } else if (dbLocation.startsWith("/")) {
+        return "jdbc:h2:.." + dbLocation;
+      } else {
+        return "jdbc:h2:../" + dbLocation;
+      }
+    }
+    return null;
   }
   
   private String readDbLocation() throws IOException {
@@ -64,19 +68,6 @@ public class DatabaseLocation extends Properties {
       return sb.toString().replace(File.separatorChar, '/'); 
     }
     
-  }
-
-  @Override
-  public synchronized boolean equals(Object o) {
-    if (o instanceof DatabaseLocation) {
-      return super.equals(o);
-    }
-    return false;
-  }
-
-  @Override
-  public synchronized int hashCode() {
-    return super.hashCode();
   }
   
 }

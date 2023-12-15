@@ -1,20 +1,21 @@
 package nl.ealse.ccnl.ledenadministratie.payment;
 
 import lombok.Getter;
+import lombok.experimental.UtilityClass;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Component
-@Getter
+@UtilityClass
 public class MemberShipFee {
   
+  @Getter
   private final double incasso;
+  @Getter
   private final double overboeken;
   
-  public MemberShipFee(@Value("${ccnl.contributie.incasso}") String incasso, @Value("${ccnl.contributie.overboeken}") String overboeken) {
-    this.incasso = toDouble(incasso);
-    this.overboeken = toDouble(overboeken);
+  static {
+    incasso = toDouble(DatabaseProperties.getProperty("ccnl.contributie.incasso"));
+    overboeken = toDouble(DatabaseProperties.getProperty("ccnl.contributie.overboeken"));
   }
   
   private double toDouble(String bedrag) {

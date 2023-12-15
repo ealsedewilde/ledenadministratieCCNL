@@ -62,8 +62,8 @@ public class CCNLLid extends CCNLAdres implements Comparable<CCNLLid> {
 
   private String naam;
 
-  public CCNLLid(Row row, CCNLColumnProperties properties) throws EOFException {
-    super(row, properties);
+  public CCNLLid(Row row) throws EOFException {
+    super(row);
     init();
   }
 
@@ -121,7 +121,7 @@ public class CCNLLid extends CCNLAdres implements Comparable<CCNLLid> {
 
 
   private boolean checkBoolean(String cellWaarde, LidColumnDefinition.Property trueValueProperty) {
-    String waarde = getProperties().getProperty(trueValueProperty.name().toLowerCase());
+    String waarde = CCNLColumnProperties.getProperty(trueValueProperty.name().toLowerCase());
     String[] waarden = waarde.split(";");
     for (String w : waarden) {
       if (w.equalsIgnoreCase(cellWaarde)) {

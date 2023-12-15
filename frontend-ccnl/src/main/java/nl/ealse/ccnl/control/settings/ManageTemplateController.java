@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.control.settings;
 
-import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Optional;
 import javafx.fxml.FXML;
@@ -13,25 +12,25 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.event.support.EventListener;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.FXMLLoaderBean;
 import nl.ealse.javafx.ImagesMap;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public class ManageTemplateController {
-
-  private final ApplicationEventPublisher eventPublisher;
+  
+  @Getter
+  private static final ManageTemplateController instance = new ManageTemplateController();
 
   private final PageController pageController;
 
@@ -71,15 +70,13 @@ public class ManageTemplateController {
   private Scene mailHelpScene;
 
 
-  public ManageTemplateController(PageController pageController, DocumentService documentService,
-      ApplicationEventPublisher eventPublisher) {
-    this.eventPublisher = eventPublisher;
-    this.pageController = pageController;
-    this.documentService = documentService;
+  private ManageTemplateController() {
+    this.pageController = PageController.getInstance();
+    this.documentService = DocumentService.getInstance();
+    setup();
   }
 
-  @PostConstruct
-  void setup() {
+  private void setup() {
     this.dialog = new Stage();
     this.dialog.initModality(Modality.APPLICATION_MODAL);
     this.dialog.setResizable(false);
@@ -175,7 +172,7 @@ public class ManageTemplateController {
     if (dialog.isShowing()) {
       dialog.close();
     }
-    eventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.TEMPLATES_OVERVIEW));
+    EventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.TEMPLATES_OVERVIEW));
   }
 
 }
