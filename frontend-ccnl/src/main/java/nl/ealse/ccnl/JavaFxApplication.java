@@ -38,6 +38,7 @@ public class JavaFxApplication extends Application {
   public void stop() throws Exception {
     super.stop();
     EntityManagerProvider.close();
+    System.exit(0);
   }
 
 }

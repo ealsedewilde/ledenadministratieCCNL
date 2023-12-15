@@ -3,7 +3,6 @@ package nl.ealse.ccnl.ledenadministratie.util;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import java.util.ServiceLoader;
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -11,29 +10,35 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class EntityManagerProvider {
-  
-  @Getter
-  private final EntityManager entityManager;
-  
-  // load real database access  or mock in case of unit tests.
+
+  private static final PersistenceInitializer pi;
+
   static {
     ServiceLoader<PersistenceInitializer> serviceLoader =
         ServiceLoader.load(PersistenceInitializer.class);
     Optional<PersistenceInitializer> first = serviceLoader.findFirst();
     if (first.isPresent()) {
-      entityManager = first.get().initializePersistence();
+      pi = first.get();
     } else {
       throw new ExceptionInInitializerError("No DatabasePropertiesProvider available");
     }
   }
-  
+
+  private ThreadLocal<EntityManager> threadLocal =
+      ThreadLocal.withInitial(pi::initializePersistence);
+
   /**
    * Close all connections with the database.
    */
   public void close() {
-    if (entityManager.getEntityManagerFactory().isOpen()) {
-      entityManager.getEntityManagerFactory().close();
+    if (threadLocal.get().getEntityManagerFactory().isOpen()) {
+      threadLocal.get().getEntityManagerFactory().close();
+      threadLocal.remove();
     }
+  }
+
+  public static EntityManager getEntityManager() {
+    return threadLocal.get();
   }
 
 }
