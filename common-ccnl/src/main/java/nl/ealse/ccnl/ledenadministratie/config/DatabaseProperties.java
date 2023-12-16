@@ -8,6 +8,19 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class DatabaseProperties {
   
+  private static final DatabasePropertiesProvider provider;
+  
+  static {
+    ServiceLoader<DatabasePropertiesProvider> serviceLoader =
+        ServiceLoader.load(DatabasePropertiesProvider.class);
+    Optional<DatabasePropertiesProvider> first = serviceLoader.findFirst();
+    if (first.isPresent()) {
+      provider = first.get();
+    } else {
+      throw new ExceptionInInitializerError("No DatabasePropertiesProvider available");
+    }
+  }
+  
   private Properties properties;
 
   public String getProperty(String key) {
@@ -25,17 +38,10 @@ public class DatabaseProperties {
   }
   
   public void reload() {
-    initialize();
+    properties = provider.getProperties();
   }
 
   public synchronized void initialize() {
-    ServiceLoader<DatabasePropertiesProvider> serviceLoader =
-        ServiceLoader.load(DatabasePropertiesProvider.class);
-    Optional<DatabasePropertiesProvider> first = serviceLoader.findFirst();
-    if (first.isPresent()) {
-      properties = first.get().getProperties();
-    } else {
-      throw new ExceptionInInitializerError("No DatabasePropertiesProvider available");
-    }
+    properties = provider.getProperties();
   }
 }
