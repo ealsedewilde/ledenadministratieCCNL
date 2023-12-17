@@ -222,9 +222,9 @@ public abstract class BaseDbConfigurator {
 
   private Connection getConnection(String dbLocation) {
     try {
-      Class.forName(ApplicationProperties.getProperty("database.driver"));
+      Class.forName(ApplicationProperties.getProperty("database.driver", "org.h2.Driver"));
       return DriverManager.getConnection(dbLocation,
-          ApplicationProperties.getProperty("database.user"),
+          ApplicationProperties.getProperty("database.user", "sa"),
           ApplicationProperties.getProperty("database.password", ""));
     } catch (ClassNotFoundException | SQLException e) {
       log.error("Failed to initialize connection", e);

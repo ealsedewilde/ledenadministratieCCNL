@@ -31,8 +31,9 @@ public class EntityManagerProvider {
    * Close all connections with the database.
    */
   public void close() {
-    if (threadLocal.get().getEntityManagerFactory().isOpen()) {
-      threadLocal.get().getEntityManagerFactory().close();
+    EntityManager em = threadLocal.get();
+    if (em != null && em.getEntityManagerFactory().isOpen()) {
+      em.getEntityManagerFactory().close();
       threadLocal.remove();
     }
   }
