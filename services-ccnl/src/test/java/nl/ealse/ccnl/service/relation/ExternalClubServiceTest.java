@@ -2,8 +2,8 @@ package nl.ealse.ccnl.service.relation;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.util.ClubNumberFactory;
 import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.BeforeAll;

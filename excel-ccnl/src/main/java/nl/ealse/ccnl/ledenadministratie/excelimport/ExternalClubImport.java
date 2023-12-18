@@ -1,9 +1,9 @@
 package nl.ealse.ccnl.ledenadministratie.excelimport;
 
 import java.time.LocalDate;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.club.CCNLClub;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationClubRepository;
 
 public class ExternalClubImport extends ExternalImport<ExternalRelationClub, CCNLClub> {
 

@@ -3,9 +3,9 @@ package nl.ealse.ccnl.ledenadministratie.excelimport;
 import java.util.List;
 import java.util.Optional;
 import lombok.Setter;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLAdres;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationRepository;
 
 public abstract class ExternalImport<T extends ExternalRelation, S extends CCNLAdres> {
 

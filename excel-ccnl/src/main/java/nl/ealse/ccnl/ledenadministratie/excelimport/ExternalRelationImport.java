@@ -1,9 +1,9 @@
 package nl.ealse.ccnl.ledenadministratie.excelimport;
 
 import java.time.LocalDate;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.partner.CCNLPartner;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.util.DateUtil;
 
 public abstract class ExternalRelationImport<T extends ExternalRelation>

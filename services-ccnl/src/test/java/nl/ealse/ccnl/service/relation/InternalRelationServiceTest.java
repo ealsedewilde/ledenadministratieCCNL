@@ -2,8 +2,8 @@ package nl.ealse.ccnl.service.relation;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import nl.ealse.ccnl.ledenadministratie.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
 import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -9,7 +9,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
-import nl.ealse.ccnl.ledenadministratie.util.PersistenceInitializer;
+import nl.ealse.ccnl.ledenadministratie.dao.util.PersistenceInitializer;
 import org.hibernate.cfg.JdbcSettings;
 
 @Slf4j

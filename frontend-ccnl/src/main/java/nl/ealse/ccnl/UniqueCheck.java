@@ -1,7 +1,6 @@
 package nl.ealse.ccnl;
 
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Check if there is no other instance of this application running.
@@ -17,7 +16,6 @@ public class UniqueCheck {
    * @return true when unique
    */
   public boolean uniqueProcess() {
-    long start = System.currentTimeMillis();
     ProcessHandle current = ProcessHandle.current();
     String refCommand = getCommand(current);
     long refPid = current.pid();

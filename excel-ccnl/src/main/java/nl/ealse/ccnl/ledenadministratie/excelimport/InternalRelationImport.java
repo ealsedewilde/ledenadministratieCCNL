@@ -3,9 +3,9 @@ package nl.ealse.ccnl.ledenadministratie.excelimport;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import nl.ealse.ccnl.ledenadministratie.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.intern.CCNLIntern;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
 
 public class InternalRelationImport {
 

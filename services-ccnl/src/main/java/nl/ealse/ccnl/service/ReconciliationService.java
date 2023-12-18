@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.PaymentFileRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.PaymentFileRepository;
 import nl.ealse.ccnl.ledenadministratie.payment.PaymentHandler;
 import nl.ealse.ccnl.ledenadministratie.util.XmlValidator;
 

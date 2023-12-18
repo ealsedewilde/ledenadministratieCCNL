@@ -10,7 +10,7 @@ import java.util.zip.ZipFile;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
-import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 
 /**
  * Database backup / restore.

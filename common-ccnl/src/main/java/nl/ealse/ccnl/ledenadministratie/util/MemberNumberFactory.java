@@ -2,7 +2,7 @@ package nl.ealse.ccnl.ledenadministratie.util;
 
 import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
-import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 
 /**
  * Generate a random new member number from the list with free numbers.

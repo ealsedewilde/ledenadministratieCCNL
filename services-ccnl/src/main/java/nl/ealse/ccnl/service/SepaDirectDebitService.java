@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
@@ -21,7 +22,6 @@ import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigBooleanE
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigDateEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEntry;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
-import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
 
 @Slf4j
 public class SepaDirectDebitService {

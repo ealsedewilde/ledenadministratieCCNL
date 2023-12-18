@@ -8,7 +8,7 @@ import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
-import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 
 public class JavaFxApplication extends Application {
 

@@ -1,7 +1,9 @@
-package nl.ealse.ccnl.ledenadministratie.model.dao;
+package nl.ealse.ccnl.ledenadministratie.dao;
 
 import java.time.LocalDate;
 import java.util.List;
+import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;

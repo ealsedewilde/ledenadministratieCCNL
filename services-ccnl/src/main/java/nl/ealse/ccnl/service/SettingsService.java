@@ -6,9 +6,9 @@ import java.util.StringJoiner;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.dao.SettingRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
-import nl.ealse.ccnl.ledenadministratie.model.dao.SettingRepository;
-import nl.ealse.ccnl.ledenadministratie.util.TransactionUtil;
 
 @Slf4j
 public class SettingsService {

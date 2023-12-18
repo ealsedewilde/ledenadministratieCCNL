@@ -1,6 +1,7 @@
-package nl.ealse.ccnl.ledenadministratie.model.dao;
+package nl.ealse.ccnl.ledenadministratie.dao;
 
 import java.util.List;
+import nl.ealse.ccnl.ledenadministratie.dao.SettingRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

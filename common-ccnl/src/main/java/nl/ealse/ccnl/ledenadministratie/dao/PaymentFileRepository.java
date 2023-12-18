@@ -1,4 +1,4 @@
-package nl.ealse.ccnl.ledenadministratie.model.dao;
+package nl.ealse.ccnl.ledenadministratie.dao;
 
 import java.util.List;
 import lombok.Getter;

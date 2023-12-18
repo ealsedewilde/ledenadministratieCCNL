@@ -1,12 +1,12 @@
-package nl.ealse.ccnl.ledenadministratie.model.dao;
+package nl.ealse.ccnl.ledenadministratie.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
-import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
-import nl.ealse.ccnl.ledenadministratie.util.TransactionUtil;
+import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 
 /**
  * Super class of all database repositories.

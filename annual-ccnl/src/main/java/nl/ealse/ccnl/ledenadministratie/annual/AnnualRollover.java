@@ -6,14 +6,14 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
+import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ArchiveRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import nl.ealse.ccnl.ledenadministratie.util.TransactionUtil;
 
 /**
  * Rollover to a new membership year.

@@ -11,9 +11,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
-import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
 import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Test;
 

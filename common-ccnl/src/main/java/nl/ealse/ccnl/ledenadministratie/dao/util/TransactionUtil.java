@@ -1,9 +1,8 @@
-package nl.ealse.ccnl.ledenadministratie.util;
+package nl.ealse.ccnl.ledenadministratie.dao.util;
 
 import jakarta.persistence.EntityTransaction;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.model.dao.Procedure;
 
 /**
  * Utility to handle some work in one database transaction.

@@ -2,8 +2,8 @@ package nl.ealse.ccnl.ledenadministratie.config;
 
 import java.util.List;
 import java.util.Properties;
+import nl.ealse.ccnl.ledenadministratie.dao.SettingRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
-import nl.ealse.ccnl.ledenadministratie.model.dao.SettingRepository;
 
 public class DefaultDatabasePropertiesProvider implements DatabasePropertiesProvider{
 

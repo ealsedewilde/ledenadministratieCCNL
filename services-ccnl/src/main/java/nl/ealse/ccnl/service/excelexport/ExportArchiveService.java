@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.Archiefbestand;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ArchiveRepository;
 
 /**
  * Export all data to Excel.

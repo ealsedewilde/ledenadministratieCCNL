@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import nl.ealse.ccnl.ledenadministratie.util.PersistenceInitializer;
+import nl.ealse.ccnl.ledenadministratie.dao.util.PersistenceInitializer;
 
 public class TestPersistenceInitializer implements PersistenceInitializer{
 

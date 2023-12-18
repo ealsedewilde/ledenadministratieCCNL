@@ -2,6 +2,12 @@ package nl.ealse.ccnl.ledenadministratie.excelimport;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationPartnerRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.InternalRelationRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLWorkbook;
 import nl.ealse.ccnl.ledenadministratie.excel.base.SheetDefinition;
 import nl.ealse.ccnl.ledenadministratie.excel.base.SheetNotFoundException;
@@ -9,12 +15,6 @@ import nl.ealse.ccnl.ledenadministratie.excel.club.CCNLClubSheet;
 import nl.ealse.ccnl.ledenadministratie.excel.intern.CCNLInternSheet;
 import nl.ealse.ccnl.ledenadministratie.excel.lid.CCNLLidSheet;
 import nl.ealse.ccnl.ledenadministratie.excel.partner.CCNLPartnerSheet;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationClubRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationOtherRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
-import nl.ealse.ccnl.ledenadministratie.util.TransactionUtil;
 
 public class ImportHandler {
 

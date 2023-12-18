@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

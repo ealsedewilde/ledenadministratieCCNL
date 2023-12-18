@@ -2,7 +2,7 @@ package nl.ealse.ccnl.service;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ArchiveRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
 
 /**
  * Remove obselete archive data.

@@ -1,9 +1,9 @@
 package nl.ealse.ccnl.service.relation;
 
 import lombok.Getter;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationClubRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.util.ClubNumberFactory;
 
 public class ExternalClubService extends ExternalRelationService<ExternalRelationClub> {

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
 
 @Slf4j
 public class InternalRelationService {

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.util.NumberFactory;
 
 @Slf4j

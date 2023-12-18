@@ -1,7 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
 import lombok.Getter;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationPartnerRepository;
 
 public class PartnerNumberFactory extends NumberFactory {
 

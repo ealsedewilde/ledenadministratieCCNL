@@ -2,11 +2,11 @@ package nl.ealse.ccnl.ledenadministratie.excelimport;
 
 import java.util.List;
 import java.util.Optional;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.lid.CCNLLid;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.util.DateUtil;
 
 public class MemberImport {

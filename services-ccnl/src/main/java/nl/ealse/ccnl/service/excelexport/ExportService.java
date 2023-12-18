@@ -7,16 +7,16 @@ import java.util.EnumSet;
 import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationPartnerRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.InternalRelationRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.Ledenbestand;
 import nl.ealse.ccnl.ledenadministratie.excel.base.SheetDefinition;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationClubRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationOtherRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.InternalRelationRepository;
-import nl.ealse.ccnl.ledenadministratie.model.dao.MemberRepository;
 
 /**
  * Export all data to Excel.

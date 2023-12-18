@@ -1,5 +1,6 @@
-package nl.ealse.ccnl.ledenadministratie.model.dao;
+package nl.ealse.ccnl.ledenadministratie.dao;
 
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationPartnerRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import org.junit.jupiter.api.Assertions;

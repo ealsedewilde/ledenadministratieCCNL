@@ -1,4 +1,4 @@
-package nl.ealse.ccnl.ledenadministratie.util;
+package nl.ealse.ccnl.ledenadministratie.dao.util;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

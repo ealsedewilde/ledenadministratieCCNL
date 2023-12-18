@@ -4,12 +4,12 @@ import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigBooleanEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigDateEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEntry;
-import nl.ealse.ccnl.ledenadministratie.util.EntityManagerProvider;
 
 @Slf4j
 public class IncassoPropertiesprovider {

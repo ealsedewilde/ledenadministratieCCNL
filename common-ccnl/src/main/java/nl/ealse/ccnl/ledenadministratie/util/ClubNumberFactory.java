@@ -1,7 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
 import lombok.Getter;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationClubRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 
 public class ClubNumberFactory extends NumberFactory {
 

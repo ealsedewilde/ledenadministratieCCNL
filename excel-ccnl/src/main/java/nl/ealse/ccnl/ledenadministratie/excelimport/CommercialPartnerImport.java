@@ -1,7 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.excelimport;
 
+import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationPartnerRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.ledenadministratie.model.dao.ExternalRelationPartnerRepository;
 
 public class CommercialPartnerImport extends ExternalRelationImport<ExternalRelationPartner> {
 

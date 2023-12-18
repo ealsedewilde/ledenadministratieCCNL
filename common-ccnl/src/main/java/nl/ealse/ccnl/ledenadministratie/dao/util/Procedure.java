@@ -1,4 +1,4 @@
-package nl.ealse.ccnl.ledenadministratie.model.dao;
+package nl.ealse.ccnl.ledenadministratie.dao.util;
 
 /**
  * Unit of work to excute in a database transaction.
