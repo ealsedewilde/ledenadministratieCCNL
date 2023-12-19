@@ -43,4 +43,12 @@ public class JpaPersistenceInitializer implements PersistenceInitializer {
     return emf.createEntityManager();
   }
 
+  @Override
+  public void shutdown() {
+    if (emf != null) {
+      emf.close();
+    }
+    
+  }
+
 }

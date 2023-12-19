@@ -13,5 +13,10 @@ public interface PersistenceInitializer {
    * @return access to the database
    */
   EntityManager initializePersistence();
+  
+  /**
+   * Close all database connections.
+   */
+  void shutdown();
 
 }

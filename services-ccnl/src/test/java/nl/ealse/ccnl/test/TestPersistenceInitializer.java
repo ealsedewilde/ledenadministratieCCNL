@@ -16,4 +16,10 @@ public class TestPersistenceInitializer implements PersistenceInitializer{
     return em;
   }
 
+  @Override
+  public void shutdown() {
+    // nothing
+    
+  }
+
 }
