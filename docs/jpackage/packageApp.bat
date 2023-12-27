@@ -1,1 +1,0 @@
-C:\java\jdk-21\bin\jpackage.exe @jpackage.cfg
