@@ -9,35 +9,49 @@
 	</parent>
 	<artifactId>frontend-ccnl</artifactId>
 
-  <build>
-    <finalName>LedenadministratieApp</finalName>
-    <plugins>
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.4.1</version>
-        <executions>
-          <execution>
-            <id>shade-my-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-             <keepDependenciesWithProvidedScope>false</keepDependenciesWithProvidedScope> 
-             <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <manifestEntries>
-                    <Main-Class>nl.ealse.ccnl.LedenadministratieApplication</Main-Class>
-                    <SplashScreen-Image>CCNLLogo.png</SplashScreen-Image>
-                  </manifestEntries>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+	<build>
+		<finalName>LedenadministratieApp</finalName>
+		<plugins>
+			<plugin>
+				<groupId>io.smallrye</groupId>
+				<artifactId>jandex-maven-plugin</artifactId>
+				<version>3.1.6</version>
+				<executions>
+					<execution>
+						<id>make-index</id>
+						<goals>
+							<goal>jandex</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.4.1</version>
+				<executions>
+					<execution>
+						<id>shade-my-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<keepDependenciesWithProvidedScope>false</keepDependenciesWithProvidedScope>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>nl.ealse.ccnl.LedenadministratieApplication</Main-Class>
+										<SplashScreen-Image>CCNLLogo.png</SplashScreen-Image>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>
@@ -111,27 +125,4 @@
 			<version>6.0.0</version>
 		</dependency>
 	</dependencies>
-
-	<profiles>
-		<profile>
-			<id>jandex</id>
-			<build>
-				<plugins>
-			<plugin>
-				<groupId>io.smallrye</groupId>
-				<artifactId>jandex-maven-plugin</artifactId>
-				<version>3.1.6</version>
-				<executions>
-					<execution>
-						<id>make-index</id>
-						<goals>
-							<goal>jandex</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>
