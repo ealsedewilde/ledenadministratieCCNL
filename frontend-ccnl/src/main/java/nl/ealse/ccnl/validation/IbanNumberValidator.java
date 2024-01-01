@@ -6,6 +6,10 @@ import javafx.scene.control.TextField;
 import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import org.apache.commons.validator.routines.IBANValidator;
 
+/**
+ * Formats the IBNA-number by removing spaces and make it upper case.
+ * The formatted IBAN-NUMBEr get validated.
+ */
 public class IbanNumberValidator extends AbstractValidator {
 
   private static final IBANValidator ibanValidator = new IBANValidator();
@@ -32,6 +36,7 @@ public class IbanNumberValidator extends AbstractValidator {
         result = false;
       }
     } else {
+      ibanNumber = ibanNumber.replaceAll("\\s", "");
       ibanNumber = ibanNumber.toUpperCase();
       ibanNumberField.setText(ibanNumber);
       result = ibanValidator.isValid(ibanNumber);
