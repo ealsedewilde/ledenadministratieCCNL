@@ -10,15 +10,14 @@
 				value="org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy" />
 
 			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+			<property name="hibernate.connection.provider_class"
+				value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
 			<!-- <property name="jakarta.persistence.schema-generation.scripts.action" value="drop-and-create" 
 				/> <property name="jakarta.persistence.schema-generation.scripts.create-target" value="./create.sql" 
 				/> -->
 			<!-- Echo all executed SQL to console -->
-<!-- 
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="true" />
-			<property name="hibernate.highlight_sql" value="true" />
- -->
- 		</properties>
+			<!-- <property name="hibernate.show_sql" value="true" /> <property name="hibernate.format_sql" value="true" 
+				/> <property name="hibernate.highlight_sql" value="true" /> -->
+		</properties>
 	</persistence-unit>
 </persistence>             
