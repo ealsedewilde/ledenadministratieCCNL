@@ -24,13 +24,14 @@ public class EntityManagerProvider {
     }
   }
 
-  private ThreadLocal<EntityManager> threadLocal =
+  private static final ThreadLocal<EntityManager> threadLocal =
       ThreadLocal.withInitial(pi::initializePersistence);
 
   /**
    * Close all connections with the database.
    */
   public void close() {
+    threadLocal.remove();
     pi.shutdown();
   }
 
