@@ -8,7 +8,7 @@ import java.util.Optional;
  */
 public class UniqueCheck {
 
-  private boolean nonUnique;
+  private boolean unique = true;
 
   /**
    * Determine uniqueness of the application.
@@ -29,10 +29,10 @@ public class UniqueCheck {
       // of this application running.
       if (refCommand.equals(getCommand(process)) && refCommand.equals(getParentCommand(process))
           && refPid != process.pid()) {
-        nonUnique = true;
+        unique = false;
       }
     });
-    return !nonUnique;
+    return unique;
   }
 
   private String getCommand(ProcessHandle process) {
