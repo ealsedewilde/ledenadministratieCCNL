@@ -45,6 +45,8 @@
 								<modulePath>${project.build.directory}/mods</modulePath>
 							</modulePaths>
 							<addModules>
+								<!-- subset of jmods indicated by jdeps -->
+								<addModule>javafx.base</addModule>
 								<addModule>java.desktop</addModule>
 								<addModule>java.instrument</addModule>
 								<addModule>java.logging</addModule>
@@ -53,11 +55,11 @@
 								<addModule>java.scripting</addModule>
 								<addModule>java.sql</addModule>
 								<addModule>java.xml</addModule>
-								<addModule>jdk.charsets</addModule>
-								<addModule>jdk.crypto.ec</addModule>
 								<addModule>jdk.unsupported</addModule>
 								<addModule>jdk.xml.dom</addModule>
-								<addModule>javafx.base</addModule>
+								<!-- the following jmod is missedd by jdeps; is required for TLS  (email) -->'
+								<addModule>jdk.crypto.ec</addModule>
+								<!-- add the required JavaFX mods -->
 								<addModule>javafx.controls</addModule>
 								<addModule>javafx.fxml</addModule>
 								<addModule>javafx.graphics</addModule>
