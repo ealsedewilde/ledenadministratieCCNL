@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.javafx.FXMLLoadException;
 
 /**
@@ -20,15 +21,12 @@ import nl.ealse.javafx.FXMLLoadException;
 public abstract class FXMLBaseTest extends FXBase {
 
   private static final String FXML_DIR = "/fxml/";
-
-  private static PageController pc = MockProvider.mock(PageController.class);
-
-  /**
-   * Setup a environment for loading forms.
-   */
+  
   static {
-    pc = MockProvider.mock(PageController.class);
+    EventProcessor.getInstance().initialize();
   }
+
+  private static final PageController pc = MockProvider.mock(PageController.class);
 
   /**
    * Return a mockito spy. Use it when working with a form.

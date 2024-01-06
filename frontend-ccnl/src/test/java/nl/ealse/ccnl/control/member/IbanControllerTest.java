@@ -66,8 +66,7 @@ class IbanControllerTest extends FXMLBaseTest {
   static void setup() {
     MockProvider.mock(DocumentService.class);
     MockProvider.mock(MemberService.class);
-    EventProcessor.getInstance().initialize();
-    fileChooser = mock(WrappedFileChooser.class);
+     fileChooser = mock(WrappedFileChooser.class);
     when(fileChooser.showSaveDialog()).thenReturn(new File("welkom.pdf"));
   }
 

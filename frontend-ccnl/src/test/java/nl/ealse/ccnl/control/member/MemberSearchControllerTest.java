@@ -86,7 +86,6 @@ class MemberSearchControllerTest extends FXMLBaseTest {
     members.add(m);
     when(service.searchMember(any(SearchItem.class), anyString())).thenReturn(members);
     when(service.searchMemberWithoutSepa(any(SearchItem.class), anyString())).thenReturn(members);
-    EventProcessor.getInstance().initialize();
   }
 
   private static Member member() {

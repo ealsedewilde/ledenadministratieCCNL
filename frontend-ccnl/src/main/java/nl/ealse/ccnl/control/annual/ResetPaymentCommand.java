@@ -17,7 +17,7 @@ import nl.ealse.ccnl.service.ReconciliationService;
 public class ResetPaymentCommand {
   
   @Getter
-  private static ResetPaymentCommand instance = new ResetPaymentCommand();
+  private static final ResetPaymentCommand instance = new ResetPaymentCommand();
 
   private final PageController pageController;
 

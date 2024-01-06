@@ -64,8 +64,7 @@ class ManageTemplateControllerTest extends FXMLBaseTest {
   @BeforeAll
   static void setup() {
     MockProvider.mock(DocumentService.class);
-    EventProcessor.getInstance().initialize();
-  }
+   }
 
   private void initTemplateId() {
     try {
