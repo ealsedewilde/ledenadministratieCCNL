@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.ledenadministratie.pdf;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import lombok.Getter;
@@ -30,8 +29,6 @@ public class FopFactoryProvider {
   static {
     // The resource is on the classpath of the output-ccnl module
     URL fopConf = FopFactoryProvider.class.getResource("/fop.xconf");
-    log.info("FOP conf found: " + new File(fopConf.getFile()).exists());
-    
     try {
       URI basUri = getBaseUri(fopConf.toURI());
       log.info(fopConf.toURI().toString());
