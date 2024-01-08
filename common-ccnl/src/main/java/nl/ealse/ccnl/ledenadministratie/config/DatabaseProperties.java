@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import lombok.experimental.UtilityClass;
+import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 
 @UtilityClass
 public class DatabaseProperties {
@@ -25,14 +26,14 @@ public class DatabaseProperties {
 
   public String getProperty(String key) {
     if (properties == null) {
-      initialize();
+      reload();
     }
     return properties.getProperty(key);
   }
 
   public String getProperty(String key, String defaultValue) {
     if (properties == null) {
-      initialize();
+      reload();
     }
     return properties.getProperty(key, defaultValue);
   }

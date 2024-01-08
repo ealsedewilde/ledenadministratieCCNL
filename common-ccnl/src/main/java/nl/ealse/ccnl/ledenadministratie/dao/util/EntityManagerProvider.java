@@ -24,19 +24,34 @@ public class EntityManagerProvider {
     }
   }
 
-  private static final ThreadLocal<EntityManager> threadLocal =
-      ThreadLocal.withInitial(pi::initializePersistence);
+  private static final ThreadLocal<Optional<EntityManager>> threadLocal =
+      ThreadLocal.withInitial(Optional::empty);
+
+  /**
+   * Close all connections with the database for this Thread.
+   */
+  public void cleanup() {
+    Optional<EntityManager> holder = threadLocal.get();
+    if (holder.isPresent()) {
+      holder.get().close();
+    }
+    threadLocal.remove();
+  }
 
   /**
    * Close all connections with the database.
    */
-  public void close() {
-    threadLocal.remove();
+  public void shutdown() {
+    cleanup();
     pi.shutdown();
   }
 
   public static EntityManager getEntityManager() {
-    return threadLocal.get();
+    Optional<EntityManager> holder = threadLocal.get();
+    if (holder.isEmpty()) {
+      holder = Optional.of(pi.initializePersistence());
+      threadLocal.set(holder);
+    }
+    return holder.get();
   }
-
 }
