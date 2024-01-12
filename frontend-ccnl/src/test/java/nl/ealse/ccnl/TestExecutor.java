@@ -5,14 +5,16 @@ import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import nl.ealse.ccnl.control.HandledTask;
+import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
-public class TestExecutor<T extends HandledTask> extends TaskExecutor {
-
-  @SuppressWarnings("unchecked")
+public class TestExecutor extends TaskExecutor {
+  
+  private static final TestExecutor testExecutor = new TestExecutor();
+  
   @Override
   public void execute(Runnable task) {
-    T fxt = (T) task;
+    HandledTask fxt = (HandledTask) task;
     try {
       String result = (String) MethodUtils.invokeMethod(fxt, true, "call");
       ObjectProperty<String>  v = (ObjectProperty<String>) fxt.valueProperty();
@@ -28,11 +30,11 @@ public class TestExecutor<T extends HandledTask> extends TaskExecutor {
       f.handle(evt);
     } catch (Exception e) {
     }
-    
+    EntityManagerProvider.cleanup();
   }
   
-  public static void overrideTaskExecutor(TaskExecutor instance) {
-    TaskExecutor.instance = instance;
+  public static void overrideTaskExecutor() {
+    TaskExecutor.instance = testExecutor;
   }
 
 }

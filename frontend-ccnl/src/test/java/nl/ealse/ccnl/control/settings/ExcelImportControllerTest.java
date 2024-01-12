@@ -70,7 +70,7 @@ class ExcelImportControllerTest extends FXMLBaseTest {
     fileChooser = mock(WrappedFileChooser.class);
     URL url  = ExcelImportController.class.getResource("/leden.xlsx");
     when(fileChooser.showOpenDialog()).thenReturn(new File(url.getFile()));
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
   private void setFileChooser() {
@@ -79,17 +79,6 @@ class ExcelImportControllerTest extends FXMLBaseTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  private static class TestTaskExcecutor extends TaskExecutor {
-
-    private static nl.ealse.ccnl.TaskExecutor executor = new TestExecutor<ExcelImportController.AsyncTask>();
-    
-    @Override
-    public void execute(Runnable task) {
-      executor.execute(task);
-    }
-   
   }
 
 }

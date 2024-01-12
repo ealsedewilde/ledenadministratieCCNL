@@ -39,7 +39,7 @@ public class SettingsService {
   public void save(Setting setting) {
     setting.prePersist();
     dao.save(setting);
-    DatabaseProperties.reload();
+    DatabaseProperties.initialize();
   }
 
   public void save(Setting setting, String oldId) {
@@ -53,7 +53,7 @@ public class SettingsService {
         }
       }
       dao.save(setting);
-      DatabaseProperties.reload();
+      DatabaseProperties.initialize();
     });
   }
 

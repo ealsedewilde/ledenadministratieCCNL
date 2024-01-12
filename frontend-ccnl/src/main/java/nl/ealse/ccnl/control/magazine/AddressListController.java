@@ -85,19 +85,19 @@ public class AddressListController {
   @EventListener(menuChoice = MenuChoice.CARD_ADDRESS_LIST)
   public void cardList(MenuChoiceEvent event) {
     AsyncCardAddressListTask asyncTask =
-        new AsyncCardAddressListTask(pageController, magazineService);
+        new AsyncCardAddressListTask(magazineService);
     generateFile(String.format(CARD_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
 
   @EventListener(menuChoice = MenuChoice.MEMBER_LIST_BY_NUMBER)
   public void memberListByNumber(MenuChoiceEvent event) {
-    MemberListTask asyncTask = new MemberListTask(pageController, magazineService, false);
+    MemberListTask asyncTask = new MemberListTask(magazineService, false);
     generateFile(String.format(MEMBER_FILE_NUMBER, LocalDate.now().getYear()), asyncTask);
   }
 
   @EventListener(menuChoice = MenuChoice.MEMBER_LIST_BY_NAME)
   public void memberListByName(MenuChoiceEvent event) {
-    MemberListTask asyncTask = new MemberListTask(pageController, magazineService, true);
+    MemberListTask asyncTask = new MemberListTask(magazineService, true);
     generateFile(String.format(MEMBER_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
 
@@ -137,10 +137,6 @@ public class AddressListController {
     @Setter
     protected File addressFile;
 
-    protected FileTask(PageController pageController) {
-      super(pageController);
-    }
-
     @Override
     protected String call() {
       try {
@@ -160,7 +156,6 @@ public class AddressListController {
     private final AddressListController controller;
 
     AsyncAddressListTask(AddressListController controller) {
-      super(controller.pageController);
       this.controller = controller;
     }
 
@@ -190,8 +185,7 @@ public class AddressListController {
   protected static class AsyncCardAddressListTask extends FileTask {
     private final ExportAddressService magazineService;
 
-    AsyncCardAddressListTask(PageController pageController, ExportAddressService magazineService) {
-      super(pageController);
+    AsyncCardAddressListTask(ExportAddressService magazineService) {
       this.magazineService = magazineService;
     }
 
@@ -206,9 +200,8 @@ public class AddressListController {
     private final ExportAddressService magazineService;
     private final boolean byName;
 
-    MemberListTask(PageController pageController, ExportAddressService magazineService,
+    MemberListTask(ExportAddressService magazineService,
         boolean byName) {
-      super(pageController);
       this.magazineService = magazineService;
       this.byName = byName;
     }

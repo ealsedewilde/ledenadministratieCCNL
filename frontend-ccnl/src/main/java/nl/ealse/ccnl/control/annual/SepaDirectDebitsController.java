@@ -171,7 +171,6 @@ public class SepaDirectDebitsController {
     private final File selectedFile;
 
     DirectDebitTask(SepaDirectDebitsController controller) {
-      super(controller.pageController);
       this.controller = controller;
       this.service = controller.service;
       this.selectedFile = controller.selectedFile;

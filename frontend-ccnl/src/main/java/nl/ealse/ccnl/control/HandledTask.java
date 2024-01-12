@@ -8,8 +8,13 @@ import nl.ealse.ccnl.control.menu.PageController;
  */
 public abstract class HandledTask extends Task<String> {
 
-  protected HandledTask(PageController pageController) {
+  protected HandledTask() {
     super();
+    initialize();
+  }
+  
+  private void initialize() {
+    PageController pageController = PageController.getInstance();
     this.setOnSucceeded(evt -> pageController.showMessage(evt.getSource().getValue().toString()));
     this.setOnFailed(evt -> {
       Throwable t = evt.getSource().getException();

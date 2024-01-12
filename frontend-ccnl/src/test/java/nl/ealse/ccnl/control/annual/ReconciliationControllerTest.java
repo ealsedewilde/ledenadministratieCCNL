@@ -100,7 +100,7 @@ class ReconciliationControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
     fileChooser = mock(WrappedFileChooser.class);
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
   private void setFileChooser() {
@@ -126,14 +126,5 @@ class ReconciliationControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
   }
-  private static class TestTaskExcecutor extends TaskExecutor {
-    private static TaskExecutor executor = new TestExecutor<ReconcileTask>();
 
-    @Override
-    public void execute(Runnable task) {
-      executor.execute(task);
-      
-    }
-   
-  }
 }

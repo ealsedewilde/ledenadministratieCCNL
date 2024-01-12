@@ -133,7 +133,7 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
     when(memberService.findMembersCurrentYearNotPaid(any(PaymentMethod.class))).thenReturn(members);
 
     fileChooser = mock(WrappedFileChooser.class);
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
   private static DocumentTemplate documentTemplate(boolean sepa) {
@@ -164,21 +164,5 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
     return b;
-  }
-
-  private static class TestTaskExcecutor extends TaskExecutor {
-
-    private static TaskExecutor toFileEexecutor = new TestExecutor<PdfToFile>();
-    private static TaskExecutor toPrintEexecutor = new TestExecutor<PdfToPrint>();
-
-    @Override
-    public void execute(Runnable task) {
-      if (task instanceof PdfToFile) {
-        toFileEexecutor.execute(task);
-      } else {
-        toPrintEexecutor.execute(task);
-      }
-    }
-
   }
 }

@@ -72,7 +72,7 @@ public class BackupRestoreService {
         em.getTransaction().commit();
         em.clear();
         // reload to reflect the restored data
-        DatabaseProperties.reload();
+        DatabaseProperties.initialize();
       } catch (Exception e) {
         log.error("Restore failed", e);
         em.getTransaction().rollback();

@@ -160,7 +160,6 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     private final String template;
 
     AsyncGenerator(PaymentReminderLettersController controller, String template) {
-      super(controller.pageController);
       this.controller = controller;
       this.template = template;
     }

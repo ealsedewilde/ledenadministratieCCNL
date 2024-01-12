@@ -86,7 +86,7 @@ class AddressListControllerTest extends FXMLBaseTest {
     when(service.getSetting(Optional.of(SETTING_GROUP), SETTING_KEY)).thenReturn(Optional.of(s));
     fileChooser = mock(WrappedFileChooser.class);
     when(fileChooser.showSaveDialog()).thenReturn(new File("address.xlsx"));
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
 
@@ -96,21 +96,6 @@ class AddressListControllerTest extends FXMLBaseTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-  private static class TestTaskExcecutor extends TaskExecutor {
-
-  private static TaskExecutor step1Executor = new TestExecutor<AsyncAddressListTask>();
-  private static TaskExecutor step2Executor = new TestExecutor<AsyncCardAddressListTask>();
- 
-    @Override
-    public void execute(Runnable task) {
-    if ( task instanceof AsyncAddressListTask) {
-      step1Executor.execute(task);
-    } else {
-      step2Executor.execute(task);
-    }
-    }
-   
   }
 
 }

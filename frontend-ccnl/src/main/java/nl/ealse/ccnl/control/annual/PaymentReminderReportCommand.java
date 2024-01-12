@@ -59,7 +59,6 @@ public class PaymentReminderReportCommand {
     private final File reportFile;
 
     ReminderTask(PaymentReminderReportCommand command, File reportFile) {
-      super(command.pageController);
       this.exportService = command.exportService;
       this.reportFile = reportFile;
     }

@@ -78,7 +78,6 @@ public class BackupRestoreCommand {
     private final File backupFile;
 
     BackupTask(BackupRestoreCommand command, File backupFile) {
-      super(command.pageController);
       this.backupFile = backupFile;
       this.service = command.service;
     }
@@ -101,7 +100,6 @@ public class BackupRestoreCommand {
     private final File backupFile;
 
     RestoreTask(BackupRestoreCommand command, File backupFile) {
-      super(command.pageController);
       this.backupFile = backupFile;
       this.service = command.service;
     }

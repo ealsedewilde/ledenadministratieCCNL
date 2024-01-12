@@ -137,7 +137,6 @@ public class AnnualRolloverController {
     private final File backupFile;
 
     AsyncRolloverStep1(AnnualRolloverController controller, File backupFile) {
-      super(controller.pageController);
       this.controller = controller;
       this.backupFile = backupFile;
     }
@@ -160,7 +159,6 @@ public class AnnualRolloverController {
     private final AnnualRolloverController controller;
 
     AsyncRolloverStep2(AnnualRolloverController controller) {
-      super(controller.pageController);
       this.controller = controller;
     }
 
@@ -176,7 +174,6 @@ public class AnnualRolloverController {
     private final AnnualRolloverController controller;
 
     AsyncRolloverStep3(AnnualRolloverController controller) {
-      super(controller.pageController);
       this.controller = controller;
     }
 

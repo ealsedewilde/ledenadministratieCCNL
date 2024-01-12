@@ -89,7 +89,7 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
     result.setValid(true);
     when(service.saveProperty(any(FlatProperty.class))).thenReturn(result);
     fileChooser = mock(WrappedFileChooser.class);
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
   private void setFileChooser() {
@@ -107,16 +107,6 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
     return null;
-  }
-  private static class TestTaskExcecutor extends TaskExecutor {
-    private static TaskExecutor executor = new TestExecutor<DirectDebitTask>();
-
-    @Override
-    public void execute(Runnable task) {
-      executor.execute(task);
-      
-    }
-   
   }
 
 }

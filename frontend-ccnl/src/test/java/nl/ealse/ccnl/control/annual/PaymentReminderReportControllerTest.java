@@ -43,7 +43,7 @@ class PaymentReminderReportControllerTest  extends FXMLBaseTest {
     MockProvider.mock(ExportService.class);
     fileChooser = mock(WrappedFileChooser.class);
     when(fileChooser.showSaveDialog()).thenReturn(new File("reminders.xlsx"));
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
 
@@ -54,18 +54,5 @@ class PaymentReminderReportControllerTest  extends FXMLBaseTest {
       e.printStackTrace();
     }
   }
-  
-  private static class TestTaskExcecutor extends TaskExecutor {
-    
-    private static TaskExecutor executor = new TestExecutor<ReminderTask>();
-
-    @Override
-    public void execute(Runnable task) {
-      executor.execute(task);
-      
-    }
-   
-  }
-
 
 }

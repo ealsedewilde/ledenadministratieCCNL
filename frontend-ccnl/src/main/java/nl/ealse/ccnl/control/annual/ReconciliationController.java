@@ -160,7 +160,6 @@ public class ReconciliationController {
     private final boolean includeDD;
 
     ReconcileTask(ReconciliationController controller, LocalDate referenceDate, boolean includeDD) {
-      super(controller.pageController);
       this.controller = controller;
       this.referenceDate = referenceDate;
       this.includeDD = includeDD;

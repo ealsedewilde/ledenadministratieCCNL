@@ -13,7 +13,7 @@ import org.hibernate.service.spi.Stoppable;
 @SuppressWarnings("serial")
 public class JdbcConnectionPoolProvider implements ConnectionProvider, Configurable, Stoppable {
 
-  private JdbcConnectionPool cp;
+  private transient JdbcConnectionPool cp;
 
   @Override
   public boolean isUnwrappableAs(Class<?> unwrapType) {

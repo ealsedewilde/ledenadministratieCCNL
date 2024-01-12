@@ -159,7 +159,6 @@ public class ExcelImportController {
     private final File selectedFile;
 
     AsyncTask(ExcelImportController controller, ImportSelection selection) {
-      super(controller.pageController);
       this.importService = controller.importService;
       this.selection = selection;
       this.selectedFile = controller.selectedFile;

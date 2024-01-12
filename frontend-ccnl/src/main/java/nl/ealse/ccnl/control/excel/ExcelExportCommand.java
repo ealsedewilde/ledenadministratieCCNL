@@ -70,7 +70,6 @@ public class ExcelExportCommand {
     private final File exportFile;
 
     AsyncArchiveTask(ExcelExportCommand command, File exportFile) {
-      super(command.pageController);
       this.archiveService = command.archiveService;
       this.exportFile = exportFile;
     }
@@ -95,7 +94,6 @@ public class ExcelExportCommand {
     private final MenuChoice menuChoice;
 
     AsyncExportTask(ExcelExportCommand command, MenuChoice menuChoice, File exportFile) {
-      super(command.pageController);
       this.menuChoice = menuChoice;
       this.service = command.service;
       this.exportFile = exportFile;

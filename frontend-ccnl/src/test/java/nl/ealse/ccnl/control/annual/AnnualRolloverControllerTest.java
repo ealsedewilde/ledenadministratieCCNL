@@ -5,11 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.TaskExecutor;
 import nl.ealse.ccnl.TestExecutor;
-import nl.ealse.ccnl.control.annual.AnnualRolloverController.AsyncRolloverStep1;
-import nl.ealse.ccnl.control.annual.AnnualRolloverController.AsyncRolloverStep2;
-import nl.ealse.ccnl.control.annual.AnnualRolloverController.AsyncRolloverStep3;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -75,7 +71,7 @@ class AnnualRolloverControllerTest extends FXMLBaseTest {
     MockProvider.mock(BackupRestoreService.class);
     MockProvider.mock(ExportArchiveService.class);
     MockProvider.mock(ExportService.class);
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
   private void setFileChooser() {
@@ -84,25 +80,6 @@ class AnnualRolloverControllerTest extends FXMLBaseTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-  
-  private static class TestTaskExcecutor extends TaskExecutor {
-    
-    private static TaskExecutor step1Executor = new TestExecutor<AsyncRolloverStep1>();
-    private static TaskExecutor step2Executor = new TestExecutor<AsyncRolloverStep2>();
-    private static TaskExecutor step3Executor = new TestExecutor<AsyncRolloverStep3>();
-
-    @Override
-    public void execute(Runnable task) {
-      if ( task instanceof AsyncRolloverStep1) {
-        step1Executor.execute(task);
-      } else if ( task instanceof AsyncRolloverStep2) {
-        step2Executor.execute(task);
-      } else {
-        step3Executor.execute(task);
-      }
-    }
-    
   }
 
 }

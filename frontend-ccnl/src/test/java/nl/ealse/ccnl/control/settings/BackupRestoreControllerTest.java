@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.TaskExecutor;
 import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -82,7 +81,7 @@ class BackupRestoreControllerTest extends FXMLBaseTest {
     when(fileChooser.showOpenDialog()).thenReturn(zip);
     service = MockProvider.mock(BackupRestoreService.class);
     when(service.restoreDatabase(zip)).thenReturn(Boolean.FALSE);
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
 
@@ -92,22 +91,6 @@ class BackupRestoreControllerTest extends FXMLBaseTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  private static class TestTaskExcecutor extends TaskExecutor {
-    private static TaskExecutor backupExecutor = new TestExecutor<BackupRestoreCommand.BackupTask>();
-    private static TaskExecutor restoreExecutor = new TestExecutor<BackupRestoreCommand.RestoreTask>();
-
-    
-    @Override
-    public void execute(Runnable task) {
-    if ( task instanceof BackupRestoreCommand.BackupTask) {
-      backupExecutor.execute(task);
-    } else {
-      restoreExecutor.execute(task);
-    }
-    }
-   
   }
 
 }

@@ -79,7 +79,7 @@ class ExcelExportCommandTest extends FXMLBaseTest {
   static void setup() {
     MockProvider.mock(ExportArchiveService.class);
     MockProvider.mock(ExportService.class);
-    TestExecutor.overrideTaskExecutor(new TestTaskExcecutor());
+    TestExecutor.overrideTaskExecutor();
   }
 
 
@@ -89,22 +89,6 @@ class ExcelExportCommandTest extends FXMLBaseTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  private static class TestTaskExcecutor extends TaskExecutor {
-    private static TaskExecutor defaultExecutor = new TestExecutor<AsyncExportTask>();
-    private static TaskExecutor archiveExecutor = new TestExecutor<AsyncArchiveTask>();
-
-    @Override
-    public void execute(Runnable task) {
-      if (task instanceof AsyncArchiveTask) {
-        archiveExecutor.execute(task);
-      } else {
-        defaultExecutor.execute(task);
-      }
-      
-    }
-   
   }
 
 }
