@@ -14,7 +14,8 @@ public class TaskExecutor {
 
   /**
    * Execute a task; end with optional closing EntityManager.
-   * @param task
+   *
+   * @param task to execute asynchronously
    */
   public void execute(Runnable task) {
     service.execute(() -> {

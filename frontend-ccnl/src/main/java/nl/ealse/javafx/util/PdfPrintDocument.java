@@ -11,7 +11,6 @@ public class PdfPrintDocument implements PrintDocument {
     this.pdf = pdf;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public byte[] getDocument() {
     return pdf;

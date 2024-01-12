@@ -77,6 +77,9 @@ public class WrappedFileChooser {
     return fileChooser.showSaveDialog(fileChooserStage);
   }
 
+  /**
+   * All file extensions in use by this application.
+   */
   public enum FileExtension {
     PDF(new FileChooser.ExtensionFilter("PDF-document", "*.pdf")),
 
