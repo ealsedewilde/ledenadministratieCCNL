@@ -4,6 +4,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -21,12 +24,14 @@ public class BackupRestoreService {
   @Getter
   private static BackupRestoreService instance = new BackupRestoreService();
 
+  private static final String TEMP_FILE = "temp_backup.zip";
+
   /**
    * A block size large enough to hold a complete PDF. This takes away the need of an intermediate
    * SYSTEM_LOB_STREAM table
    */
-  private static final String BACKUP_SQL =
-      "SCRIPT SIMPLE NOPASSWORDS DROP BLOCKSIZE 524288 TO '%s' COMPRESSION ZIP";
+  private static final String BACKUP_SQL = String
+      .format("SCRIPT SIMPLE NOPASSWORDS DROP BLOCKSIZE 524288 TO '%s' COMPRESSION ZIP", TEMP_FILE);
   private static final String RESTORE_SQL = "RUNSCRIPT FROM '%s' COMPRESSION ZIP";
 
 
@@ -36,17 +41,22 @@ public class BackupRestoreService {
 
   /**
    * Backup the database to a zip file.
+   * First create the zip to a local file, because that is fast.
+   * Then move the file to the (Cloud) destination. 
    *
    * @param backupName - name of the zip file
+   * @throws Exception - when creating backup goes wrong
    */
-  public void backupDatabase(File backupName) {
-    String queryString = String.format(BACKUP_SQL, backupName.getAbsolutePath());
+  public void backupDatabase(File backupName) throws Exception {
     EntityManager em = EntityManagerProvider.getEntityManager();
-    Query q = em.createNativeQuery(queryString);
+    Query q = em.createNativeQuery(BACKUP_SQL);
     try {
       @SuppressWarnings("unchecked")
       List<String> result = q.getResultList();
       result.forEach(log::info);
+      Path src = Paths.get(TEMP_FILE);
+      Path dest = backupName.toPath();
+      Files.move(src, dest);
     } catch (Exception e) {
       log.error("Backup failed", e);
       throw e;

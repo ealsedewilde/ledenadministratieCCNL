@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.service;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -9,6 +10,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,12 +33,16 @@ class BackupRestoreServiceTest {
   private static BackupRestoreService sut;
 
   @Test
-  void testBackupDatabase() {
+  void testBackupDatabase() throws Exception {
     List<String> result = new ArrayList<>();
     when(query.getResultList()).thenReturn(result);
+    FileWriter w = new FileWriter("temp_backup.zip");
+    w.write("dummy");
+    w.close();
     File testFile = new File(tempDir, "backup.zip");
     sut.backupDatabase(testFile);
     verify(query).getResultList();
+    assertTrue(testFile.exists());
   }
 
   @Test
