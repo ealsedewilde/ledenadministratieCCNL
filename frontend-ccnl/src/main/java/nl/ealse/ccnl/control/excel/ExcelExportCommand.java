@@ -27,8 +27,6 @@ public class ExcelExportCommand {
 
   private final PageController pageController;
 
-  private final TaskExecutor executor;
-
   private final ExportService service;
 
   private final ExportArchiveService archiveService;
@@ -39,7 +37,6 @@ public class ExcelExportCommand {
     this.pageController = PageController.getInstance();
     this.archiveService = ExportArchiveService.getInstance();
     this.service = ExportService.getInstance();
-    this.executor = TaskExecutor.getInstance();
     setup();
   }
 
@@ -56,11 +53,11 @@ public class ExcelExportCommand {
       pageController.showPermanentMessage("MS Excel-werkblad wordt aangemaakt; even geduld a.u.b.");
       if (event.getMenuChoice() == REPORT_ARCHIVE) {
         AsyncArchiveTask asyncArchiveTask = new AsyncArchiveTask(this, exportFile);
-        executor.execute(asyncArchiveTask);
+        asyncArchiveTask.executeTask();
       } else {
         AsyncExportTask asyncExportTask =
             new AsyncExportTask(this, event.getMenuChoice(), exportFile);
-        executor.execute(asyncExportTask);
+        asyncExportTask.executeTask();
       }
     }
   }

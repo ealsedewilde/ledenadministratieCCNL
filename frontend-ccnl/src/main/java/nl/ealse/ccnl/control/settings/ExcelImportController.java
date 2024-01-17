@@ -36,9 +36,6 @@ public class ExcelImportController {
 
   private final ImportService importService;
 
-  private final TaskExecutor executor;
-
-
   @FXML
   private ToggleGroup importGroup;
 
@@ -71,7 +68,6 @@ public class ExcelImportController {
   private ExcelImportController() {
     this.pageController = PageController.getInstance();
     this.importService = ImportService.getInstance();
-    this.executor = TaskExecutor.getInstance();
     setup();
   }
 
@@ -133,7 +129,7 @@ public class ExcelImportController {
         clubs.isSelected(), external.isSelected(), internal.isSelected(), type);
     pageController.showPermanentMessage("Import wordt uitgevoerd; even geduld a.u.b.");
     AsyncTask asyncTask = new AsyncTask(this, selection);
-    executor.execute(asyncTask);
+    asyncTask.executeTask();
   }
 
   @EventListener(menuChoice = MenuChoice.IMPORT_FROM_EXCEL)

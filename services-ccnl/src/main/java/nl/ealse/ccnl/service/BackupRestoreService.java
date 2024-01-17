@@ -53,7 +53,9 @@ public class BackupRestoreService {
     try {
       @SuppressWarnings("unchecked")
       List<String> result = q.getResultList();
-      result.forEach(log::info);
+      if (log.isDebugEnabled()) {
+        result.forEach(log::debug);
+      }
       Path src = Paths.get(TEMP_FILE);
       Path dest = backupName.toPath();
       Files.move(src, dest);

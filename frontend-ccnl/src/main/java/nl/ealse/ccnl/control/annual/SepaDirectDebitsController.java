@@ -43,8 +43,6 @@ public class SepaDirectDebitsController {
 
   private final SepaDirectDebitService service;
 
-  private final TaskExecutor executor;
-
   private File selectedFile;
 
   private WrappedFileChooser fileChooser;
@@ -76,7 +74,6 @@ public class SepaDirectDebitsController {
   private SepaDirectDebitsController() {
     this.pageController = PageController.getInstance();
     this.service = SepaDirectDebitService.getInstance();
-    this.executor = TaskExecutor.getInstance();
     setup();
   }
   
@@ -136,7 +133,7 @@ public class SepaDirectDebitsController {
 
     pageController.showPermanentMessage("Incassobestand wordt aangemaakt; even geduld a.u.b.");
     DirectDebitTask directDebitTask = new DirectDebitTask(this);
-    executor.execute(directDebitTask);
+    directDebitTask.executeTask();
     pageController.activateLogoPage();
   }
 

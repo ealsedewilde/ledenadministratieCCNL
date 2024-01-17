@@ -41,8 +41,6 @@ public class PaymentReminderLettersController extends DocumentTemplateController
 
   private final MemberLetterHandler memberLetterHandler;
 
-  private final TaskExecutor executor;
-
   private List<Member> selectedMembers;
 
   private DocumentViewer documentViewer;
@@ -59,7 +57,6 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     this.documentService = DocumentService.getInstance();
     this.memberService = MemberService.getInstance();
     this.memberLetterHandler = MemberLetterHandler.getInstance();
-    this.executor = TaskExecutor.getInstance();
   }
   
   @FXML
@@ -112,7 +109,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
       if (file != null) {
         pageController.showPermanentMessage("Brieven worden aangemaakt; even geduld a.u.b.");
         PdfToFile pdfToFile = new PdfToFile(this, getLetterText().getText(), file);
-        executor.execute(pdfToFile);
+        pdfToFile.executeTask();
         pageController.activateLogoPage();
       }
     }
@@ -123,7 +120,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     if (overdueExists()) {
       pageController.showPermanentMessage("Printen wordt voorbereid; even geduld a.u.b.");
       PdfToPrint pdfToPrint = new PdfToPrint(this, getLetterText().getText());
-      executor.execute(pdfToPrint);
+      pdfToPrint.executeTask();
       pageController.activateLogoPage();
     }
   }

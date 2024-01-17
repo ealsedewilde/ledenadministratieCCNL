@@ -45,8 +45,6 @@ public class AddressListController {
 
   private final SettingsService service;
 
-  private final TaskExecutor executor;
-
   private WrappedFileChooser fileChooser;
 
   @FXML
@@ -58,7 +56,6 @@ public class AddressListController {
     this.pageController = PageController.getInstance();
     this.magazineService = ExportAddressService.getInstance();
     this.service = SettingsService.getInstance();
-    this.executor = TaskExecutor.getInstance();
     setup();
   }
 
@@ -107,7 +104,7 @@ public class AddressListController {
     if (addressFile != null) {
       task.setAddressFile(addressFile);
       pageController.showPermanentMessage("Bestand wordt aangemaakt; even geduld a.u.b.");
-      executor.execute(task);
+      task.executeTask();
       pageController.activateLogoPage();
     }
   }
@@ -140,7 +137,7 @@ public class AddressListController {
     @Override
     protected String call() {
       try {
-        executeTask();
+        executeWork();
         return "Bestand is aangemaakt";
       } catch (IOException e) {
         log.error("error creating Excel file", e);
@@ -148,7 +145,7 @@ public class AddressListController {
       }
     }
 
-    protected abstract void executeTask() throws IOException;
+    protected abstract void executeWork() throws IOException;
 
   }
 
@@ -160,7 +157,7 @@ public class AddressListController {
     }
 
     @Override
-    protected void executeTask() throws IOException {
+    protected void executeWork() throws IOException {
       controller.magazineService.generateMagazineAddressFile(addressFile);
       Setting setting = getSetting();
       setting.setValue(controller.magazineNumber.getText());
@@ -190,7 +187,7 @@ public class AddressListController {
     }
 
     @Override
-    protected void executeTask() throws IOException {
+    protected void executeWork() throws IOException {
       magazineService.generateCardAddressFile(addressFile);
     }
 
@@ -207,7 +204,7 @@ public class AddressListController {
     }
 
     @Override
-    protected void executeTask() throws IOException {
+    protected void executeWork() throws IOException {
       if (byName) {
         magazineService.generateMemberListFileByName(addressFile);
       } else {

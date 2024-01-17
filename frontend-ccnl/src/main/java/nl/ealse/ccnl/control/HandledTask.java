@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control;
 
 import javafx.concurrent.Task;
+import nl.ealse.ccnl.TaskExecutor;
 import nl.ealse.ccnl.control.menu.PageController;
 
 /**
@@ -20,6 +21,10 @@ public abstract class HandledTask extends Task<String> {
       Throwable t = evt.getSource().getException();
       pageController.showErrorMessage(t.getMessage());
     });
+  }
+  
+  public void executeTask() {
+    TaskExecutor.getInstance().execute(this);
   }
 
 }

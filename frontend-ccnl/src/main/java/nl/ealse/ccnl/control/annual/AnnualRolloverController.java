@@ -53,8 +53,6 @@ public class AnnualRolloverController {
 
   private final ExportArchiveService archiveService;
 
-  private final TaskExecutor executor;
-
   private WrappedFileChooser fileChooser;
 
   @FXML
@@ -75,7 +73,6 @@ public class AnnualRolloverController {
     this.rolloverService = AnnualRolloverService.getInstance();
     this.exportService = ExportService.getInstance();
     this.archiveService = ExportArchiveService.getInstance();
-    this.executor = TaskExecutor.getInstance();
     setup();
   }
 
@@ -96,7 +93,7 @@ public class AnnualRolloverController {
     if (backupFile != null) {
       pageController.showPermanentMessage("Backup wordt aangemaakt; even geduld a.u.b.");
       AsyncRolloverStep1 asyncTask = new AsyncRolloverStep1(this, backupFile);
-      executor.execute(asyncTask);
+      asyncTask.executeTask();
       backupButton.setDisable(true);
       rolloverButton.setDisable(false);
     }
@@ -109,7 +106,7 @@ public class AnnualRolloverController {
   void annualRollover() {
     pageController.showPermanentMessage("Jaarovergang wordt uitgevoerd; even geduld a.u.b.");
     AsyncRolloverStep2 asyncTask = new AsyncRolloverStep2(this);
-    executor.execute(asyncTask);
+    asyncTask.executeTask();
     rolloverButton.setDisable(true);
     exportButton.setDisable(false);
   }
@@ -121,7 +118,7 @@ public class AnnualRolloverController {
   void exportToExcel() {
     pageController.showPermanentMessage("Excel export wordt aangemaakt; even geduld a.u.b.");
     AsyncRolloverStep3 asyncTask = new AsyncRolloverStep3(this);
-    executor.execute(asyncTask);
+    asyncTask.executeTask();
   }
 
   @EventListener(menuChoice = MenuChoice.ANNUAL_ROLLOVER)

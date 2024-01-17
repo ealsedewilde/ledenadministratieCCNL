@@ -30,8 +30,6 @@ public class BackupRestoreCommand {
 
   private final PageController pageController;
 
-  private final TaskExecutor executor;
-
   private final BackupRestoreService service;
 
   private WrappedFileChooser fileChooser;
@@ -39,7 +37,6 @@ public class BackupRestoreCommand {
   private BackupRestoreCommand() {
     this.pageController = PageController.getInstance();
     this.service = BackupRestoreService.getInstance();
-    this.executor = TaskExecutor.getInstance();
     setup();
   }
 
@@ -57,7 +54,7 @@ public class BackupRestoreCommand {
     if (backupFile != null) {
       pageController.showPermanentMessage("Backup wordt aangemaakt; even geduld a.u.b.");
       BackupTask asyncTask = new BackupTask(this, backupFile);
-      executor.execute(asyncTask);
+      asyncTask.executeTask();
     }
   }
 
@@ -68,7 +65,7 @@ public class BackupRestoreCommand {
     if (backupFile != null) {
       pageController.showPermanentMessage("Backup wordt teruggezet; even geduld a.u.b.");
       RestoreTask asyncTask = new RestoreTask(this, backupFile);
-      executor.execute(asyncTask);
+      asyncTask.executeTask();
     }
   }
 

@@ -24,8 +24,6 @@ public class PaymentReminderReportCommand {
 
   private final PageController pageController;
 
-  private final TaskExecutor executor;
-
   private final ExportService exportService;
 
   private WrappedFileChooser fileChooser;
@@ -33,7 +31,6 @@ public class PaymentReminderReportCommand {
   private PaymentReminderReportCommand() {
     this.pageController = PageController.getInstance();
     this.exportService = ExportService.getInstance();
-    this.executor = TaskExecutor.getInstance();
     setup();
   }
 
@@ -49,7 +46,7 @@ public class PaymentReminderReportCommand {
     if (reportFile != null) {
       pageController.showPermanentMessage("Herinneringen overzicht wordt aangemaakt");
       ReminderTask reminderTask = new ReminderTask(this, reportFile);
-      executor.execute(reminderTask);
+      reminderTask.executeTask();
     }
   }
 

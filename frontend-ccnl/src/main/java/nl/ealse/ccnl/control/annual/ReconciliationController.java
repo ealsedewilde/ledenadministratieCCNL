@@ -41,8 +41,6 @@ public class ReconciliationController {
 
   private final PageController pageController;
 
-  private final TaskExecutor executor;
-
   private final ReconciliationService service;
 
   private WrappedFileChooser fileChooser;
@@ -71,7 +69,6 @@ public class ReconciliationController {
   private ReconciliationController() {
     this.pageController = PageController.getInstance();
     this.service = ReconciliationService.getInstance();
-    this.executor = TaskExecutor.getInstance();
     setup();
   }
 
@@ -146,7 +143,7 @@ public class ReconciliationController {
       referenceDateE.setVisible(false);
       pageController.showPermanentMessage("Betalingen worden verwerkt; even geduld a.u.b.");
       ReconcileTask reconcileTask = new ReconcileTask(this, dateValue, includeDD.isSelected());
-      executor.execute(reconcileTask);
+      reconcileTask.executeTask();
     }
   }
 
