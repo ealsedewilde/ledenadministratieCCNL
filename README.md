@@ -15,9 +15,10 @@ Aside of developing the application, I also wanted to look at an efficient deplo
 
 # Design
 ### Some non functional Requirements
-1. Quick startup (focus on lazy loading)
-2. Easy deployment
-3. Using FXML (mainly because I could use JavaFX SceneBuilder)
+1. Layered application structure (data-layer, functional layer, service layer, frontend layer)
+2. Quick startup (focus on lazy loading)
+3. Easy deployment
+4. Using FXML (mainly because I could use JavaFX SceneBuilder)
 
 ### Starting with Spring Boot
 I've designed quite some applications throughout my career.
