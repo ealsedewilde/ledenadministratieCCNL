@@ -96,7 +96,7 @@ Note: I use the `exec-maven-plugin` to run JPackage, because I was unable to get
 When you accidently start a second instance of the application, it will start with an error on the database connection. Stopping this second, in error, application is ignored; you will have to use the Windos Taskmanager to stop it. Therefore I added a uniqueness check at start up; (using `java.lang.ProcessHandle` to find the relevant process information). 
 When an already running process is detected, the start up is aborted immediately, so before the start of JPA and JavaFX.  
 
-##Maven Build
+## Maven Build
 I'm currently using Maven version 3.9.5. 
 
 In the Maven user settings.xml you need to set the property `jpackage.exe` and point it to the `bin\jpackage.exe` in the Java 21 JDK. 
