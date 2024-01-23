@@ -1,1 +1,0 @@
-C:\java\jdk-21\bin\jpackage.exe --main-jar ..\frontend-ccnl\target\LedenadministratieApp.jar --runtime-image ..\minimal-jre\target\minimal-jre-4.0.0.zip --name ledenadministratieCCNL -i . --app-version 4.0 --win-dir-chooser
