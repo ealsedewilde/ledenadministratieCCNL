@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
@@ -57,11 +58,9 @@ public class DocumentViewer extends BorderPane {
 
   private static final String HEADER_TEXT = "Pagina %d van %d";
 
-  private Scene scene;
-  
-  private Region root;
-
   private Stage documentViewerStage;
+
+  private Region parent;
 
   /**
    * Title of the popup window of the PDF-viewer.
@@ -136,7 +135,8 @@ public class DocumentViewer extends BorderPane {
         initializeMultiPage(bufferedImage.getWidth(), bufferedImage.getHeight());
       }
       documentViewerStage.setTitle(getStageTitle(member));
-      documentViewerStage.show();
+      show();
+
       pageNum = 0;
       showPage();
     } catch (IOException e) {
@@ -156,7 +156,7 @@ public class DocumentViewer extends BorderPane {
       this.document = new ImagePrintDocument(image);
       initializeSinglePage(width, height);
       documentViewerStage.setTitle(getStageTitle(member));
-      documentViewerStage.show();
+      show();
       ImageView imageView = new ImageView(image);
       imageView.setFitHeight(height);
       imageView.setFitWidth(width);
@@ -165,6 +165,15 @@ public class DocumentViewer extends BorderPane {
       String msg = "Error rendering image";
       log.error(msg, e);
       throw new PDFViewerException(msg, e);
+    }
+  }
+
+  private void show() {
+    documentViewerStage.show();
+    double y = documentViewerStage.getY();
+    if (y < 0) {
+      documentViewerStage.setY(0d);
+      documentViewerStage.setHeight(documentViewerStage.getHeight() + y);
     }
   }
 
@@ -183,7 +192,7 @@ public class DocumentViewer extends BorderPane {
    * Initialize for a single page PDF.
    */
   private void initializeSinglePage(double width, double height) {
-    setDimension(width + 38d, height + 85d);
+    setDimension(width + 10d, height + 60d);
     this.setRight(null);
     this.setLeft(null);
     this.setTop(null);
@@ -193,7 +202,7 @@ public class DocumentViewer extends BorderPane {
    * Initialize for a multi page PDF.
    */
   private void initializeMultiPage(double width, double height) {
-    setDimension(width + 156d, height + 115d);
+    setDimension(width + 135d, height + 35d);
 
     this.setRight(nextButton);
     this.setLeft(prevButton);
@@ -202,12 +211,8 @@ public class DocumentViewer extends BorderPane {
   }
 
   private void setDimension(double width, double height) {
-    root.setMinWidth(width);
-    // for whatever reason need to set both min and max height to resize properly
-    // Strangely enough it is not neceassary for the width
-    root.setMinHeight(height);
-    root.setMaxHeight(height);
-
+    parent.setPrefWidth(width);
+    parent.setPrefHeight(height);
   }
 
   private void previousPage() {
@@ -296,35 +301,6 @@ public class DocumentViewer extends BorderPane {
       initialize();
     }
 
-    public void initialize() {
-      VBox content = new VBox();
-      content.setPadding(new Insets(10.d));
-      content.getChildren().add(instance);
-      buttons = new HBox();
-      buttons.setPadding(new Insets(10d, 0d, 0d, 0d));
-      buttons.setSpacing(20d);
-      content.getChildren().add(buttons);
-
-      ScrollPane root = new ScrollPane();
-      instance.root = root;
-      root.setContent(content);
-      instance.scene = new Scene(root);
-      instance.documentViewerStage = new Stage();
-      instance.documentViewerStage.initOwner(MainStage.getStage());
-      instance.documentViewerStage.getIcons().add(MainStage.getIcon());
-      instance.documentViewerStage.initModality(Modality.APPLICATION_MODAL);
-      instance.documentViewerStage.setResizable(false);
-      instance.documentViewerStage.setScene(instance.scene);
-
-      instance.nextButton = new PagingButton("\u00BB");
-      instance.nextButton.setOnAction(e -> instance.nextPage());
-      instance.prevButton = new PagingButton("\u00AB");
-      instance.prevButton.setOnAction(e -> instance.previousPage());
-      instance.header = new Label();
-      instance.header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-      BorderPane.setAlignment(instance.header, Pos.CENTER);
-    }
-
     public Builder withCancelButton(EventHandler<ActionEvent> handler) {
       CancelButton cb = new CancelButton();
       cb.setText("Sluiten");
@@ -335,6 +311,45 @@ public class DocumentViewer extends BorderPane {
     public Builder withDeleteButton(EventHandler<ActionEvent> handler) {
       addButton(new DeleteButton(), handler);
       return this;
+    }
+
+    private void initialize() {
+      VBox root = new VBox();
+      root.setPadding(new Insets(10.d));
+      
+      ScrollPane pane = new ScrollPane();
+      instance.parent = pane;
+      pane.setContent(instance);
+      pane.setHbarPolicy(ScrollBarPolicy.NEVER);
+      pane.setStyle("-fx-background-color:transparent;");
+      pane.setFitToWidth(true);
+      root.getChildren().add(pane);
+      buttons = new HBox();
+      buttons.setPadding(new Insets(10d, 0d, 0d, 0d));
+      buttons.setSpacing(20d);
+      root.getChildren().add(buttons);
+    
+      final Stage stage = new Stage();
+      instance.documentViewerStage = stage;
+      stage.initOwner(MainStage.getStage());
+      stage.getIcons().add(MainStage.getIcon());
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.setScene(new Scene(root));
+      stage.centerOnScreen();
+      stage.setResizable(false);
+      stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+        if (!Double.isNaN((double) oldVal)) {
+          pane.setPrefHeight(newVal.doubleValue() - 160d);
+        }
+      });
+    
+      instance.nextButton = new PagingButton("\u00BB");
+      instance.nextButton.setOnAction(e -> instance.nextPage());
+      instance.prevButton = new PagingButton("\u00AB");
+      instance.prevButton.setOnAction(e -> instance.previousPage());
+      instance.header = new Label();
+      instance.header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+      BorderPane.setAlignment(instance.header, Pos.TOP_CENTER);
     }
 
     public Builder withPrintButton(EventHandler<ActionEvent> handler) {

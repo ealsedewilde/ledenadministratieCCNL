@@ -8,7 +8,7 @@
 <?import nl.ealse.ccnl.control.button.*?>
 
 <VBox stylesheets="@../../css/main.css" spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-  minWidth="-Infinity" prefHeight="600.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="1005.0" xmlns="http://javafx.com/javafx/8"
   xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <Label text="Incasso instellingen" styleClass="header" />
