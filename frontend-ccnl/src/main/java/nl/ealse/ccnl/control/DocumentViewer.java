@@ -60,6 +60,7 @@ public class DocumentViewer extends BorderPane {
 
   private Stage documentViewerStage;
 
+  private Scene scene;
   private Region parent;
 
   /**
@@ -192,27 +193,41 @@ public class DocumentViewer extends BorderPane {
    * Initialize for a single page PDF.
    */
   private void initializeSinglePage(double width, double height) {
-    setDimension(width + 10d, height + 60d);
+    initializePage(width + 10d, height + 60d);
+    this.setTop(null);
     this.setRight(null);
     this.setLeft(null);
-    this.setTop(null);
   }
 
   /**
    * Initialize for a multi page PDF.
    */
   private void initializeMultiPage(double width, double height) {
-    setDimension(width + 135d, height + 35d);
+    initializePage(width + 135d, height + 35d);
 
+    this.setTop(header);
     this.setRight(nextButton);
     this.setLeft(prevButton);
-    this.setTop(header);
     prevButton.setDisable(true);
   }
 
-  private void setDimension(double width, double height) {
+  private void initializePage(double width, double height) {
     parent.setPrefWidth(width);
     parent.setPrefHeight(height);
+    
+    final Stage stage = new Stage();
+    documentViewerStage = stage;
+    stage.initOwner(MainStage.getStage());
+    stage.getIcons().add(MainStage.getIcon());
+    stage.initModality(Modality.APPLICATION_MODAL);
+    stage.setScene(scene);
+    stage.centerOnScreen();
+    stage.setResizable(false);
+    stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+      if (!Double.isNaN((double) oldVal)) {
+        parent.setPrefHeight(newVal.doubleValue() - 160d);
+      }
+    });
   }
 
   private void previousPage() {
@@ -316,6 +331,7 @@ public class DocumentViewer extends BorderPane {
     private void initialize() {
       VBox root = new VBox();
       root.setPadding(new Insets(10.d));
+      instance.scene = new Scene(root);
       
       ScrollPane pane = new ScrollPane();
       instance.parent = pane;
@@ -324,24 +340,11 @@ public class DocumentViewer extends BorderPane {
       pane.setStyle("-fx-background-color:transparent;");
       pane.setFitToWidth(true);
       root.getChildren().add(pane);
+      
       buttons = new HBox();
       buttons.setPadding(new Insets(10d, 0d, 0d, 0d));
       buttons.setSpacing(20d);
       root.getChildren().add(buttons);
-    
-      final Stage stage = new Stage();
-      instance.documentViewerStage = stage;
-      stage.initOwner(MainStage.getStage());
-      stage.getIcons().add(MainStage.getIcon());
-      stage.initModality(Modality.APPLICATION_MODAL);
-      stage.setScene(new Scene(root));
-      stage.centerOnScreen();
-      stage.setResizable(false);
-      stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-        if (!Double.isNaN((double) oldVal)) {
-          pane.setPrefHeight(newVal.doubleValue() - 160d);
-        }
-      });
     
       instance.nextButton = new PagingButton("\u00BB");
       instance.nextButton.setOnAction(e -> instance.nextPage());
@@ -349,6 +352,7 @@ public class DocumentViewer extends BorderPane {
       instance.prevButton.setOnAction(e -> instance.previousPage());
       instance.header = new Label();
       instance.header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+      
       BorderPane.setAlignment(instance.header, Pos.TOP_CENTER);
     }
 

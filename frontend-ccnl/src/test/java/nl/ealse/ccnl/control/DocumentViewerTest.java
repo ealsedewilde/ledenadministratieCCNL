@@ -31,6 +31,7 @@ class DocumentViewerTest extends FXBase {
   private void doTest() {
     Member m = member();
     sut.showPdf( getPdf("/welkom.pdf"), m);
+    pdfStage = getStage();
     assertTrue(pdfStage.isShowing());
     sut.close();
     assertTrue(!pdfStage.isShowing());
@@ -44,7 +45,6 @@ class DocumentViewerTest extends FXBase {
   private void prepare() {
     sut = DocumentViewer.builder().build();
     sut.setWindowTitle("Welkomsbrief voor lid: %d (%s)");
-    pdfStage = getStage();
   }
   
   private byte[] getPdf(String name) {
