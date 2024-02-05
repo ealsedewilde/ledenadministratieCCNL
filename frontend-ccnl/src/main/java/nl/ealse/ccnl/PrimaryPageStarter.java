@@ -42,7 +42,9 @@ public class PrimaryPageStarter {
 
       Scene scene = new Scene(FXMLLoaderBean.getPage(MAIN_FXML));
       stage.setScene(scene);
+      stage.centerOnScreen();
       stage.show();
+      checkScreenSize(stage);
     } catch (Exception e) {
       log.error("Start error", e);
     } finally {
@@ -51,6 +53,24 @@ public class PrimaryPageStarter {
       if (splash != null) {
         splash.close();
       }
+    }
+  }
+
+  /**
+   * Adjust the size when it doesn't fit on the screen.
+   *
+   * @param stage - primary stage
+   */
+  private void checkScreenSize(final Stage stage) {
+    double x = stage.getY();
+    if (x < 0) {
+      stage.setX(0d);
+      stage.setHeight(stage.getWidth() + x);
+    }
+    double y = stage.getY();
+    if (y < 0) {
+      stage.setY(0d);
+      stage.setHeight(stage.getHeight() + y);
     }
   }
 

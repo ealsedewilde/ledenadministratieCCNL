@@ -8,13 +8,12 @@
 <ScrollPane stylesheets="@../css/main.css" maxHeight="-Infinity" maxWidth="-Infinity"
   minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0"
   xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-  fitToWidth="true"
   fx:controller="nl.ealse.ccnl.control.menu.PageController">
   <content>
     <VBox prefHeight="790.0" prefWidth="1022.0">
       <children>
         <fx:include source="/fxml_includes/menu.fxml" />
-        <BorderPane fx:id="mainPage" prefHeight="600.0" prefWidth="1000.0" translateX="15.0" >
+        <BorderPane fx:id="mainPage" prefHeight="600.0" prefWidth="1005.0" translateX="15.0" >
           <top>
             <HBox>
               <ImageView fx:id="logo"/>
