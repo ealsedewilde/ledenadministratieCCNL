@@ -174,7 +174,8 @@ public class DocumentViewer extends BorderPane {
     double y = documentViewerStage.getY();
     if (y < 0) {
       documentViewerStage.setY(0d);
-      documentViewerStage.setHeight(documentViewerStage.getHeight() + y);
+      double scaleY = 1d + (y * 0.0022d);
+      documentViewerStage.setHeight(documentViewerStage.getHeight() * scaleY);
     }
   }
 
@@ -222,6 +223,7 @@ public class DocumentViewer extends BorderPane {
     stage.initModality(Modality.APPLICATION_MODAL);
     stage.setScene(scene);
     stage.centerOnScreen();
+    stage.sizeToScene();
     stage.setResizable(false);
     stage.heightProperty().addListener((obs, oldVal, newVal) -> {
       if (!Double.isNaN((double) oldVal)) {
