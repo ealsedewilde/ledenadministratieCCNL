@@ -13,7 +13,7 @@ public class MembershipStatusMapper implements PropertyMapper<ChoiceBox<String>,
   public static final String LAST_YEAR_MEMBERSHIP = "laatste jaar";
   public static final String OVERDUE = "niet betaald";
   public static final String INACTIVE = "opgezegd";
-  public static final String AFTER_APRIL = "na 1 april opzeggen";
+  public static final String AFTER_APRIL = "na 1 april opgezegd";
 
   @Getter
   private static final ObservableList<String> statuses = FXCollections.observableArrayList(ACTIVE,

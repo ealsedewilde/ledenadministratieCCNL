@@ -69,14 +69,14 @@ public class MemberCancelController extends MemberCancelView {
     pageController.setActivePage(PageName.MEMBER_CANCEL);
     if (MembershipStatus.ACTIVE == selectedMember.getMemberStatus()) {
       // Avoid that active is a valid choice in the ChoiceBox
+      selectedMember.setMemberStatus(MembershipStatus.LAST_YEAR_MEMBERSHIP);
       LocalDate now = LocalDate.now();
-      if (now.getMonthValue() < 2) {
+      if (now.getMonthValue() < 4) {
         LocalDate incassoDatum = IncassoProperties.getIncassoDatum().minusWeeks(1);
         if (now.isAfter(incassoDatum)) {
           selectedMember.setMemberStatus(MembershipStatus.AFTER_APRIL);
         }
       } 
-      selectedMember.setMemberStatus(MembershipStatus.LAST_YEAR_MEMBERSHIP);
     }
     ViewModel.modelToView(this, selectedMember);
     initializeInitialsType();
