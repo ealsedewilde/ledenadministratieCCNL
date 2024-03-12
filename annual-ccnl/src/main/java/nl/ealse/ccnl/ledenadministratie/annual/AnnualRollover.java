@@ -81,6 +81,9 @@ public class AnnualRollover {
       } else if (!member.isCurrentYearPaid()) {
         member.setMemberStatus(MembershipStatus.OVERDUE);
       }
+      if (member.getMemberStatus() == MembershipStatus.AFTER_APRIL) {
+        member.setMemberStatus(MembershipStatus.LAST_YEAR_MEMBERSHIP);
+      }
     }
   }
 

@@ -3,6 +3,7 @@ package nl.ealse.ccnl.ledenadministratie.payment;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -23,6 +24,10 @@ public class PaymentHandler {
   private static PaymentHandler instance = new PaymentHandler();
 
   private final MemberRepository dao;
+  
+  private static final EnumSet<MembershipStatus> statuses =
+      EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
+
 
   private PaymentHandler() {
     this.dao = MemberRepository.getInstance();
@@ -30,7 +35,7 @@ public class PaymentHandler {
 
   public List<String> handlePayments(List<PaymentFile> paymentFiles, LocalDate referenceDate,
       boolean includeDD) {
-    List<Member> members = dao.findMemberByMemberStatus(MembershipStatus.ACTIVE);
+    List<Member> members = dao.findMembersByStatuses(statuses);
 
     final ReconciliationContext rc =
         ReconciliationContext.newInstance(members, includeDD);

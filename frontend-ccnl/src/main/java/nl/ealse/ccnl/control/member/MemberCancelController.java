@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.member;
 
+import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.event.support.EventPublisher;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.mappers.MembershipStatusMapper;
@@ -67,6 +69,13 @@ public class MemberCancelController extends MemberCancelView {
     pageController.setActivePage(PageName.MEMBER_CANCEL);
     if (MembershipStatus.ACTIVE == selectedMember.getMemberStatus()) {
       // Avoid that active is a valid choice in the ChoiceBox
+      LocalDate now = LocalDate.now();
+      if (now.getMonthValue() < 2) {
+        LocalDate incassoDatum = IncassoProperties.getIncassoDatum().minusWeeks(1);
+        if (now.isAfter(incassoDatum)) {
+          selectedMember.setMemberStatus(MembershipStatus.AFTER_APRIL);
+        }
+      } 
       selectedMember.setMemberStatus(MembershipStatus.LAST_YEAR_MEMBERSHIP);
     }
     ViewModel.modelToView(this, selectedMember);

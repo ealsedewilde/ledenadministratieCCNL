@@ -13,10 +13,11 @@ public class MembershipStatusMapper implements PropertyMapper<ChoiceBox<String>,
   public static final String LAST_YEAR_MEMBERSHIP = "laatste jaar";
   public static final String OVERDUE = "niet betaald";
   public static final String INACTIVE = "opgezegd";
+  public static final String AFTER_APRIL = "na 1 april opzeggen";
 
   @Getter
-  private static final ObservableList<String> statuses =
-      FXCollections.observableArrayList(ACTIVE, LAST_YEAR_MEMBERSHIP, OVERDUE, INACTIVE);
+  private static final ObservableList<String> statuses = FXCollections.observableArrayList(ACTIVE,
+      LAST_YEAR_MEMBERSHIP, OVERDUE, INACTIVE, AFTER_APRIL);
 
   @Override
   public MembershipStatus getPropertyFromJavaFx(ChoiceBox<String> javaFx) {
@@ -28,8 +29,10 @@ public class MembershipStatusMapper implements PropertyMapper<ChoiceBox<String>,
       case INACTIVE:
         return MembershipStatus.INACTIVE;
       case ACTIVE:
-      default:
         return MembershipStatus.ACTIVE;
+      case AFTER_APRIL:
+      default:
+        return MembershipStatus.AFTER_APRIL;
     }
   }
 
@@ -47,8 +50,11 @@ public class MembershipStatusMapper implements PropertyMapper<ChoiceBox<String>,
         javaFx.setValue(OVERDUE);
         break;
       case ACTIVE:
-      default:
         javaFx.setValue(ACTIVE);
+        break;
+      case AFTER_APRIL:
+      default:
+        javaFx.setValue(AFTER_APRIL);
         break;
 
     }

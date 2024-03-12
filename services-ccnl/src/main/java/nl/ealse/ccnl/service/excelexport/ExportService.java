@@ -26,7 +26,7 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
  */
 @Slf4j
 public class ExportService {
-  
+
   @Getter
   private static ExportService instance = new ExportService();
 
@@ -54,13 +54,14 @@ public class ExportService {
   public void exportALL(File selectedFile) throws IOException {
     try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
-      List<Member> activeMembers = memberRepository.findMembersByStatuses(
-          EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP));
+      List<Member> activeMembers =
+          memberRepository.findMembersByStatuses(EnumSet.of(MembershipStatus.ACTIVE,
+              MembershipStatus.LAST_YEAR_MEMBERSHIP, MembershipStatus.AFTER_APRIL));
       activeMembers.forEach(member -> {
         if (!member.getAddress().isAddressInvalid()) {
           targetFile.addMember(member);
         }
-        });
+      });
 
       targetFile.addSheet(SheetDefinition.NIEUWE_LEDEN);
       targetFile.addMemberHeading();
@@ -88,12 +89,11 @@ public class ExportService {
 
       targetFile.addSheet(SheetDefinition.RETOUR);
       targetFile.addMemberHeading();
-      memberRepository.findMemberByMemberStatus(MembershipStatus.ACTIVE)
-          .forEach(member -> {
-            if (member.getAddress().isAddressInvalid()) {
-              targetFile.addMember(member);
-            }
-            });
+      activeMembers.forEach(member -> {
+        if (member.getAddress().isAddressInvalid()) {
+          targetFile.addMember(member);
+        }
+      });
 
       targetFile.addSheet(SheetDefinition.NIET_BETAALD);
       targetFile.addMemberHeading();
@@ -144,7 +144,8 @@ public class ExportService {
   public void paymentReminderReport(File selectedFile) throws IOException {
     try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
-      EnumSet<PaymentMethod> paymentMethods = EnumSet.of(PaymentMethod.BANK_TRANSFER, PaymentMethod.DIRECT_DEBIT);
+      EnumSet<PaymentMethod> paymentMethods =
+          EnumSet.of(PaymentMethod.BANK_TRANSFER, PaymentMethod.DIRECT_DEBIT);
       List<Member> selectedMembers = memberRepository.findMembersCurrentYearNotPaid(paymentMethods);
       selectedMembers.forEach(targetFile::addMember);
     }
