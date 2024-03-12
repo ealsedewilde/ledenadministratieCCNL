@@ -12,11 +12,11 @@ import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigDateEntr
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEntry;
 
 @Slf4j
-public class IncassoPropertiesprovider {
+public class DefaultIncassoPropertiesProvider implements IncassoPropertiesProvider {
 
   private final EntityManager em = EntityManagerProvider.getEntityManager();
   
-  public DirectDebitConfig getProperties() {
+  public DirectDebitConfig getIncassoConfig() {
     DirectDebitConfig config = em.find(DirectDebitConfig.class, 1);
     if (config == null) {
       config = initializeConfig();

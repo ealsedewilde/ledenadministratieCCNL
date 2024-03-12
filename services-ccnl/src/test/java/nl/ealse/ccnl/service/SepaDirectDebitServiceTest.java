@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
-import nl.ealse.ccnl.ledenadministratie.dd.IncassoPropertiesprovider;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoResult;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
@@ -146,7 +146,7 @@ class SepaDirectDebitServiceTest {
   
   @BeforeAll
   static void initConfig() {
-    config = new IncassoPropertiesprovider().getProperties();
+    config = IncassoProperties.getProperties();
     config.getDirectDebitDir().setValue("C:/xtemp");
     em = EntityManagerProvider.getEntityManager();
     generator = MockProvider.mock(SepaIncassoGenerator.class);

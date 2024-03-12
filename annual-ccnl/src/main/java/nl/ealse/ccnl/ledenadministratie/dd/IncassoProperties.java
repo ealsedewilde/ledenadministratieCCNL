@@ -2,6 +2,8 @@ package nl.ealse.ccnl.ledenadministratie.dd;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
+import java.util.ServiceLoader;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
@@ -14,48 +16,59 @@ import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
  */
 @UtilityClass
 public class IncassoProperties {
-
+  
   @Getter
-  private DirectDebitConfig config = new IncassoPropertiesprovider().getProperties();
+  private final DirectDebitConfig properties;
+  
+  static {
+    ServiceLoader<IncassoPropertiesProvider> serviceLoader =
+        ServiceLoader.load(IncassoPropertiesProvider.class);
+    Optional<IncassoPropertiesProvider> first = serviceLoader.findFirst();
+    if (first.isPresent()) {
+      properties = first.get().getIncassoConfig();
+    } else {
+      throw new ExceptionInInitializerError("No DatabasePropertiesProvider available");
+    }
+  }
 
   public String getIbanNummer() {
-    return config.getIbanNumber().getValue();
+    return properties.getIbanNumber().getValue();
   }
 
   public String getIncassantId() {
-    return config.getDirectDebitId().getValue();
+    return properties.getDirectDebitId().getValue();
   }
 
   public BigDecimal getIncassoBedrag() {
-    return config.getDirectDebitAmount().getValue();
+    return properties.getDirectDebitAmount().getValue();
   }
 
   public LocalDate getIncassoDatum() {
-    return config.getDirectDebitDate().getValue();
+    return properties.getDirectDebitDate().getValue();
   }
 
   public String getIncassoReden() {
-    return config.getDirectDebitDescription().getValue();
+    return properties.getDirectDebitDescription().getValue();
   }
 
   public String getMachtigingReferentie() {
-    return config.getAuthorization().getValue();
+    return properties.getAuthorization().getValue();
   }
 
   public String getMachtigingType() {
-    return config.getAuthorizationType().getValue();
+    return properties.getAuthorizationType().getValue();
   }
 
   public String getMessageId() {
-    return config.getMessageId().getValue();
+    return properties.getMessageId().getValue();
   }
 
   public String getNaam() {
-    return config.getClubName().getValue();
+    return properties.getClubName().getValue();
   }
 
   public String getIncassoDirectory() {
-    return config.getDirectDebitDir().getValue();
+    return properties.getDirectDebitDir().getValue();
   }
 
   /**
@@ -65,7 +78,7 @@ public class IncassoProperties {
    * @return <code>true</code> in geval van testrun
    */
   public boolean isTest() {
-    return config.getTestRun().isValue();
+    return properties.getTestRun().isValue();
   }
 
 }

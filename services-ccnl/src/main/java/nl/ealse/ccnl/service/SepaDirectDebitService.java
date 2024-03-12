@@ -48,7 +48,7 @@ public class SepaDirectDebitService {
 
   public List<FlatProperty> getProperties() {
     List<FlatProperty> propertyList = new ArrayList<>();
-    DirectDebitConfig config = IncassoProperties.getConfig();
+    DirectDebitConfig config = IncassoProperties.getProperties();
     if (config != null) {
       propertyList.add(new FlatProperty(FlatPropertyKey.DD_DIR, config.getDirectDebitDir()));
       propertyList.add(new FlatProperty(FlatPropertyKey.DD_AMOUNT, config.getDirectDebitAmount()));
