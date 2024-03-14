@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.DocumentRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.dd.model.Document;
 import nl.ealse.ccnl.ledenadministratie.dd.model.ObjectFactory;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -47,13 +48,15 @@ public class SepaIncassoGenerator {
    */
   public SepaIncassoResult generateSepaDirectDebitFile(File targetFile, File controlExcelFile)
       throws IncassoException {
-    SepaIncassoContext context = new SepaIncassoContext();
-    SepaIncassoDocumentGenerator documentGenerator =
-        new SepaIncassoDocumentGenerator(context);
     List<Member> members = dao.findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(
         PaymentMethod.DIRECT_DEBIT, MembershipStatus.ACTIVE, false);
     List<Integer> sepaNumbers = documentDao.findMemberNummbersWithSepa();
-    Document incassoDocument = documentGenerator.generateIncassoDocument(controlExcelFile, members, sepaNumbers);
+    
+    SepaIncassoContext context = new SepaIncassoContext(controlExcelFile, members, sepaNumbers);
+    SepaIncassoDocumentGenerator documentGenerator =
+        new SepaIncassoDocumentGenerator(context);
+    TransactionUtil.inTransction(documentGenerator);
+    Document incassoDocument = documentGenerator.getDocument();
     maakSepaIncassoBestand(incassoDocument, targetFile);
     return new SepaIncassoResult(documentGenerator.getAantalTransacties(), context.getMessages());
   }

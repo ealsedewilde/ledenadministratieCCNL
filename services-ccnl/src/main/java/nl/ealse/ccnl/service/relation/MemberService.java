@@ -30,7 +30,6 @@ public class MemberService {
     return MemberNumberFactory.getInstance().getNewNumber();
   }
 
-  @Transactional
   public List<Member> searchMemberWithoutSepa(SearchItem searchItem, String searchValue) {
     List<Member> members = searchMember(searchItem, searchValue);
     return members.stream()

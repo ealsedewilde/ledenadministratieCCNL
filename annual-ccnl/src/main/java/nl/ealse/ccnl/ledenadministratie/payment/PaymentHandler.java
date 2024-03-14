@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -69,36 +71,48 @@ public class PaymentHandler {
    * @param rc - context for this run
    */
   private void processPaymentInfo(List<IngBooking> bookingList, ReconciliationContext rc) {
+    // Build a map for all members with bookings.
+    // Add a transaction for every booking for that member
+    Map<Integer, MemberContext> memberContextMap = new HashMap<>(); 
     bookingList.forEach(booking -> {
-      MemberContext mc = rc.getMemberContext(booking.getLidnummer());
+      int lidnummer = booking.getLidnummer();
+      MemberContext mc = rc.getMemberContext(lidnummer);
+      if (memberContextMap.get(lidnummer) == null) {
+        memberContextMap.put(lidnummer, mc);
+      }
       BigDecimal amount = BigDecimal.valueOf(booking.getBedrag());
       Transaction t = new Transaction(amount, booking.getBoekdatum(), booking.getTypebooking(),
           getPaymentInfo(booking));
       mc.getTransactions().add(t);
     });
-
+    
     BigDecimal refAmount = BigDecimal.valueOf(MemberShipFee.getOverboeken());
-    rc.getContexts().values().forEach(mc -> {
+    memberContextMap.values().forEach(mc -> {
       Optional<Member> member = dao.findById(mc.getNumber());
       if (member.isPresent()) {
         Member m = member.get();
-        m.setPaymentInfo(mc.toString());
-        m.setPaymentDate(mc.getPaymentDate());
-        boolean withAmount = mc.getTotalAmount().compareTo(BigDecimal.ZERO) > 0;
-        m.setCurrentYearPaid(withAmount);
-        if (mc.isInactief() && withAmount) {
-          String msg = "Betaling ontvangen voor inactief lid " + m.getMemberNumber();
-          rc.getMessages().add(msg);
-        } else if (mc.getTotalAmount().compareTo(refAmount) > 0) {
-          String amountString = AmountFormatter.format(mc.getTotalAmount());
-          String msg =
-              String.format("Lid %d heeft totaal %s betaald", m.getMemberNumber(), amountString);
-          rc.getMessages().add(msg);
-        }
+        performPaymentChecks(rc, refAmount, mc, m);
         dao.save(m);
       }
-
     });
+
+  }
+
+  private void performPaymentChecks(ReconciliationContext rc, BigDecimal refAmount,
+      MemberContext mc, Member m) {
+    m.setPaymentInfo(mc.toString());
+    m.setPaymentDate(mc.getPaymentDate());
+    boolean withAmount = mc.getTotalAmount().compareTo(BigDecimal.ZERO) > 0;
+    m.setCurrentYearPaid(withAmount);
+    if (mc.isInactief() && withAmount) {
+      String msg = "Betaling ontvangen voor inactief lid " + m.getMemberNumber();
+      rc.getMessages().add(msg);
+    } else if (mc.getTotalAmount().compareTo(refAmount) > 0) {
+      String amountString = AmountFormatter.format(mc.getTotalAmount());
+      String msg =
+          String.format("Lid %d heeft totaal %s betaald", m.getMemberNumber(), amountString);
+      rc.getMessages().add(msg);
+    }
   }
 
   private String getPaymentInfo(IngBooking booking) {

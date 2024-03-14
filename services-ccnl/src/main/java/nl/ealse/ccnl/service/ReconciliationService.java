@@ -85,7 +85,6 @@ public class ReconciliationService {
     return reconciliationHandler.handlePayments(allFiles(), referenceDate, includeDD);
   }
 
-  @Transactional
   public void resetPaymentStatus() {
     List<Member> members = memberDao.findMembersByStatuses(STATUSES);
     members.forEach(member -> {
