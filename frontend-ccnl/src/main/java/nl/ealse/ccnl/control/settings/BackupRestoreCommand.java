@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.TaskExecutor;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;

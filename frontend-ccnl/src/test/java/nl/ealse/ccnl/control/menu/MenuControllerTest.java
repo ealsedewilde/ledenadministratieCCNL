@@ -224,6 +224,14 @@ class MenuControllerTest {
   }
 
   @Test
+  void excelAfterApril() {
+    sut.excelAfterApril();
+    context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());
+    MenuChoiceEvent event = menu.getValue();
+    Assertions.assertEquals(MenuChoice.REPORT_AFTER_APRIL, event.getMenuChoice());
+  }
+
+  @Test
   void excelArchive() {
     sut.excelArchive();
     context.verify(() -> EventPublisher.publishEvent(menu.capture()), atLeastOnce());

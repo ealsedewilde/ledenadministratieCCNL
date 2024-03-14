@@ -80,6 +80,7 @@
         <SeparatorMenuItem mnemonicParsing="false" />
         <MenuItem onAction="#excelNew" mnemonicParsing="false" text="Nieuwe leden" />
         <MenuItem onAction="#excelCancelation" mnemonicParsing="false" text="Opzeggers" />
+        <MenuItem onAction="#excelAfterApril" mnemonicParsing="false" text="Na 1 april opgezegd" />
         <MenuItem onAction="#excelOverdue" mnemonicParsing="false" text="Niet betalers" />
         <MenuItem onAction="#excelArchive" mnemonicParsing="false" text="Archief" />
       </items>

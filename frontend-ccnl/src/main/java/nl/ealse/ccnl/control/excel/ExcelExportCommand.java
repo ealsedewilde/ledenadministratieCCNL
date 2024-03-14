@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.TaskExecutor;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
@@ -106,6 +105,9 @@ public class ExcelExportCommand {
           case REPORT_CANCELLED_MEMBERS:
             service.exportCancelled(exportFile);
             return "MS Excel-werkblad voor opgezegde leden is aangemaakt";
+          case REPORT_AFTER_APRIL:
+            service.exportAfterApril(exportFile);
+            return "MS Excel-werkblad voor opgezegd na 1 april is aangemaakt";
           case REPORT_OVERDUE_MEMBERS:
             service.exportOverdue(exportFile);
             return "MS Excel-werkblad voor niet betalers is aangemaakt";

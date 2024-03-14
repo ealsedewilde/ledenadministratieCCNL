@@ -163,6 +163,11 @@ public class MenuController {
   }
 
   @FXML
+  void excelAfterApril() {
+    EventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.REPORT_AFTER_APRIL));
+  }
+
+  @FXML
   void excelArchive() {
     EventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.REPORT_ARCHIVE));
   }

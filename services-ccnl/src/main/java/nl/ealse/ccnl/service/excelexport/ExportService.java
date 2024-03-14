@@ -124,19 +124,22 @@ public class ExportService {
   }
 
   public void exportCancelled(File selectedFile) throws IOException {
-    try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
-      targetFile.addMemberHeading();
-      List<Member> lastYearMembers =
-          memberRepository.findMemberByMemberStatus(MembershipStatus.LAST_YEAR_MEMBERSHIP);
-      lastYearMembers.forEach(targetFile::addMember);
-    }
+    makeFile(selectedFile, MembershipStatus.LAST_YEAR_MEMBERSHIP);
   }
 
   public void exportOverdue(File selectedFile) throws IOException {
+    makeFile(selectedFile, MembershipStatus.OVERDUE);
+  }
+
+  public void exportAfterApril(File selectedFile) throws IOException {
+    makeFile(selectedFile, MembershipStatus.AFTER_APRIL);
+  }
+
+  private void makeFile(File selectedFile, MembershipStatus status) throws IOException {
     try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
       List<Member> lastYearMembers =
-          memberRepository.findMemberByMemberStatus(MembershipStatus.OVERDUE);
+          memberRepository.findMemberByMemberStatus(status);
       lastYearMembers.forEach(targetFile::addMember);
     }
   }
