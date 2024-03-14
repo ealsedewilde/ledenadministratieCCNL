@@ -19,7 +19,7 @@ public class WrappedFileChooser {
 
   private final Stage fileChooserStage;
   private final FileChooser fileChooser;
-  private Supplier<String> directorySupplier;
+  private Supplier<String> directorySupplier = ()-> "C:/temp";
 
   /**
    * Construct an instance.

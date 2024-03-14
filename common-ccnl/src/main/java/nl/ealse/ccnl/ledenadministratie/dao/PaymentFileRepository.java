@@ -18,7 +18,7 @@ public class PaymentFileRepository extends BaseRepository<PaymentFile> {
   }
   
   public List<PaymentFile> findAllByOrderByFileName() {
-    return executeQuery("SELECT F FROM PaymentFile F ORDER BY F.fleName ASC");
+    return executeQuery("SELECT F FROM PaymentFile F ORDER BY F.fileName ASC");
   }
 
   public void deleteAll() {
