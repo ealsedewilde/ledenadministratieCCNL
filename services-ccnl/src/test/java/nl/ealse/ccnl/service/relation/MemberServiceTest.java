@@ -11,6 +11,7 @@ import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
+import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
 import nl.ealse.ccnl.test.MockProvider;
@@ -86,8 +87,10 @@ class MemberServiceTest {
   
   @Test
   void testFindMembersCurrentYearNotPaid() {
+    EnumSet<MembershipStatus> statuses =
+        EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
     sut.findMembersCurrentYearNotPaid(PaymentMethod.BANK_TRANSFER);
-    verify(dao).findMembersCurrentYearNotPaid(EnumSet.of(PaymentMethod.BANK_TRANSFER));
+    verify(dao).findMembersCurrentYearNotPaid(statuses, EnumSet.of(PaymentMethod.BANK_TRANSFER));
   }
   
   @Test

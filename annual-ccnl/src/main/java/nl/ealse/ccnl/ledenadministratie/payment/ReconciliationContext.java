@@ -24,26 +24,34 @@ public class ReconciliationContext {
   private final Map<Integer, MemberContext> contexts = new HashMap<>();
   private final List<String> messages = new ArrayList<>();
 
-  private ReconciliationContext(List<Member> members, boolean includeDD) {
-    Transaction t = new Transaction(IncassoProperties.getIncassoBedrag(),
-        IncassoProperties.getIncassoDatum(), BookingType.RDDT,
-        IncassoProperties.getIncassoReden());
+  private ReconciliationContext(List<Member> members, LocalDate referenceDate, boolean includeDD) {
+    // Add bank transactions not part of this reconciliation
+    BankTransaction t = new BankTransaction(IncassoProperties.getIncassoBedrag(),
+        IncassoProperties.getIncassoDatum(), BookingType.RDDT, IncassoProperties.getIncassoReden());
     members.forEach(m -> {
       MemberContext mc = new MemberContext(m.getMemberNumber());
       if (m.getPaymentMethod() == PaymentMethod.DIRECT_DEBIT && includeDD) {
         if (m.getPaymentDate() == null) {
-          log.debug("Er is geen incasso uitgevoerd voor lid " + m.getMemberNumber());
-        } else if (m.getPaymentDate().equals(IncassoProperties.getIncassoDatum())) {
+          log.debug("No Direct Debet for member " + m.getMemberNumber());
+        } else if (!m.getPaymentDate().isBefore(IncassoProperties.getIncassoDatum())) {
           mc.setDirectDebit(IncassoProperties.getIncassoDatum());
-          mc.getTransactions().add(t);
+          mc.getBankTransactions().add(t);
         }
+      } else if (m.getPaymentMethod() == PaymentMethod.BANK_TRANSFER && m.isCurrentYearPaid()
+          && referenceDate.isAfter(m.getPaymentDate())) {
+        log.debug("Bank Tranfer Payment before reference date " + m.getMemberNumber());
+        BigDecimal btAmount = BigDecimal.valueOf(MemberShipFee.getOverboeken());
+        BankTransaction btt = new BankTransaction(btAmount, m.getPaymentDate(), BookingType.RCDT,
+            BookingType.RCDT.getOmschrijving());
+        mc.getBankTransactions().add(btt);
       }
       contexts.put(m.getMemberNumber(), mc);
     });
   }
 
-  public static ReconciliationContext newInstance(List<Member> members, boolean includeDD) {
-    return new ReconciliationContext(members, includeDD);
+  public static ReconciliationContext newInstance(List<Member> members, LocalDate referenceDate,
+      boolean includeDD) {
+    return new ReconciliationContext(members, referenceDate, includeDD);
   }
 
   public MemberContext getMemberContext(Integer lidnummer) {
@@ -59,7 +67,7 @@ public class ReconciliationContext {
   public static class MemberContext {
 
     private final int number;
-    private final Set<Transaction> transactions = new TreeSet<>();
+    private final Set<BankTransaction> bankTransactions = new TreeSet<>();
     private final boolean inactief;
     @Setter
     private LocalDate directDebit;
@@ -76,7 +84,7 @@ public class ReconciliationContext {
 
     public BigDecimal getTotalAmount() {
       BigDecimal total = BigDecimal.ZERO;
-      for (Transaction t : transactions) {
+      for (BankTransaction t : bankTransactions) {
         total = total.add(t.getAmount());
       }
       return total;
@@ -87,7 +95,7 @@ public class ReconciliationContext {
         return directDebit;
       }
       LocalDate pd = null;
-      for (Transaction t : transactions) {
+      for (BankTransaction t : bankTransactions) {
         if (pd == null || t.getTransactionDate().isAfter(pd)) {
           pd = t.getTransactionDate();
         }
@@ -109,7 +117,7 @@ public class ReconciliationContext {
     @Override
     public String toString() {
       StringJoiner sj = new StringJoiner("\n");
-      for (Transaction t : transactions) {
+      for (BankTransaction t : bankTransactions) {
         sj.add(String.format("%s: %s", t.getBookingType().getOmschrijving(), t.getDescription()));
       }
       return sj.toString();
@@ -118,7 +126,7 @@ public class ReconciliationContext {
   }
 
   @Data
-  public static class Transaction implements Comparable<Transaction> {
+  public static class BankTransaction implements Comparable<BankTransaction> {
     private static final BookingType[] BTM =
         {BookingType.RDDT, BookingType.IDDT, BookingType.RCDT, BookingType.RDDT, BookingType.IRCT};
     private final BigDecimal amount;
@@ -127,7 +135,7 @@ public class ReconciliationContext {
     private final String description;
 
     @Override
-    public int compareTo(Transaction o) {
+    public int compareTo(BankTransaction o) {
       int r = this.transactionDate.compareTo(o.transactionDate);
       if (r == 0) {
         int bt1 = 0;

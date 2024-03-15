@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
+import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
 
@@ -76,7 +77,9 @@ public class MemberService {
   }
 
   public List<Member> findMembersCurrentYearNotPaid(PaymentMethod paymentMethod) {
-    return dao.findMembersCurrentYearNotPaid(EnumSet.of(paymentMethod));
+    EnumSet<MembershipStatus> statuses =
+        EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
+    return dao.findMembersCurrentYearNotPaid(statuses, EnumSet.of(paymentMethod));
   }
 
 }

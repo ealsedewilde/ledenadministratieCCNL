@@ -11,22 +11,23 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.MemberContext;
-import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.Transaction;
+import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.BankTransaction;
 import nl.ealse.ccnl.ledenadministratie.payment.filter.FilterChain;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 
 @Slf4j
 public class PaymentHandler {
-  
+
   @Getter
   private static PaymentHandler instance = new PaymentHandler();
 
   private final MemberRepository dao;
-  
+
   private static final EnumSet<MembershipStatus> statuses =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
 
@@ -40,7 +41,7 @@ public class PaymentHandler {
     List<Member> members = dao.findMembersByStatuses(statuses);
 
     final ReconciliationContext rc =
-        ReconciliationContext.newInstance(members, includeDD);
+        ReconciliationContext.newInstance(members, referenceDate, includeDD);
     final FilterChain filterChain = new FilterChain(members, referenceDate);
 
     final List<IngBooking> bookingList = new ArrayList<>();
@@ -71,23 +72,19 @@ public class PaymentHandler {
    * @param rc - context for this run
    */
   private void processPaymentInfo(List<IngBooking> bookingList, ReconciliationContext rc) {
-    // Build a map for all members with bookings.
-    // Add a transaction for every booking for that member
-    Map<Integer, MemberContext> memberContextMap = new HashMap<>(); 
     bookingList.forEach(booking -> {
       int lidnummer = booking.getLidnummer();
       MemberContext mc = rc.getMemberContext(lidnummer);
-      if (memberContextMap.get(lidnummer) == null) {
-        memberContextMap.put(lidnummer, mc);
-      }
       BigDecimal amount = BigDecimal.valueOf(booking.getBedrag());
-      Transaction t = new Transaction(amount, booking.getBoekdatum(), booking.getTypebooking(),
-          getPaymentInfo(booking));
-      mc.getTransactions().add(t);
+      BankTransaction t = new BankTransaction(amount, booking.getBoekdatum(),
+          booking.getTypebooking(), getPaymentInfo(booking));
+      mc.getBankTransactions().add(t);
     });
-    
+
+    // At this point ALL BankTransactions are put in the MemberContext of every member in
+    // the ReconciliationContext.
     BigDecimal refAmount = BigDecimal.valueOf(MemberShipFee.getOverboeken());
-    memberContextMap.values().forEach(mc -> {
+    rc.getContexts().values().forEach(mc -> {
       Optional<Member> member = dao.findById(mc.getNumber());
       if (member.isPresent()) {
         Member m = member.get();
@@ -102,9 +99,11 @@ public class PaymentHandler {
       MemberContext mc, Member m) {
     m.setPaymentInfo(mc.toString());
     m.setPaymentDate(mc.getPaymentDate());
-    boolean withAmount = mc.getTotalAmount().compareTo(BigDecimal.ZERO) > 0;
-    m.setCurrentYearPaid(withAmount);
-    if (mc.isInactief() && withAmount) {
+    
+    // At least the DirectDebit-amount is payed.
+    boolean payed = mc.getTotalAmount().compareTo(IncassoProperties.getIncassoBedrag()) >= 0;
+    m.setCurrentYearPaid(payed);
+    if (mc.isInactief() && payed) {
       String msg = "Betaling ontvangen voor inactief lid " + m.getMemberNumber();
       rc.getMessages().add(msg);
     } else if (mc.getTotalAmount().compareTo(refAmount) > 0) {
