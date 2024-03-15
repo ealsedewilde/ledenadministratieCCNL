@@ -13,7 +13,7 @@ public class MemberRepository extends BaseRepository<Member> {
 
   @Getter
   private static MemberRepository instance = new MemberRepository();
-  
+
   private MemberRepository() {
     super(Member.class);
   }
@@ -24,10 +24,11 @@ public class MemberRepository extends BaseRepository<Member> {
     return query.getResultList();
   }
 
-  public List<Member> findMembersCurrentYearNotPaid(Set<PaymentMethod> paymentMethods) {
+  public List<Member> findMembersCurrentYearNotPaid(Set<MembershipStatus> statuses,
+      Set<PaymentMethod> paymentMethods) {
     return executeQuery("SELECT M FROM Member M WHERE M.currentYearPaid = FALSE AND "
-        + "M.memberStatus = nl.ealse.ccnl.ledenadministratie.model.MembershipStatus.ACTIVE AND "
-        + "M.paymentMethod IN ?1 ORDER BY M.memberNumber", paymentMethods);
+        + "M.memberStatus IN ?1 AND " + "M.paymentMethod IN ?2 ORDER BY M.memberNumber",
+        statuses, paymentMethods);
   }
 
   public List<Member> findMemberByMemberStatus(MembershipStatus status) {

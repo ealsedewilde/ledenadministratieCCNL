@@ -138,8 +138,7 @@ public class ExportService {
   private void makeFile(File selectedFile, MembershipStatus status) throws IOException {
     try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
-      List<Member> lastYearMembers =
-          memberRepository.findMemberByMemberStatus(status);
+      List<Member> lastYearMembers = memberRepository.findMemberByMemberStatus(status);
       lastYearMembers.forEach(targetFile::addMember);
     }
   }
@@ -147,9 +146,12 @@ public class ExportService {
   public void paymentReminderReport(File selectedFile) throws IOException {
     try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
+      EnumSet<MembershipStatus> statuses =
+          EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
       EnumSet<PaymentMethod> paymentMethods =
           EnumSet.of(PaymentMethod.BANK_TRANSFER, PaymentMethod.DIRECT_DEBIT);
-      List<Member> selectedMembers = memberRepository.findMembersCurrentYearNotPaid(paymentMethods);
+      List<Member> selectedMembers =
+          memberRepository.findMembersCurrentYearNotPaid(statuses, paymentMethods);
       selectedMembers.forEach(targetFile::addMember);
     }
   }
