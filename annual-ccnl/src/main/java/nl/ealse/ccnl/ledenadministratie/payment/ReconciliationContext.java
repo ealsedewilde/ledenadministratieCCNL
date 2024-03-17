@@ -17,6 +17,9 @@ import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 
+/**
+ * Context with the complete payment history of every member.
+ */
 @Getter
 @Slf4j
 public class ReconciliationContext {
@@ -24,8 +27,14 @@ public class ReconciliationContext {
   private final Map<Integer, MemberContext> contexts = new HashMap<>();
   private final List<String> messages = new ArrayList<>();
 
+  /**
+   * Construct the context with the payment history before this recinciliation is executed.
+   * @param members
+   * @param referenceDate - start date of the first reconciliation file
+   * @param includeDD - assume that the Direct Debet process is executed.
+   */
   private ReconciliationContext(List<Member> members, LocalDate referenceDate, boolean includeDD) {
-    // Add bank transactions not part of this reconciliation
+    // Add bank transactions previous to of the reconciliation execution.
     BankTransaction t = new BankTransaction(IncassoProperties.getIncassoBedrag(),
         IncassoProperties.getIncassoDatum(), BookingType.RDDT, IncassoProperties.getIncassoReden());
     members.forEach(m -> {
@@ -63,6 +72,9 @@ public class ReconciliationContext {
     return mc;
   }
 
+  /**
+   * Context with complete payment history of one member.
+   */
   @Getter
   public static class MemberContext {
 
@@ -125,6 +137,9 @@ public class ReconciliationContext {
 
   }
 
+  /**
+   * Data regarding one payment for a specific member.
+   */
   @Data
   public static class BankTransaction implements Comparable<BankTransaction> {
     private static final BookingType[] BTM =

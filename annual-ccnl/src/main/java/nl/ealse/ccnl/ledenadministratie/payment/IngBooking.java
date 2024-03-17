@@ -19,6 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+/**
+ * Wrapper for the DOM-element of one bank transaction in the camt053 bank statement file
+ * og the ING-bank.
+ */
 @Slf4j
 public class IngBooking implements Comparable<IngBooking> {
 
@@ -34,7 +38,7 @@ public class IngBooking implements Comparable<IngBooking> {
   }
 
   /**
-   * The ban transaction that is wrapper by this class.
+   * The bank transaction that is wrapped by this class.
    */
   private final Element element;
 
@@ -44,14 +48,12 @@ public class IngBooking implements Comparable<IngBooking> {
   private Map<Token, XPathExpression> expressions;
 
   /**
-   * This booking is a membership fee.
-   * This is determined during the reconciliation process.
+   * This booking is a membership fee. This is determined during the reconciliation process.
    */
   private boolean contributie = true;
 
   /**
-   * Member number,
-   * This number is determined during the reconciliation process.
+   * Member number, This number is determined during the reconciliation process.
    */
   private int lidnummer;
 
@@ -69,8 +71,7 @@ public class IngBooking implements Comparable<IngBooking> {
   private LocalDate boekdatum;
 
   /**
-   * Unique key for this booking
-   * It consists of the booking dat (yyMMdd + member number.
+   * Unique key for this booking It consists of the booking dat (yyMMdd + member number.
    */
   private String key;
 
@@ -259,11 +260,11 @@ public class IngBooking implements Comparable<IngBooking> {
   private enum Token {
     BOOKING_TYPE, BEDRAG, BOEKDATUM, DEBET, NAAM, POSTCODE, ADRES, TEGEN_REKENING, OMSCHRIJVING, STORNO_INFO, CANCEL_REASON
   }
-  
+
   private static final class XPathConfig {
     private final Map<Token, XPathExpression> debitExpressions = new EnumMap<>(Token.class);
     private final Map<Token, XPathExpression> creditExpressions = new EnumMap<>(Token.class);
-    
+
     private XPathConfig() {
       init();
     }
@@ -294,27 +295,27 @@ public class IngBooking implements Comparable<IngBooking> {
             xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:CdtrAcct/ing:Id/ing:IBAN"));
         creditExpressions.put(Token.TEGEN_REKENING,
             xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:DbtrAcct/ing:Id/ing:IBAN"));
-        debitExpressions.put(Token.ADRES,
-            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Cdtr/ing:PstlAdr/ing:AdrLine"));
-        creditExpressions.put(Token.ADRES,
-            xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Dbtr/ing:PstlAdr/ing:AdrLine"));
+        debitExpressions.put(Token.ADRES, xpath
+            .compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Cdtr/ing:PstlAdr/ing:AdrLine"));
+        creditExpressions.put(Token.ADRES, xpath
+            .compile("ing:NtryDtls/ing:TxDtls/ing:RltdPties/ing:Dbtr/ing:PstlAdr/ing:AdrLine"));
 
       } catch (XPathExpressionException e) {
         log.error("Invalid XPath", e);
         throw new ExceptionInInitializerError(e);
       }
     }
-    
+
     public Map<Token, XPathExpression> getDebitExpressions() {
       return debitExpressions;
     }
-    
+
     public Map<Token, XPathExpression> getCreditExpressions() {
       return creditExpressions;
     }
-    
+
   }
-  
-  
+
+
 
 }

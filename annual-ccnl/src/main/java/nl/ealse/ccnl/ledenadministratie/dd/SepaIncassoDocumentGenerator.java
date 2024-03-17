@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.ledenadministratie.dd;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -4,9 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +13,14 @@ import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
-import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.MemberContext;
 import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.BankTransaction;
+import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.MemberContext;
 import nl.ealse.ccnl.ledenadministratie.payment.filter.FilterChain;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 
+/**
+ * Handler for the reconcile process.
+ */
 @Slf4j
 public class PaymentHandler {
 
@@ -36,16 +37,28 @@ public class PaymentHandler {
     this.dao = MemberRepository.getInstance();
   }
 
+  /**
+   * Perform the recinciliation process.
+   *
+   * @param paymentFiles - the files to reconcile
+   * @param referenceDate - start date of the oldest reconcile file
+   * @param includeDD - assume Direct Debit process is executed
+   * @return list of reconciliation results that need manual investigation
+   */
   public List<String> handlePayments(List<PaymentFile> paymentFiles, LocalDate referenceDate,
       boolean includeDD) {
+    // members that will be active in the upcoming year
     List<Member> members = dao.findMembersByStatuses(statuses);
 
+    // Context with all payments made previously to the reconciliation
     final ReconciliationContext rc =
         ReconciliationContext.newInstance(members, referenceDate, includeDD);
-    final FilterChain filterChain = new FilterChain(members, referenceDate);
 
+    // Initialize the reconciliation process
+    final FilterChain filterChain = new FilterChain(members, referenceDate);
     final List<IngBooking> bookingList = new ArrayList<>();
 
+    // Reconcile the payment file(s).
     List<PaymentFileIterable> paymentFileIterables =
         paymentFiles.stream().map(PaymentFileIterable::new).toList();
     paymentFileIterables.forEach(pf -> pf.forEach(booking -> {
@@ -61,6 +74,8 @@ public class PaymentHandler {
         }
       }
     }));
+
+    // Handle the results of the reconciliation
     processPaymentInfo(bookingList, rc);
     return rc.getMessages();
   }
@@ -83,30 +98,43 @@ public class PaymentHandler {
 
     // At this point ALL BankTransactions are put in the MemberContext of every member in
     // the ReconciliationContext.
-    BigDecimal refAmount = BigDecimal.valueOf(MemberShipFee.getOverboeken());
+    // We can now evaluate the status for every member.
+    BigDecimal bankTransferAmount = BigDecimal.valueOf(MemberShipFee.getOverboeken());
     rc.getContexts().values().forEach(mc -> {
       Optional<Member> member = dao.findById(mc.getNumber());
       if (member.isPresent()) {
         Member m = member.get();
-        performPaymentChecks(rc, refAmount, mc, m);
+        performPaymentChecks(rc, bankTransferAmount, mc, m);
         dao.save(m);
       }
     });
 
   }
 
-  private void performPaymentChecks(ReconciliationContext rc, BigDecimal refAmount,
+  private void performPaymentChecks(ReconciliationContext rc, BigDecimal bankTransferAmount,
       MemberContext mc, Member m) {
     m.setPaymentInfo(mc.toString());
     m.setPaymentDate(mc.getPaymentDate());
-    
-    // At least the DirectDebit-amount is payed.
+
+    /*
+     * We have 2 membership fees. Bank Tranfer amount Direct Debit amount which has a small discount
+     */
+
+
+    /*
+     * Check/set whether at least the DirectDebit-amount is payed.
+     * We don't check the payment method. 
+     * We accept that a Bank Transfer member sometimes just
+     * pays the Direct Debit amount.
+     */
     boolean payed = mc.getTotalAmount().compareTo(IncassoProperties.getIncassoBedrag()) >= 0;
     m.setCurrentYearPaid(payed);
+
     if (mc.isInactief() && payed) {
       String msg = "Betaling ontvangen voor inactief lid " + m.getMemberNumber();
       rc.getMessages().add(msg);
-    } else if (mc.getTotalAmount().compareTo(refAmount) > 0) {
+    } else if (mc.getTotalAmount().compareTo(bankTransferAmount) > 0) {
+      // The total amount is larger than the Bank Transfer amount; the member payed too much
       String amountString = AmountFormatter.format(mc.getTotalAmount());
       String msg =
           String.format("Lid %d heeft totaal %s betaald", m.getMemberNumber(), amountString);
