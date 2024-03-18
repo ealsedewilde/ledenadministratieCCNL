@@ -26,7 +26,7 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
  */
 @Slf4j
 public class SepaIncassoGenerator {
-  
+
   @Getter
   private static SepaIncassoGenerator instance = new SepaIncassoGenerator();
 
@@ -39,7 +39,7 @@ public class SepaIncassoGenerator {
   }
 
   /**
-   * SEPA INCASSO bestand aanmaken op basis van het ledenbestand
+   * SEPA INCASSO bestand aanmaken op basis van het ledenbestand.
    *
    * @param targetFile - doel incassobestand
    * @param controlExcelFile - Excel controlebestand
@@ -48,14 +48,14 @@ public class SepaIncassoGenerator {
    */
   public SepaIncassoResult generateSepaDirectDebitFile(File targetFile, File controlExcelFile)
       throws IncassoException {
-    List<Member> members = dao.findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(
-        PaymentMethod.DIRECT_DEBIT, MembershipStatus.ACTIVE, false);
+    List<Member> members =
+        dao.findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(
+            PaymentMethod.DIRECT_DEBIT, MembershipStatus.ACTIVE, false);
     List<Integer> sepaNumbers = documentDao.findMemberNummbersWithSepa();
-    
+
     SepaIncassoContext context = new SepaIncassoContext(controlExcelFile, members, sepaNumbers);
-    SepaIncassoDocumentGenerator documentGenerator =
-        new SepaIncassoDocumentGenerator(context);
-    TransactionUtil.inTransction(documentGenerator);
+    SepaIncassoDocumentGenerator documentGenerator = new SepaIncassoDocumentGenerator(context);
+    TransactionUtil.inTransction(documentGenerator::generateIncassoDocument);
     Document incassoDocument = documentGenerator.getDocument();
     maakSepaIncassoBestand(incassoDocument, targetFile);
     return new SepaIncassoResult(documentGenerator.getAantalTransacties(), context.getMessages());

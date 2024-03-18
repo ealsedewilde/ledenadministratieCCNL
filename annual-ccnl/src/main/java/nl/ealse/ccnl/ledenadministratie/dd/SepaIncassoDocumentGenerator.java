@@ -7,15 +7,17 @@ import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.dao.util.Procedure;
 import nl.ealse.ccnl.ledenadministratie.dd.model.DirectDebitTransactionInformation9;
 import nl.ealse.ccnl.ledenadministratie.dd.model.Document;
 import nl.ealse.ccnl.ledenadministratie.dd.model.PaymentInstructionInformation4;
 import nl.ealse.ccnl.ledenadministratie.excel.Ledenbestand;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 
+/**
+ * Generate the Direct Debit document.
+ */
 @Slf4j
-public class SepaIncassoDocumentGenerator implements Procedure<IncassoException> {
+public class SepaIncassoDocumentGenerator {
 
   private final SepaIncassoContext context;
   private final DocumentBuilder documentBuilder;
@@ -24,20 +26,29 @@ public class SepaIncassoDocumentGenerator implements Procedure<IncassoException>
   @Getter
   private Document document;
 
-
   @Getter
   private int aantalTransacties = 0;
   private double somTransactieBedrag = 0.0;
 
 
+  /**
+   * Create the generator.
+   *
+   * @param context - all data neede to generate the document
+   */
   public SepaIncassoDocumentGenerator(SepaIncassoContext context) {
     this.context = context;
     this.documentBuilder = new DocumentBuilder();
     this.paymentInstructionInformationBuilder = new PaymentInstructionInformationBuilder();
   }
 
-  @Override
-  public void execute() throws IncassoException {
+  /**
+   * Generate the Direct Debit document.
+   * This method updates the payment status of members.
+   *
+   * @throws IncassoException - whenever document generation fails
+   */
+  public void generateIncassoDocument() throws IncassoException {
     SepaAuthorizationHelper sah = new SepaAuthorizationHelper(context.getSepaNumbers());
     try (Ledenbestand incassobestand = new Ledenbestand(context.getControlExcelFile())) {
       incassobestand.addMemberHeading();
