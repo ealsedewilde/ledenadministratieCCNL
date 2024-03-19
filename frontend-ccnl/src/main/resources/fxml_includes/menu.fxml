@@ -10,119 +10,119 @@
   <menus>
     <Menu mnemonicParsing="false" text="Leden">
       <items>
-        <MenuItem onAction="#newMember" mnemonicParsing="false" text="Nieuw" />
-        <MenuItem onAction="#amendMember" mnemonicParsing="false" text="Wijzigen" />
-        <MenuItem onAction="#cancelMembership" mnemonicParsing="false" text="Opzeggen" />
+        <MenuItem onAction="#action" id="NEW_MEMBER" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#action" id="AMEND_MEMBER" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#action" id="CANCEL_MEMBERSHIP" mnemonicParsing="false" text="Opzeggen" />
         <SeparatorMenuItem mnemonicParsing="false" />
-        <MenuItem onAction="#paymentAuthorization" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="PAYMENT_AUTHORIZATION" mnemonicParsing="false"
           text="SEPA machtiging toevoegen" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Adverteerders">
       <items>
-        <MenuItem onAction="#newPartner" mnemonicParsing="false" text="Nieuw" />
-        <MenuItem onAction="#amendPartner" mnemonicParsing="false" text="Wijzigen" />
-        <MenuItem onAction="#deletePartner" mnemonicParsing="false" text="Verwijderen" />
+        <MenuItem onAction="#action" id="NEW_PARTNER" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#action" id="AMEND_PARTNER" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#action" id="DELETE_PARTNER" mnemonicParsing="false" text="Verwijderen" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Clubs">
       <items>
-        <MenuItem onAction="#newExternalClub" mnemonicParsing="false" text="Nieuw" />
-        <MenuItem onAction="#amendExternalClub" mnemonicParsing="false" text="Wijzigen" />
-        <MenuItem onAction="#deleteExternalClub" mnemonicParsing="false" text="Verwijderen" />
+        <MenuItem onAction="#action" id="NEW_EXTERNAL_CLUB" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#action" id="AMEND_EXTERNAL_CLUB" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#action" id="DELETE_EXTERNAL_CLUB" mnemonicParsing="false" text="Verwijderen" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Externe relaties">
       <items>
-        <MenuItem onAction="#newExternalRelation" mnemonicParsing="false" text="Nieuw" />
-        <MenuItem onAction="#amendExternalRelation" mnemonicParsing="false" text="Wijzigen" />
-        <MenuItem onAction="#deleteExternalRelation" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="NEW_EXTERNAL_RELATION" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#action" id="AMEND_EXTERNAL_RELATION" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#action" id="DELETE_EXTERNAL_RELATION" mnemonicParsing="false"
           text="Verwijderen" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Functies">
       <items>
-        <MenuItem onAction="#newInternalRelation" mnemonicParsing="false" text="Nieuw" />
-        <MenuItem onAction="#amendInternalRelation" mnemonicParsing="false" text="Wijzigen" />
-        <MenuItem onAction="#deleteInternalRelation" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="NEW_INTERNAL_RELATION" mnemonicParsing="false" text="Nieuw" />
+        <MenuItem onAction="#action" id="AMEND_INTERNAL_RELATION" mnemonicParsing="false" text="Wijzigen" />
+        <MenuItem onAction="#action" id="DELETE_INTERNAL_RELATION" mnemonicParsing="false"
           text="Verwijderen" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Clubbad">
       <items>
-        <MenuItem onAction="#magazineAddressList" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="MAGAZINE_ADDRESS_LIST" mnemonicParsing="false"
           text="Adressenbestand aanmaken" />
-        <MenuItem onAction="#cardAddressList" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="CARD_ADDRESS_LIST" mnemonicParsing="false"
           text="Adressen lidmaatschapskaart" />
-       <MenuItem onAction="#magazineInvalidAddress" mnemonicParsing="false"
+       <MenuItem onAction="#action" id="MAGAZINE_INVALID_ADDRESS" mnemonicParsing="false"
           text="Retouren registreren" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Ledenlijst">
       <items>
-        <MenuItem onAction="#memberListByNumber" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="MEMBER_LIST_BY_NUMBER" mnemonicParsing="false"
           text="Ledenlijst op lidnummer" />
       </items>
       <items>
-        <MenuItem onAction="#memberListByName" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="MEMBER_LIST_BY_NAME" mnemonicParsing="false"
           text="Ledenlijst op achternaam" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Correspondentie">
       <items>
-        <MenuItem onAction="#addDocument" mnemonicParsing="false" text="Toevoegen" />
-        <MenuItem onAction="#viewDocument" mnemonicParsing="false" text="Inzien" />
+        <MenuItem onAction="#action" id="ADD_DOCUMENT" mnemonicParsing="false" text="Toevoegen" />
+        <MenuItem onAction="#action" id="VIEW_DOCUMENT" mnemonicParsing="false" text="Inzien" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Overzichten">
       <items>
-        <MenuItem onAction="#excelAll" mnemonicParsing="false" text="Export naar Excel" />
+        <MenuItem onAction="#action" id="REPORT_ALL_DATA" mnemonicParsing="false" text="Export naar Excel" />
         <SeparatorMenuItem mnemonicParsing="false" />
-        <MenuItem onAction="#excelNew" mnemonicParsing="false" text="Nieuwe leden" />
-        <MenuItem onAction="#excelCancelation" mnemonicParsing="false" text="Opzeggers" />
-        <MenuItem onAction="#excelAfterApril" mnemonicParsing="false" text="Na 1 april opgezegd" />
-        <MenuItem onAction="#excelOverdue" mnemonicParsing="false" text="Niet betalers" />
-        <MenuItem onAction="#excelArchive" mnemonicParsing="false" text="Archief" />
+        <MenuItem onAction="#action" id="REPORT_NEW_MEMBERS" mnemonicParsing="false" text="Nieuwe leden" />
+        <MenuItem onAction="#action" id="REPORT_CANCELLED_MEMBERS" mnemonicParsing="false" text="Opzeggers" />
+        <MenuItem onAction="#action" id="REPORT_AFTER_APRIL" mnemonicParsing="false" text="Na 1 april opgezegd" />
+        <MenuItem onAction="#action" id="REPORT_OVERDUE" mnemonicParsing="false" text="Niet betalers" />
+        <MenuItem onAction="#action" id="REPORT_ARCHIVE" mnemonicParsing="false" text="Archief" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Jaarwerk">
       <items>
-        <MenuItem onAction="#resetPayments" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="RESET_PAYMENTS" mnemonicParsing="false"
           text="Betaalgegevens wissen" />
-        <MenuItem onAction="#directDebits" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="PRODUCE_DIRECT_DEBITS_FILE" mnemonicParsing="false"
           text="Incassobestand aanmaken" />
-        <MenuItem onAction="#reconcilePayments" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="RECONCILE_PAYMENTS" mnemonicParsing="false"
           text="Betalingen afletteren" />
-        <MenuItem onAction="#reminderReport" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="PRODUCE_REMINDER_REPORT" mnemonicParsing="false"
           text="Overzicht Herinneringen" />
         <Menu mnemonicParsing="false" text="Herinneringsbrieven aanmaken">
           <items>
-            <MenuItem onAction="#makeReminderLettersDirectDebit" mnemonicParsing="false"
+            <MenuItem onAction="#action" id="PRODUCE_REMINDER_LETTERS_DD" mnemonicParsing="false"
               text="Leden met Automatische Incasso" />
-            <MenuItem onAction="#makeReminderLettersBankTranfer" mnemonicParsing="false"
+            <MenuItem onAction="#action" id="PRODUCE_REMINDER_LETTERS_BT" mnemonicParsing="false"
               text="Leden met Overboeking" />
           </items>
         </Menu>
-        <MenuItem onAction="#yearly" mnemonicParsing="false" text="Jaarovergang" />
+        <MenuItem onAction="#action" id="ANNUAL_ROLLOVER" mnemonicParsing="false" text="Jaarovergang" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Beheer">
       <items>
-        <MenuItem onAction="#settings" mnemonicParsing="false" text="Instellingen" />
+        <MenuItem onAction="#action" id="SETTINGS" mnemonicParsing="false" text="Instellingen" />
         <SeparatorMenuItem mnemonicParsing="false" />
-        <MenuItem onAction="#manageSepaAuthorizationForm" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="UPLOAD_SEPA_FORM" mnemonicParsing="false"
           text="SEPA-machtiging formulier" />
-        <MenuItem onAction="#manageDocumentTemplates" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="TEMPLATES_OVERVIEW" mnemonicParsing="false"
           text="Beheer document templates" />
         <SeparatorMenuItem mnemonicParsing="false" />
-        <MenuItem onAction="#importFromExcel" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="IMPORT_FROM_EXCEL" mnemonicParsing="false"
           text="Import uit Excel" />
-        <MenuItem onAction="#manageArchive" mnemonicParsing="false"
+        <MenuItem onAction="#action" id="MANAGE_ARCHIVE" mnemonicParsing="false"
           text="Archief opschonen" />
         <SeparatorMenuItem mnemonicParsing="false" />
-        <MenuItem onAction="#backupDatabase" mnemonicParsing="false" text="Backup Database" />
-        <MenuItem onAction="#restoreDatabase" mnemonicParsing="false" text="Restore Database" />
-        <MenuItem onAction="#dbconfig" mnemonicParsing="false" text="Wijzig database locatie" />
+        <MenuItem onAction="#action" id="MANAGE_BACKUP_DATABASE" mnemonicParsing="false" text="Backup Database" />
+        <MenuItem onAction="#action" id="MANAGE_RESTORE_DATABASE" mnemonicParsing="false" text="Restore Database" />
+        <MenuItem onAction="#action" id="DB_CONFIG" mnemonicParsing="false" text="Wijzig database locatie" />
       </items>
     </Menu>
   </menus>
