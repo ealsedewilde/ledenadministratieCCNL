@@ -26,8 +26,9 @@ public class MemberRepository extends BaseRepository<Member> {
 
   public List<Member> findMembersCurrentYearNotPaid(Set<MembershipStatus> statuses,
       Set<PaymentMethod> paymentMethods) {
-    return executeQuery("SELECT M FROM Member M WHERE M.currentYearPaid = FALSE AND "
-        + "M.memberStatus IN ?1 AND " + "M.paymentMethod IN ?2 ORDER BY M.memberNumber",
+    return executeQuery(
+        "SELECT M FROM Member M WHERE M.currentYearPaid = FALSE AND M.address.addressInvalid = FALSE "
+            + "AND M.memberStatus IN ?1 AND " + "M.paymentMethod IN ?2 ORDER BY M.memberNumber",
         statuses, paymentMethods);
   }
 
