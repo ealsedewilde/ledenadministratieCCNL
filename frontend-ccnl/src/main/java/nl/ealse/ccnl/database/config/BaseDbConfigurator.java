@@ -19,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -128,6 +130,13 @@ public abstract class BaseDbConfigurator {
     String dbLocation = handleSave();
     if (dbLocation != null) {
       initializeDatabase(DatabaseLocation.initialize(dbLocation));
+    }
+  }
+
+  @FXML
+  void enter(KeyEvent evt) {
+    if (evt.getCode() == KeyCode.ENTER) {
+      handleSave();
     }
   }
 

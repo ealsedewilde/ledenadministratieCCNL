@@ -76,10 +76,16 @@ public class MemberService {
     dao.save(member);
   }
 
+  /**
+   * Find not paying members with valid address.
+   *
+   * @param paymentMethod - payment method for a member
+   * @return list of non paying members with valid address
+   */
   public List<Member> findMembersCurrentYearNotPaid(PaymentMethod paymentMethod) {
     EnumSet<MembershipStatus> statuses =
         EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
-    return dao.findMembersCurrentYearNotPaid(statuses, EnumSet.of(paymentMethod));
+    return dao.findMembersCurrentYearNotPaidLetters(statuses, EnumSet.of(paymentMethod));
   }
 
 }

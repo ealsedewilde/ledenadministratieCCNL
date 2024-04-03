@@ -53,7 +53,7 @@ class AnnualRolloverControllerTest extends FXMLBaseTest {
     verify(getPageController()).showMessage("Jaarovergang is uitgevoerd");
 
     sut.exportToExcel();
-    verify(getPageController()).showMessage("Excel exportbestanden zijn aangemaakt");
+    verify(getPageController()).showMessage("Excel exportbestanden zijn aangemaakt in c:/temp");
   }
 
   private void prepare() {

@@ -24,12 +24,18 @@ public class MemberRepository extends BaseRepository<Member> {
     return query.getResultList();
   }
 
+  public List<Member> findMembersCurrentYearNotPaidLetters(Set<MembershipStatus> statuses,
+      Set<PaymentMethod> paymentMethods) {
+      return executeQuery("SELECT M FROM Member M WHERE M.currentYearPaid = FALSE "
+          + "AND M.address.addressInvalid = FALSE AND M.memberStatus IN ?1 AND "
+          + "M.paymentMethod IN ?2 ORDER BY M.memberNumber", statuses, paymentMethods);
+  }
+
   public List<Member> findMembersCurrentYearNotPaid(Set<MembershipStatus> statuses,
       Set<PaymentMethod> paymentMethods) {
-    return executeQuery(
-        "SELECT M FROM Member M WHERE M.currentYearPaid = FALSE AND M.address.addressInvalid = FALSE "
-            + "AND M.memberStatus IN ?1 AND " + "M.paymentMethod IN ?2 ORDER BY M.memberNumber",
-        statuses, paymentMethods);
+    return executeQuery("SELECT M FROM Member M WHERE M.currentYearPaid = FALSE "
+        + "AND M.memberStatus IN ?1 AND "
+        + "M.paymentMethod IN ?2 ORDER BY M.memberNumber", statuses, paymentMethods);
   }
 
   public List<Member> findMemberByMemberStatus(MembershipStatus status) {
@@ -44,7 +50,8 @@ public class MemberRepository extends BaseRepository<Member> {
   public List<Member> findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(
       PaymentMethod paymentMethod, MembershipStatus status, boolean currentYearPaid) {
     return executeQuery(
-        "SELECT M FROM Member M WHERE M.paymentMethod = ?1 AND M.memberStatus = ?2 AND M.currentYearPaid = ?3",
+        "SELECT M FROM Member M WHERE M.paymentMethod = ?1 "
+            + "AND M.memberStatus = ?2 AND M.currentYearPaid = ?3",
         paymentMethod, status, currentYearPaid);
   }
 

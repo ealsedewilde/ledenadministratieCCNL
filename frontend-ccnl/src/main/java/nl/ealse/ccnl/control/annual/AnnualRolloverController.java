@@ -168,6 +168,7 @@ public class AnnualRolloverController {
 
   protected static class AsyncRolloverStep3 extends HandledTask {
     private final AnnualRolloverController controller;
+    private final String dir = DatabaseProperties.getProperty("ccnl.directory.annual", DEFAULT_DIR);
 
     AsyncRolloverStep3(AnnualRolloverController controller) {
       this.controller = controller;
@@ -177,7 +178,7 @@ public class AnnualRolloverController {
     protected String call() {
       exportMembersToExcel();
       exportToArchiveExcel();
-      return "Excel exportbestanden zijn aangemaakt";
+      return "Excel exportbestanden zijn aangemaakt in " + dir;
     }
 
     private void exportMembersToExcel() {
@@ -185,7 +186,7 @@ public class AnnualRolloverController {
           String.format(MEMBER_FILE_NAME, formatter.format(LocalDateTime.now()));
       try {
         File excelParent =
-            new File(DatabaseProperties.getProperty("ccnl.directory.annual", DEFAULT_DIR));
+            new File(dir);
         controller.exportService.exportALL(new File(excelParent, memberFileName));
       } catch (IOException e) {
         log.error("Could not write Excel document", e);
@@ -198,7 +199,7 @@ public class AnnualRolloverController {
           String.format(ARCHIVE_FILE_NAME, formatter.format(LocalDateTime.now()));
       try {
         File excelParent =
-            new File(DatabaseProperties.getProperty("ccnl.directory.annual", DEFAULT_DIR));
+            new File(dir);
         controller.archiveService.export(new File(excelParent, archiveFileName));
       } catch (IOException e) {
         log.error("Could not write Excel document", e);

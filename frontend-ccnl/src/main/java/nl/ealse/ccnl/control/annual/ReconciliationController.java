@@ -142,6 +142,15 @@ public class ReconciliationController {
       referenceDateE.setVisible(false);
       pageController.showPermanentMessage("Betalingen worden verwerkt; even geduld a.u.b.");
       ReconcileTask reconcileTask = new ReconcileTask(this, dateValue, includeDD.isSelected());
+      reconcileTask.setOnSucceeded(evt -> {
+        pageController.showMessage(evt.getSource().getValue().toString());
+        List<String> messages = reconcileTask.getMessages();
+        if (messages != null && !messages.isEmpty()) {
+          reconcileMessages.getItems().addAll(messages);
+          messagesStage.show();
+        }
+      });
+
       reconcileTask.executeTask();
     }
   }
@@ -154,6 +163,8 @@ public class ReconciliationController {
     private final ReconciliationController controller;
     private final LocalDate referenceDate;
     private final boolean includeDD;
+    @Getter
+    private List<String> messages;
 
     ReconcileTask(ReconciliationController controller, LocalDate referenceDate, boolean includeDD) {
       this.controller = controller;
@@ -165,11 +176,7 @@ public class ReconciliationController {
     @Override
     protected String call() {
       try {
-        List<String> messages = controller.service.reconcilePayments(referenceDate, includeDD);
-        if (messages != null && !messages.isEmpty()) {
-          controller.reconcileMessages.getItems().addAll(messages);
-          controller.messagesStage.show();
-        }
+        messages = controller.service.reconcilePayments(referenceDate, includeDD);
         return "Betalingen zijn verwerkt";
       } catch (Exception e) {
         log.error("Failed to reconcile", e);

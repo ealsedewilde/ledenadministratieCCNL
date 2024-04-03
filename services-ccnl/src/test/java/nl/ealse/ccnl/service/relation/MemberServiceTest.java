@@ -90,7 +90,7 @@ class MemberServiceTest {
     EnumSet<MembershipStatus> statuses =
         EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
     sut.findMembersCurrentYearNotPaid(PaymentMethod.BANK_TRANSFER);
-    verify(dao).findMembersCurrentYearNotPaid(statuses, EnumSet.of(PaymentMethod.BANK_TRANSFER));
+    verify(dao).findMembersCurrentYearNotPaidLetters(statuses, EnumSet.of(PaymentMethod.BANK_TRANSFER));
   }
   
   @Test

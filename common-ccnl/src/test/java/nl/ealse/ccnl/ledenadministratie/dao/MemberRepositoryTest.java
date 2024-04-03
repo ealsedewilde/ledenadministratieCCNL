@@ -17,11 +17,11 @@ public class MemberRepositoryTest {
   @Test
   void test() {
     Member owner = initializedModel();
-    Member savedMember = sut.saveAndFlush(owner);
+    sut.saveAndFlush(owner);
     EnumSet<MembershipStatus> statuses =
         EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
     List<Member> members = sut.findMembersCurrentYearNotPaid(statuses, EnumSet.of(PaymentMethod.DIRECT_DEBIT));
-    Assertions.assertEquals(1, members.size());
+    Assertions.assertFalse(members.isEmpty());
 
  
   }
