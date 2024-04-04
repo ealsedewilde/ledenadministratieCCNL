@@ -91,8 +91,11 @@ public class NaamStrategie extends BetalingStrategie {
     // Als de VOORLETTERS achter de naam staan dan deze weghalen
     String[] parts = naam.split(" ");
     boolean initial = false; 
-    for (int q = parts.length -1 ; q >= 0 ; q--) {
+    for (int q = parts.length - 1; q >= 0; q--) {
       String p = parts[q];
+      if ("HR".equalsIgnoreCase(p) || "MW".equalsIgnoreCase(p) || "EN/OF".equalsIgnoreCase(p)) {
+        continue;
+      }
       if (p.length() == 1) {
         initial = true;
       } else if (initial) {
