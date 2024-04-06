@@ -32,7 +32,7 @@
     <HBox spacing="20">
       <children>
         <HBox>
-          <Label text="Verwerk boekingen met datum na peildatum" />
+          <Label text="Verwerk boekingen vanaf peildatum" />
           <Label style="-fx-text-fill: red;" text=" *" />
         </HBox>
         <DatePicker fx:id="referenceDate" maxWidth="146" />
