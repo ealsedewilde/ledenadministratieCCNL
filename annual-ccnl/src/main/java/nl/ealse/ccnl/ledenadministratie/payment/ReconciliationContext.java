@@ -41,11 +41,11 @@ public class ReconciliationContext {
     members.forEach(m -> {
       MemberContext mc = new MemberContext(m.getMemberNumber());
       if (m.getPaymentMethod() == PaymentMethod.DIRECT_DEBIT && includeDD) {
-        if (!IncassoProperties.getIncassoDatum().isEqual(m.getPaymentDate())) {
-          log.debug("No Direct Debet for member " + m.getMemberNumber());
-        } else if (!m.getPaymentDate().isBefore(IncassoProperties.getIncassoDatum())) {
+        if (IncassoProperties.getIncassoDatum().isEqual(m.getPaymentDate())) {
           mc.setDirectDebit(IncassoProperties.getIncassoDatum());
           mc.getBankTransactions().add(t);
+        } else {
+          log.debug("No Direct Debet for member " + m.getMemberNumber());
         }
       } else if (m.getPaymentMethod() == PaymentMethod.BANK_TRANSFER && m.isCurrentYearPaid()
           && referenceDate.isAfter(m.getPaymentDate())) {
