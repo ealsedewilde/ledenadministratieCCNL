@@ -29,6 +29,7 @@ public class ReconciliationContext {
 
   /**
    * Construct the context with the payment history before this recinciliation is executed.
+   * 
    * @param members
    * @param referenceDate - start date of the first reconciliation file
    * @param includeDD - assume that the Direct Debet process is executed.
@@ -40,7 +41,7 @@ public class ReconciliationContext {
     members.forEach(m -> {
       MemberContext mc = new MemberContext(m.getMemberNumber());
       if (m.getPaymentMethod() == PaymentMethod.DIRECT_DEBIT && includeDD) {
-        if (m.getPaymentDate() == null) {
+        if (!IncassoProperties.getIncassoDatum().isEqual(m.getPaymentDate())) {
           log.debug("No Direct Debet for member " + m.getMemberNumber());
         } else if (!m.getPaymentDate().isBefore(IncassoProperties.getIncassoDatum())) {
           mc.setDirectDebit(IncassoProperties.getIncassoDatum());
