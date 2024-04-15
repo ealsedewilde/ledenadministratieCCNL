@@ -88,6 +88,7 @@ public class ReconciliationService {
   public void resetPaymentStatus() {
     List<Member> members = memberDao.findMembersByStatuses(STATUSES);
     members.forEach(member -> {
+      member.setDirectDebitExecuted(false);
       member.setCurrentYearPaid(PaymentMethod.NOT_APPLICABLE == member.getPaymentMethod());
       member.setPaymentDate(null);
       member.setPaymentInfo(null);

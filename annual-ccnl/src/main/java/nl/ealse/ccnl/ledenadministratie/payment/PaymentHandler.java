@@ -90,9 +90,6 @@ public class PaymentHandler {
     bookingList.forEach(booking -> {
       int lidnummer = booking.getLidnummer();
       MemberContext mc = rc.getMemberContext(lidnummer);
-      if (BookingType.IDDT == booking.getTypebooking() && mc.getBankTransactions().isEmpty()) {
-        mc.getBankTransactions().add(ReconciliationContext.DD_TRANSACTION);
-      }
       BigDecimal amount = BigDecimal.valueOf(booking.getBedrag());
       BankTransaction t = new BankTransaction(amount, booking.getBoekdatum(),
           booking.getTypebooking(), getPaymentInfo(booking));

@@ -38,6 +38,7 @@ public class MemberBase implements AddressOwner {
   @Enumerated(EnumType.STRING)
   private PaymentMethod paymentMethod = PaymentMethod.BANK_TRANSFER;
   private LocalDate paymentDate;
+  private boolean directDebitExecuted;
   private boolean currentYearPaid;
   private boolean membercardIssued;
   @Lob

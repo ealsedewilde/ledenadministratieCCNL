@@ -82,6 +82,7 @@ public class SepaIncassoDocumentGenerator {
     try {
       DirectDebitTransactionInformation9 transactie = getDebitTransaction(member);
       paymentInstructionInformationBuilder.toevoegenDebitTransactie(transactie);
+      member.setDirectDebitExecuted(true);
       member.setCurrentYearPaid(true);
       member.setPaymentInfo(IncassoProperties.getIncassoReden());
       member.setPaymentDate(IncassoProperties.getIncassoDatum());
