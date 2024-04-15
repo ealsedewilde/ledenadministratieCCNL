@@ -23,6 +23,9 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 @Getter
 @Slf4j
 public class ReconciliationContext {
+  
+  public static final BankTransaction DD_TRANSACTION = new BankTransaction(IncassoProperties.getIncassoBedrag(),
+      IncassoProperties.getIncassoDatum(), BookingType.RDDT, IncassoProperties.getIncassoReden());
 
   private final Map<Integer, MemberContext> contexts = new HashMap<>();
   private final List<String> messages = new ArrayList<>();
@@ -36,14 +39,14 @@ public class ReconciliationContext {
    */
   private ReconciliationContext(List<Member> members, LocalDate referenceDate, boolean includeDD) {
     // Add bank transactions previous to of the reconciliation execution.
-    BankTransaction t = new BankTransaction(IncassoProperties.getIncassoBedrag(),
-        IncassoProperties.getIncassoDatum(), BookingType.RDDT, IncassoProperties.getIncassoReden());
+    
     members.forEach(m -> {
       MemberContext mc = new MemberContext(m.getMemberNumber());
       if (m.getPaymentMethod() == PaymentMethod.DIRECT_DEBIT && includeDD) {
-        if (IncassoProperties.getIncassoDatum().isEqual(m.getPaymentDate())) {
+        if (m.getPaymentDate() != null
+            && IncassoProperties.getIncassoDatum().isEqual(m.getPaymentDate())) {
           mc.setDirectDebit(IncassoProperties.getIncassoDatum());
-          mc.getBankTransactions().add(t);
+          mc.getBankTransactions().add(DD_TRANSACTION);
         } else {
           log.debug("No Direct Debet for member " + m.getMemberNumber());
         }

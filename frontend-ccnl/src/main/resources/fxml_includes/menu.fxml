@@ -81,7 +81,7 @@
         <MenuItem onAction="#action" id="REPORT_NEW_MEMBERS" mnemonicParsing="false" text="Nieuwe leden" />
         <MenuItem onAction="#action" id="REPORT_CANCELLED_MEMBERS" mnemonicParsing="false" text="Opzeggers" />
         <MenuItem onAction="#action" id="REPORT_AFTER_APRIL" mnemonicParsing="false" text="Na 1 april opgezegd" />
-        <MenuItem onAction="#action" id="REPORT_OVERDUE" mnemonicParsing="false" text="Niet betalers" />
+        <MenuItem onAction="#action" id="REPORT_OVERDUE_MEMBERS" mnemonicParsing="false" text="Niet betalers" />
         <MenuItem onAction="#action" id="REPORT_ARCHIVE" mnemonicParsing="false" text="Archief" />
       </items>
     </Menu>
