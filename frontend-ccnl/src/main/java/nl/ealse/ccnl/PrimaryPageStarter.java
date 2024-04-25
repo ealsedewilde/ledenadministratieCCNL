@@ -1,7 +1,9 @@
 package nl.ealse.ccnl;
 
 import java.awt.SplashScreen;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -62,15 +64,16 @@ public class PrimaryPageStarter {
    * @param stage - primary stage
    */
   private void checkScreenSize(final Stage stage) {
-    double x = stage.getY();
+    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+    double x = stage.getX();
     if (x < 0) {
       stage.setX(0d);
-      stage.setHeight(stage.getWidth() + x);
+      stage.setMaxWidth(primaryScreenBounds.getWidth());
     }
     double y = stage.getY();
     if (y < 0) {
       stage.setY(0d);
-      stage.setHeight(stage.getHeight() + y);
+      stage.setHeight(primaryScreenBounds.getHeight());
     }
   }
 
