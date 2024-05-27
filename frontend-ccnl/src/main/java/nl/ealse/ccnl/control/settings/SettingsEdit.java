@@ -9,7 +9,7 @@ import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 
 public class SettingsEdit extends SettingsView {
   
@@ -34,7 +34,7 @@ public class SettingsEdit extends SettingsView {
     editStage.setTitle("Instelling wijzigen");
     editStage.getIcons().add(MainStage.getIcon());
     editStage.initOwner(MainStage.getStage());
-    Parent p = FXMLLoaderBean.getPage("settings/settingsEdit", this);
+    Parent p = FXMLLoaderUtil.getPage("settings/settingsEdit", this);
     Scene dialogScene = new Scene(p, 1105, 400);
     editStage.setScene(dialogScene);
   }

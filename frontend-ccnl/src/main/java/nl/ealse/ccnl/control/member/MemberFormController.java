@@ -2,7 +2,7 @@ package nl.ealse.ccnl.control.member;
 
 import javafx.scene.layout.Pane;
 import nl.ealse.ccnl.form.FormController;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 
 /**
  * Helper for form pages.
@@ -42,10 +42,10 @@ public class MemberFormController extends FormController {
   @Override
   protected void initializePages() {
     // initialize the 4 pages of the form.
-    formPageArray[0] = FXMLLoaderBean.getPage("member/form/pagePersonal", controller);
-    formPageArray[1] = FXMLLoaderBean.getPage("form/address", controller);
-    formPageArray[2] = FXMLLoaderBean.getPage("member/form/pageFinancial", controller);
-    formPageArray[3] = FXMLLoaderBean.getPage("member/form/pageExtraInfo", controller);
+    formPageArray[0] = FXMLLoaderUtil.getPage("member/form/pagePersonal", controller);
+    formPageArray[1] = FXMLLoaderUtil.getPage("form/address", controller);
+    formPageArray[2] = FXMLLoaderUtil.getPage("member/form/pageFinancial", controller);
+    formPageArray[3] = FXMLLoaderUtil.getPage("member/form/pageExtraInfo", controller);
 
     // initialize the submenu for form nsvigation.
     addMenuItem(0, "Persoonsgegevens");

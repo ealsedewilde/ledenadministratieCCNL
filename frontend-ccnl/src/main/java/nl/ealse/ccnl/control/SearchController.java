@@ -27,7 +27,7 @@ import nl.ealse.ccnl.event.EntitySelectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.service.relation.SearchItem;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 
 /**
  * Super class for all controllers for searching a relation in the database.
@@ -75,7 +75,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   private Parent parent;
 
   protected SearchController() {
-    this.parent = FXMLLoaderBean.getPage("search/search", this);
+    this.parent = FXMLLoaderUtil.getPage("search/search", this);
   }
 
   @FXML

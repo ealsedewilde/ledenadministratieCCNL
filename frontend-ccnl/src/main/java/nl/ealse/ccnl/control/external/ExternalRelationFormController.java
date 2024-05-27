@@ -2,7 +2,7 @@ package nl.ealse.ccnl.control.external;
 
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 
 public abstract class ExternalRelationFormController<T extends ExternalRelation, C extends ExternalRelationController<T>>
     extends FormController {
@@ -15,8 +15,8 @@ public abstract class ExternalRelationFormController<T extends ExternalRelation,
   }
 
   protected void initialize(String fxmlName, String menuItemName) {
-    formPageArray[0] = FXMLLoaderBean.getPage(fxmlName, controller);
-    formPageArray[1] = FXMLLoaderBean.getPage("form/address", controller);
+    formPageArray[0] = FXMLLoaderUtil.getPage(fxmlName, controller);
+    formPageArray[1] = FXMLLoaderUtil.getPage("form/address", controller);
 
     // initialize the submenu for form nsvigation.
     addMenuItem(0, menuItemName);

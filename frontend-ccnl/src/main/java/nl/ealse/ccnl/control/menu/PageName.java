@@ -2,7 +2,7 @@ package nl.ealse.ccnl.control.menu;
 
 import javafx.scene.Parent;
 import lombok.Getter;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 
 /**
  * Pages to load via the PageController.
@@ -51,7 +51,7 @@ public enum PageName implements PageReference {
   @Override
   public Parent getPage() {
     if (page == null) {
-      page = FXMLLoaderBean.getPage(fxmlName);
+      page = FXMLLoaderUtil.getPage(fxmlName);
     }
     return page;
   }

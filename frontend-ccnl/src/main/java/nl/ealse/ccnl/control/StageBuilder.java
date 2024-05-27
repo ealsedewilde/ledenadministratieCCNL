@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.MainStage;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 import nl.ealse.javafx.ImagesMap;
 
 /**
@@ -19,7 +19,7 @@ public class StageBuilder {
   private Parent parent;
   
   public StageBuilder fxml(String fxmlName, Object controller) {
-    parent = FXMLLoaderBean.getPage(fxmlName, controller);
+    parent = FXMLLoaderUtil.getPage(fxmlName, controller);
     return this;
   }
 

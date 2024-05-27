@@ -14,7 +14,7 @@ import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 import org.apache.commons.validator.routines.IBANValidator;
 
 /**
@@ -52,7 +52,7 @@ public class IbanController {
     ibanNumberStage.setTitle("IBAN-nummer toevoegen");
     ibanNumberStage.getIcons().add(MainStage.getIcon());
     ibanNumberStage.initOwner(MainStage.getStage());
-    Parent p = FXMLLoaderBean.getPage("dialog/addIban", this);
+    Parent p = FXMLLoaderUtil.getPage("dialog/addIban", this);
     Scene dialogScene = new Scene(p, 1200, 400);
     ibanNumberStage.setScene(dialogScene);
   }

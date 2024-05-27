@@ -24,7 +24,7 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 import nl.ealse.javafx.ImagesMap;
 
 public class ManageTemplateController {
@@ -84,8 +84,8 @@ public class ManageTemplateController {
     this.dialog.getIcons().add(ImagesMap.get("info.png"));
 
     dialog.initOwner(MainStage.getStage());
-    letterHelpScene = new Scene(FXMLLoaderBean.getPage("dialog/texthelp"), 550, 330);
-    mailHelpScene = new Scene(FXMLLoaderBean.getPage("dialog/mailhelp"), 550, 150);
+    letterHelpScene = new Scene(FXMLLoaderUtil.getPage("dialog/texthelp"), 550, 330);
+    mailHelpScene = new Scene(FXMLLoaderUtil.getPage("dialog/mailhelp"), 550, 150);
   }
 
   @EventListener

@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
 import lombok.Getter;
 import nl.ealse.ccnl.control.menu.PageReference;
 import nl.ealse.ccnl.validation.CompositeValidator;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 import nl.ealse.javafx.mapping.Mapping;
 
 /**
@@ -110,7 +110,7 @@ public abstract class FormController {
    * Initialize this FromController.
    */
   public void initializeForm() {
-    this.form = FXMLLoaderBean.getPage("form/form", this);
+    this.form = FXMLLoaderUtil.getPage("form/form", this);
     initializePages();
     validator.initialize();
     

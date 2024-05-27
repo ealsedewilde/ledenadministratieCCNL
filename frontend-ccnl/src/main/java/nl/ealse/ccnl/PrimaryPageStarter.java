@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 import nl.ealse.javafx.ImagesMap;
 
 /**
@@ -40,7 +40,7 @@ public class PrimaryPageStarter {
       stage.setResizable(false);
       MainStage.setStage(stage);
 
-      Scene scene = new Scene(FXMLLoaderBean.getPage(MAIN_FXML));
+      Scene scene = new Scene(FXMLLoaderUtil.getPage(MAIN_FXML));
       stage.setScene(scene);
       stage.centerOnScreen();
       stage.show();

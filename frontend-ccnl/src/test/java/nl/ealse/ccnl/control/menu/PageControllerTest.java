@@ -7,7 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import nl.ealse.ccnl.test.FXBase;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ class PageControllerTest extends FXBase {
   }
 
   private void testController() {
-    ScrollPane m = (ScrollPane) FXMLLoaderBean.getPage(MAIN_FXML);
+    ScrollPane m = (ScrollPane) FXMLLoaderUtil.getPage(MAIN_FXML);
     VBox content = (VBox) m.getContent();
     BorderPane p = (BorderPane) content.getChildren().get(1);
     Node c = p.getCenter();

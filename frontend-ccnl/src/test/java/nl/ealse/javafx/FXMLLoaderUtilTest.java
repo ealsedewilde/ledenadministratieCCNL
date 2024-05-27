@@ -8,7 +8,7 @@ import nl.ealse.ccnl.test.FXBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class FXMLLoaderBeanTest extends FXBase {
+class FXMLLoaderUtilTest extends FXBase {
   
   @Test
   void testFxmlLoading() {
@@ -26,19 +26,19 @@ class FXMLLoaderBeanTest extends FXBase {
 
   //@Test
   void getPage() {
-    Parent p = FXMLLoaderBean.getPage("logo");
+    Parent p = FXMLLoaderUtil.getPage("logo");
     Assertions.assertTrue(p instanceof VBox);
   }
 
   //@Test
   void pageNotFound() {
-    Parent p = FXMLLoaderBean.getPage("dummy");
+    Parent p = FXMLLoaderUtil.getPage("dummy");
     Assertions.assertTrue(p instanceof Label);
   }
 
   //@Test
   void pageInError() {
-    Assertions.assertThrows(FXMLLoadException.class, () -> FXMLLoaderBean.getPage("empty"));
+    Assertions.assertThrows(FXMLLoadException.class, () -> FXMLLoaderUtil.getPage("empty"));
   }
 
 

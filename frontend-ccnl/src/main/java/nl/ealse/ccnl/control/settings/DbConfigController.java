@@ -10,7 +10,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.database.config.BaseDbConfigurator;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.javafx.FXMLLoaderBean;
+import nl.ealse.javafx.FXMLLoaderUtil;
 
 public class DbConfigController extends BaseDbConfigurator{
   
@@ -37,7 +37,7 @@ public class DbConfigController extends BaseDbConfigurator{
 
   @Override
   protected Parent loadFxml(String fxmlName) {
-    return FXMLLoaderBean.getPage(fxmlName, this);
+    return FXMLLoaderUtil.getPage(fxmlName, this);
   }
 
   @Override
