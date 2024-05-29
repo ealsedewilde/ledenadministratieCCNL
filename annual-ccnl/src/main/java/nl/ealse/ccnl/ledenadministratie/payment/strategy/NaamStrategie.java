@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.ledenadministratie.payment.strategy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
  */
 @Slf4j
 public class NaamStrategie extends BetalingStrategie {
+
+  private static final List<String> SKIP = Arrays.asList("HR", "MW", "EN/OF");
 
   private final List<Member> members;
   private Map<Integer, Integer> scores = new HashMap<>();
@@ -55,7 +58,7 @@ public class NaamStrategie extends BetalingStrategie {
       if (booking.getLidnummer() == 0) {
         logResult(booking);
       }
-    } else if (!getNummers().isEmpty()) { 
+    } else if (!getNummers().isEmpty()) {
       Integer nr = getNummers().get(0);
       booking.setLidnummer(nr);
       log.debug(String.format("lid %s bij naam %s", nr, booking.getNaam()));
@@ -90,26 +93,25 @@ public class NaamStrategie extends BetalingStrategie {
     }
     // Als de VOORLETTERS achter de naam staan dan deze weghalen
     String[] parts = naam.split(" ");
-    boolean initial = false; 
+    boolean initial = false;
     for (int q = parts.length - 1; q >= 0; q--) {
       String p = parts[q];
-      if ("HR".equalsIgnoreCase(p) || "MW".equalsIgnoreCase(p) || "EN/OF".equalsIgnoreCase(p)) {
-        continue;
-      }
-      if (p.length() == 1) {
-        initial = true;
-      } else if (initial) {
-        int ix = naam.indexOf(p) + p.length();
-        naam =  naam.substring(0, ix);
-        break;
+      if (!SKIP.contains(p)) {
+        
+        if (p.length() == 1) {
+          initial = true;
+        } else if (initial) {
+          int ix = naam.indexOf(p) + p.length();
+          naam = naam.substring(0, ix);
+          break;
+        }
       }
     }
     return naam;
   }
 
   /**
-   * Op hoeveel letters is er een overeenkomst? 
-   * Omdat de naam ook voorvoegsel kan bevatten, wordt er
+   * Op hoeveel letters is er een overeenkomst? Omdat de naam ook voorvoegsel kan bevatten, wordt er
    * van achter naar voren gewerkt.
    *
    * @param naam

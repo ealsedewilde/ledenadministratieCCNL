@@ -10,7 +10,7 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class MemberRepositoryTest {
+class MemberRepositoryTest {
   
   private MemberRepository sut = MemberRepository.getInstance();
   
