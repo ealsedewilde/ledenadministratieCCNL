@@ -4,17 +4,13 @@ import jakarta.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 
 public class MemberRepository extends BaseRepository<Member> {
 
-  @Getter
-  private static MemberRepository instance = new MemberRepository();
-
-  private MemberRepository() {
+  public MemberRepository() {
     super(Member.class);
   }
 

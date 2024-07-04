@@ -33,7 +33,7 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
 
   @Test
   void onEvent() {
-   
+
     Platform.setImplicitExit(false);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -73,27 +73,27 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
     try {
       FieldUtils.writeField(sut, "textId", new TextField(), true);
       FieldUtils.writeField(sut, "letterText", new TextArea(), true);
-      
+
       FieldUtils.writeField(sut, "textIdE", new Label(), true);
       FieldUtils.writeField(sut, "textSelection", new ChoiceBox<String>(), true);
-   } catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
-   }
+    }
 
   }
 
 
   public static class Tester extends DocumentTemplateController {
-    
+
     private final PageController pageController;
     private final DocumentService documentService;
 
     public Tester(PageController pageController, DocumentService documentService) {
       super(DocumentTemplateContext.PAYMENT_REMINDER);
       this.pageController = pageController;
-      this.documentService =documentService;
+      this.documentService = documentService;
     }
-    
+
     public Stage getStage() {
       try {
         return (Stage) FieldUtils.readField(this, "dialog", true);

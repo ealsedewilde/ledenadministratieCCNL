@@ -12,10 +12,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
-import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -54,7 +51,7 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = spy(SepaAuthorizarionController.getInstance());
+    sut = spy(getTestSubject(SepaAuthorizarionController.class));
     doNothing().when(sut).closePDFViewer();
     setFile();
     setFileChooser();
@@ -62,8 +59,6 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    MockProvider.mock(DocumentService.class);
-    MockProvider.mock(MemberService.class);
     fileChooser = mock(WrappedFileChooser.class);
     URL url = SepaAuthorizarionController.class.getResource("/MachtigingsformulierSEPA.pdf");
     File f = new File(url.getFile());

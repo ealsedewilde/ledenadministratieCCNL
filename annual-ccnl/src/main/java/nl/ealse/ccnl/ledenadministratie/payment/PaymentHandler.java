@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
@@ -24,21 +23,17 @@ import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 @Slf4j
 public class PaymentHandler {
 
-  @Getter
-  private static PaymentHandler instance = new PaymentHandler();
-
   private final MemberRepository dao;
 
   private static final EnumSet<MembershipStatus> statuses =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
 
-
-  private PaymentHandler() {
-    this.dao = MemberRepository.getInstance();
+   public PaymentHandler(MemberRepository dao) {
+    this.dao = dao;
   }
 
   /**
-   * Perform the recinciliation process.
+   * Perform the reconciliation process.
    *
    * @param paymentFiles - the files to reconcile
    * @param referenceDate - start date of the oldest reconcile file

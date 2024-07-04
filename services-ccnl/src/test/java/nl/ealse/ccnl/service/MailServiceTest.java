@@ -2,12 +2,12 @@ package nl.ealse.ccnl.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import jakarta.mail.MessagingException;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.mail.support.MailMessage;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,8 +46,8 @@ class MailServiceTest {
 
   @BeforeEach
   void setup() {
-    documentService = MockProvider.mock(DocumentService.class);
-    sut = MailService.getInstance();
+    documentService = mock(DocumentService.class);
+    sut = new MailService(documentService);
   }
 
 }

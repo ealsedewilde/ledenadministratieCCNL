@@ -1,8 +1,8 @@
 package nl.ealse.ccnl.control.club;
 
-import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationDeleteController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.event.support.EventListener;
@@ -12,12 +12,9 @@ import nl.ealse.javafx.mapping.ViewModel;
 
 public class ExternalClubDeleteController
     extends ExternalRelationDeleteController<ExternalRelationClub> {
-  
-  @Getter
-  private static ExternalClubDeleteController instance = new ExternalClubDeleteController();
 
-  private ExternalClubDeleteController() {
-    super(ExternalClubService.getInstance());
+  public ExternalClubDeleteController(PageController pageController, ExternalClubService service) {
+    super(pageController, service);
   }
 
   @EventListener(menuChoice = MenuChoice.DELETE_EXTERNAL_CLUB)

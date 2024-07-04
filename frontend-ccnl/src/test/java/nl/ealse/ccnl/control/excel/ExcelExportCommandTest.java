@@ -4,20 +4,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.TaskExecutor;
-import nl.ealse.ccnl.TestExecutor;
-import nl.ealse.ccnl.control.excel.ExcelExportCommand.AsyncArchiveTask;
-import nl.ealse.ccnl.control.excel.ExcelExportCommand.AsyncExportTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.service.excelexport.ExportArchiveService;
-import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,7 +24,7 @@ class ExcelExportCommandTest extends FXMLBaseTest {
 
   @TempDir
   File tempDir;
-  
+
 
   private ExcelExportCommand sut;
 
@@ -43,7 +35,7 @@ class ExcelExportCommandTest extends FXMLBaseTest {
 
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = ExcelExportCommand.getInstance();
+      sut = getTestSubject(ExcelExportCommand.class);
       doTest();
       ar.set(true);
     }, ar);
@@ -74,14 +66,6 @@ class ExcelExportCommandTest extends FXMLBaseTest {
     sut.executeCommand(event);
     verify(getPageController()).showMessage("MS Excel-werkblad voor alle gegevens is aangemaakt");
   }
-  
-  @BeforeAll
-  static void setup() {
-    MockProvider.mock(ExportArchiveService.class);
-    MockProvider.mock(ExportService.class);
-    TestExecutor.overrideTaskExecutor();
-  }
-
 
   private void setFileChooser() {
     try {

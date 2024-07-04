@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.member;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.IOException;
@@ -11,13 +12,13 @@ import javafx.scene.Parent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.form.FormController;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class MemberControllerTest extends FXMLBaseTest {
 
   private static DocumentService documentService;
   private static MemberService service;
- 
+
   private MemberController controller;
   private FormController formController;
   private Member m;
@@ -81,13 +82,14 @@ class MemberControllerTest extends FXMLBaseTest {
 
   private void prepare() {
     m = getMember();
-    service = MockProvider.mock(MemberService.class);
-    documentService = MockProvider.mock(DocumentService.class);
+    service = ComponentProviderUtil.getComponent(MemberService.class);
+    reset(service);
+    documentService = ComponentProviderUtil.getComponent(DocumentService.class);
     when(documentService.findSepaAuthorization(m)).thenReturn(Optional.empty());
-    controller = MemberController.getInstance();
+    controller = getTestSubject(MemberController.class);
     formController = getFormController();
   }
-  
+
 
   private Member getMember() {
     Member m = new Member();

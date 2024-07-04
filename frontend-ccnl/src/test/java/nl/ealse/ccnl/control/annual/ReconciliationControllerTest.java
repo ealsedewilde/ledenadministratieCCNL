@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.annual;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,16 +16,13 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
-import nl.ealse.ccnl.TaskExecutor;
-import nl.ealse.ccnl.TestExecutor;
-import nl.ealse.ccnl.control.annual.ReconciliationController.ReconcileTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -78,15 +74,14 @@ class ReconciliationControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    reset(getPageController());
-    sut = ReconciliationController.getInstance();
+    sut = getTestSubject(ReconciliationController.class);
     getPageWithFxController(sut, PageName.RECONCILE_PAYMENTS);
 
   }
 
   @BeforeAll
   static void setup() {
-    service = MockProvider.mock(ReconciliationService.class);
+    service = ComponentProviderUtil.getComponent(ReconciliationService.class);
 
 
     try {
@@ -100,7 +95,6 @@ class ReconciliationControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
     fileChooser = mock(WrappedFileChooser.class);
-    TestExecutor.overrideTaskExecutor();
   }
 
   private void setFileChooser() {

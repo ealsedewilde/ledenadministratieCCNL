@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.magazine;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -15,9 +14,6 @@ import nl.ealse.ccnl.view.AddressView;
 import nl.ealse.javafx.mapping.ViewModel;
 
 public class InvalidAddressController extends AddressView {
-  
-  @Getter
-  static InvalidAddressController instance = new InvalidAddressController();
 
   private final PageController pageController;
 
@@ -32,9 +28,9 @@ public class InvalidAddressController extends AddressView {
   @FXML
   private TextArea memberInfo;
 
-  public InvalidAddressController() {
-    this.pageController = PageController.getInstance();
-    this.service = MemberService.getInstance();
+  public InvalidAddressController(PageController pageController, MemberService service) {
+    this.pageController = pageController;
+    this.service = service;
   }
 
   @EventListener(menuChoice = MenuChoice.MAGAZINE_INVALID_ADDRESS)

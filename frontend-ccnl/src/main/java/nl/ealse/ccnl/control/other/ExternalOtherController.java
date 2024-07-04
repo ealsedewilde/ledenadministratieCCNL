@@ -13,17 +13,14 @@ import nl.ealse.ccnl.service.relation.ExternalOtherService;
 
 public class ExternalOtherController extends ExternalRelationController<ExternalRelationOther> {
   
-  @Getter
-  private static final ExternalOtherController instance = new ExternalOtherController();
-  
   private final PageController pageController;
 
   @Getter
   private FormController formController;
 
-  private ExternalOtherController() {
-    super(ExternalOtherService.getInstance());
-    this.pageController = PageController.getInstance();
+  public ExternalOtherController(PageController pageController, ExternalOtherService service) {
+    super(pageController, service);
+    this.pageController = pageController;
     setup();
   }
 

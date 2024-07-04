@@ -2,7 +2,6 @@ package nl.ealse.ccnl.control.annual;
 
 import java.io.File;
 import java.io.IOException;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
@@ -18,18 +17,15 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 @Slf4j
 public class PaymentReminderReportCommand {
 
-  @Getter
-  private static final PaymentReminderReportCommand instance = new PaymentReminderReportCommand();
-
   private final PageController pageController;
 
   private final ExportService exportService;
 
   private WrappedFileChooser fileChooser;
 
-  private PaymentReminderReportCommand() {
-    this.pageController = PageController.getInstance();
-    this.exportService = ExportService.getInstance();
+   public PaymentReminderReportCommand(PageController pageController, ExportService exportService) {
+    this.pageController = pageController;
+    this.exportService = exportService;
     setup();
   }
 

@@ -34,9 +34,6 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
 @Slf4j
 public class ReconciliationController {
-  
-  @Getter
-  private static final ReconciliationController instance = new ReconciliationController();
 
   private final PageController pageController;
 
@@ -65,9 +62,9 @@ public class ReconciliationController {
 
   private Stage messagesStage;
 
-  private ReconciliationController() {
-    this.pageController = PageController.getInstance();
-    this.service = ReconciliationService.getInstance();
+  public ReconciliationController(PageController pageController, ReconciliationService service) {
+    this.pageController = pageController;
+    this.service = service;
     setup();
   }
 

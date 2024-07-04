@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
@@ -27,22 +26,23 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 @Slf4j
 public class ExportService {
 
-  @Getter
-  private static ExportService instance = new ExportService();
-
   private final ExternalRelationPartnerRepository commercialPartnerRepository;
   private final ExternalRelationClubRepository externalRelationClubRepository;
   private final ExternalRelationOtherRepository externalRelationOtherRepository;
   private final InternalRelationRepository internalRelationRepository;
   private final MemberRepository memberRepository;
 
-  private ExportService() {
+  public ExportService(ExternalRelationPartnerRepository commercialPartnerRepository,
+      ExternalRelationClubRepository externalRelationClubRepository,
+      ExternalRelationOtherRepository externalRelationOtherRepository,
+      InternalRelationRepository internalRelationRepository,
+      MemberRepository memberRepository) {
     log.info("Service created");
-    this.commercialPartnerRepository = ExternalRelationPartnerRepository.getInstance();
-    this.externalRelationClubRepository = ExternalRelationClubRepository.getInstance();
-    this.externalRelationOtherRepository = ExternalRelationOtherRepository.getInstance();
-    this.internalRelationRepository = InternalRelationRepository.getInstance();
-    this.memberRepository = MemberRepository.getInstance();
+    this.commercialPartnerRepository = commercialPartnerRepository;
+    this.externalRelationClubRepository = externalRelationClubRepository;
+    this.externalRelationOtherRepository = externalRelationOtherRepository;
+    this.internalRelationRepository = internalRelationRepository;
+    this.memberRepository = memberRepository;
   }
 
   /**

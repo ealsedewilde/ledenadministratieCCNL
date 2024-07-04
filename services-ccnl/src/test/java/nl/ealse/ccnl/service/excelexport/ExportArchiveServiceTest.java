@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.service.excelexport;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +10,6 @@ import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,8 +42,8 @@ class ExportArchiveServiceTest {
   
   @BeforeEach
   void before() {
-    archiveRepository = MockProvider.mock(ArchiveRepository.class);
-    sut = ExportArchiveService.getInstance();
+    archiveRepository = mock(ArchiveRepository.class);
+    sut = new ExportArchiveService(archiveRepository);
     setup();
   }
    

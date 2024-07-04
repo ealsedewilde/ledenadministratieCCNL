@@ -1,11 +1,9 @@
 package nl.ealse.ccnl.service.relation;
 
-import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -16,19 +14,18 @@ import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
 
 @Slf4j
 public class MemberService {
-  
-  @Getter
-  private static MemberService instance = new MemberService();
 
   private final MemberRepository dao;
+  private final MemberNumberFactory numberFactory;
 
-  private MemberService() {
+  public MemberService(MemberRepository dao, MemberNumberFactory numberFactory) {
     log.info("Service created");
-    this.dao = MemberRepository.getInstance();
+    this.dao = dao;
+    this.numberFactory= numberFactory;
   }
 
   public Integer getFreeNumber() {
-    return MemberNumberFactory.getInstance().getNewNumber();
+    return numberFactory.getNewNumber();
   }
 
   public List<Member> searchMemberWithoutSepa(SearchItem searchItem, String searchValue) {

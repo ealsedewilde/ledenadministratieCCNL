@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,7 +17,6 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -102,9 +102,9 @@ class DocumentServiceTest {
   
   @BeforeAll
   static void setup() {
-    dao = MockProvider.mock(DocumentRepository.class);
-    templateDao = MockProvider.mock(DocumentTemplateRepository.class);
-    sut = DocumentService.getInstance();
+    dao = mock(DocumentRepository.class);
+    templateDao = mock(DocumentTemplateRepository.class);
+    sut = new DocumentService(dao, templateDao);
   }
 
 }

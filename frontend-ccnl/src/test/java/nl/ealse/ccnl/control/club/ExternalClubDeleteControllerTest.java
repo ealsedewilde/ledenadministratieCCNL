@@ -9,11 +9,8 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.service.relation.ExternalClubService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalClubDeleteControllerTest extends FXMLBaseTest {
@@ -23,7 +20,7 @@ class ExternalClubDeleteControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    sut = ExternalClubDeleteController.getInstance();
+    sut = getTestSubject(ExternalClubDeleteController.class);
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -42,11 +39,6 @@ class ExternalClubDeleteControllerTest extends FXMLBaseTest {
     sut.delete();
     verify(getPageController()).showMessage("Gegevens zijn verwijderd");
   }
-
-  @BeforeAll
-  static void setup() {
-    MockProvider.mock(ExternalClubService.class);
-  };
 
   private void prepare() {
     reset(getPageController());

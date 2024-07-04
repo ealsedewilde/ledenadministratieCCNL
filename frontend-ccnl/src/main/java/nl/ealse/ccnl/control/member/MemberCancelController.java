@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.member;
 import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -22,9 +21,6 @@ import nl.ealse.javafx.mapping.ViewModel;
  * Controller for membership canceling.
  */
 public class MemberCancelController extends MemberCancelView {
-  
-  @Getter
-  static MemberCancelController instance = new MemberCancelController();
 
   private final PageController pageController;
 
@@ -38,9 +34,9 @@ public class MemberCancelController extends MemberCancelView {
   @FXML
   private Label initialsLabel;
 
-  private MemberCancelController() {
-    this.pageController = PageController.getInstance();
-    this.service = MemberService.getInstance();
+  public MemberCancelController(PageController pageController, MemberService memberService) {
+    this.pageController = pageController;
+    this.service = memberService;
   }
 
 

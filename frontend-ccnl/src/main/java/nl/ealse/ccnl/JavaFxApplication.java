@@ -6,6 +6,7 @@ import nl.ealse.ccnl.database.config.DbConfigurator;
 import nl.ealse.ccnl.database.config.DbProperties;
 import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.ccnl.event.support.EventPublisher;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
@@ -29,7 +30,7 @@ public class JavaFxApplication extends Application {
   public void init() throws Exception {
     super.init();
     if (DatabaseLocation.DB_LOCATION_FILE.exists()) {
-      TaskExecutor.getInstance().execute(DatabaseProperties::initialize);
+      ComponentProviderUtil.getComponent(TaskExecutor.class).execute(DatabaseProperties::initialize);
     }
     EventProcessor.getInstance().initialize();
   }

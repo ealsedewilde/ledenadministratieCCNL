@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class InternalRelationTest {
 
-  private InternalRelationRepository repository = InternalRelationRepository.getInstance();
+  private InternalRelationRepository repository = new InternalRelationRepository();
 
   @Test
   void testByTitle() {

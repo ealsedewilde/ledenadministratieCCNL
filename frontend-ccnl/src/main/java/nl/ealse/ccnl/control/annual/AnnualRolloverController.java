@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
@@ -29,9 +28,6 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
  */
 @Slf4j
 public class AnnualRolloverController {
-
-  @Getter
-  private static final AnnualRolloverController instance = new AnnualRolloverController();
 
   private static final DateTimeFormatter formatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss");
@@ -66,12 +62,14 @@ public class AnnualRolloverController {
   @FXML
   private Label step4;
 
-  private AnnualRolloverController() {
-    this.pageController = PageController.getInstance();
-    this.backupService = BackupRestoreService.getInstance();
-    this.rolloverService = AnnualRolloverService.getInstance();
-    this.exportService = ExportService.getInstance();
-    this.archiveService = ExportArchiveService.getInstance();
+  public AnnualRolloverController(PageController pageController, BackupRestoreService backupService,
+      AnnualRolloverService rolloverService, ExportService exportService,
+      ExportArchiveService archiveService) {
+    this.pageController = pageController;
+    this.backupService = backupService;
+    this.rolloverService = rolloverService;
+    this.exportService = exportService;
+    this.archiveService = archiveService;
     setup();
   }
 
@@ -185,8 +183,7 @@ public class AnnualRolloverController {
       String memberFileName =
           String.format(MEMBER_FILE_NAME, formatter.format(LocalDateTime.now()));
       try {
-        File excelParent =
-            new File(dir);
+        File excelParent = new File(dir);
         controller.exportService.exportALL(new File(excelParent, memberFileName));
       } catch (IOException e) {
         log.error("Could not write Excel document", e);
@@ -198,8 +195,7 @@ public class AnnualRolloverController {
       String archiveFileName =
           String.format(ARCHIVE_FILE_NAME, formatter.format(LocalDateTime.now()));
       try {
-        File excelParent =
-            new File(dir);
+        File excelParent = new File(dir);
         controller.archiveService.export(new File(excelParent, archiveFileName));
       } catch (IOException e) {
         log.error("Could not write Excel document", e);

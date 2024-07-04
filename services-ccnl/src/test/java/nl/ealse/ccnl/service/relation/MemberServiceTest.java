@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.service.relation;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,7 +15,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Test;
 class MemberServiceTest {
   
   private static MemberRepository dao;
+  
+  private static MemberNumberFactory memberNumberFactory;
   
   private static MemberService sut;
   
@@ -82,7 +84,7 @@ class MemberServiceTest {
   @Test
   void testGetFreeNumber() {
     sut.getFreeNumber();
-    verify(MemberNumberFactory.getInstance()).getNewNumber();
+    verify(memberNumberFactory).getNewNumber();
   }
   
   @Test
@@ -109,9 +111,9 @@ class MemberServiceTest {
   
   @BeforeAll
   static void setup() {
-    MockProvider.mock(MemberNumberFactory.class);
-    dao = MockProvider.mock(MemberRepository.class);
-    sut = MemberService.getInstance();
+    memberNumberFactory = mock(MemberNumberFactory.class);
+    dao = mock(MemberRepository.class);
+    sut = new MemberService(dao, memberNumberFactory);
     
   }
 

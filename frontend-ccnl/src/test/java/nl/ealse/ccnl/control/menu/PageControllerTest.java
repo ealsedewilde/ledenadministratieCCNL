@@ -44,7 +44,7 @@ class PageControllerTest extends FXBase {
 
   @BeforeEach
   void setup() {
-    sut = PageController.getInstance();
+    sut = new PageController();
   }
 
   private void setBorderPane(BorderPane pane) {

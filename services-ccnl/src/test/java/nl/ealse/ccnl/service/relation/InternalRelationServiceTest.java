@@ -1,10 +1,10 @@
 package nl.ealse.ccnl.service.relation;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import nl.ealse.ccnl.ledenadministratie.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -71,8 +71,8 @@ class InternalRelationServiceTest {
   
   @BeforeAll
   static void setup() {
-    dao = MockProvider.mock(InternalRelationRepository.class);
-    sut = InternalRelationService.getInstance();
+    dao = mock(InternalRelationRepository.class);
+    sut = new InternalRelationService(dao);
     
   }
 

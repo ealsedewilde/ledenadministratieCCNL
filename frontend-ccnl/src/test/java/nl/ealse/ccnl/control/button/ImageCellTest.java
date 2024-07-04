@@ -9,10 +9,10 @@ import nl.ealse.ccnl.test.FXBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class ImageCellTest  extends FXBase {
+class ImageCellTest extends FXBase {
 
   private ImageCell<Object> sut;
-  
+
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();

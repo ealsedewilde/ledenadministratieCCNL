@@ -2,7 +2,6 @@ package nl.ealse.ccnl.control.member;
 
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -15,16 +14,13 @@ import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 
 public class MemberSearchController extends SearchController<Member, MemberSeLectionEvent> {
-  
-  @Getter
-  private static final MemberSearchController instance = new MemberSearchController();
 
   private final PageController pageController;
   private final MemberService service;
 
-  private MemberSearchController() {
-    this.pageController = PageController.getInstance();
-    this.service = MemberService.getInstance();
+   public MemberSearchController(PageController pageController, MemberService service) {
+    this.pageController = pageController;
+    this.service = service;
   }
 
   @EventListener(choiceGroup = ChoiceGroup.SEARCH_MEMBER)

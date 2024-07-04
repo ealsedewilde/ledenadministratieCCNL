@@ -9,15 +9,13 @@ import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 public class TestExecutor extends TaskExecutor {
-  
-  private static final TestExecutor testExecutor = new TestExecutor();
-  
+
   @Override
   public void execute(Runnable task) {
     HandledTask fxt = (HandledTask) task;
     try {
       String result = (String) MethodUtils.invokeMethod(fxt, true, "call");
-      ObjectProperty<String>  v = (ObjectProperty<String>) fxt.valueProperty();
+      ObjectProperty<String> v = (ObjectProperty<String>) fxt.valueProperty();
       v.set(result);
       EventHandler<WorkerStateEvent> e = fxt.getOnSucceeded();
       WorkerStateEvent evt = new WorkerStateEvent(fxt, WorkerStateEvent.WORKER_STATE_SUCCEEDED);
@@ -31,10 +29,6 @@ public class TestExecutor extends TaskExecutor {
     } catch (Exception e) {
     }
     EntityManagerProvider.cleanup();
-  }
-  
-  public static void overrideTaskExecutor() {
-    TaskExecutor.instance = testExecutor;
   }
 
 }

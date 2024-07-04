@@ -18,7 +18,7 @@ import nl.ealse.ccnl.view.MemberView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class DataMapperTest  extends FXBase {
+class DataMapperTest extends FXBase {
 
   @Test
   void testFormToModel() throws Exception {
@@ -41,7 +41,7 @@ class DataMapperTest  extends FXBase {
 
   private MemberView initializedForm() {
     MemberView form = new MemberViewImpl();
-    //injectAddressController(form);
+    // injectAddressController(form);
     form.setStreet(new TextField("Helena Hoeve"));
     form.setAddressNumber(new TextField("26"));
     form.setAddressNumberAppendix(new TextField());
@@ -91,9 +91,9 @@ class DataMapperTest  extends FXBase {
 
     return member;
   }
-  
+
   private static class MemberViewImpl extends MemberView {
-    
+
   }
 
 }

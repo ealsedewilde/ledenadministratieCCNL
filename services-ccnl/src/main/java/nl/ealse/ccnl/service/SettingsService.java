@@ -3,7 +3,6 @@ package nl.ealse.ccnl.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.dao.SettingRepository;
@@ -12,15 +11,12 @@ import nl.ealse.ccnl.ledenadministratie.model.Setting;
 
 @Slf4j
 public class SettingsService {
-  
-  @Getter
-  private static SettingsService instance = new SettingsService();
 
   private final SettingRepository dao;
 
-  private SettingsService() {
+  public SettingsService(SettingRepository dao) {
     log.info("Service created");
-    this.dao = SettingRepository.getInstance();
+    this.dao = dao;
   }
 
   public List<Setting> findByOrderBySettingsGroupAscKeyAsc() {

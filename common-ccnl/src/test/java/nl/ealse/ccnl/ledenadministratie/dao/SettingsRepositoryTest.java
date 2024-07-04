@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class SettingsRepositoryTest {
 
-  private SettingRepository dao = SettingRepository.getInstance();
+  private SettingRepository dao = new SettingRepository();
 
   @Test
   void prepersisttest() {

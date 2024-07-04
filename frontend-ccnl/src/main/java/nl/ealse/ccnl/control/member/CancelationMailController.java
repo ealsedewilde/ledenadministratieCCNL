@@ -22,14 +22,11 @@ import nl.ealse.ccnl.service.MailService;
 import nl.ealse.ccnl.service.relation.MemberService;
 
 public class CancelationMailController extends DocumentTemplateController {
-  
-  @Getter
-  private static final CancelationMailController instance = new CancelationMailController();
 
   private final PageController pageController;
 
   private final MemberService memberService;
-  
+
   private final DocumentService documentService;
 
   private final MailService mailService;
@@ -54,15 +51,15 @@ public class CancelationMailController extends DocumentTemplateController {
 
   private CancelMailValidation validation;
 
-
-  private CancelationMailController() {
+  public CancelationMailController(PageController pageController, MemberService memberService,
+      DocumentService documentService, MailService mailService) {
     super(DocumentTemplateContext.MEMBERSHIP_CANCELATION_MAIL);
-    this.pageController = PageController.getInstance();
-    this.memberService = MemberService.getInstance();
-    this.documentService = DocumentService.getInstance();
-    this.mailService = MailService.getInstance();
+    this.pageController = pageController;
+    this.memberService = memberService;
+    this.documentService = documentService;
+    this.mailService = mailService;
   }
-  
+
   @FXML
   protected void initialize() {
     initializeTemplates();

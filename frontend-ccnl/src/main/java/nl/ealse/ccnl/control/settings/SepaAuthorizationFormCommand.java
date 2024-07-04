@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.settings;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -17,18 +16,15 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 @Slf4j
 public class SepaAuthorizationFormCommand {
 
-  @Getter
-  private static final SepaAuthorizationFormCommand instance = new SepaAuthorizationFormCommand();
-
   private WrappedFileChooser fileChooser;
 
   private final PageController pageController;
 
   private final DocumentService documentService;
 
-  private SepaAuthorizationFormCommand() {
-    this.pageController = PageController.getInstance();
-    this.documentService = DocumentService.getInstance();
+  public SepaAuthorizationFormCommand(PageController pageController, DocumentService documentService) {
+    this.pageController = pageController;
+    this.documentService = documentService;
     setup();
   }
 

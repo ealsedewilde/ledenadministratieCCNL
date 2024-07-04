@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class DocumentViewerTest extends FXBase {
-  
+
   private DocumentViewer sut;
   private Stage pdfStage;
-  
+
   @Test
   void testViewer() {
     AtomicBoolean ar = new AtomicBoolean();
@@ -27,10 +27,10 @@ class DocumentViewerTest extends FXBase {
     }, ar);
     Assertions.assertTrue(result.get());
   }
-  
+
   private void doTest() {
     Member m = member();
-    sut.showPdf( getPdf("/welkom.pdf"), m);
+    sut.showPdf(getPdf("/welkom.pdf"), m);
     pdfStage = getStage();
     assertTrue(pdfStage.isShowing());
     sut.close();
@@ -41,12 +41,12 @@ class DocumentViewerTest extends FXBase {
     d.setOwner(m);
     sut.showDocument(d);
   }
-  
+
   private void prepare() {
     sut = DocumentViewer.builder().build();
     sut.setWindowTitle("Welkomsbrief voor lid: %d (%s)");
   }
-  
+
   private byte[] getPdf(String name) {
     byte[] b = null;
     try (InputStream is = getClass().getResourceAsStream(name)) {
@@ -56,7 +56,7 @@ class DocumentViewerTest extends FXBase {
     }
     return b;
   }
-  
+
   private Member member() {
     Member m = new Member();
     m.setMemberNumber(920);
@@ -64,7 +64,7 @@ class DocumentViewerTest extends FXBase {
     m.setLastName("Tester");
     return m;
   }
-  
+
   private Stage getStage() {
     try {
       return (Stage) FieldUtils.readDeclaredField(sut, "documentViewerStage", true);

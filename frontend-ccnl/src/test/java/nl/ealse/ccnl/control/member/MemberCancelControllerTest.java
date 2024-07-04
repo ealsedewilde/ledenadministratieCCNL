@@ -10,11 +10,8 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
-import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
@@ -25,7 +22,6 @@ class MemberCancelControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    sut = MemberCancelController.getInstance();
     m = member();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
@@ -47,13 +43,8 @@ class MemberCancelControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = MemberCancelController.getInstance();
+    sut = getTestSubject(MemberCancelController.class);
     getPageWithFxController(sut, PageName.MEMBER_CANCEL);
-  }
-
-  @BeforeAll
-  static void setup() {
-    MockProvider.mock(MemberService.class);
   }
 
   private static Member member() {

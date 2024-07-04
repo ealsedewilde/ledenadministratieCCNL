@@ -6,7 +6,7 @@ package nl.ealse.ccnl.ledenadministratie.dao.util;
  * @param <E> Exception thrown by the unit of work
  */
 @FunctionalInterface
-public interface Procedure<E extends Exception> {
+public interface UnitOfWork<E extends Exception> {
 
   /**
    * Execute the unit of work.

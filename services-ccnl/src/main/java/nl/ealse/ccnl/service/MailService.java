@@ -11,7 +11,6 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Properties;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
@@ -25,17 +24,14 @@ import nl.ealse.ccnl.mail.support.MailMessage;
 @Slf4j
 public class MailService {
 
-  @Getter
-  private static MailService instance = new MailService();
-
   private static final String FILE_NAME = "OpzegMailLid%d.pdf";
 
   private final Session session;
 
   private final DocumentService documentService;
 
-  private MailService() {
-    this.documentService = DocumentService.getInstance();
+  public MailService(DocumentService documentService) {
+    this.documentService = documentService;
     this.session = initialize();
   }
 

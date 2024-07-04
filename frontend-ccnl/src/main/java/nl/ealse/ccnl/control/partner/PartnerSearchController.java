@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.partner;
 
 import java.util.Map;
-import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -15,15 +14,12 @@ import nl.ealse.ccnl.service.relation.SearchItem;
 
 public class PartnerSearchController
     extends ExternalRelationSearchController<ExternalRelationPartner> {
-  
-  @Getter
-  private static final PartnerSearchController instance = new PartnerSearchController();
 
   private final PageController pageController;
 
-  private PartnerSearchController() {
-    super(CommercialPartnerService.getInstance());
-    this.pageController = PageController.getInstance();
+  public PartnerSearchController(PageController pageController, CommercialPartnerService service) {
+    super(service);
+    this.pageController = pageController;
   }
 
   @EventListener(choiceGroup = ChoiceGroup.SEARCH_PARTNER)

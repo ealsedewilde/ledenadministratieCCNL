@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import javafx.fxml.FXML;
 import javax.print.PrintService;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.DocumentViewer;
@@ -25,9 +24,6 @@ import nl.ealse.javafx.util.PrintUtil;
 
 @Slf4j
 public class WelcomeLetterController extends DocumentTemplateController {
-  
-  @Getter
-  private static final WelcomeLetterController instance = new WelcomeLetterController();
 
   private final PageController pageController;
 
@@ -37,10 +33,10 @@ public class WelcomeLetterController extends DocumentTemplateController {
 
   private DocumentViewer documentViewer;
 
-  private WelcomeLetterController() {
+   public WelcomeLetterController(PageController pageController, DocumentService documentService) {
     super(DocumentTemplateContext.WELCOME_LETTER);
-    this.pageController = PageController.getInstance();
-    this.documentService = DocumentService.getInstance();
+    this.pageController = pageController;
+    this.documentService = documentService;
   }
 
   @EventListener

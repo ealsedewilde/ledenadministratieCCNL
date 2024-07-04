@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ExplainTest {
-  
+
   @Test
   void testExplain() {
     String ex = ViewModel.explain(MemberController.class, Member.class);

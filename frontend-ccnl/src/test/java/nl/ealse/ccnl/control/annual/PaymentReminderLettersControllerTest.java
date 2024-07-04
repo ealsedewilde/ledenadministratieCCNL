@@ -12,14 +12,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.TaskExecutor;
-import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.DocumentViewer;
-import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToFile;
-import nl.ealse.ccnl.control.annual.PaymentReminderLettersController.PdfToPrint;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
@@ -32,7 +29,6 @@ import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -86,7 +82,7 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = PaymentReminderLettersController.getInstance();
+    sut = getTestSubject(PaymentReminderLettersController.class);
     getPageWithFxController(sut, PageName.PAYMENT_REMINDER_LETTERS);
     setPdfViewer();
     setFileChooser();
@@ -112,7 +108,7 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    documentService = MockProvider.mock(DocumentService.class);
+    documentService = ComponentProviderUtil.getComponent(DocumentService.class);
     List<Document> letters = new ArrayList<>();
     when(documentService.findDocuments(any(Member.class), any(DocumentType.class)))
         .thenReturn(letters);
@@ -129,11 +125,10 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
     List<Member> members = new ArrayList<>();
     members.add(member());
-    memberService = MockProvider.mock(MemberService.class);
+    memberService = ComponentProviderUtil.getComponent(MemberService.class);
     when(memberService.findMembersCurrentYearNotPaid(any(PaymentMethod.class))).thenReturn(members);
 
     fileChooser = mock(WrappedFileChooser.class);
-    TestExecutor.overrideTaskExecutor();
   }
 
   private static DocumentTemplate documentTemplate(boolean sepa) {

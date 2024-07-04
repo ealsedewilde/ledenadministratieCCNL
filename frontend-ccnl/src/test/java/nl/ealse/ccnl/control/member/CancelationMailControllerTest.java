@@ -6,12 +6,10 @@ import jakarta.mail.MessagingException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TextArea;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.MailService;
-import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,7 +27,7 @@ class CancelationMailControllerTest extends FXMLBaseTest {
     final ArgumentCaptor<String> arg = ArgumentCaptor.forClass(String.class);
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-     Member m = new Member();
+      Member m = new Member();
       m.setMemberNumber(4444);
       m.setInitials("tester");
       m.setEmail("test@ealse.nl");
@@ -46,15 +44,13 @@ class CancelationMailControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    controller = CancelationMailController.getInstance();
+    controller = getTestSubject(CancelationMailController.class);
     getPageWithFxController(controller, PageName.MEMBER_CANCEL_MAIL);
   }
-  
+
   @BeforeAll
   static void setup() {
-    MockProvider.mock(DocumentService.class);
-    MockProvider.mock(MemberService.class);
-    mailService = MockProvider.mock(MailService.class);
+    mailService = ComponentProviderUtil.getComponent(MailService.class);
   }
 
   private void setContent() {

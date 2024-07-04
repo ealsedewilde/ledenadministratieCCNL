@@ -1,17 +1,16 @@
 package nl.ealse.ccnl.control.settings;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TextField;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -55,16 +54,16 @@ class ManageTemplateControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = ManageTemplateController.getInstance();
+    sut = getTestSubject(ManageTemplateController.class);
     getPageWithFxController(sut, PageName.MANAGE_TEMPLATE);
-    getPageWithFxController(TemplatesController.getInstance(), PageName.TEMPLATES_OVERVIEW);
+    getPageWithFxController(getTestSubject(TemplatesController.class), PageName.TEMPLATES_OVERVIEW);
 
   }
 
   @BeforeAll
   static void setup() {
-    MockProvider.mock(DocumentService.class);
-   }
+    mock(DocumentService.class);
+  }
 
   private void initTemplateId() {
     try {

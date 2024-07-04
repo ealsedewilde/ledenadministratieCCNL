@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -18,7 +19,6 @@ import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
 import nl.ealse.ccnl.service.SepaDirectDebitService.MappingResult;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -148,8 +148,8 @@ class SepaDirectDebitServiceTest {
     config = IncassoProperties.getProperties();
     config.getDirectDebitDir().setValue("C:/xtemp");
     em = EntityManagerProvider.getEntityManager();
-    generator = MockProvider.mock(SepaIncassoGenerator.class);
-    sut = SepaDirectDebitService.getInstance();
+    generator = mock(SepaIncassoGenerator.class);
+    sut = new SepaDirectDebitService(generator);
   }
 
 }

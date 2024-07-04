@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -13,9 +12,6 @@ import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.service.ArchiveService;
 
 public class ManageArchiveController {
-  
-  @Getter
-  private static final ManageArchiveController instance = new ManageArchiveController();
 
   private final PageController pageController;
 
@@ -27,9 +23,9 @@ public class ManageArchiveController {
   @FXML
   private Label referenceYearE;
 
-  private ManageArchiveController() {
-    this.pageController = PageController.getInstance();
-    this.service = ArchiveService.getInstance();
+   public ManageArchiveController(PageController pageController, ArchiveService service) {
+    this.pageController = pageController;
+    this.service = service;
   }
 
   @FXML

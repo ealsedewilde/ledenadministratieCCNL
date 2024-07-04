@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -21,9 +20,6 @@ import org.apache.commons.validator.routines.IBANValidator;
  * Controls the popup for adding a missing IBAN-number.
  */
 public class IbanController {
-  
-  @Getter
-  private static final IbanController instance = new IbanController();
 
   @FXML
   private Label memberInfo;
@@ -40,7 +36,7 @@ public class IbanController {
 
   private Stage ibanNumberStage;
   
-  private IbanController() {
+  public IbanController() {
     setup();
   }
   

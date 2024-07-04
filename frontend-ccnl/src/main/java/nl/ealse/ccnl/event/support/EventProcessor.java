@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import org.jboss.jandex.AnnotationInstance;
 import org.jboss.jandex.AnnotationValue;
 import org.jboss.jandex.ClassInfo;
@@ -189,8 +190,7 @@ public class EventProcessor {
     private void initializeTarget(Object event) {
       try {
         Class<?> targetClass = Class.forName(targetClassName);
-        Method instanceMethod = targetClass.getMethod("getInstance");
-        targetObject = instanceMethod.invoke(null);
+        targetObject = ComponentProviderUtil.getComponent(targetClass);
         if (getParametersClassName() != null) {
           targetMethod = targetClass.getMethod(targetMethodName, event.getClass());
         } else {

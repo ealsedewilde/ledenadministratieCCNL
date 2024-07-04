@@ -10,7 +10,7 @@ class ImagesMapTest {
   void getImage() {
     Image img = ImagesMap.get("Citroen.png");
     Assertions.assertNotNull(img);
-    
+
     Assertions.assertThrows(FXMLLoadException.class, () -> ImagesMap.get("Missing.png"));
 
   }

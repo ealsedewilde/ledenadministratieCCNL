@@ -1,21 +1,15 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
 
 public class ExternalRelationNumberFactory extends NumberFactory {
   
-  @Getter
-  private static final ExternalRelationNumberFactory instance = new ExternalRelationNumberFactory();
-
-  private final ExternalRelationOtherRepository dao = ExternalRelationOtherRepository.getInstance();
-  
-  private ExternalRelationNumberFactory() {
+  public ExternalRelationNumberFactory(ExternalRelationOtherRepository dao) {
     super(99, 8400);
-    initialize();
+    initialize(dao);
   }
 
-  private void initialize() {
+  private void initialize(ExternalRelationOtherRepository dao) {
     super.initialize(dao.getAllRelationNumbers());
 
   }

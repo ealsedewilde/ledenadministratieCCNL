@@ -18,24 +18,25 @@ import nl.ealse.ccnl.ledenadministratie.excel.partner.CCNLPartnerSheet;
 
 public class ImportHandler {
 
-  @Getter
-  private static ImportHandler instance = new ImportHandler();
-
   private final MemberRepository memberRepository;
   private final ExternalRelationClubRepository clubRepository;
   private final ExternalRelationOtherRepository otherRepository;
   private final ExternalRelationPartnerRepository partnerRepository;
   private final InternalRelationRepository internalRepository;
-  
-  private ImportHandler() {
-    this.memberRepository = MemberRepository.getInstance();
-    this.clubRepository = ExternalRelationClubRepository.getInstance();
-    this.otherRepository = ExternalRelationOtherRepository.getInstance();
-    this.partnerRepository = ExternalRelationPartnerRepository.getInstance();
-    this.internalRepository = InternalRelationRepository.getInstance();
+
+  public ImportHandler(MemberRepository memberRepository,
+      ExternalRelationClubRepository clubRepository,
+      ExternalRelationOtherRepository otherRepository,
+      ExternalRelationPartnerRepository partnerRepository, InternalRelationRepository internalRepository) {
+    this.memberRepository = memberRepository;
+    this.clubRepository = clubRepository;
+    this.otherRepository = otherRepository;
+    this.partnerRepository = partnerRepository;
+    this.internalRepository = internalRepository;
   }
-  
-  public void importFromExcel(CCNLWorkbook workbook, ImportSelection selection) throws SheetNotFoundException {
+
+  public void importFromExcel(CCNLWorkbook workbook, ImportSelection selection)
+      throws SheetNotFoundException {
     ProcessType importType = selection.getImportType().getProcessType();
     TransactionUtil.inTransction(() -> {
       if (selection.isMembers()) {
@@ -54,7 +55,7 @@ public class ImportHandler {
         importInternalRelationsFromExcel(workbook, importType);
       }
     });
-    
+
   }
 
   private void importMembersFromExcel(CCNLWorkbook workbook, ProcessType importType)

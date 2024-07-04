@@ -20,19 +20,18 @@ class MenuControllerTest {
 
   private static MenuController sut;
 
-  private ArgumentCaptor<MenuChoiceEvent> menu =
-      ArgumentCaptor.forClass(MenuChoiceEvent.class);
+  private ArgumentCaptor<MenuChoiceEvent> menu = ArgumentCaptor.forClass(MenuChoiceEvent.class);
 
   @BeforeEach
   void init() {
     context = mockStatic(EventPublisher.class);
   }
-  
+
   @AfterEach
   void clear() {
     context.close();
   }
-  
+
   @Test
   void action() {
     MenuItem item = new MenuItem();
@@ -46,7 +45,7 @@ class MenuControllerTest {
 
   @BeforeAll
   static void setup() {
-     sut = MenuController.getInstance();
+    sut = new MenuController();
   }
 
 }

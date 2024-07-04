@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.ledenadministratie.dd;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.ArrayList;
@@ -10,7 +11,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -26,13 +26,13 @@ class SepaIncassoGeneratorTest {
 
   @Test
   void generateSepaDirectDebitFile() {
-    dao = MockProvider.mock(MemberRepository.class);
-    MockProvider.mock(DocumentRepository.class);
+    dao = mock(MemberRepository.class);
+    DocumentRepository documentRepository = mock(DocumentRepository.class);
     List<Member> members = new ArrayList<>();
     members.add(member());
     when(dao.findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(PaymentMethod.DIRECT_DEBIT,
         MembershipStatus.ACTIVE, false)).thenReturn(members);
-    sut = SepaIncassoGenerator.getInstance();
+    sut = new SepaIncassoGenerator(dao, documentRepository);
     File xmlFile = new File(tempDir, "sepa.xml");
     File excelFile = new File(tempDir, "sepa.xlsx");
     try {

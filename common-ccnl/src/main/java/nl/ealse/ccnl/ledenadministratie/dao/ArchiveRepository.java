@@ -2,15 +2,11 @@ package nl.ealse.ccnl.ledenadministratie.dao;
 
 import jakarta.persistence.Query;
 import java.util.List;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 
 public class ArchiveRepository extends BaseRepository<ArchivedMember> {
 
-  @Getter
-  private static ArchiveRepository instance = new ArchiveRepository();
-
-  private ArchiveRepository() {
+  public ArchiveRepository() {
     super(ArchivedMember.class);
   }
 

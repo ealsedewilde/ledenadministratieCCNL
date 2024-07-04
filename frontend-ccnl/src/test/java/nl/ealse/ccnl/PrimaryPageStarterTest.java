@@ -18,7 +18,7 @@ class PrimaryPageStarterTest extends FXMLBaseTest {
     AtomicBoolean result = runFX(() -> {
       sut = new PrimaryPageStarter();
       config();
-      
+
       doTest();
       ar.set(true);
     }, ar);
@@ -34,13 +34,12 @@ class PrimaryPageStarterTest extends FXMLBaseTest {
   }
 
   @BeforeAll
-  static void setup() {
-  }
+  static void setup() {}
 
   private void config() {
     try {
       FieldUtils.writeDeclaredField(sut, "applicationIcon", "Citroen.png", true);
-     } catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
 

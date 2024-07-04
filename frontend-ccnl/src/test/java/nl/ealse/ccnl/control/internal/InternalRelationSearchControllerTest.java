@@ -10,7 +10,7 @@ import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class InternalRelationSearchControllerTest extends FXMLBaseTest{
+class InternalRelationSearchControllerTest extends FXMLBaseTest {
 
   private InternalRelationSearchController sut;
 
@@ -25,13 +25,13 @@ class InternalRelationSearchControllerTest extends FXMLBaseTest{
     }, ar);
     Assertions.assertTrue(result.get());
   }
-  
+
   private void prepare() {
-    sut = InternalRelationSearchController.getInstance();
+    sut = getTestSubject(InternalRelationSearchController.class);
   }
-  
+
   private void testController() {
- 
+
     InternalRelationSelectionEvent result =
         sut.newEntitySelectionEvent(MenuChoice.AMEND_INTERNAL_RELATION);
     Assertions.assertNotNull(result);

@@ -5,7 +5,6 @@ import java.util.StringJoiner;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -27,9 +26,6 @@ import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 
 public class MemberController extends MemberView {
-  
-  @Getter
-  private static final MemberController instance = new MemberController();
 
   private final PageController pageController;
 
@@ -52,10 +48,11 @@ public class MemberController extends MemberView {
 
   private MemberFormController formController;
 
-  private MemberController() {
-    this.pageController = PageController.getInstance();
-    this.service = MemberService.getInstance();
-    this.documentService = DocumentService.getInstance();
+  public MemberController(PageController pageController, MemberService memberService,
+      DocumentService documentService) {
+    this.pageController = pageController;
+    this.service = memberService;
+    this.documentService = documentService;
     setup();
   }
 
@@ -68,9 +65,9 @@ public class MemberController extends MemberView {
     documentViewer = DocumentViewer.builder().withDeleteButton(e -> deletePDF())
         .withPrintButton(e -> printPDF()).withCancelButton(e -> closePDF()).build();
     documentViewer.setWindowTitle("SEPA machtiging voor lid: %d (%s)");
-    
+
     getIbanNumber().textProperty()
-    .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
+        .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
   }
 
   @FXML
@@ -136,7 +133,7 @@ public class MemberController extends MemberView {
     formController.getValidator().initialize();
     formController.getSaveButton().setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER);
     formController.setActiveFormPage(0);
-    
+
     setIbanControls(selectedMember.getIbanNumber());
   }
 
@@ -251,7 +248,7 @@ public class MemberController extends MemberView {
     }
     setIbanControls(ibanNumber);
   }
-  
+
   private void setIbanControls(String ibanNumber) {
     ObservableList<Node> children = formController.getFinancialPage().getChildren();
     if (hasContent(ibanNumber)) {
@@ -259,8 +256,7 @@ public class MemberController extends MemberView {
         children.addAll(getIbanOwnerNameL(), getIbanOwnerName(), getBicCodeL(), getBicCode());
       }
     } else {
-      children.removeAll(getIbanOwnerNameL(), getIbanOwnerName(),
-          getBicCodeL(), getBicCode());
+      children.removeAll(getIbanOwnerNameL(), getIbanOwnerName(), getBicCodeL(), getBicCode());
     }
   }
 

@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.excel;
 import static nl.ealse.ccnl.control.menu.MenuChoice.REPORT_ARCHIVE;
 import java.io.File;
 import java.io.IOException;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
@@ -21,9 +20,6 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 @Slf4j
 public class ExcelExportCommand {
 
-  @Getter
-  private static final ExcelExportCommand instance = new ExcelExportCommand();
-
   private final PageController pageController;
 
   private final ExportService service;
@@ -32,17 +28,18 @@ public class ExcelExportCommand {
 
   private WrappedFileChooser fileChooser;
 
-  private ExcelExportCommand() {
-    this.pageController = PageController.getInstance();
-    this.archiveService = ExportArchiveService.getInstance();
-    this.service = ExportService.getInstance();
+  public ExcelExportCommand(PageController pageController, ExportService service,
+      ExportArchiveService archiveService) {
+    this.pageController = pageController;
+    this.archiveService = archiveService;
+    this.service = service;
     setup();
   }
 
   private void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
-    fileChooser.setInitialDirectory(() ->
-        DatabaseProperties.getProperty("ccnl.directory.excel", "c:/temp"));
+    fileChooser.setInitialDirectory(
+        () -> DatabaseProperties.getProperty("ccnl.directory.excel", "c:/temp"));
   }
 
   @EventListener(choiceGroup = ChoiceGroup.REPORTS)

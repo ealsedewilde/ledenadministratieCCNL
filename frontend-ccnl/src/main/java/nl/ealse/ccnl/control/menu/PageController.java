@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
-import lombok.Getter;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.javafx.ImagesMap;
@@ -23,9 +22,6 @@ import nl.ealse.javafx.ImagesMap;
  * @author ealse
  */
 public class PageController {
-  
-  @Getter
-  private static PageController instance = new PageController();
 
   @FXML
   private BorderPane mainPage;
@@ -39,8 +35,6 @@ public class PageController {
   private Node logoPage;
 
   private PauseTransition delay;
-  
-  private PageController() {}
 
   @FXML
   void initialize() {

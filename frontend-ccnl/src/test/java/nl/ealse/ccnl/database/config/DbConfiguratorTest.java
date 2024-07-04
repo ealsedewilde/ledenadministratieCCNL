@@ -26,11 +26,11 @@ class DbConfiguratorTest extends FXMLBaseTest {
 
   private DbConfigurator sut;
   private Stage stage;
-  
+
   private static String next;
-  
+
   private static boolean fileSelected = true;
-  
+
   @TempDir
   File tempDir;
 
@@ -49,26 +49,26 @@ class DbConfiguratorTest extends FXMLBaseTest {
     sut.openDialog();
     assertTrue(sut.getConfigStage().isShowing());
     stage.close();
-    
+
     sut.configureExistingDatabase();
     assertEquals("c:\\temp\\db", sut.getDbFolder().getText());
     assertEquals("test", sut.getDbName().getText());
     assertTrue(sut.getConfigStage().isShowing());
     stage.close();
-    
+
     fileSelected = false;
     sut.configureExistingDatabase();
     String msg = sut.getMessage().getText();
     assertEquals("Geen (geldige) database geselecteerd", msg);
     assertTrue(sut.getConfigStage().isShowing());
     stage.close();
-    
+
     sut.configureNewDatabase();
     assertEquals("S:\\ledenadministratie-ccnl\\db", sut.getDbFolder().getText());
     assertEquals("ccnl", sut.getDbName().getText());
     assertTrue(sut.getConfigStage().isShowing());
     stage.close();
-    
+
     File dbProps = new File("db.properties");
     sut.getDbFolder().setText(tempDir.getAbsolutePath());
     if (dbProps.exists()) {
@@ -89,8 +89,7 @@ class DbConfiguratorTest extends FXMLBaseTest {
   }
 
   @BeforeAll
-  static void setup() {
-  }
+  static void setup() {}
 
   private void clickButton() {
     Platform.runLater(() -> {
@@ -98,7 +97,7 @@ class DbConfiguratorTest extends FXMLBaseTest {
       if (info != null) {
         DialogPane pane = info.getDialogPane();
         ButtonType yes = pane.getButtonTypes().get(0);
-        Button ok =  (Button) pane.lookupButton(yes);
+        Button ok = (Button) pane.lookupButton(yes);
         ok.fire();
       }
     });

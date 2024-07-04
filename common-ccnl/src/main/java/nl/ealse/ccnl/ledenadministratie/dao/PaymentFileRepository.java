@@ -1,14 +1,11 @@
 package nl.ealse.ccnl.ledenadministratie.dao;
 
 import java.util.List;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 
 public class PaymentFileRepository extends BaseRepository<PaymentFile> {
-  @Getter
-  private static PaymentFileRepository instance = new PaymentFileRepository();
   
-  private PaymentFileRepository() {
+  public PaymentFileRepository() {
     super(PaymentFile.class);
   }
 

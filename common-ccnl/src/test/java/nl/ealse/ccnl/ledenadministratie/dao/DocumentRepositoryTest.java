@@ -17,9 +17,9 @@ class DocumentRepositoryTest {
 
   private static final String DOC_NAME = "/Lid 0030.pdf";
 
-  private DocumentRepository dao = DocumentRepository.getInstance();
+  private DocumentRepository dao = new DocumentRepository();
 
-  private MemberRepository memberDao = MemberRepository.getInstance();
+  private MemberRepository memberDao = new MemberRepository();
 
   @Test
   void findByOwnerAndDocumentTypeTest() {

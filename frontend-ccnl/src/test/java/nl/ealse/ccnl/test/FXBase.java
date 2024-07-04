@@ -24,7 +24,7 @@ public abstract class FXBase {
     Awaitility.await().atMost(Duration.ofSeconds(6000)).untilAtomic(ar, equalTo(Boolean.TRUE));
     return ar;
   }
-  
+
   private static void initializeMainStage() {
     Field icon = FieldUtils.getField(MainStage.class, "icon", true);
     try {

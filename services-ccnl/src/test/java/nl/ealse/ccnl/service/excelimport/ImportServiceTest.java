@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.service.excelimport;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,10 +13,10 @@ import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationPartnerRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.base.SheetNotFoundException;
+import nl.ealse.ccnl.ledenadministratie.excelimport.ImportHandler;
 import nl.ealse.ccnl.ledenadministratie.excelimport.ImportHandler.ImportSelection;
 import nl.ealse.ccnl.ledenadministratie.excelimport.ImportType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -48,17 +49,17 @@ class ImportServiceTest {
       sut.importFromExcel(new File(url.getFile()), selection);
       verify(memberRepository, times(16)).save(any(Member.class));
     });
-    Assertions.assertEquals("Excel tabblad 'Rel.&Advert.' niet gevonden in Excel bestand", thrown.getMessage());
+    Assertions.assertEquals("Excel tabblad 'Rel.&Advert.' niet gevonden in Excel bestand",
+        thrown.getMessage());
   }
 
   @BeforeAll
   static void setup() {
-    MockProvider.mock(ExternalRelationPartnerRepository.class);
-    MockProvider.mock(ExternalRelationClubRepository.class);
-    MockProvider.mock(ExternalRelationOtherRepository.class);
-    MockProvider.mock(InternalRelationRepository.class);
-    memberRepository = MockProvider.mock(MemberRepository.class);
-    sut = ImportService.getInstance();
+    memberRepository = mock(MemberRepository.class);
+    ImportHandler importHandler = new ImportHandler(memberRepository,
+        mock(ExternalRelationClubRepository.class), mock(ExternalRelationOtherRepository.class),
+        mock(ExternalRelationPartnerRepository.class), mock(InternalRelationRepository.class));
+    sut = new ImportService(importHandler);
   }
 
 

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.DocumentTemplateController;
@@ -28,9 +27,6 @@ import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 
 public class PaymentReminderLettersController extends DocumentTemplateController {
-  
-  @Getter
-  private static final PaymentReminderLettersController instance = new PaymentReminderLettersController();
 
   private final PageController pageController;
 
@@ -50,14 +46,16 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   @FXML
   private Label headerText;
 
-  private PaymentReminderLettersController() {
+  public PaymentReminderLettersController(PageController pageController,
+      DocumentService documentService, MemberService memberService,
+      MemberLetterHandler memberLetterHandler) {
     super(DocumentTemplateContext.PAYMENT_REMINDER);
-    this.pageController = PageController.getInstance();
-    this.documentService = DocumentService.getInstance();
-    this.memberService = MemberService.getInstance();
-    this.memberLetterHandler = MemberLetterHandler.getInstance();
+    this.pageController = pageController;
+    this.documentService = documentService;
+    this.memberService = memberService;
+    this.memberLetterHandler = memberLetterHandler;
   }
-  
+
   @FXML
   protected void initialize() {
     documentViewer = DocumentViewer.builder().withPrintButton(evt -> printPDF())

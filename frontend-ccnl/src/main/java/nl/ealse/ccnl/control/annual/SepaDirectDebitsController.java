@@ -10,7 +10,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
@@ -34,9 +33,6 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
  */
 @Slf4j
 public class SepaDirectDebitsController {
-  
-  @Getter
-  private static final SepaDirectDebitsController instance = new SepaDirectDebitsController();
   
   private final PageController pageController;
 
@@ -70,9 +66,9 @@ public class SepaDirectDebitsController {
   @FXML
   private TableColumn<FlatProperty, String> descriptionColumn;
 
-  private SepaDirectDebitsController() {
-    this.pageController = PageController.getInstance();
-    this.service = SepaDirectDebitService.getInstance();
+   public SepaDirectDebitsController(PageController pageController, SepaDirectDebitService service) {
+    this.pageController = pageController;
+    this.service = service;
     setup();
   }
   

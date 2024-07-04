@@ -6,9 +6,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -26,7 +24,7 @@ class SepaAuthorizationFormControllerTest extends FXMLBaseTest {
   void testController() {
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = SepaAuthorizationFormCommand.getInstance();
+      sut = getTestSubject(SepaAuthorizationFormCommand.class);
       doTest();
       ar.set(true);
     }, ar);
@@ -42,7 +40,6 @@ class SepaAuthorizationFormControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    MockProvider.mock(DocumentService.class);
     fileChooser = mock(WrappedFileChooser.class);
     URL url = SepaAuthorizationFormCommand.class.getResource("/MachtigingsformulierSEPA.pdf");
     when(fileChooser.showOpenDialog()).thenReturn(new File(url.getFile()));

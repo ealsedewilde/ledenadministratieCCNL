@@ -1,16 +1,13 @@
 package nl.ealse.ccnl.ledenadministratie.dao;
 
 import java.util.List;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 
 public class DocumentTemplateRepository extends BaseRepository<DocumentTemplate> {
-  @Getter
-  private static DocumentTemplateRepository instance = new DocumentTemplateRepository();
 
-  private DocumentTemplateRepository() {
+  public DocumentTemplateRepository() {
     super(DocumentTemplate.class);
   }
 

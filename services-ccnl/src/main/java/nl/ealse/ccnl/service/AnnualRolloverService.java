@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.service;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.annual.AnnualRollover;
 
@@ -9,15 +8,12 @@ import nl.ealse.ccnl.ledenadministratie.annual.AnnualRollover;
  */
 @Slf4j
 public class AnnualRolloverService {
-  
-  @Getter
-  private static AnnualRolloverService instance = new AnnualRolloverService();
 
   private final AnnualRollover rollover;
 
-  private AnnualRolloverService() {
+  public AnnualRolloverService(AnnualRollover rollover) {
     log.info("Service created");
-    this.rollover = AnnualRollover.getInstance();
+    this.rollover = rollover;
   }
 
   public void annualRollover() {

@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.service.excelexport;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,6 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -95,15 +95,16 @@ class ExportServiceTest {
   @BeforeAll
   static void beforeAll() {
     initMocks();
-    sut = ExportService.getInstance();
+    sut = new ExportService(commercialPartnerRepository, externalRelationClubRepository,
+        externalRelationOtherRepository, internalRelationRepository, memberRepository);
   }
 
   private static void initMocks() {
-    commercialPartnerRepository = MockProvider.mock(ExternalRelationPartnerRepository.class);
-    externalRelationClubRepository = MockProvider.mock(ExternalRelationClubRepository.class);
-    externalRelationOtherRepository = MockProvider.mock(ExternalRelationOtherRepository.class);
-    internalRelationRepository = MockProvider.mock(InternalRelationRepository.class);
-    memberRepository = MockProvider.mock(MemberRepository.class);
+    commercialPartnerRepository = mock(ExternalRelationPartnerRepository.class);
+    externalRelationClubRepository = mock(ExternalRelationClubRepository.class);
+    externalRelationOtherRepository = mock(ExternalRelationOtherRepository.class);
+    internalRelationRepository = mock(InternalRelationRepository.class);
+    memberRepository = mock(MemberRepository.class);
 
     List<ExternalRelationClub> clubs = new ArrayList<>();
     when(externalRelationClubRepository.findAll()).thenReturn(clubs);

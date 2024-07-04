@@ -7,7 +7,6 @@ import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
@@ -26,9 +25,6 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
 @Slf4j
 public class AddressListController {
-
-  @Getter
-  private static final AddressListController instance = new AddressListController();
 
   private static final String MAGAZINE_FILE_NAME = "adressen_clubblad_%s.xlsx";
   private static final String CARD_FILE_NAME = "adressen_lidmaatschap_%d.xlsx";
@@ -51,17 +47,18 @@ public class AddressListController {
   @FXML
   private Label magazineNumberE;
 
-  public AddressListController() {
-    this.pageController = PageController.getInstance();
-    this.magazineService = ExportAddressService.getInstance();
-    this.service = SettingsService.getInstance();
+  public AddressListController(PageController pageController, ExportAddressService magazineService,
+      SettingsService service) {
+    this.pageController = pageController;
+    this.magazineService = magazineService;
+    this.service = service;
     setup();
   }
 
   void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
-    fileChooser.setInitialDirectory(() ->
-        DatabaseProperties.getProperty("ccnl.directory.magazine", "c:/temp"));
+    fileChooser.setInitialDirectory(
+        () -> DatabaseProperties.getProperty("ccnl.directory.magazine", "c:/temp"));
   }
 
   @EventListener(menuChoice = MenuChoice.MAGAZINE_ADDRESS_LIST)
@@ -80,8 +77,7 @@ public class AddressListController {
 
   @EventListener(menuChoice = MenuChoice.CARD_ADDRESS_LIST)
   public void cardList(MenuChoiceEvent event) {
-    AsyncCardAddressListTask asyncTask =
-        new AsyncCardAddressListTask(magazineService);
+    AsyncCardAddressListTask asyncTask = new AsyncCardAddressListTask(magazineService);
     generateFile(String.format(CARD_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
 
@@ -196,8 +192,7 @@ public class AddressListController {
     private final ExportAddressService magazineService;
     private final boolean byName;
 
-    MemberListTask(ExportAddressService magazineService,
-        boolean byName) {
+    MemberListTask(ExportAddressService magazineService, boolean byName) {
       this.magazineService = magazineService;
       this.byName = byName;
     }

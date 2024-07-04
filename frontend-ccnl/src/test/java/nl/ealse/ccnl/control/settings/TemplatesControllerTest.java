@@ -15,12 +15,12 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -50,18 +50,19 @@ class TemplatesControllerTest extends FXMLBaseTest {
     MenuChoiceEvent event = new MenuChoiceEvent(this, MenuChoice.TEMPLATES_OVERVIEW);
     try (MockedStatic<EventPublisher> context = mockStatic(EventPublisher.class)) {
       sut.onApplicationEvent(event);
-  
+
       sut.selectTemplate(ev);
-  
+
       sut.newCancelationMailTemplate();
       sut.newReminderLetterTemplate();
       sut.newWelcomeLetterTemplate();
-      context.verify(() -> EventPublisher.publishEvent(any(TemplateSelectionEvent.class)), times(4));
+      context.verify(() -> EventPublisher.publishEvent(any(TemplateSelectionEvent.class)),
+          times(4));
     }
   }
 
   private void prepare() {
-    sut = TemplatesController.getInstance();
+    sut = getTestSubject(TemplatesController.class);
     getPageWithFxController(sut, PageName.TEMPLATES_OVERVIEW);
     TableRow<DocumentTemplate> row = new TableRow<>();
     row.setItem(template);
@@ -72,7 +73,7 @@ class TemplatesControllerTest extends FXMLBaseTest {
   @BeforeAll
   static void setup() {
 
-    service = MockProvider.mock(DocumentService.class);
+    service = ComponentProviderUtil.getComponent(DocumentService.class);
     List<DocumentTemplate> templates = new ArrayList<>();
     template = template();
     templates.add(template);

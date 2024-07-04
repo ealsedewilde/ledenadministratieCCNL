@@ -1,21 +1,18 @@
 package nl.ealse.ccnl.service.relation;
 
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.ledenadministratie.util.ClubNumberFactory;
 
 public class ExternalClubService extends ExternalRelationService<ExternalRelationClub> {
-  
-  @Getter
-  private static ExternalClubService instance = new ExternalClubService();
 
   private final ExternalRelationClubRepository clubDao;
 
-  private ExternalClubService() {
-    super(ClubNumberFactory::getInstance);
-    this.clubDao = ExternalRelationClubRepository.getInstance();
+  public ExternalClubService(ExternalRelationClubRepository clubDao,
+      ClubNumberFactory numberFactory) {
+    super(numberFactory);
+    this.clubDao = clubDao;
   }
 
   @Override

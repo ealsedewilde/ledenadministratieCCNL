@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -19,7 +20,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.ccnl.test.PrintCount;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -77,7 +77,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    controller = WelcomeLetterController.getInstance();
+    controller = getTestSubject(WelcomeLetterController.class);
     getPageWithFxController(controller, PageName.WELCOME_LETTER);
     controller.getLetterText().setText("Beste <<naam>>, \n Welkom bij Citroën Club Nederland.");
     fileChooser = mock(WrappedFileChooser.class);
@@ -85,11 +85,12 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
     when(fileChooser.showSaveDialog()).thenReturn(exportFile);
     setFileChooser();
   }
+
   @BeforeAll
   static void setup() {
     pdf = getBlob("/welkom.pdf");
     docx = getBlob("/welkom.docx");
-    documentService = MockProvider.mock(DocumentService.class);
+    documentService = ComponentProviderUtil.getComponent(DocumentService.class);
     when(documentService.generatePDF(any(LetterData.class))).thenReturn(pdf);
     when(documentService.generateWordDocument(any(LetterData.class))).thenReturn(docx);
     List<Document> documents = new ArrayList<>();
@@ -106,8 +107,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
   }
 
   @BeforeEach
-  protected void getPDF() {
-  }
+  protected void getPDF() {}
 
   private static byte[] getBlob(String name) {
     byte[] b = null;

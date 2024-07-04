@@ -3,7 +3,6 @@ package nl.ealse.ccnl.service.relation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
@@ -12,15 +11,15 @@ import nl.ealse.ccnl.ledenadministratie.util.NumberFactory;
 @Slf4j
 public abstract class ExternalRelationService<T extends ExternalRelation> {
 
-  private final Supplier<NumberFactory> numberFactory;
+  private final NumberFactory numberFactory;
 
-  protected ExternalRelationService(Supplier<NumberFactory> numberFactory) {
+  protected ExternalRelationService(NumberFactory numberFactory) {
     log.info("Service created");
     this.numberFactory = numberFactory;
   }
 
   public Integer getFreeNumber() {
-    return numberFactory.get().getNewNumber();
+    return numberFactory.getNewNumber();
   }
 
   public List<T> searchExternalRelation(SearchItem searchItem, String searchValue) {

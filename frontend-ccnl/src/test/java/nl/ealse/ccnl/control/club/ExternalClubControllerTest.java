@@ -7,11 +7,8 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
-import nl.ealse.ccnl.service.relation.ExternalClubService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalClubControllerTest extends FXMLBaseTest {
@@ -24,7 +21,7 @@ class ExternalClubControllerTest extends FXMLBaseTest {
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = ExternalClubController.getInstance();
+      sut = getTestSubject(ExternalClubController.class);
       doTest();
       ar.set(true);
     }, ar);
@@ -32,7 +29,7 @@ class ExternalClubControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-     ExternalClubSelectionEvent event =
+    ExternalClubSelectionEvent event =
         new ExternalClubSelectionEvent(sut, MenuChoice.AMEND_EXTERNAL_CLUB, club);
     sut.amendClub(event);
 
@@ -42,11 +39,6 @@ class ExternalClubControllerTest extends FXMLBaseTest {
     sut.getFormController().nextPage();
     sut.getFormController().previousPage();
   }
-
-  @BeforeAll
-  static void setup() {
-    MockProvider.mock(ExternalClubService.class);
-  };
 
   private ExternalRelationClub club() {
     ExternalRelationClub r = new ExternalRelationClub();

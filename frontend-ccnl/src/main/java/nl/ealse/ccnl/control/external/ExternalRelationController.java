@@ -29,8 +29,8 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
 
   protected MenuChoice currentMenuChoice;
 
-  protected ExternalRelationController(ExternalRelationService<T> externalRelationService) {
-    this.pageController = PageController.getInstance();
+  protected ExternalRelationController(PageController pageController, ExternalRelationService<T> externalRelationService) {
+    this.pageController = pageController;
     this.externalRelationService = externalRelationService;
     this.externalRelationValidation = new ExternalRelationValidation(this);
   }

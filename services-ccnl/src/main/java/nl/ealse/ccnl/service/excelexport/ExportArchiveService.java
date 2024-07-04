@@ -3,7 +3,6 @@ package nl.ealse.ccnl.service.excelexport;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.Archiefbestand;
@@ -17,15 +16,12 @@ import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
  */
 @Slf4j
 public class ExportArchiveService {
-  
-  @Getter
-  private static ExportArchiveService instance = new ExportArchiveService();
 
   private final ArchiveRepository archiveRepository;
 
-  private ExportArchiveService() {
+  public ExportArchiveService(ArchiveRepository archiveRepository) {
     log.info("Service created");
-    this.archiveRepository = ArchiveRepository.getInstance();
+    this.archiveRepository = archiveRepository;
   }
 
   /**

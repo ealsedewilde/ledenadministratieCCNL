@@ -2,16 +2,12 @@ package nl.ealse.ccnl.ledenadministratie.dao;
 
 import jakarta.persistence.TypedQuery;
 import java.util.List;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 
 public class ExternalRelationClubRepository
     extends ExternalRelationRepository<ExternalRelationClub> {
-  @Getter
-  private static ExternalRelationClubRepository instance =
-      new ExternalRelationClubRepository();
   
-  private ExternalRelationClubRepository() {
+  public ExternalRelationClubRepository() {
     super(ExternalRelationClub.class);
   }
 

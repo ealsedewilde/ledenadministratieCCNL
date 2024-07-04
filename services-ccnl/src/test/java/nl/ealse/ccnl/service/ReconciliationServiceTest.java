@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.service;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
@@ -14,7 +15,6 @@ import nl.ealse.ccnl.ledenadministratie.dao.PaymentFileRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.payment.PaymentHandler;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -52,10 +52,9 @@ class ReconciliationServiceTest {
   
   @BeforeAll
   static void setup() {
-    dao = MockProvider.mock(PaymentFileRepository.class);
-    memberDao = MockProvider.mock(MemberRepository.class);
-    MockProvider.mock(PaymentHandler.class);
-    sut = ReconciliationService.getInstance();
+    dao = mock(PaymentFileRepository.class);
+    memberDao = mock(MemberRepository.class);
+    sut = new ReconciliationService(dao, memberDao, mock(PaymentHandler.class));
   }
 
 }

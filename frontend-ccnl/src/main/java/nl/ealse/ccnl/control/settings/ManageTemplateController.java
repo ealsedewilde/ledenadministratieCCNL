@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -28,9 +27,6 @@ import nl.ealse.javafx.FXMLLoaderUtil;
 import nl.ealse.javafx.ImagesMap;
 
 public class ManageTemplateController {
-  
-  @Getter
-  private static final ManageTemplateController instance = new ManageTemplateController();
 
   private final PageController pageController;
 
@@ -69,10 +65,9 @@ public class ManageTemplateController {
 
   private Scene mailHelpScene;
 
-
-  private ManageTemplateController() {
-    this.pageController = PageController.getInstance();
-    this.documentService = DocumentService.getInstance();
+   public ManageTemplateController(PageController pageController, DocumentService documentService) {
+    this.pageController = pageController;
+    this.documentService = documentService;
     setup();
   }
 

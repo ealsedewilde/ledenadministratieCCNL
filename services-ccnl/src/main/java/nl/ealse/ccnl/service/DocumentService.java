@@ -2,7 +2,6 @@ package nl.ealse.ccnl.service;
 
 import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.DocumentRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.DocumentTemplateRepository;
@@ -20,18 +19,15 @@ import nl.ealse.ccnl.ledenadministratie.word.LetterGenerator;
 
 @Slf4j
 public class DocumentService {
-  
-  @Getter
-  private static DocumentService instance = new DocumentService();
 
   private final DocumentRepository dao;
 
   private final DocumentTemplateRepository templateDao;
 
-  private DocumentService() {
+  public DocumentService(DocumentRepository dao, DocumentTemplateRepository templateDao) {
     log.info("Service created");
-    this.dao = DocumentRepository.getInstance();
-    this.templateDao = DocumentTemplateRepository.getInstance();
+    this.dao = dao;
+    this.templateDao = templateDao;
   }
 
   public List<Document> findDocuments(Member owner) {

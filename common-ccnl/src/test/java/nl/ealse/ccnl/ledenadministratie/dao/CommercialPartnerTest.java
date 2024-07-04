@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class CommercialPartnerTest {
 
-  private ExternalRelationPartnerRepository repository = ExternalRelationPartnerRepository.getInstance();
+  private ExternalRelationPartnerRepository repository = new ExternalRelationPartnerRepository();
 
   @Test
   void newCommercialpartner() {

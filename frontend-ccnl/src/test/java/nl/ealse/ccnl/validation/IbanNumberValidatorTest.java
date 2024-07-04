@@ -18,7 +18,7 @@ class IbanNumberValidatorTest extends FXBase {
   private static Label errorMessageLabel;
 
   private IbanNumberValidator sut;
-  
+
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
@@ -48,7 +48,7 @@ class IbanNumberValidatorTest extends FXBase {
     sut.reset();
     Platform.setImplicitExit(false);
   }
-  
+
 
   @BeforeAll
   static void setup() {

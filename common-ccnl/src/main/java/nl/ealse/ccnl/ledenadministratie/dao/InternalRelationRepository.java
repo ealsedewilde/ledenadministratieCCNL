@@ -3,14 +3,11 @@ package nl.ealse.ccnl.ledenadministratie.dao;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 
 public class InternalRelationRepository extends BaseRepository<InternalRelation> {
-  @Getter
-  private static InternalRelationRepository instance = new InternalRelationRepository();
   
-  private InternalRelationRepository() {
+  public InternalRelationRepository() {
     super(InternalRelation.class);
   }
 

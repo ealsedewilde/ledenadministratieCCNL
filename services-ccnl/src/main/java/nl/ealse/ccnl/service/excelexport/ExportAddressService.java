@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
@@ -26,9 +25,6 @@ import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
  */
 @Slf4j
 public class ExportAddressService {
-  
-  @Getter
-  private static ExportAddressService instance = new ExportAddressService();
 
   private static final EnumSet<MembershipStatus> statuses =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
@@ -39,13 +35,18 @@ public class ExportAddressService {
   private final InternalRelationRepository internalRelationRepository;
   private final MemberRepository memberRepository;
 
-  private ExportAddressService() {
+  public ExportAddressService(ExternalRelationPartnerRepository commercialPartnerRepository,
+      ExternalRelationClubRepository externalRelationClubRepository,
+      ExternalRelationOtherRepository externalRelationOtherRepository,
+      InternalRelationRepository internalRelationRepository,
+      MemberRepository memberRepository) {
+    
     log.info("Service created");
-    this.commercialPartnerRepository = ExternalRelationPartnerRepository.getInstance();
-    this.externalRelationClubRepository = ExternalRelationClubRepository.getInstance();
-    this.externalRelationOtherRepository = ExternalRelationOtherRepository.getInstance();
-    this.internalRelationRepository = InternalRelationRepository.getInstance();
-    this.memberRepository = MemberRepository.getInstance();
+    this.commercialPartnerRepository = commercialPartnerRepository;
+    this.externalRelationClubRepository = externalRelationClubRepository;
+    this.externalRelationOtherRepository = externalRelationOtherRepository;
+    this.internalRelationRepository = internalRelationRepository;
+    this.memberRepository = memberRepository;
   }
 
   /**
@@ -53,7 +54,7 @@ public class ExportAddressService {
    *
    * @param addressFile - location for the target Excel file
    * @return generated wrapper around Excel file
-   * @throws IOException - in case generating the file fails 
+   * @throws IOException - in case generating the file fails
    */
   public Adresbestand generateMagazineAddressFile(File addressFile) throws IOException {
     try (Adresbestand targetFile = new Adresbestand(addressFile)) {
@@ -88,7 +89,7 @@ public class ExportAddressService {
         if (!member.getAddress().isAddressInvalid()) {
           targetFile.addMember(member);
         }
-        });
+      });
       return targetFile;
     }
   }

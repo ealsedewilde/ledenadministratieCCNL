@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -20,9 +19,6 @@ import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 
 public class DocumentController {
-  
-  @Getter
-  private static final DocumentController instance = new DocumentController();
 
   private final PageController pageController;
 
@@ -40,10 +36,9 @@ public class DocumentController {
 
   private DocumentViewer documentViewer;
 
-
-  private DocumentController() {
-    this.pageController = PageController.getInstance();
-    this.documentService = DocumentService.getInstance();
+  public DocumentController(PageController pageController, DocumentService documentService) {
+    this.pageController = pageController;
+    this.documentService = documentService;
     setup();
   }
 

@@ -9,11 +9,8 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class PartnerDeleteControllerTest extends FXMLBaseTest {
@@ -43,14 +40,8 @@ class PartnerDeleteControllerTest extends FXMLBaseTest {
     verify(getPageController()).showMessage("Gegevens zijn verwijderd");
   }
 
-  @BeforeAll
-  static void setup() {
-   
-    MockProvider.mock(CommercialPartnerService.class);
-  };
-
   private void prepare() {
-    sut = PartnerDeleteController.getInstance();
+    sut = getTestSubject(PartnerDeleteController.class);
     getPageWithFxController(sut, PageName.PARTNER_DELETE);
   }
 

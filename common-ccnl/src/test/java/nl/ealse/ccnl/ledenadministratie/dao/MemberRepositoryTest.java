@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class MemberRepositoryTest {
   
-  private MemberRepository sut = MemberRepository.getInstance();
+  private MemberRepository sut = new MemberRepository();
   
   @Test
   void test() {

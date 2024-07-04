@@ -1,8 +1,8 @@
 package nl.ealse.ccnl.service;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import nl.ealse.ccnl.ledenadministratie.annual.AnnualRollover;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,8 +16,8 @@ class AnnualRolloverServiceTest {
   
   @Test
   void testRollover() {
-    rollover = MockProvider.mock(AnnualRollover.class);
-    sut = AnnualRolloverService.getInstance();
+    rollover = mock(AnnualRollover.class);
+    sut = new AnnualRolloverService(rollover);
     sut.annualRollover();
     verify(rollover).rollover();
   }

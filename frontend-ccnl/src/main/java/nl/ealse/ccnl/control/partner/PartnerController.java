@@ -12,18 +12,15 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 
 public class PartnerController extends ExternalRelationController<ExternalRelationPartner> {
-  
-  @Getter
-  private static final PartnerController instance = new PartnerController();
-  
+
   private final PageController pageController;
 
   @Getter
   private FormController formController;
 
-  private PartnerController() {
-    super(CommercialPartnerService.getInstance());
-    this.pageController = PageController.getInstance();
+   public PartnerController(PageController pageController, CommercialPartnerService service) {
+    super(pageController, service);
+    this.pageController = pageController;
     setup();
   }
 
@@ -45,7 +42,7 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
     this.selectedExternalRelation = event.getSelectedEntity();
     handlePartner(event);
   }
-  
+
   private void handlePartner(MenuChoiceEvent event) {
     pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);

@@ -6,13 +6,9 @@ import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
-import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -21,12 +17,12 @@ import org.junit.jupiter.api.Test;
 
 class IbanControllerTest extends FXMLBaseTest {
   private static WrappedFileChooser fileChooser;
-  
+
   private IbanController sut;
   private Member m;
   private TextField ibanNumber;
   private Label ibanNumberE;
-  
+
   @Test
   void testController() {
     m = member();
@@ -36,8 +32,9 @@ class IbanControllerTest extends FXMLBaseTest {
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());  }
-  
+    Assertions.assertTrue(result.get());
+  }
+
   private void doTest() {
     AddIbanNumberEvent event = new AddIbanNumberEvent(m, this::nextAction);
     sut.onApplicationEvent(event);
@@ -46,31 +43,29 @@ class IbanControllerTest extends FXMLBaseTest {
     sut.save();
     Assertions.assertTrue(ibanNumberE.isVisible());
     Assertions.assertEquals("IBAN-nummer is verplicht", ibanNumberE.getText());
-    
+
     ibanNumber.setText("GB33BUKB0000000000");
     sut.save();
     Assertions.assertTrue(ibanNumberE.isVisible());
     Assertions.assertEquals("IBAN-nummer onjuist", ibanNumberE.getText());
-    
+
     ibanNumber.setText("GB33BUKB20201555555555");
     sut.save();
     Assertions.assertFalse(ibanNumberE.isVisible());
   }
-  
+
   private void prepare() {
-    sut = IbanController.getInstance();
+    sut = getTestSubject(IbanController.class);
     setFileChooser();
   }
-  
+
   @BeforeAll
   static void setup() {
-    MockProvider.mock(DocumentService.class);
-    MockProvider.mock(MemberService.class);
-     fileChooser = mock(WrappedFileChooser.class);
+    fileChooser = mock(WrappedFileChooser.class);
     when(fileChooser.showSaveDialog()).thenReturn(new File("welkom.pdf"));
   }
 
-  
+
   private static Member member() {
     Member m = new Member();
     m.setMemberNumber(1234);
@@ -82,7 +77,8 @@ class IbanControllerTest extends FXMLBaseTest {
 
   private void setFileChooser() {
     try {
-      FieldUtils.writeField(SepaAuthorizarionController.getInstance(), "fileChooser", fileChooser, true);
+      FieldUtils.writeField(getTestSubject(SepaAuthorizarionController.class), "fileChooser",
+          fileChooser, true);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -96,10 +92,10 @@ class IbanControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
   }
-  
+
   private Void nextAction() {
     return null;
   }
-  
+
 
 }

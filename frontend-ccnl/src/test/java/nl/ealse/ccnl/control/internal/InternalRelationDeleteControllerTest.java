@@ -9,11 +9,8 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class InternalRelationDeleteControllerTest extends FXMLBaseTest {
@@ -42,15 +39,9 @@ class InternalRelationDeleteControllerTest extends FXMLBaseTest {
     verify(getPageController()).showMessage("Gegevens zijn verwijderd");
   }
 
-  @BeforeAll
-  static void setup() {
-   
-    MockProvider.mock(InternalRelationService.class);
-  };
-
   private void prepare() {
     reset(getPageController());
-    sut = InternalRelationDeleteController.getInstance();
+    sut = getTestSubject(InternalRelationDeleteController.class);
     getPageWithFxController(sut, PageName.INTERNAL_RELATION_DELETE);
   }
 

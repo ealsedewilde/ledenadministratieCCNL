@@ -16,10 +16,10 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ class SettingsControllerTest extends FXMLBaseTest {
       sut.editSetting(mouseEvent);
       context.verify(() -> EventPublisher.publishEvent(any(SettingSelectionEvent.class)));
     }
- 
+
     sut.save();
     verify(getPageController(), never()).showMessage("Instelling is opgeslagen");
     setInput();
@@ -69,7 +69,7 @@ class SettingsControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = SettingsController.getInstance();
+    sut = getTestSubject(SettingsController.class);
     getPageWithFxController(sut, PageName.SETTINGS);
     TableRow<Setting> row = new TableRow<>();
     row.setItem(setting);
@@ -78,7 +78,7 @@ class SettingsControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    service = MockProvider.mock(SettingsService.class);
+    service = ComponentProviderUtil.getComponent(SettingsService.class);
     setting = setting();
     List<Setting> settings = new ArrayList<>();
     settings.add(setting);

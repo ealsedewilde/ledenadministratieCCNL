@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -15,9 +14,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 
 public class SettingsController extends SettingsView {
-  
-  @Getter
-  private static final SettingsController instance = new SettingsController();
 
   private final PageController pageController;
 
@@ -26,9 +22,9 @@ public class SettingsController extends SettingsView {
   @FXML
   private TableView<Setting> tableView;
 
-  private SettingsController() {
-    this.pageController = PageController.getInstance();
-    this.service = SettingsService.getInstance();
+  public SettingsController(PageController pageController, SettingsService service) {
+    this.pageController = pageController;
+    this.service = service;
   }
 
   @FXML

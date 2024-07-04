@@ -17,13 +17,12 @@ import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.ccnl.event.support.EventPublisher;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -57,9 +56,10 @@ class MemberSearchControllerTest extends FXMLBaseTest {
       when(me.getSource()).thenReturn(row);
       try (MockedStatic<EventPublisher> context = mockStatic(EventPublisher.class)) {
         sut.handleSelected(me);
-        context.verify(() -> EventPublisher.publishEvent(any(MemberSeLectionEvent.class)), times(1));
+        context.verify(() -> EventPublisher.publishEvent(any(MemberSeLectionEvent.class)),
+            times(1));
       }
- 
+
       searchField("1234");
       sut.search();
       searchCriterium(3);
@@ -73,14 +73,14 @@ class MemberSearchControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = MemberSearchController.getInstance();
- 
+    sut = getTestSubject(MemberSearchController.class);
+
   }
 
 
   @BeforeAll
   static void setup() {
-    service = MockProvider.mock(MemberService.class);
+    service = ComponentProviderUtil.getComponent(MemberService.class);
     m = member();
     List<Member> members = new ArrayList<>();
     members.add(m);

@@ -10,7 +10,6 @@ import java.util.Optional;
 import nl.ealse.ccnl.ledenadministratie.dao.SettingRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -45,8 +44,8 @@ class SettingsServiceTest {
     EntityManager em = EntityManagerProvider.getEntityManager();
     EntityTransaction t = mock(EntityTransaction.class);
     when(em.getTransaction()).thenReturn(t);
-    dao = MockProvider.mock(SettingRepository.class);
-    sut = SettingsService.getInstance();
+    dao = mock(SettingRepository.class);
+    sut = new SettingsService(dao);
   }
 
 }

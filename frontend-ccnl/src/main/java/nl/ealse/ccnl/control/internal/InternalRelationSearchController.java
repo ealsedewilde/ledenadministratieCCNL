@@ -2,7 +2,6 @@ package nl.ealse.ccnl.control.internal;
 
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -16,16 +15,14 @@ import nl.ealse.ccnl.service.relation.SearchItem;
 
 public class InternalRelationSearchController
     extends SearchController<InternalRelation, InternalRelationSelectionEvent> {
-  
-  @Getter
-  private static final InternalRelationSearchController instance = new InternalRelationSearchController();
 
   private final PageController pageController;
   private final InternalRelationService internalRelationService;
 
-  private InternalRelationSearchController() {
-    this.pageController = PageController.getInstance();
-    this.internalRelationService = InternalRelationService.getInstance();
+  public InternalRelationSearchController(PageController pageController,
+      InternalRelationService internalRelationService) {
+    this.pageController = pageController;
+    this.internalRelationService = internalRelationService;
   }
 
   @EventListener(choiceGroup = ChoiceGroup.SEARCH_INTERNAL)

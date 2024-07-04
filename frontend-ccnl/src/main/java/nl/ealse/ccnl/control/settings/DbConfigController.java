@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.settings;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
-import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -14,13 +13,10 @@ import nl.ealse.javafx.FXMLLoaderUtil;
 
 public class DbConfigController extends BaseDbConfigurator{
   
-  @Getter
-  private static final DbConfigController instance = new DbConfigController();
-  
   private final PageController pageController;
 
-  private DbConfigController() {
-    this.pageController = PageController.getInstance();
+   public DbConfigController(PageController pageController) {
+    this.pageController = pageController;
     getConfigStage().initOwner(MainStage.getStage());
     getConfigStage().initModality(Modality.APPLICATION_MODAL);
  }

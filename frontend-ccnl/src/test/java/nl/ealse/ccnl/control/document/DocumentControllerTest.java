@@ -15,11 +15,11 @@ import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,7 +35,7 @@ class DocumentControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-     AtomicBoolean ar = new AtomicBoolean();
+    AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
       doTest();
@@ -58,7 +58,7 @@ class DocumentControllerTest extends FXMLBaseTest {
 
 
   private void prepare() {
-    sut = DocumentController.getInstance();
+    sut = getTestSubject(DocumentController.class);
     getPageWithFxController(sut, PageName.VIEW_DOCUMENTS);
     setPdfViewer();
     TableRow<Document> row = new TableRow<>();
@@ -79,7 +79,7 @@ class DocumentControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    documentService = MockProvider.mock(DocumentService.class);
+    documentService = ComponentProviderUtil.getComponent(DocumentService.class);
     document = document();
     List<Document> documents = new ArrayList<>();
     documents.add(document);

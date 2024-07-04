@@ -13,7 +13,7 @@ class ButtonCellTest extends FXBase {
 
   private ButtonCell<AddButton, Object> sut;
 
-  
+
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();

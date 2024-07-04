@@ -13,17 +13,14 @@ import nl.ealse.ccnl.service.relation.ExternalClubService;
 
 public class ExternalClubController extends ExternalRelationController<ExternalRelationClub> {
 
-  @Getter
-  private static final ExternalClubController instance = new ExternalClubController();
-
   private final PageController pageController;
 
   @Getter
   private FormController formController;
 
-  private ExternalClubController() {
-    super(ExternalClubService.getInstance());
-    this.pageController = PageController.getInstance();
+  public ExternalClubController(PageController pageController, ExternalClubService service) {
+    super(pageController, service);
+    this.pageController = pageController;
     setup();
   }
 

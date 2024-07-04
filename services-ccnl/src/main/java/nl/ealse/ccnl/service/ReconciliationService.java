@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.service;
 
-import jakarta.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,7 +8,6 @@ import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.PaymentFileRepository;
@@ -22,9 +20,6 @@ import nl.ealse.ccnl.ledenadministratie.util.XmlValidator;
 
 @Slf4j
 public class ReconciliationService {
-  
-  @Getter
-  private static ReconciliationService instance = new ReconciliationService();
 
   private static final Set<MembershipStatus> STATUSES =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
@@ -35,11 +30,11 @@ public class ReconciliationService {
 
   private static final String XSD = "/camt.053.001.02.xsd";
 
-  private ReconciliationService() {
+  public ReconciliationService(PaymentFileRepository dao, MemberRepository memberDao, PaymentHandler reconciliationHandler) {
     log.info("Service created");
-    this.dao = PaymentFileRepository.getInstance();
-    this.memberDao = MemberRepository.getInstance();
-    this.reconciliationHandler = PaymentHandler.getInstance();
+    this.dao = dao;
+    this.memberDao = memberDao;
+    this.reconciliationHandler = reconciliationHandler;
   }
 
   public void deleteAllFiles() {

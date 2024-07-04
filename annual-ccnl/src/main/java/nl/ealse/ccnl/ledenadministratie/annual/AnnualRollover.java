@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
@@ -22,17 +21,15 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
  */
 public class AnnualRollover {
 
-  @Getter
-  private static AnnualRollover instance = new AnnualRollover();
-  private final ArchiveRepository archiveRepository = ArchiveRepository.getInstance();
-
   private static final EnumSet<MembershipStatus> statuses = EnumSet.of(MembershipStatus.INACTIVE,
       MembershipStatus.LAST_YEAR_MEMBERSHIP, MembershipStatus.OVERDUE);
 
   private final MemberRepository memberRepository;
+  private final ArchiveRepository archiveRepository;
 
-  private AnnualRollover() {
-    this.memberRepository = MemberRepository.getInstance();
+  public AnnualRollover(MemberRepository memberRepository, ArchiveRepository archiveRepository) {
+    this.memberRepository = memberRepository;
+    this.archiveRepository = archiveRepository;
   }
   /**
    * Rollover to a new membership year.

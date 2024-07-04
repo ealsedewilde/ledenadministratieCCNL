@@ -8,14 +8,10 @@ import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
-import nl.ealse.ccnl.TaskExecutor;
-import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.service.excelimport.ImportService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -59,18 +55,15 @@ class ExcelImportControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = ExcelImportController.getInstance();
+    sut = getTestSubject(ExcelImportController.class);
     getPageWithFxController(sut, PageName.EXCEL_IMPORT);
   }
 
   @BeforeAll
   static void setup() {
-   
-    MockProvider.mock(ImportService.class);
     fileChooser = mock(WrappedFileChooser.class);
-    URL url  = ExcelImportController.class.getResource("/leden.xlsx");
+    URL url = ExcelImportController.class.getResource("/leden.xlsx");
     when(fileChooser.showOpenDialog()).thenReturn(new File(url.getFile()));
-    TestExecutor.overrideTaskExecutor();
   }
 
   private void setFileChooser() {

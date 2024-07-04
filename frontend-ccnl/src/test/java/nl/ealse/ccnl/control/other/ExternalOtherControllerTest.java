@@ -7,11 +7,8 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
-import nl.ealse.ccnl.service.relation.ExternalOtherService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalOtherControllerTest extends FXMLBaseTest {
@@ -24,7 +21,7 @@ class ExternalOtherControllerTest extends FXMLBaseTest {
     relation = externalRelationOther();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = ExternalOtherController.getInstance();
+      sut = getTestSubject(ExternalOtherController.class);
       doTest();
       ar.set(true);
     }, ar);
@@ -42,11 +39,6 @@ class ExternalOtherControllerTest extends FXMLBaseTest {
     sut.getFormController().nextPage();
     sut.getFormController().previousPage();
   }
-
-  @BeforeAll
-  static void setup() {
-    MockProvider.mock(ExternalOtherService.class);
-  };
 
   private ExternalRelationOther externalRelationOther() {
     ExternalRelationOther r = new ExternalRelationOther();

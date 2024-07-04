@@ -18,7 +18,7 @@ public class TransactionUtil {
    * @param work - the work unit to handle in the transaction
    * @throws E exception thrown by the work unit
    */
-  public <E extends Exception> void inTransction(Procedure<E> work) throws E {
+  public <E extends Exception> void inTransction(UnitOfWork<E> work) throws E {
     EntityTransaction transaction = EntityManagerProvider.getEntityManager().getTransaction();
     if (!transaction.isActive()) {
       try {

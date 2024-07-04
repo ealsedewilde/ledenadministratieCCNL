@@ -26,16 +26,13 @@ import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 @Slf4j
 public class SepaDirectDebitService {
 
-  @Getter
-  private static SepaDirectDebitService instance = new SepaDirectDebitService();
-
   private static final DateTimeFormatter DT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
   private final SepaIncassoGenerator generator;
 
-  private  SepaDirectDebitService() {
+  public  SepaDirectDebitService(SepaIncassoGenerator generator) {
     log.info("Service created");
-    this.generator = SepaIncassoGenerator.getInstance();
+    this.generator = generator;
   }
 
   public List<String> generateSepaDirectDebitFile(File targetFile) throws IncassoException {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class DocumentTemplateRepositoryTest {
 
-  private DocumentTemplateRepository dao = DocumentTemplateRepository.getInstance();
+  private DocumentTemplateRepository dao = new DocumentTemplateRepository();
 
   @Test
   void doTest() {

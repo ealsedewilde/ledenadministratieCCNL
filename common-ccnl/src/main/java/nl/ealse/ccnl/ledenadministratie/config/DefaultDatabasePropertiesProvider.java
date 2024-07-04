@@ -9,7 +9,7 @@ public class DefaultDatabasePropertiesProvider implements DatabasePropertiesProv
 
   @Override
   public Properties getProperties() {
-    SettingRepository dao = SettingRepository.getInstance();
+    SettingRepository dao = new SettingRepository();
     List<Setting> settings = dao.findByOrderBySettingsGroupAscKeyAsc();
     Properties properties = new Properties();
     settings.forEach(setting -> properties.put(setting.getId(), setting.getValue()));

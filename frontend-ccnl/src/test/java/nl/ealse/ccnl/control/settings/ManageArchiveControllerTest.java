@@ -6,12 +6,9 @@ import javafx.scene.control.TextField;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.service.ArchiveService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ManageArchiveControllerTest extends FXMLBaseTest {
@@ -22,7 +19,6 @@ class ManageArchiveControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    sut = ManageArchiveController.getInstance();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
       prepare();
@@ -49,13 +45,8 @@ class ManageArchiveControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = ManageArchiveController.getInstance();
+    sut = getTestSubject(ManageArchiveController.class);
     getPageWithFxController(sut, PageName.MANAGE_ARCHIVE);
-  }
-
-  @BeforeAll
-  static void setup() {
-    MockProvider.mock(ArchiveService.class);
   }
 
   private void referenceYear() {

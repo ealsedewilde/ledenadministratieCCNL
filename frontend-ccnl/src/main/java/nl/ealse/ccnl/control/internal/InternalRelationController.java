@@ -16,10 +16,7 @@ import nl.ealse.ccnl.view.InternalRelationView;
 import nl.ealse.javafx.mapping.ViewModel;
 
 public class InternalRelationController extends InternalRelationView {
-  
-  @Getter
-  private static final InternalRelationController instance = new InternalRelationController();
-  
+
   private final PageController pageController;
 
   private final InternalRelationService internalRelationService;
@@ -32,9 +29,10 @@ public class InternalRelationController extends InternalRelationView {
 
   private FormController formController;
 
-  private InternalRelationController() {
-    this.pageController = PageController.getInstance();
-    this.internalRelationService = InternalRelationService.getInstance();
+  public InternalRelationController(PageController pageController,
+      InternalRelationService internalRelationService) {
+    this.pageController = pageController;
+    this.internalRelationService = internalRelationService;
     setup();
   }
 
@@ -56,8 +54,8 @@ public class InternalRelationController extends InternalRelationView {
     this.selectedInternalRelation = event.getSelectedEntity();
     handleRelation(event);
   }
-  
-  private  void handleRelation(MenuChoiceEvent event) {
+
+  private void handleRelation(MenuChoiceEvent event) {
     this.currentMenuChoice = event.getMenuChoice();
     pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);

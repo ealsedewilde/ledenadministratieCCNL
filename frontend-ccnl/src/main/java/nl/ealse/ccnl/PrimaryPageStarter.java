@@ -3,7 +3,6 @@ package nl.ealse.ccnl;
 import java.awt.SplashScreen;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
@@ -18,9 +17,6 @@ import nl.ealse.javafx.ImagesMap;
  */
 @Slf4j
 public class PrimaryPageStarter {
-  
-  @Getter
-  private static final PrimaryPageStarter instance = new PrimaryPageStarter();
 
   private static final String MAIN_FXML = "main";
 

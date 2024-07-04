@@ -8,12 +8,9 @@ import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
-import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class InternalRelationControllerTest extends FXMLBaseTest {
@@ -33,7 +30,7 @@ class InternalRelationControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    sut = InternalRelationController.getInstance();
+    sut = getTestSubject(InternalRelationController.class);
     InternalRelationSelectionEvent event =
         new InternalRelationSelectionEvent(sut, MenuChoice.AMEND_INTERNAL_RELATION, rel);
     sut.amendRelation(event);
@@ -45,11 +42,6 @@ class InternalRelationControllerTest extends FXMLBaseTest {
     formController.nextPage();
     formController.previousPage();
 
-  }
-
-  @BeforeAll
-  static void setup() {
-    MockProvider.mock(InternalRelationService.class);
   }
 
   private InternalRelation internalRelation() {
@@ -68,7 +60,7 @@ class InternalRelationControllerTest extends FXMLBaseTest {
     r.setRelationNumber(8506);
     return r;
   }
-  
+
   private FormController getFormController() {
     try {
       return (FormController) FieldUtils.readDeclaredField(sut, "formController", true);

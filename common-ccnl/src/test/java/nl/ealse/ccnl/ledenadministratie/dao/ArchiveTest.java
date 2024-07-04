@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 
 class ArchiveTest {
   
-  private MemberRepository memberRepository = MemberRepository.getInstance();
-  private ArchiveRepository archivedMemberRepository = ArchiveRepository.getInstance();
+  private MemberRepository memberRepository = new MemberRepository();
+  private ArchiveRepository archivedMemberRepository = new ArchiveRepository();
   
   @Test
   void testArchive() {

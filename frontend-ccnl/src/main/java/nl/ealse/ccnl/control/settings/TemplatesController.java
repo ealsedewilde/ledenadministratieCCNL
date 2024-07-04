@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -20,9 +19,6 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 
 public class TemplatesController {
-  
-  @Getter
-  private static final TemplatesController instance = new TemplatesController();
 
   private final PageController pageController;
 
@@ -37,9 +33,9 @@ public class TemplatesController {
   @FXML
   private TextArea templateText;
 
-  private TemplatesController() {
-     this.pageController = PageController.getInstance();
-    this.documentService = DocumentService.getInstance();
+   public TemplatesController(PageController pageController, DocumentService documentService) {
+    this.pageController = pageController;
+    this.documentService = documentService;
   }
 
   @EventListener(menuChoice = MenuChoice.TEMPLATES_OVERVIEW)

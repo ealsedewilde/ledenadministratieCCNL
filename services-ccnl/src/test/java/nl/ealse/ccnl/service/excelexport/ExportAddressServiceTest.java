@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.service.excelexport;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -56,15 +56,13 @@ class ExportAddressServiceTest {
 
   @BeforeAll
   static void setup() {
-    MockProvider.mock(ExternalRelationPartnerRepository.class);
-    MockProvider.mock(ExternalRelationClubRepository.class);
-    MockProvider.mock(ExternalRelationOtherRepository.class);
-    MockProvider.mock(InternalRelationRepository.class);
-    memberRepository = MockProvider.mock(MemberRepository.class);
+    memberRepository = mock(MemberRepository.class);
     List<Member> members = new ArrayList<>();
     members.add(member());
     when(memberRepository.findMembersByStatuses(statuses)).thenReturn(members);
-    sut = ExportAddressService.getInstance();
+    sut = new ExportAddressService(mock(ExternalRelationPartnerRepository.class),
+        mock(ExternalRelationClubRepository.class), mock(ExternalRelationOtherRepository.class),
+        mock(InternalRelationRepository.class), memberRepository);
   }
 
 

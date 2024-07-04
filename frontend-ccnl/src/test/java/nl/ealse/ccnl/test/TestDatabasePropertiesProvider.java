@@ -3,7 +3,7 @@ package nl.ealse.ccnl.test;
 import java.util.Properties;
 import nl.ealse.ccnl.ledenadministratie.config.DatabasePropertiesProvider;
 
-public class TestDatabasePropertiesProvider implements DatabasePropertiesProvider{
+public class TestDatabasePropertiesProvider implements DatabasePropertiesProvider {
 
   @Override
   public Properties getProperties() {

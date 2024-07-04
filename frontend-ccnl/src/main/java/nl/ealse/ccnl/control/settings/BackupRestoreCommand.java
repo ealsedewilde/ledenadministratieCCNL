@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control.settings;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
@@ -19,9 +18,6 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 @Slf4j
 public class BackupRestoreCommand {
 
-  @Getter
-  private static final BackupRestoreCommand instance = new BackupRestoreCommand();
-
   private static final DateTimeFormatter formatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss");
 
@@ -33,9 +29,9 @@ public class BackupRestoreCommand {
 
   private WrappedFileChooser fileChooser;
 
-  private BackupRestoreCommand() {
-    this.pageController = PageController.getInstance();
-    this.service = BackupRestoreService.getInstance();
+   public BackupRestoreCommand(PageController pageController, BackupRestoreService service) {
+    this.pageController = pageController;
+    this.service = service;
     setup();
   }
 

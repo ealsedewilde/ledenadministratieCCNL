@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.fxml.FXML;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -31,9 +30,6 @@ import nl.ealse.javafx.util.WrappedFileChooser;
 @Slf4j
 public class SepaAuthorizarionController {
 
-  @Getter
-  private static final SepaAuthorizarionController instance = new SepaAuthorizarionController();
-
   private final PageController pageController;
 
   private final DocumentService documentService;
@@ -56,10 +52,10 @@ public class SepaAuthorizarionController {
    * @param documentService
    * @param service
    */
-  private SepaAuthorizarionController() {
-    this.pageController = PageController.getInstance();
-    this.documentService = DocumentService.getInstance();
-    this.service = MemberService.getInstance();
+  public SepaAuthorizarionController(PageController pageController, DocumentService documentService, MemberService service) {
+    this.pageController = pageController;
+    this.documentService = documentService;
+    this.service = service;
     setup();
   }
 

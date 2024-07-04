@@ -5,16 +5,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.javafx.FXMLLoaderUtil;
 
 public class SettingsEdit extends SettingsView {
-  
-  @Getter
-  private static final SettingsEdit instance = new SettingsEdit();
 
   private final SettingsController controller;
 
@@ -22,9 +18,8 @@ public class SettingsEdit extends SettingsView {
   
   private Stage editStage;
 
-
-  private SettingsEdit() {
-    this.controller = SettingsController.getInstance();
+  public SettingsEdit(SettingsController controller) {
+    this.controller = controller;
     setup();
   }
   

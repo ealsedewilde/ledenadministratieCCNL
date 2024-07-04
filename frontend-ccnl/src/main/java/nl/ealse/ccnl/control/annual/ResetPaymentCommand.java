@@ -6,7 +6,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -15,9 +14,6 @@ import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.service.ReconciliationService;
 
 public class ResetPaymentCommand {
-  
-  @Getter
-  private static final ResetPaymentCommand instance = new ResetPaymentCommand();
 
   private final PageController pageController;
 
@@ -25,9 +21,9 @@ public class ResetPaymentCommand {
   
   private Alert confirmation;
 
-  private ResetPaymentCommand() {
-    this.pageController = PageController.getInstance();
-    this.reconciliationService = ReconciliationService.getInstance();
+  public ResetPaymentCommand(PageController pageController, ReconciliationService reconciliationService) {
+    this.pageController = pageController;
+    this.reconciliationService = reconciliationService;
     setup();
   }
   

@@ -2,6 +2,7 @@ package nl.ealse.ccnl.ledenadministratie.payment;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.IOException;
@@ -14,7 +15,6 @@ import java.util.Optional;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Test;
 
 class PaymentHandlerTest {
@@ -27,10 +27,10 @@ class PaymentHandlerTest {
   
   @Test
   void handlePayment() {
-    memberRepository = MockProvider.mock(MemberRepository.class);
+    memberRepository = mock(MemberRepository.class);
     Optional<Member> om = Optional.of(member());
     when(memberRepository.findById(any(int.class))).thenReturn(om);
-    sut = PaymentHandler.getInstance();
+    sut = new PaymentHandler(memberRepository);
     List<PaymentFile> files = new ArrayList<>();
     files.add(paymentFile());
     sut.handlePayments(files, LocalDate.of(2020, 12, 5), true);

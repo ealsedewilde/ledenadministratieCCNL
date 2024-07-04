@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.service.relation;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.ledenadministratie.util.ClubNumberFactory;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,12 +13,14 @@ class ExternalClubServiceTest {
   
   private static ExternalRelationClubRepository clubDao;
   
+  private static ClubNumberFactory clubNumberFactory;
+  
   private static ExternalClubService sut;
   
   @Test
   void testGetFreeNumber() {
     sut.getFreeNumber();
-    verify(ClubNumberFactory.getInstance()).getNewNumber();
+    verify(clubNumberFactory).getNewNumber();
   }
   
   @Test
@@ -72,9 +74,9 @@ class ExternalClubServiceTest {
   
   @BeforeAll
   static void setup() {
-    MockProvider.mock(ClubNumberFactory.class);
-    clubDao = MockProvider.mock(ExternalRelationClubRepository.class);
-    sut = ExternalClubService.getInstance();
+    clubNumberFactory = mock(ClubNumberFactory.class);
+    clubDao = mock(ExternalRelationClubRepository.class);
+    sut = new ExternalClubService(clubDao, clubNumberFactory);
     
   }
 

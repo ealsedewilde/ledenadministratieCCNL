@@ -7,12 +7,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
-import nl.ealse.ccnl.service.ReconciliationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ResetPaymentControllerTest extends FXMLBaseTest {
@@ -23,7 +20,7 @@ class ResetPaymentControllerTest extends FXMLBaseTest {
   void testController() {
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = ResetPaymentCommand.getInstance();
+      sut = getTestSubject(ResetPaymentCommand.class);
       clickButton();
       sut.executeCommand(null);
       verify(getPageController()).showMessage("Alle betaalgegevens zijn gewist");
@@ -32,14 +29,8 @@ class ResetPaymentControllerTest extends FXMLBaseTest {
     Assertions.assertTrue(result.get());
   }
 
-  @BeforeAll
-  static void setup() {
-     MockProvider.mock(ReconciliationService.class);
-  }
-
   /**
-   * Click the confirm button.
-   * This code gets executed when the main FX thread waits for input.
+   * Click the confirm button. This code gets executed when the main FX thread waits for input.
    */
   private void clickButton() {
     Platform.runLater(() -> {

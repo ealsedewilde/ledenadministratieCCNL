@@ -2,17 +2,13 @@ package nl.ealse.ccnl.ledenadministratie.dao;
 
 import jakarta.persistence.TypedQuery;
 import java.util.List;
-import lombok.Getter;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 
 public class DocumentRepository extends BaseRepository<Document> {
-
-  @Getter
-  private static DocumentRepository instance = new DocumentRepository();
    
-  private DocumentRepository() {
+  public DocumentRepository() {
     super(Document.class);
   }
 

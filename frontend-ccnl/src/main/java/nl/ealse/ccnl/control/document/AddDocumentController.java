@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
@@ -27,9 +26,6 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
 @Slf4j
 public class AddDocumentController {
-
-  @Getter
-  private static final AddDocumentController instance = new AddDocumentController();
 
   private final PageController pageController;
 
@@ -58,10 +54,9 @@ public class AddDocumentController {
 
   private WrappedFileChooser fileChooser;
 
-
-  private AddDocumentController() {
-    this.pageController = PageController.getInstance();
-    this.documentService = DocumentService.getInstance();
+  public AddDocumentController(PageController pageController, DocumentService documentService) {
+    this.pageController = pageController;
+    this.documentService = documentService;
     setup();
   }
 

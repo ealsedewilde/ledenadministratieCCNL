@@ -1,6 +1,8 @@
 package nl.ealse.ccnl.test;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.support.EventProcessor;
+import nl.ealse.ccnl.ioc.ComponentProviderException;
+import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.javafx.FXMLLoadException;
 
 /**
@@ -21,20 +25,13 @@ import nl.ealse.javafx.FXMLLoadException;
 public abstract class FXMLBaseTest extends FXBase {
 
   private static final String FXML_DIR = "/fxml/";
-  
+
   static {
     EventProcessor.getInstance().initialize();
   }
 
-  private static final PageController pc = MockProvider.mock(PageController.class);
-
-  /**
-   * Return a mockito spy. Use it when working with a form.
-   *
-   * @return
-   */
   protected PageController getPageController() {
-    return pc;
+    return ComponentProviderUtil.getComponent(PageController.class);
   }
 
   /**
@@ -80,7 +77,7 @@ public abstract class FXMLBaseTest extends FXBase {
       } else {
         fxmlLoader.setController(controller);
       }
-      //log.info(fxmlLoader.getLocation().toString());
+      // log.info(fxmlLoader.getLocation().toString());
       Parent page = fxmlLoader.load();
       return page;
     } catch (IOException e) {
@@ -89,6 +86,29 @@ public abstract class FXMLBaseTest extends FXBase {
     }
   }
 
-
+  /**
+   * Get a component with mocks for the related component.
+   * @param <T>
+   * @param clazz
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  protected <T> T getTestSubject(Class<T> clazz) {
+    Constructor<?> constructor = clazz.getConstructors()[0];
+    Class<?>[] parmTypes = constructor.getParameterTypes();
+    Object[] parms = new Object[parmTypes.length];
+    for (int ix = 0; ix < parmTypes.length; ix++) {
+      Class<?> parmType = parmTypes[ix];
+      Object parmMock = ComponentProviderUtil.getComponent(parmType);
+      parms[ix] = parmMock;
+    }
+    try {
+      return (T) constructor.newInstance(parms);
+    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+        | InvocationTargetException e) {
+      log.error(String.format("Class %s could not be instantiated", clazz), e);
+      throw new ComponentProviderException(e);
+    }
+  }
 
 }

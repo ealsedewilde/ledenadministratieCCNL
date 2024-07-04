@@ -6,11 +6,8 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class InvalidAddressControllerTest extends FXMLBaseTest {
@@ -39,14 +36,8 @@ class InvalidAddressControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = InvalidAddressController.getInstance();
+    sut = getTestSubject(InvalidAddressController.class);
     getPageWithFxController(sut, PageName.MAGAZINE_INVALID_ADDRESS);
-  }
-
-  @BeforeAll
-  static void setup() {
-   
-    MockProvider.mock(MemberService.class);
   }
 
   private Member member() {

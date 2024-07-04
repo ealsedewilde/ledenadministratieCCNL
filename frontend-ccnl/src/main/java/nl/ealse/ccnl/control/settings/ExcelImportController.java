@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
@@ -27,9 +26,6 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
 @Slf4j
 public class ExcelImportController {
-
-  @Getter
-  private static final ExcelImportController instance = new ExcelImportController();
 
   private final PageController pageController;
 
@@ -64,9 +60,9 @@ public class ExcelImportController {
 
   private File selectedFile;
 
-  private ExcelImportController() {
-    this.pageController = PageController.getInstance();
-    this.importService = ImportService.getInstance();
+  public ExcelImportController(PageController pageController, ImportService importService) {
+    this.pageController = pageController;
+    this.importService = importService;
     setup();
   }
 

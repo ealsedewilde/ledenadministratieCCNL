@@ -5,16 +5,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.service.AnnualRolloverService;
-import nl.ealse.ccnl.service.BackupRestoreService;
-import nl.ealse.ccnl.service.excelexport.ExportArchiveService;
-import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -57,7 +51,7 @@ class AnnualRolloverControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = AnnualRolloverController.getInstance();
+    sut = getTestSubject(AnnualRolloverController.class);
     setFileChooser();
     File backupFile = new File(tempDir, "backup.zip");
     when(fileChooser.showSaveDialog()).thenReturn(backupFile);
@@ -67,11 +61,6 @@ class AnnualRolloverControllerTest extends FXMLBaseTest {
   @BeforeAll
   static void setup() {
     fileChooser = mock(WrappedFileChooser.class);
-    MockProvider.mock(AnnualRolloverService.class);
-    MockProvider.mock(BackupRestoreService.class);
-    MockProvider.mock(ExportArchiveService.class);
-    MockProvider.mock(ExportService.class);
-    TestExecutor.overrideTaskExecutor();
   }
 
   private void setFileChooser() {

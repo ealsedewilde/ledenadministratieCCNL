@@ -5,29 +5,24 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
-import nl.ealse.ccnl.TaskExecutor;
-import nl.ealse.ccnl.TestExecutor;
-import nl.ealse.ccnl.control.annual.PaymentReminderReportCommand.ReminderTask;
-import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class PaymentReminderReportControllerTest  extends FXMLBaseTest {
-  
+class PaymentReminderReportControllerTest extends FXMLBaseTest {
+
   private static WrappedFileChooser fileChooser;
-  
+
   private PaymentReminderReportCommand sut;
-  
+
   @Test
   void test() {
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = PaymentReminderReportCommand.getInstance();
+      sut = getTestSubject(PaymentReminderReportCommand.class);
       sut.setup();
       setFileChooser();
       sut.executeCommand(null);
@@ -37,13 +32,11 @@ class PaymentReminderReportControllerTest  extends FXMLBaseTest {
     Assertions.assertTrue(result.get());
   }
 
-  
+
   @BeforeAll
   static void setup() {
-    MockProvider.mock(ExportService.class);
     fileChooser = mock(WrappedFileChooser.class);
     when(fileChooser.showSaveDialog()).thenReturn(new File("reminders.xlsx"));
-    TestExecutor.overrideTaskExecutor();
   }
 
 

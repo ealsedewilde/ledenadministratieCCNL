@@ -7,24 +7,21 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
-import nl.ealse.ccnl.service.relation.CommercialPartnerService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class PartnerControllerTest extends FXMLBaseTest {
 
   private static PartnerController sut;
   private ExternalRelationPartner partner;
- 
+
   @Test
   void testController() {
     partner = externalRelationPartner();
     final AtomicBoolean ar = new AtomicBoolean();
     AtomicBoolean result = runFX(() -> {
-      sut = PartnerController.getInstance();
+      sut = getTestSubject(PartnerController.class);
       doTest();
       ar.set(true);
     }, ar);
@@ -41,11 +38,6 @@ class PartnerControllerTest extends FXMLBaseTest {
     sut.getFormController().nextPage();
     sut.getFormController().previousPage();
   }
-
-  @BeforeAll
-  static void setup() {
-     MockProvider.mock(CommercialPartnerService.class);
-  };
 
   private ExternalRelationPartner externalRelationPartner() {
     ExternalRelationPartner r = new ExternalRelationPartner();

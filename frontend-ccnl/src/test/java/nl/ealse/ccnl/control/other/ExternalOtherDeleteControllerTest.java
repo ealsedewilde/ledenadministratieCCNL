@@ -8,11 +8,8 @@ import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
-import nl.ealse.ccnl.service.relation.ExternalOtherService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import nl.ealse.ccnl.test.MockProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalOtherDeleteControllerTest extends FXMLBaseTest {
@@ -41,13 +38,8 @@ class ExternalOtherDeleteControllerTest extends FXMLBaseTest {
     verify(getPageController()).showMessage("Gegevens zijn verwijderd");
   }
 
-  @BeforeAll
-  static void setup() {
-    MockProvider.mock(ExternalOtherService.class);
-  };
-
   private void prepare() {
-    sut = ExternalOtherDeleteController.getInstance();
+    sut = getTestSubject(ExternalOtherDeleteController.class);
     getPageWithFxController(sut, PageName.EXTERNAL_RELATION_DELETE);
   }
 

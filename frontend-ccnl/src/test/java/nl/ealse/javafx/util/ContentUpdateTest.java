@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ContentUpdateTest extends FXBase {
-  
+
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
@@ -41,4 +41,4 @@ class ContentUpdateTest extends FXBase {
     Assertions.assertEquals("1234 AA", tf.getText());
   }
 }
-  
+

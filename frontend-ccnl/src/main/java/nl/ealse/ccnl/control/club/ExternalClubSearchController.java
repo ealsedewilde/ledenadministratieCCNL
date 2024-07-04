@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.club;
 
 import java.util.Map;
-import lombok.Getter;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -15,15 +14,12 @@ import nl.ealse.ccnl.service.relation.SearchItem;
 
 public class ExternalClubSearchController
     extends ExternalRelationSearchController<ExternalRelationClub> {
-  
-  @Getter
-  private static final ExternalClubSearchController instance = new ExternalClubSearchController();
 
   private final PageController pageController;
 
-  private ExternalClubSearchController() {
-    super(ExternalClubService.getInstance());
-    this.pageController = PageController.getInstance();
+  public ExternalClubSearchController(PageController pageController, ExternalClubService service) {
+    super(service);
+    this.pageController = pageController;
   }
 
   @EventListener(choiceGroup = ChoiceGroup.SEARCH_CLUB)

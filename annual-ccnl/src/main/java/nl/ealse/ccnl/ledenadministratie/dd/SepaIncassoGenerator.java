@@ -6,7 +6,6 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import java.io.File;
 import java.util.List;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.DocumentRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
@@ -27,15 +26,12 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 @Slf4j
 public class SepaIncassoGenerator {
 
-  @Getter
-  private static SepaIncassoGenerator instance = new SepaIncassoGenerator();
-
   private final MemberRepository dao;
   private final DocumentRepository documentDao;
 
-  private SepaIncassoGenerator() {
-    this.dao = MemberRepository.getInstance();
-    this.documentDao = DocumentRepository.getInstance();
+   public SepaIncassoGenerator(MemberRepository dao, DocumentRepository documentDao) {
+    this.dao = dao;
+    this.documentDao = documentDao;
   }
 
   /**

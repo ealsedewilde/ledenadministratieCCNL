@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.internal;
 
 import javafx.fxml.FXML;
-import lombok.Getter;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
@@ -13,19 +12,17 @@ import nl.ealse.ccnl.view.InternalRelationDeleteView;
 import nl.ealse.javafx.mapping.ViewModel;
 
 public class InternalRelationDeleteController extends InternalRelationDeleteView {
-  
-  @Getter
-  private static final InternalRelationDeleteController instance = new InternalRelationDeleteController();
-  
+
   private final PageController pageController;
 
   private final InternalRelationService service;
 
   private InternalRelation selectedEntity;
 
-  private InternalRelationDeleteController() {
-    this.pageController = PageController.getInstance();
-    this.service = InternalRelationService.getInstance();
+   public InternalRelationDeleteController(PageController pageController,
+      InternalRelationService service) {
+    this.pageController = pageController;
+    this.service = service;
   }
 
   @FXML

@@ -11,6 +11,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>21</java.version>
 		<javafx.version>22.0.1</javafx.version>
+		<javafx.platform>win</javafx.platform>
 		<hibernate.version>6.4.1.Final</hibernate.version>
 		<poi.version>5.2.3</poi.version>
 		<fop.version>2.9</fop.version>
