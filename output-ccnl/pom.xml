@@ -3,7 +3,7 @@
   <parent>
     <groupId>nl.ealse.ccnl</groupId>
     <artifactId>ledenadministratieCCNL</artifactId>
-    <version>6.0.0</version>
+    <version>7.0.0</version>
   </parent>
   <artifactId>output-ccnl</artifactId>
   

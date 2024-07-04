@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.ioc;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -19,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultComponentProvider implements ComponentProvider {
   
-  private final Map<Class<?>, WeakReference<?>> componentMap = new HashMap<>();
+  private final Map<Class<?>, Object> componentMap = new HashMap<>();
   
   /**
    * Look up a component.
@@ -29,12 +28,12 @@ public class DefaultComponentProvider implements ComponentProvider {
    */
   @SuppressWarnings("unchecked")
   public <T> T getComponent(Class<T> clazz) {
-    WeakReference<?> reference = componentMap.get(clazz);
-    if (reference == null || reference.get() == null) {
-      reference = new WeakReference<>(newComponent(clazz));
-      componentMap.put(clazz,  reference);
+    Object component = componentMap.get(clazz);
+    if (component == null) {
+      component = newComponent(clazz);
+      componentMap.put(clazz,  component);
     }
-    return (T) reference.get();
+    return (T) component;
   }
 
   private Object newComponent(Class<?> clazz) {

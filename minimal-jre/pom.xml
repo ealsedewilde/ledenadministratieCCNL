@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>nl.ealse.ccnl</groupId>
 		<artifactId>ledenadministratieCCNL</artifactId>
-		<version>6.0.0</version>
+		<version>7.0.0</version>
 	</parent>
 	<artifactId>minimal-jre</artifactId>
 	<packaging>jlink</packaging>
@@ -57,7 +57,7 @@
 								<addModule>java.xml</addModule>
 								<addModule>jdk.unsupported</addModule>
 								<addModule>jdk.xml.dom</addModule>
-								<!-- the following jmod is missedd by jdeps; is required for TLS  (email) -->'
+								<!-- the following jmod is missed by jdeps; is required for TLS  (email) -->'
 								<addModule>jdk.crypto.ec</addModule>
 								<!-- add the required JavaFX mods -->
 								<addModule>javafx.controls</addModule>

@@ -45,7 +45,6 @@ To support unit testing I use `java.util.ServiceLoader` for `EntityManagerProvid
 
 The Spring beans IOC mechanism was replaced by a very simple dedicated IOC utility `ComponentProviderUtil` class. This works because all components use constructor injection and have just one constructor. It also helps that there are no concurrency issues since all components are created in the single JavaFX application thread.
 The `ComponentProviderUtil` uses a HashMap to store the created components. Which makes all components de facto singletons.
-This HasMap stores the components in a WeakReference to facilitate garbage collection.
 
 The JavaFX controllers are the main singletons. I use lazy instantiation. There are two triggers for instantiation of controllers:
 1. The `fx:controller` attribute while loading and fxml-page
