@@ -15,7 +15,7 @@ public class ComponentProviderUtil {
     if (first.isPresent()) {
       provider = first.get();
     } else {
-      throw new ExceptionInInitializerError("No ComponentProvider available");
+      provider = new DefaultComponentProvider();
     }
   }
   

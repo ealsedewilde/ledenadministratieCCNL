@@ -17,7 +17,7 @@ public class DatabaseProperties {
     if (first.isPresent()) {
       provider = first.get();
     } else {
-      throw new ExceptionInInitializerError("No DatabasePropertiesProvider available");
+      provider = new DefaultDatabasePropertiesProvider();
     }
   }
   

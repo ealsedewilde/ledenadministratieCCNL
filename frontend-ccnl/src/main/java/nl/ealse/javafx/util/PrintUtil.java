@@ -24,7 +24,7 @@ public class PrintUtil {
     if (first.isPresent()) {
       printServiceProvider = first.get();
     } else {
-      throw new ExceptionInInitializerError("No PrintServiceProvider available");
+      printServiceProvider = new DefaultPrintServiceProvider();
     }
   }
 

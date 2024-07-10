@@ -20,7 +20,7 @@ public class EntityManagerProvider {
     if (first.isPresent()) {
       pi = first.get();
     } else {
-      throw new ExceptionInInitializerError("No DatabasePropertiesProvider available");
+      pi = new JpaPersistenceInitializer();
     }
   }
 

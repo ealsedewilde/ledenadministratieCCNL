@@ -52,6 +52,5 @@ public class DefaultComponentProvider implements ComponentProvider {
     }
   }
 
-  
 
 }

@@ -27,7 +27,7 @@ public class IncassoProperties {
     if (first.isPresent()) {
       properties = first.get().getIncassoConfig();
     } else {
-      throw new ExceptionInInitializerError("No DatabasePropertiesProvider available");
+      properties = new DefaultIncassoPropertiesProvider().getIncassoConfig();
     }
   }
 
