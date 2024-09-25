@@ -14,7 +14,7 @@ class FOGeneratorTest {
   void testFOGenerator() {
     Member m = getMember();
     LetterData data = new LetterData(getContent());
-    data.getMembers().add(m);
+    data.members().add(m);
     FOContent content = FOGenerator.generateFO(data);
     boolean ok = content.toString().indexOf("?name?,") > -1;
     Assertions.assertTrue(ok);

@@ -37,7 +37,7 @@ class SepaIncassoGeneratorTest {
     File excelFile = new File(tempDir, "sepa.xlsx");
     try {
       SepaIncassoResult result = sut.generateSepaDirectDebitFile(xmlFile, excelFile);
-      Assertions.assertEquals(1, result.getNumberOfTransactions());
+      Assertions.assertEquals(1, result.numberOfTransactions());
     } catch (IncassoException e) {
       e.printStackTrace();
     }

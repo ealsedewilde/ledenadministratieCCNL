@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.excel.base.ColumnDefinition;
 import nl.ealse.ccnl.ledenadministratie.excel.lid.LidColumnDefinition;
 
-@SuppressWarnings("serial")
 @Slf4j
 @UtilityClass
 public class CCNLColumnProperties {

@@ -30,7 +30,7 @@ public class PDFGenerator {
   public byte[] generatePDF(FOContent content, LetterData data) {
     StringBuilder sb = new StringBuilder();
     sb.append(content.getPreContent());
-    for (Member member : data.getMembers()) {
+    for (Member member : data.members()) {
       sb.append(content.getContent(member));
     }
     sb.append(content.getPostContent());

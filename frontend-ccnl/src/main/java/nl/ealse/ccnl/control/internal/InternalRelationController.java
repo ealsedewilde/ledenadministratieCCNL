@@ -112,14 +112,11 @@ public class InternalRelationController extends InternalRelationView {
   }
 
   private String getHeaderTextValue() {
-    switch (currentMenuChoice) {
-      case NEW_INTERNAL_RELATION:
-        return "Interne functie opvoeren";
-      case AMEND_INTERNAL_RELATION:
-        return "Interne functie wijzigen";
-      default:
-        return "Invalid";
-    }
+    return switch (currentMenuChoice) {
+      case NEW_INTERNAL_RELATION -> "Interne functie opvoeren";
+      case AMEND_INTERNAL_RELATION -> "Interne functie wijzigen";
+      default -> "Invalid";
+    };
   }
 
   private enum RelationNumberValue {

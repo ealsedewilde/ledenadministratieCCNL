@@ -93,7 +93,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     if (overdueExists()) {
       Member selectedMember = selectedMembers.get(0);
       LetterData data = new LetterData(getLetterText().getText());
-      data.getMembers().add(selectedMember);
+      data.members().add(selectedMember);
       byte[] pdf = documentService.generatePDF(data);
       documentViewer.showPdf(pdf, selectedMember);
     }
@@ -161,7 +161,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     @Override
     protected String call() {
       LetterData data = new LetterData(template);
-      data.getMembers().addAll(controller.selectedMembers);
+      data.members().addAll(controller.selectedMembers);
       FOContent foContent = controller.documentService.generateFO(data);
       controller.memberLetterHandler.addLetterToMembers(foContent, controller.selectedMembers);
       byte[] pdf = controller.documentService.generatePDF(foContent, data);

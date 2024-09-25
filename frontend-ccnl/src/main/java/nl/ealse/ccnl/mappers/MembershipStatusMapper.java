@@ -21,19 +21,18 @@ public class MembershipStatusMapper implements PropertyMapper<ChoiceBox<String>,
 
   @Override
   public MembershipStatus getPropertyFromJavaFx(ChoiceBox<String> javaFx) {
-    switch (javaFx.getValue()) {
+    return switch (javaFx.getValue()) {
       case LAST_YEAR_MEMBERSHIP:
-        return MembershipStatus.LAST_YEAR_MEMBERSHIP;
+        yield MembershipStatus.LAST_YEAR_MEMBERSHIP;
       case OVERDUE:
-        return MembershipStatus.OVERDUE;
+        yield MembershipStatus.OVERDUE;
       case INACTIVE:
-        return MembershipStatus.INACTIVE;
+        yield MembershipStatus.INACTIVE;
       case ACTIVE:
-        return MembershipStatus.ACTIVE;
-      case AFTER_APRIL:
+        yield MembershipStatus.ACTIVE;
       default:
-        return MembershipStatus.AFTER_APRIL;
-    }
+        yield MembershipStatus.AFTER_APRIL;
+    };
   }
 
   @Override

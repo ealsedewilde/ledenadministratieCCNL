@@ -2,7 +2,6 @@ package nl.ealse.ccnl.ledenadministratie.output;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 
 /**
@@ -11,12 +10,11 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
  * @author ealse
  *
  */
-@Data
-public class LetterData {
-
-  private final List<Member> members = new ArrayList<>();
-
-  private final String content;
+public record LetterData(List<Member> members, String content) {
+  
+  public LetterData(String content) {
+    this(new ArrayList<>(), content);
+  }
 
   /**
    * All possible tokens in a content template.

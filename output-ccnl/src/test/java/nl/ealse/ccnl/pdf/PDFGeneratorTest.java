@@ -15,8 +15,8 @@ class PDFGeneratorTest {
   void testFOGenerator() {
     Member m = getMember();
     LetterData data = new LetterData(getContent());
-    data.getMembers().add(m);
-    data.getMembers().add(m);
+    data.members().add(m);
+    data.members().add(m);
     FOContent content = FOGenerator.generateFO(data);
     System.out.println(content.toString());
     byte[] pdf = PDFGenerator.generatePDF(content, data);

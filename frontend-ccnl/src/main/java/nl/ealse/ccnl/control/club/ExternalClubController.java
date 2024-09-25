@@ -53,14 +53,11 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
   }
 
   protected String getHeaderTextValue() {
-    switch (currentMenuChoice) {
-      case NEW_EXTERNAL_CLUB:
-        return "Club opvoeren";
-      case AMEND_EXTERNAL_CLUB:
-        return "Club wijzigen";
-      default:
-        return "invalid";
-    }
+    return switch (currentMenuChoice) {
+      case NEW_EXTERNAL_CLUB -> "Club opvoeren";
+      case AMEND_EXTERNAL_CLUB -> "Club wijzigen";
+      default -> "invalid";
+    };
   }
 
   @Override

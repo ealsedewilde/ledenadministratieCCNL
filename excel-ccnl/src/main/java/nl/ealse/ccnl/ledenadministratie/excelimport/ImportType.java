@@ -17,14 +17,11 @@ public enum ImportType {
   }
 
   public static ImportType fromId(String id) {
-    switch (id) {
-      case "add":
-        return ImportType.ADD;
-      case "addReplace":
-        return ImportType.ADD_OVERWRITE;
-      default:
-        return ImportType.REPLACE;
-    }
+    return switch (id) {
+      case "add" -> ImportType.ADD;
+      case "addReplace" -> ImportType.ADD_OVERWRITE;
+      default -> ImportType.REPLACE;
+    };
   }
 
 }

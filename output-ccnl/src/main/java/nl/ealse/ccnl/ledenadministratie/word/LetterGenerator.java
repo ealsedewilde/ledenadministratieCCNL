@@ -65,13 +65,13 @@ public class LetterGenerator {
    * @return the docx-document
    */
   public byte[] generateDocument(LetterData data) {
-    Member member = data.getMembers().get(0);
+    Member member = data.members().get(0);
     setAddress(member);
 
     LineContext lineContext = new LineContext();
     createParagraph(lineContext);
 
-    String[] lines = data.getContent().split("\\r?\\n");
+    String[] lines = data.content().split("\\r?\\n");
     for (String line : lines) {
       line = handlePlaceholders(member, line);
       if (lineContext.isList()) {

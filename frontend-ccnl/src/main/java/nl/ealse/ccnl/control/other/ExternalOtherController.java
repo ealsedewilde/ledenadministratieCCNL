@@ -53,14 +53,11 @@ public class ExternalOtherController extends ExternalRelationController<External
   }
 
   protected String getHeaderTextValue() {
-    switch (currentMenuChoice) {
-      case NEW_EXTERNAL_RELATION:
-        return "Externe relatie opvoeren";
-      case AMEND_EXTERNAL_RELATION:
-        return "Externe relatie wijzigen";
-      default:
-        return "Invalid";
-    }
+    return switch (currentMenuChoice) {
+      case NEW_EXTERNAL_RELATION -> "Externe relatie opvoeren";
+      case AMEND_EXTERNAL_RELATION -> "Externe relatie wijzigen";
+      default -> "Invalid";
+    };
   }
 
   @Override

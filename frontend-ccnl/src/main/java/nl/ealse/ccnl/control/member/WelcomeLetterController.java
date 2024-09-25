@@ -57,7 +57,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   void showLetterExample() {
     log.debug("showLetterExample");
     LetterData data = new LetterData(getLetterText().getText());
-    data.getMembers().add(selectedMember);
+    data.members().add(selectedMember);
     byte[] pdf = documentService.generatePDF(data);
     documentViewer.showPdf(pdf, selectedMember);
   }
@@ -68,7 +68,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
     File file = getFileChooser().showSaveDialog();
     if (file != null) {
       LetterData data = new LetterData(getLetterText().getText());
-      data.getMembers().add(selectedMember);
+      data.members().add(selectedMember);
       byte[] docx = documentService.generateWordDocument(data);
       try (FileOutputStream fos = new FileOutputStream(file)) {
         fos.write(docx);
@@ -83,7 +83,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   void printLetter() {
     log.debug("printLetter");
     LetterData data = new LetterData(getLetterText().getText());
-    data.getMembers().add(selectedMember);
+    data.members().add(selectedMember);
     byte[] pdf = documentService.generatePDF(data);
     saveWelcomeLetter(pdf);
     try {

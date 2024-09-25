@@ -86,7 +86,7 @@ public class MailService {
    */
   public void saveMail(Member member, MailMessage message) {
     FOContent content =
-        MailFOGenerator.generateFO(message.getTo(), null, message.getSubject(), message.getText());
+        MailFOGenerator.generateFO(message.to(), null, message.subject(), message.text());
     byte[] pdf = PDFGenerator.generateMailPDF(content);
     List<Document> letters =
         documentService.findDocuments(member, DocumentType.MEMBERSHIP_CANCELATION_MAIL);

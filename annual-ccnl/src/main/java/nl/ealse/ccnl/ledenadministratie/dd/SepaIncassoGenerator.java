@@ -5,6 +5,7 @@ import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.DocumentRepository;
@@ -49,12 +50,12 @@ public class SepaIncassoGenerator {
             PaymentMethod.DIRECT_DEBIT, MembershipStatus.ACTIVE, false);
     List<Integer> sepaNumbers = documentDao.findMemberNummbersWithSepa();
 
-    SepaIncassoContext context = new SepaIncassoContext(controlExcelFile, members, sepaNumbers);
+    SepaIncassoContext context = new SepaIncassoContext(new ArrayList<>(), controlExcelFile, members, sepaNumbers);
     SepaIncassoDocumentGenerator documentGenerator = new SepaIncassoDocumentGenerator(context);
     TransactionUtil.inTransction(documentGenerator::generateIncassoDocument);
     Document incassoDocument = documentGenerator.getDocument();
     maakSepaIncassoBestand(incassoDocument, targetFile);
-    return new SepaIncassoResult(documentGenerator.getAantalTransacties(), context.getMessages());
+    return new SepaIncassoResult(documentGenerator.getAantalTransacties(), context.messages());
   }
 
   /**

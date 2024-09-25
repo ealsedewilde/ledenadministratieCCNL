@@ -55,24 +55,16 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
 
   @Override
   protected String headerText(MenuChoice currentMenuChoice) {
-    switch (currentMenuChoice) {
-      case MAGAZINE_INVALID_ADDRESS:
-        return "Ongeldig adres - Opzoeken lid";
-      case CANCEL_MEMBERSHIP:
-        return "Opzeggen - Opzoeken lid";
-      case AMEND_MEMBER:
-        return "Opzoeken te wijzigen lid";
-      case PAYMENT_AUTHORIZATION:
-        return "SEPA-machtiging - Opzoeken lid";
-      case ADD_DOCUMENT:
-        return "Document toevoegen - Opzoeken lid";
-      case VIEW_DOCUMENT:
-        return "Documenten inzien - Opzoeken lid";
-      case DELETE_DOCUMENT:
-        return "Documenten verwijderen - Opzoeken lid";
-      default:
-        return "";
-    }
+    return switch (currentMenuChoice) {
+      case MAGAZINE_INVALID_ADDRESS -> "Ongeldig adres - Opzoeken lid";
+      case CANCEL_MEMBERSHIP -> "Opzeggen - Opzoeken lid";
+      case AMEND_MEMBER -> "Opzoeken te wijzigen lid";
+      case PAYMENT_AUTHORIZATION -> "SEPA-machtiging - Opzoeken lid";
+      case ADD_DOCUMENT -> "Document toevoegen - Opzoeken lid";
+      case VIEW_DOCUMENT ->"Documenten inzien - Opzoeken lid";
+      case DELETE_DOCUMENT -> "Documenten verwijderen - Opzoeken lid";
+      default -> "";
+    };
   }
 
   @Override

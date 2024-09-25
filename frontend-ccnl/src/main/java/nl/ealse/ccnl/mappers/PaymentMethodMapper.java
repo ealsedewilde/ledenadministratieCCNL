@@ -19,17 +19,17 @@ public class PaymentMethodMapper implements PropertyMapper<ChoiceBox<String>, Pa
 
   @Override
   public PaymentMethod getPropertyFromJavaFx(ChoiceBox<String> javaFx) {
-    switch (javaFx.getValue()) {
+    return switch (javaFx.getValue()) {
       case BANK_TRANSFER:
-        return PaymentMethod.BANK_TRANSFER;
+        yield PaymentMethod.BANK_TRANSFER;
       case DIRECT_DEBIT:
-        return PaymentMethod.DIRECT_DEBIT;
+        yield PaymentMethod.DIRECT_DEBIT;
       case NOT_APPLICABLE:
-        return PaymentMethod.NOT_APPLICABLE;
+        yield PaymentMethod.NOT_APPLICABLE;
       case UNKNOWN:
       default:
-        return PaymentMethod.UNKNOWN;
-    }
+        yield PaymentMethod.UNKNOWN;
+    };
   }
 
   @Override

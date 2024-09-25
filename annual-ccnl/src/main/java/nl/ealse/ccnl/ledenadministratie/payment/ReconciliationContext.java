@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.TreeSet;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -101,7 +100,7 @@ public class ReconciliationContext {
     public BigDecimal getTotalAmount() {
       BigDecimal total = BigDecimal.ZERO;
       for (BankTransaction t : bankTransactions) {
-        total = total.add(t.getAmount());
+        total = total.add(t.amount());
       }
       return total;
     }
@@ -112,8 +111,8 @@ public class ReconciliationContext {
       }
       LocalDate pd = null;
       for (BankTransaction t : bankTransactions) {
-        if (pd == null || t.getTransactionDate().isAfter(pd)) {
-          pd = t.getTransactionDate();
+        if (pd == null || t.transactionDate().isAfter(pd)) {
+          pd = t.transactionDate();
         }
       }
       return pd;
@@ -134,7 +133,7 @@ public class ReconciliationContext {
     public String toString() {
       StringJoiner sj = new StringJoiner("\n");
       for (BankTransaction t : bankTransactions) {
-        sj.add(String.format("%s: %s", t.getBookingType().getOmschrijving(), t.getDescription()));
+        sj.add(String.format("%s: %s", t.bookingType().getOmschrijving(), t.description()));
       }
       return sj.toString();
     }
@@ -144,14 +143,9 @@ public class ReconciliationContext {
   /**
    * Data regarding one payment for a specific member.
    */
-  @Data
-  public static class BankTransaction implements Comparable<BankTransaction> {
+  public static record BankTransaction(BigDecimal amount, LocalDate transactionDate, BookingType bookingType, String description) implements Comparable<BankTransaction> {
     private static final BookingType[] BTM =
         {BookingType.RDDT, BookingType.IDDT, BookingType.RCDT, BookingType.RDDT, BookingType.IRCT};
-    private final BigDecimal amount;
-    private final LocalDate transactionDate;
-    private final BookingType bookingType;
-    private final String description;
 
     @Override
     public int compareTo(BankTransaction o) {

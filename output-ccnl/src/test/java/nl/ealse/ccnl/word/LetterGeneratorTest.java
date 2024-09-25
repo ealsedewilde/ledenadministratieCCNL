@@ -13,7 +13,7 @@ class LetterGeneratorTest {
   void testDocumentGeneration() {
     Member m = getMember();
     LetterData data = new LetterData(getContent());
-    data.getMembers().add(m);
+    data.members().add(m);
     LetterGenerator generator = new LetterGenerator();
     byte[] doc = generator.generateDocument(data);
     int l = doc.length;

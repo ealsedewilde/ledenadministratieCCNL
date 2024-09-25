@@ -53,14 +53,11 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   }
 
   protected String getHeaderTextValue() {
-    switch (currentMenuChoice) {
-      case NEW_PARTNER:
-        return "Adverteerder opvoeren";
-      case AMEND_PARTNER:
-        return "Adverteerder wijzigen";
-      default:
-        return "Invalid";
-    }
+    return switch (currentMenuChoice) {
+      case NEW_PARTNER -> "Adverteerder opvoeren";
+      case AMEND_PARTNER -> "Adverteerder wijzigen";
+      default -> "Invalid";
+    };
   }
 
   @Override

@@ -229,14 +229,11 @@ public class MemberController extends MemberView {
   }
 
   private String getHeaderTextValue() {
-    switch (currentMenuChoice) {
-      case NEW_MEMBER:
-        return "Nieuw Lid opvoeren";
-      case AMEND_MEMBER:
-        return "Lid wijzigen";
-      default:
-        return "Invalid";
-    }
+    return switch (currentMenuChoice) {
+      case NEW_MEMBER -> "Nieuw Lid opvoeren";
+      case AMEND_MEMBER -> "Lid wijzigen";
+      default -> "Invalid";
+    };
   }
 
   void formatIbanOwnerName(String ibanNumber) {

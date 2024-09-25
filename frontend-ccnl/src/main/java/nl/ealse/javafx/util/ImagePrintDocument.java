@@ -15,7 +15,6 @@ public class ImagePrintDocument implements PrintDocument {
     this.image = SwingFXUtils.fromFXImage(image, null);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public BufferedImage getDocument() {
     return image;

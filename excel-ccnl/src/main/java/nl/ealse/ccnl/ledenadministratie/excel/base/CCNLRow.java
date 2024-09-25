@@ -52,19 +52,14 @@ public abstract class CCNLRow {
     if (cell == null) {
       return null;
     }
-    switch (cell.getCellType()) {
-      case STRING:
-        return cell.getStringCellValue();
-      case BOOLEAN:
-        return Boolean.toString(cell.getBooleanCellValue());
-      case NUMERIC:
-        return Double.toString(cell.getNumericCellValue());
-      case BLANK:
-        return null;
-      default:
-        log.error("fout cell type: " + cell.getCellType());
-    }
-    return cell.getStringCellValue().trim();
+    return switch (cell.getCellType()) {
+      case STRING -> cell.getStringCellValue();
+      case BOOLEAN -> Boolean.toString(cell.getBooleanCellValue());
+      case NUMERIC -> Double.toString(cell.getNumericCellValue());
+      case BLANK -> null;
+      default -> {log.error("fout cell type: " + cell.getCellType());
+        yield cell.getStringCellValue().trim();}
+    };
   }
 
   protected Date getDateValue(Cell cell) {

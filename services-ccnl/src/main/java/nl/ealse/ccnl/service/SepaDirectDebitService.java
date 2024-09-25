@@ -40,7 +40,7 @@ public class SepaDirectDebitService {
     int end = fileName.length() - 4;
     File controlExcelFile = new File(fileName.substring(0, end) + ".xlsx");
     SepaIncassoResult result = generator.generateSepaDirectDebitFile(targetFile, controlExcelFile);
-    return result.getMessages();
+    return result.messages();
   }
 
   public List<FlatProperty> getProperties() {

@@ -38,17 +38,13 @@ public class MemberBaseExport {
   }
 
   private String getPaymentMethodCode(PaymentMethod paymentMethod) {
-    switch (paymentMethod) {
-      case BANK_TRANSFER:
-        return CCNLColumnProperties.getPropertyOverschrijving();
-      case DIRECT_DEBIT:
-        return CCNLColumnProperties.getPropertyAutomatischeIncasso();
-      case NOT_APPLICABLE:
-        return CCNLColumnProperties.getPropertyErelid();
-      case UNKNOWN:
-      default:
-        return "";
-    }
+    return switch (paymentMethod) {
+      case BANK_TRANSFER -> CCNLColumnProperties.getPropertyOverschrijving();
+      case DIRECT_DEBIT -> CCNLColumnProperties.getPropertyAutomatischeIncasso();
+      case NOT_APPLICABLE -> CCNLColumnProperties.getPropertyErelid();
+      case UNKNOWN -> "";
+      default -> "";
+    };
   }
 
 

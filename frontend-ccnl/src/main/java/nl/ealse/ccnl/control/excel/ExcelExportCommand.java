@@ -95,25 +95,25 @@ public class ExcelExportCommand {
     @Override
     protected String call() {
       try {
-        switch (menuChoice) {
+        return switch (menuChoice) {
           case REPORT_NEW_MEMBERS:
             service.exportNew(exportFile);
-            return "MS Excel-werkblad voor nieuwe leden is aangemaakt";
+            yield "MS Excel-werkblad voor nieuwe leden is aangemaakt";
           case REPORT_CANCELLED_MEMBERS:
             service.exportCancelled(exportFile);
-            return "MS Excel-werkblad voor opgezegde leden is aangemaakt";
+            yield "MS Excel-werkblad voor opgezegde leden is aangemaakt";
           case REPORT_AFTER_APRIL:
             service.exportAfterApril(exportFile);
-            return "MS Excel-werkblad voor opgezegd na 1 april is aangemaakt";
+            yield "MS Excel-werkblad voor opgezegd na 1 april is aangemaakt";
           case REPORT_OVERDUE_MEMBERS:
             service.exportOverdue(exportFile);
-            return "MS Excel-werkblad voor niet betalers is aangemaakt";
+            yield "MS Excel-werkblad voor niet betalers is aangemaakt";
           case REPORT_ALL_DATA:
             service.exportALL(exportFile);
-            return "MS Excel-werkblad voor alle gegevens is aangemaakt";
+            yield "MS Excel-werkblad voor alle gegevens is aangemaakt";
           default:
             throw new IllegalArgumentException(menuChoice.name());
-        }
+        };
       } catch (IOException e) {
         throw new AsyncTaskException("Aanmaken MS Excel-werkblad is mislukt");
       }

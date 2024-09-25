@@ -129,7 +129,7 @@ public class FOGenerator {
     StringJoiner sj = context.getStringJoiner();
     sj.add(NEW_PARAGRAPH);
 
-    String[] lines = data.getContent().split("\\r?\\n");
+    String[] lines = data.content().split("\\r?\\n");
     for (String line : lines) {
       boolean placeholder = handlePlaceholders(content, context, line);
       sj = context.getStringJoiner();

@@ -49,10 +49,10 @@ public class SepaIncassoDocumentGenerator {
    * @throws IncassoException - whenever document generation fails
    */
   public void generateIncassoDocument() throws IncassoException {
-    SepaAuthorizationHelper sah = new SepaAuthorizationHelper(context.getSepaNumbers());
-    try (Ledenbestand incassobestand = new Ledenbestand(context.getControlExcelFile())) {
+    SepaAuthorizationHelper sah = new SepaAuthorizationHelper(context.sepaNumbers());
+    try (Ledenbestand incassobestand = new Ledenbestand(context.controlExcelFile())) {
       incassobestand.addMemberHeading();
-      for (Member member : context.getMembers()) {
+      for (Member member : context.members()) {
         String info = sah.hasSepaAuthorization(member.getMemberNumber()) ? "Machtiging: Ja"
             : "Machtiging: Nee";
         member.setPaymentInfo(info);
@@ -105,7 +105,7 @@ public class SepaIncassoDocumentGenerator {
     String iban = member.getIbanNumber();
     if (iban == null) {
       String msg = "Geen IBAN bij lid: " + member.getMemberNumber();
-      context.getMessages().add(msg);
+      context.messages().add(msg);
       throw new IllegalArgumentException(msg);
     }
     try {
@@ -114,7 +114,7 @@ public class SepaIncassoDocumentGenerator {
           .build();
     } catch (InvalidIbanException e) {
       String msg = "Geen geldige IBAN bij lid: " + member.getMemberNumber();
-      context.getMessages().add(msg);
+      context.messages().add(msg);
       throw new IllegalArgumentException(e.getMessage() + " bij lid " + member.getMemberNumber());
     }
   }
