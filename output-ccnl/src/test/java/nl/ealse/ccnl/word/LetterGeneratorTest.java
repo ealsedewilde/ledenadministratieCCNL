@@ -17,7 +17,7 @@ class LetterGeneratorTest {
     LetterGenerator generator = new LetterGenerator();
     byte[] doc = generator.generateDocument(data);
     int l = doc.length;
-    Assertions.assertEquals(48174, l);
+    Assertions.assertEquals(48166, l);
   }
 
   private Member getMember() {

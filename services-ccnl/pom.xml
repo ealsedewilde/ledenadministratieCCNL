@@ -45,7 +45,7 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<scope>test</scope>
-			<version>3.13.0</version>
+			<version>${commons-lang.version}</version>
 		</dependency>
 
 	</dependencies>
