@@ -16,13 +16,13 @@ class PrimaryPageStarterTest extends FXMLBaseTest {
   @Test
   void testSut() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       sut = new PrimaryPageStarter();
       config();
 
       doTest();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
 
   }

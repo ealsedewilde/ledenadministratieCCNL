@@ -10,6 +10,7 @@ import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ExternalOtherDeleteControllerTest extends FXMLBaseTest {
@@ -21,11 +22,11 @@ class ExternalOtherDeleteControllerTest extends FXMLBaseTest {
   void testController() {
     relation = externalRelationOther();
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

@@ -14,13 +14,13 @@ class FXMLLoaderUtilTest extends FXBase {
   @Test
   void testFxmlLoading() {
     AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       getPage();
       pageNotFound();
       pageInError();
 
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

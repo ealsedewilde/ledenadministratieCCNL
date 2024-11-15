@@ -12,12 +12,12 @@ class ContentUpdateTest extends FXBase {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       firstCapitalTest();
       formatInitialsTest();
       formatPostalCodeTest();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

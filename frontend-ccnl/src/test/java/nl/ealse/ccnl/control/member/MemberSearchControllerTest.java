@@ -25,6 +25,7 @@ import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -42,7 +43,7 @@ class MemberSearchControllerTest extends FXMLBaseTest {
   @Test
   void testSearch() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.AMEND_MEMBER);
       sut.searchMember(event);
@@ -68,7 +69,7 @@ class MemberSearchControllerTest extends FXMLBaseTest {
       sut.reset();
 
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

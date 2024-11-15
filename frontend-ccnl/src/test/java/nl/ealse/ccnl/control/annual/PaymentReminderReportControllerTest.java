@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -21,14 +22,14 @@ class PaymentReminderReportControllerTest extends FXMLBaseTest {
   @Test
   void test() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       sut = getTestSubject(PaymentReminderReportCommand.class);
       sut.setup();
       setFileChooser();
       sut.executeCommand(null);
       verify(getPageController()).showMessage("Herinneringen overzicht is aangemaakt");
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

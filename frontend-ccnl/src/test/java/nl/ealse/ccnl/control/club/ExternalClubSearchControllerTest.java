@@ -18,12 +18,12 @@ class ExternalClubSearchControllerTest extends FXMLBaseTest {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       testController();
       testSearch();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

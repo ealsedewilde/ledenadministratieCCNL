@@ -9,6 +9,7 @@ import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.test.FXMLBaseTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ExternalClubControllerTest extends FXMLBaseTest {
@@ -20,11 +21,11 @@ class ExternalClubControllerTest extends FXMLBaseTest {
   void testController() {
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       sut = getTestSubject(ExternalClubController.class);
       doTest();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

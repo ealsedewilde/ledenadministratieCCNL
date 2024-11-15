@@ -23,10 +23,10 @@ class IbanNumberValidatorTest extends FXBase {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       testSut();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

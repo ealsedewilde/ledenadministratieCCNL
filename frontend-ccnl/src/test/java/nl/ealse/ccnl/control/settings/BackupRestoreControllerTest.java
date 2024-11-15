@@ -13,6 +13,7 @@ import nl.ealse.ccnl.service.BackupRestoreService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -27,22 +28,22 @@ class BackupRestoreControllerTest extends FXMLBaseTest {
   @Test
   void testBackupController() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       backup();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 
   @Test
   void testRestoreController() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       restore();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

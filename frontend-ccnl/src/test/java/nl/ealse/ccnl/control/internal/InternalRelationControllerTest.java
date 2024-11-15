@@ -11,6 +11,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class InternalRelationControllerTest extends FXMLBaseTest {
@@ -22,10 +23,10 @@ class InternalRelationControllerTest extends FXMLBaseTest {
   void testController() {
     rel = internalRelation();
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       doTest();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

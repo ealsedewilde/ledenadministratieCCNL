@@ -37,12 +37,12 @@ class MemberControllerTest extends FXMLBaseTest {
   void testController() {
 
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       testFormController();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
 
   }

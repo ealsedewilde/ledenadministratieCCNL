@@ -23,10 +23,10 @@ class PageControllerTest extends FXBase {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       testController();
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

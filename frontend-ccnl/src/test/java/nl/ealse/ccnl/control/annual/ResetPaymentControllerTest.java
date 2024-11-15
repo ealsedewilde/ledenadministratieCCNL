@@ -10,6 +10,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ResetPaymentControllerTest extends FXMLBaseTest {
@@ -19,13 +20,13 @@ class ResetPaymentControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
       sut = getTestSubject(ResetPaymentCommand.class);
       clickButton();
       sut.executeCommand(null);
       verify(getPageController()).showMessage("Alle betaalgegevens zijn gewist");
       ar.set(true);
-    }, ar));
+    }, ar)));
     
   }
 

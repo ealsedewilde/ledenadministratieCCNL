@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.test;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import java.lang.reflect.Field;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.javafx.ImagesMap;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.jupiter.api.Assertions;
 
 @Slf4j
 public abstract class FXBase {
@@ -24,13 +22,13 @@ public abstract class FXBase {
     initializeMainStage();
   }
 
-  protected void runFX(FutureTask<AtomicBoolean> task) {
+  protected boolean runFX(FutureTask<AtomicBoolean> task) {
     Platform.runLater(task);
     try {
-      Assertions.assertTrue(task.get(6, TimeUnit.SECONDS).get());
+      return task.get(6, TimeUnit.SECONDS).get();
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
       log.error("Exception in Runnable", e);
-      fail(e.getMessage());
+      return false;
     }
   }
 
