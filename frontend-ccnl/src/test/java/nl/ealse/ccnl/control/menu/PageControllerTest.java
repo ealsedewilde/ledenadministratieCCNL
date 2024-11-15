@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.menu;
 
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -22,10 +23,10 @@ class PageControllerTest extends FXBase {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       testController();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

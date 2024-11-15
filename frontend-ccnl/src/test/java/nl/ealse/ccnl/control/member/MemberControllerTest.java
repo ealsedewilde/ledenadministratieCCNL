@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -36,12 +37,12 @@ class MemberControllerTest extends FXMLBaseTest {
   void testController() {
 
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       testFormController();
       ar.set(true);
-    }, ar);
+    }, ar));
     
 
   }

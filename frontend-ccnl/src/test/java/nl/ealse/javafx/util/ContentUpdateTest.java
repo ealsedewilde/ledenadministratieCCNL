@@ -1,5 +1,6 @@
 package nl.ealse.javafx.util;
 
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TextField;
 import nl.ealse.ccnl.test.FXBase;
@@ -11,12 +12,12 @@ class ContentUpdateTest extends FXBase {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       firstCapitalTest();
       formatInitialsTest();
       formatPostalCodeTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

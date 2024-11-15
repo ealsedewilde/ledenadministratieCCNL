@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ioc.ComponentProviderUtil;
@@ -46,7 +47,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
   void doTest() {
 
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       Member m = new Member();
       m.setMemberNumber(4444);
@@ -70,7 +71,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
       Assertions.assertEquals(2, PrintCount.getCount());
       controller.closePDF();
       ar.set(true);
-    }, ar);
+    }, ar));
     
     verify(documentService).generateWordDocument(any(LetterData.class));
     controller.getLetterText();

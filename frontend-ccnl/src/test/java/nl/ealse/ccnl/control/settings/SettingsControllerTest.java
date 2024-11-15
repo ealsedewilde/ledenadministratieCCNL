@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
@@ -20,7 +21,6 @@ import nl.ealse.ccnl.ioc.ComponentProviderUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -37,11 +37,11 @@ class SettingsControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

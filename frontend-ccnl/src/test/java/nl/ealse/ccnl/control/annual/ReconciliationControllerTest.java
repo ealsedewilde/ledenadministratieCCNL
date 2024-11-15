@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
@@ -25,7 +26,6 @@ import nl.ealse.ccnl.service.ReconciliationService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -44,12 +44,12 @@ class ReconciliationControllerTest extends FXMLBaseTest {
     File reconcileFile = new File(tempDir, "reconcile.xml");
     when(fileChooser.showOpenDialog()).thenReturn(reconcileFile);
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       setFileChooser();
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

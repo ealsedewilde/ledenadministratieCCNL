@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.partner;
 
 import java.util.Map;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -17,12 +18,12 @@ class PartnerSearchControllerTest extends FXMLBaseTest {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       testController();
       testSearch();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

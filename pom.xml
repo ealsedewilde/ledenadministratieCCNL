@@ -18,7 +18,6 @@
 		<fop.version>2.10</fop.version>
 		<pdfbox.version>3.0.3</pdfbox.version>
 		<jandex.version>3.2.3</jandex.version>
-		<awaitility.version>4.2.2</awaitility.version>
 		<mockito.version>5.14.2</mockito.version>
 		<commons-lang.version>3.17.0</commons-lang.version>
 		<checkstyle.version>10.20.1</checkstyle.version>

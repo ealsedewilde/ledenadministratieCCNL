@@ -2,13 +2,13 @@ package nl.ealse.ccnl.control.partner;
 
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class PartnerControllerTest extends FXMLBaseTest {
@@ -20,11 +20,11 @@ class PartnerControllerTest extends FXMLBaseTest {
   void testController() {
     partner = externalRelationPartner();
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       sut = getTestSubject(PartnerController.class);
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

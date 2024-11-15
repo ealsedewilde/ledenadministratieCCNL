@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.event.Event;
 import javafx.scene.control.TableRow;
@@ -21,7 +22,6 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -38,11 +38,11 @@ class TemplatesControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

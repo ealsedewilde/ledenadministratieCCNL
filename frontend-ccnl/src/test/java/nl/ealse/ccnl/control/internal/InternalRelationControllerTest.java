@@ -2,6 +2,7 @@ package nl.ealse.ccnl.control.internal;
 
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
@@ -10,7 +11,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class InternalRelationControllerTest extends FXMLBaseTest {
@@ -22,10 +22,10 @@ class InternalRelationControllerTest extends FXMLBaseTest {
   void testController() {
     rel = internalRelation();
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

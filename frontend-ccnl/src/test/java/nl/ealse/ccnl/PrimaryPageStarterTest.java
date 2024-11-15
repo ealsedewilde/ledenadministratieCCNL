@@ -1,5 +1,6 @@
 package nl.ealse.ccnl;
 
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.test.FXMLBaseTest;
@@ -15,13 +16,13 @@ class PrimaryPageStarterTest extends FXMLBaseTest {
   @Test
   void testSut() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       sut = new PrimaryPageStarter();
       config();
 
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
 
   }

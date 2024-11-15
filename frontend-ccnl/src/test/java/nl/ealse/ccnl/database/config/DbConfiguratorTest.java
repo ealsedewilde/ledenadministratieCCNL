@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -17,7 +18,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.ImagesMap;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -37,11 +37,11 @@ class DbConfiguratorTest extends FXMLBaseTest {
   @Test
   void testDbConfig() {
     AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

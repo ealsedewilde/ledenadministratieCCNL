@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.validation;
 
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import javafx.scene.control.ChoiceBox;
@@ -22,10 +23,10 @@ class IbanNumberValidatorTest extends FXBase {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       testSut();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

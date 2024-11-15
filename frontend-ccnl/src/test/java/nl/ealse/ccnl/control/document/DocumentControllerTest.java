@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
@@ -21,7 +22,6 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -36,11 +36,11 @@ class DocumentControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

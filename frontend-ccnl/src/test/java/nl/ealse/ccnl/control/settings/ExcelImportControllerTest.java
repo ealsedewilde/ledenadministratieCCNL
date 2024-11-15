@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.net.URL;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
@@ -14,7 +15,6 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -27,12 +27,12 @@ class ExcelImportControllerTest extends FXMLBaseTest {
   @Test
   void testImport() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       setFileChooser();
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
 
   }

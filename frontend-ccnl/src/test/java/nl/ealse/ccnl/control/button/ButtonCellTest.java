@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.button;
 
 import static org.mockito.Mockito.mock;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -17,10 +18,10 @@ class ButtonCellTest extends FXBase {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       testCell();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

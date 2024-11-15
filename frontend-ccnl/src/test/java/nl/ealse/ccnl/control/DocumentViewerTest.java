@@ -3,13 +3,13 @@ package nl.ealse.ccnl.control;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.test.FXBase;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class DocumentViewerTest extends FXBase {
@@ -20,11 +20,11 @@ class DocumentViewerTest extends FXBase {
   @Test
   void testViewer() {
     AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 

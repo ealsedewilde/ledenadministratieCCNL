@@ -1,13 +1,13 @@
 package nl.ealse.ccnl.control.magazine;
 
 import static org.mockito.Mockito.verify;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.test.FXMLBaseTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class InvalidAddressControllerTest extends FXMLBaseTest {
@@ -17,11 +17,11 @@ class InvalidAddressControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     final AtomicBoolean ar = new AtomicBoolean();
-    runFX(() -> {
+    runFX(new FutureTask<AtomicBoolean>(() -> {
       prepare();
       doTest();
       ar.set(true);
-    }, ar);
+    }, ar));
     
   }
 
