@@ -11,13 +11,13 @@ class ContentUpdateTest extends FXBase {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       firstCapitalTest();
       formatInitialsTest();
       formatPostalCodeTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void firstCapitalTest() {

@@ -21,7 +21,7 @@ import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberView;
-import nl.ealse.javafx.mapping.ViewModel;
+import nl.ealse.javafx.mvvm.ViewModel;
 import nl.ealse.javafx.util.PrintException;
 import nl.ealse.javafx.util.PrintUtil;
 

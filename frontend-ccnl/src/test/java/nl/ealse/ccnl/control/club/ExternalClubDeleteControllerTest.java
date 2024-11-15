@@ -23,12 +23,12 @@ class ExternalClubDeleteControllerTest extends FXMLBaseTest {
     sut = getTestSubject(ExternalClubDeleteController.class);
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

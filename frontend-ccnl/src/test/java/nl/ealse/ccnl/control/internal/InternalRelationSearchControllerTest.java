@@ -17,13 +17,13 @@ class InternalRelationSearchControllerTest extends FXMLBaseTest {
   @Test
   void performTests() {
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       testController();
       testSearch();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void prepare() {

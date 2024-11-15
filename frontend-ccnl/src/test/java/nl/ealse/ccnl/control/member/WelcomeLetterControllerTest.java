@@ -46,7 +46,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
   void doTest() {
 
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       Member m = new Member();
       m.setMemberNumber(4444);
@@ -71,7 +71,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
       controller.closePDF();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
     verify(documentService).generateWordDocument(any(LetterData.class));
     controller.getLetterText();
   }

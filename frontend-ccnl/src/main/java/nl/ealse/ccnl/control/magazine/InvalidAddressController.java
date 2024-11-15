@@ -11,7 +11,7 @@ import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.AddressView;
-import nl.ealse.javafx.mapping.ViewModel;
+import nl.ealse.javafx.mvvm.ViewModel;
 
 public class InvalidAddressController extends AddressView {
 

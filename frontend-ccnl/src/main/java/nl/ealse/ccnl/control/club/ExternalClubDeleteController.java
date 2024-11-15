@@ -8,7 +8,7 @@ import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.service.relation.ExternalClubService;
-import nl.ealse.javafx.mapping.ViewModel;
+import nl.ealse.javafx.mvvm.ViewModel;
 
 public class ExternalClubDeleteController
     extends ExternalRelationDeleteController<ExternalRelationClub> {

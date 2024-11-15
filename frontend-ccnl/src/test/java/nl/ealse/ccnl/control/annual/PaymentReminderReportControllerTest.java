@@ -21,7 +21,7 @@ class PaymentReminderReportControllerTest extends FXMLBaseTest {
   @Test
   void test() {
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       sut = getTestSubject(PaymentReminderReportCommand.class);
       sut.setup();
       setFileChooser();
@@ -29,7 +29,7 @@ class PaymentReminderReportControllerTest extends FXMLBaseTest {
       verify(getPageController()).showMessage("Herinneringen overzicht is aangemaakt");
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
 

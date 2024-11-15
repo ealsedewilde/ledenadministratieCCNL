@@ -2,6 +2,7 @@ package nl.ealse.javafx.mapping;
 
 import nl.ealse.ccnl.control.member.MemberController;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
+import nl.ealse.javafx.mvvm.ViewModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -8,7 +8,7 @@ import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalOtherService;
-import nl.ealse.javafx.mapping.ViewModel;
+import nl.ealse.javafx.mvvm.ViewModel;
 
 public class ExternalOtherDeleteController
     extends ExternalRelationDeleteController<ExternalRelationOther> {

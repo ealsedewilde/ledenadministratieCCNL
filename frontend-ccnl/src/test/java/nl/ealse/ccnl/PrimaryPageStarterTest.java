@@ -15,14 +15,14 @@ class PrimaryPageStarterTest extends FXMLBaseTest {
   @Test
   void testSut() {
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       sut = new PrimaryPageStarter();
       config();
 
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
 
   }
 

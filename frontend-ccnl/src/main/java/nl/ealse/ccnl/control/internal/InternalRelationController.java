@@ -13,7 +13,7 @@ import nl.ealse.ccnl.form.FormController;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.service.relation.InternalRelationService;
 import nl.ealse.ccnl.view.InternalRelationView;
-import nl.ealse.javafx.mapping.ViewModel;
+import nl.ealse.javafx.mvvm.ViewModel;
 
 public class InternalRelationController extends InternalRelationView {
 

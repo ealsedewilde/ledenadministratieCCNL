@@ -20,12 +20,12 @@ class ExternalOtherControllerTest extends FXMLBaseTest {
   void testController() {
     relation = externalRelationOther();
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       sut = getTestSubject(ExternalOtherController.class);
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

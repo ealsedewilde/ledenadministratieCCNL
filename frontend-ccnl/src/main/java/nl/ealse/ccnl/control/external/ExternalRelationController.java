@@ -8,7 +8,7 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.service.relation.ExternalRelationService;
 import nl.ealse.ccnl.view.ExternalRelationView;
 import nl.ealse.javafx.mapping.Mapping;
-import nl.ealse.javafx.mapping.ViewModel;
+import nl.ealse.javafx.mvvm.ViewModel;
 
 /**
  * Super class for all External relations.

@@ -42,7 +42,7 @@ class MemberSearchControllerTest extends FXMLBaseTest {
   @Test
   void testSearch() {
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.AMEND_MEMBER);
       sut.searchMember(event);
@@ -69,7 +69,7 @@ class MemberSearchControllerTest extends FXMLBaseTest {
 
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void prepare() {

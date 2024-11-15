@@ -23,12 +23,12 @@ class SepaAuthorizationFormControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       sut = getTestSubject(SepaAuthorizationFormCommand.class);
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

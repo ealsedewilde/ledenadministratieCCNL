@@ -22,12 +22,12 @@ class PartnerDeleteControllerTest extends FXMLBaseTest {
   void testController() {
     partner = externalRelationPartner();
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

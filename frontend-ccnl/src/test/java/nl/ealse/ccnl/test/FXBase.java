@@ -10,6 +10,7 @@ import nl.ealse.ccnl.MainStage;
 import nl.ealse.javafx.ImagesMap;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.awaitility.Awaitility;
+import org.junit.jupiter.api.Assertions;
 
 public abstract class FXBase {
 
@@ -19,10 +20,10 @@ public abstract class FXBase {
     initializeMainStage();
   }
 
-  protected AtomicBoolean runFX(Runnable runnable, final AtomicBoolean ar) {
+  protected void runFX(Runnable runnable, final AtomicBoolean ar) {
     Platform.runLater(runnable);
     Awaitility.await().atMost(Duration.ofSeconds(6000)).untilAtomic(ar, equalTo(Boolean.TRUE));
-    return ar;
+    Assertions.assertTrue(ar.get());
   }
 
   private static void initializeMainStage() {

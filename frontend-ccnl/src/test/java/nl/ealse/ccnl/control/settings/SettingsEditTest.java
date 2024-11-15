@@ -27,12 +27,12 @@ class SettingsEditTest extends FXMLBaseTest {
     setting.setKey(id);
     setting.setValue("value");
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

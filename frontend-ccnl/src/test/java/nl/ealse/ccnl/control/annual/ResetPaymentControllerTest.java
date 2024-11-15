@@ -19,14 +19,14 @@ class ResetPaymentControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       sut = getTestSubject(ResetPaymentCommand.class);
       clickButton();
       sut.executeCommand(null);
       verify(getPageController()).showMessage("Alle betaalgegevens zijn gewist");
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   /**

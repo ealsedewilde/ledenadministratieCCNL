@@ -44,13 +44,13 @@ class ReconciliationControllerTest extends FXMLBaseTest {
     File reconcileFile = new File(tempDir, "reconcile.xml");
     when(fileChooser.showOpenDialog()).thenReturn(reconcileFile);
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       setFileChooser();
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

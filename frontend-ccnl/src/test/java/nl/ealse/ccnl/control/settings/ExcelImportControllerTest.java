@@ -27,13 +27,13 @@ class ExcelImportControllerTest extends FXMLBaseTest {
   @Test
   void testImport() {
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       setFileChooser();
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
 
   }
 

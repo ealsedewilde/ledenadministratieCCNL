@@ -26,7 +26,7 @@ class CancelationMailControllerTest extends FXMLBaseTest {
   void doTest() throws MessagingException {
     final ArgumentCaptor<String> arg = ArgumentCaptor.forClass(String.class);
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       Member m = new Member();
       m.setMemberNumber(4444);
       m.setInitials("tester");
@@ -38,7 +38,7 @@ class CancelationMailControllerTest extends FXMLBaseTest {
       controller.sendMail();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
     verify(mailService).sendMail(anyString(), anyString(), arg.capture());
     Assertions.assertEquals("Beste tester\t\n Dit is een test.", arg.getValue());
   }

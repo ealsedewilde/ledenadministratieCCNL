@@ -93,25 +93,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
 			<version>${awaitility.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -119,11 +103,6 @@
 			<artifactId>jsr305</artifactId>
 			<version>3.0.2</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>nl.ealse.ccnl</groupId>
-			<artifactId>annual-ccnl</artifactId>
-			<version>7.0.0</version>
 		</dependency>
 	</dependencies>
 </project>

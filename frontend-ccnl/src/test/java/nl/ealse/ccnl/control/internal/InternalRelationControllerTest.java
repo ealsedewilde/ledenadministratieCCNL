@@ -22,11 +22,11 @@ class InternalRelationControllerTest extends FXMLBaseTest {
   void testController() {
     rel = internalRelation();
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

@@ -36,7 +36,7 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
 
     Platform.setImplicitExit(false);
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       documentService = mock(DocumentService.class);
 
       sut = new Tester(getPageController(), documentService);
@@ -66,7 +66,7 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
 
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void initFXML() {

@@ -20,12 +20,12 @@ class ExternalClubControllerTest extends FXMLBaseTest {
   void testController() {
     club = club();
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       sut = getTestSubject(ExternalClubController.class);
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

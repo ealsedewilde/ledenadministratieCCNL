@@ -15,7 +15,7 @@ import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.mappers.MembershipStatusMapper;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberCancelView;
-import nl.ealse.javafx.mapping.ViewModel;
+import nl.ealse.javafx.mvvm.ViewModel;
 
 /**
  * Controller for membership canceling.

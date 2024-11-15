@@ -12,6 +12,7 @@
 		<java.version>21</java.version>
 		<javafx.version>23</javafx.version>
 		<javafx.platform>win</javafx.platform>
+		<lombok-version>1.18.34</lombok-version>
 		<hibernate.version>6.5.0.Final</hibernate.version>
 		<poi.version>5.3.0</poi.version>
 		<fop.version>2.10</fop.version>
@@ -59,14 +60,6 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>3.11.1</version>
 				</plugin>
-				<!--<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.5.2</version>
-					<configuration>
-						<argLine>-XX:+EnableDynamicAgentLoading ${argLine}</argLine>
-					</configuration>
-				</plugin>-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -87,6 +80,13 @@
 				<version>3.13.0</version>
 				<configuration>
 					<release>${java.version}</release>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok-version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -126,6 +126,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.5.2</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -146,7 +147,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.34</version>
+			<version>${lombok-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -214,7 +215,7 @@
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
-				<version>1.4.12</version>
+				<version>1.5.12</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>

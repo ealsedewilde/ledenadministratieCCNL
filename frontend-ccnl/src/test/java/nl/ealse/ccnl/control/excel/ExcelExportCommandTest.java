@@ -34,12 +34,12 @@ class ExcelExportCommandTest extends FXMLBaseTest {
     when(fileChooser.showSaveDialog()).thenReturn(exportFile);
 
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       sut = getTestSubject(ExcelExportCommand.class);
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
 
   }
 

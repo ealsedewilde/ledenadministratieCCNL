@@ -20,12 +20,12 @@ class PartnerControllerTest extends FXMLBaseTest {
   void testController() {
     partner = externalRelationPartner();
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       sut = getTestSubject(PartnerController.class);
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

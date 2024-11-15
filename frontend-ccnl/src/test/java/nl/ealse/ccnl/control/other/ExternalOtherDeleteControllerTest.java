@@ -21,12 +21,12 @@ class ExternalOtherDeleteControllerTest extends FXMLBaseTest {
   void testController() {
     relation = externalRelationOther();
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {

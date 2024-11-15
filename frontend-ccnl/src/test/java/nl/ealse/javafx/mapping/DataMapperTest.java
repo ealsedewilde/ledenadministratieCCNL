@@ -15,6 +15,7 @@ import nl.ealse.ccnl.mappers.MembershipStatusMapper;
 import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.test.FXBase;
 import nl.ealse.ccnl.view.MemberView;
+import nl.ealse.javafx.mvvm.ViewModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

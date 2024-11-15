@@ -41,13 +41,13 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
     File sepaFile = new File(tempDir, "sepa.xml");
     when(fileChooser.showSaveDialog()).thenReturn(sepaFile);
     final AtomicBoolean ar = new AtomicBoolean();
-    AtomicBoolean result = runFX(() -> {
+    runFX(() -> {
       prepare();
       setFileChooser();
       doTest();
       ar.set(true);
     }, ar);
-    Assertions.assertTrue(result.get());
+    
   }
 
   private void doTest() {
