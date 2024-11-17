@@ -7,7 +7,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.javafx.ImagesMap;
@@ -17,7 +16,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 public abstract class FXBase {
 
   static {
-    new JFXPanel();
+    Platform.startup(() -> {});
     Platform.setImplicitExit(false);
     initializeMainStage();
   }
