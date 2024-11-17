@@ -1,8 +1,6 @@
 package nl.ealse.ccnl.control.settings;
 
 import static org.mockito.Mockito.verify;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
@@ -27,12 +25,12 @@ class SettingsEditTest extends FXMLBaseTest {
     setting.setId(id);
     setting.setKey(id);
     setting.setValue("value");
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

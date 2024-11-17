@@ -1,6 +1,5 @@
 package nl.ealse.javafx;
 
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -14,13 +13,13 @@ class FXMLLoaderUtilTest extends FXBase {
   @Test
   void testFxmlLoading() {
     AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(() -> {
       getPage();
       pageNotFound();
       pageInError();
 
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

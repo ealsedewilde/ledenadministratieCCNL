@@ -4,8 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ioc.ComponentProviderUtil;
@@ -27,23 +25,23 @@ class BackupRestoreControllerTest extends FXMLBaseTest {
 
   @Test
   void testBackupController() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       prepare();
       backup();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 
   @Test
   void testRestoreController() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       prepare();
       restore();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

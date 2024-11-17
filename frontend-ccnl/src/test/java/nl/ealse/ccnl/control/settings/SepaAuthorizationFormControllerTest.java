@@ -5,8 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.net.URL;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -23,12 +21,12 @@ class SepaAuthorizationFormControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(SepaAuthorizationFormCommand.class);
       doTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

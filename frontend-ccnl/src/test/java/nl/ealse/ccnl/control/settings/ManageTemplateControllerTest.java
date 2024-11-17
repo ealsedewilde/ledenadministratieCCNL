@@ -3,8 +3,6 @@ package nl.ealse.ccnl.control.settings;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TextField;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
@@ -24,13 +22,13 @@ class ManageTemplateControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       prepare();
       initTemplateId();
       doTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

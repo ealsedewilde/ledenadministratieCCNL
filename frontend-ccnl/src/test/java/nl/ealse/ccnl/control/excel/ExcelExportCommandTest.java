@@ -3,8 +3,6 @@ package nl.ealse.ccnl.control.excel;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.test.FXMLBaseTest;
@@ -34,12 +32,12 @@ class ExcelExportCommandTest extends FXMLBaseTest {
     File exportFile = new File(tempDir, "export.xlsx");
     when(fileChooser.showSaveDialog()).thenReturn(exportFile);
 
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(ExcelExportCommand.class);
       doTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
 
   }

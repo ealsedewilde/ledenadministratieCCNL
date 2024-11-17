@@ -3,8 +3,6 @@ package nl.ealse.ccnl.control.member;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -27,12 +25,12 @@ class IbanControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     m = member();
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

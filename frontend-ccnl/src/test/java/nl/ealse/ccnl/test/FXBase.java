@@ -1,11 +1,11 @@
 package nl.ealse.ccnl.test;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +22,11 @@ public abstract class FXBase {
     initializeMainStage();
   }
 
-  protected boolean runFX(FutureTask<AtomicBoolean> task) {
+  protected boolean runFX(Callable<Boolean> work) {
+    FutureTask<Boolean> task = new FutureTask<>(work);
     Platform.runLater(task);
     try {
-      return task.get(6, TimeUnit.SECONDS).get();
+      return task.get(6, TimeUnit.SECONDS);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
       log.error("Exception in Runnable", e);
       return false;

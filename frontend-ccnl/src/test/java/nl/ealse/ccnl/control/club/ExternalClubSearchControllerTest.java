@@ -1,8 +1,6 @@
 package nl.ealse.ccnl.control.club;
 
 import java.util.Map;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
 import nl.ealse.ccnl.service.relation.SearchItem;
@@ -17,13 +15,13 @@ class ExternalClubSearchControllerTest extends FXMLBaseTest {
 
   @Test
   void performTests() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       prepare();
       testController();
       testSearch();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

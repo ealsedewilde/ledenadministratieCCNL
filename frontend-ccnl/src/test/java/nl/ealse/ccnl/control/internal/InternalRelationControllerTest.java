@@ -2,8 +2,6 @@ package nl.ealse.ccnl.control.internal;
 
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.form.FormController;
@@ -22,11 +20,11 @@ class InternalRelationControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     rel = internalRelation();
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       doTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

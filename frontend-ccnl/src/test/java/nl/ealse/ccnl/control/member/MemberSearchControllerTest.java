@@ -9,8 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
@@ -42,8 +40,8 @@ class MemberSearchControllerTest extends FXMLBaseTest {
 
   @Test
   void testSearch() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       prepare();
       MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.AMEND_MEMBER);
       sut.searchMember(event);
@@ -68,8 +66,8 @@ class MemberSearchControllerTest extends FXMLBaseTest {
       sut.search();
       sut.reset();
 
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

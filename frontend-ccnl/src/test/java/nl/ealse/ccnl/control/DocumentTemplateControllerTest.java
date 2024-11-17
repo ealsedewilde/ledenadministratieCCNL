@@ -8,8 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -36,10 +34,8 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
   void onEvent() {
 
     Platform.setImplicitExit(false);
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(() -> {
       documentService = mock(DocumentService.class);
-
       sut = new Tester(getPageController(), documentService);
       initFXML();
       sut.textHelp();
@@ -65,8 +61,8 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
       sut.saveText();
       verify(documentService).persistDocumentemplate(any(DocumentTemplate.class));
 
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

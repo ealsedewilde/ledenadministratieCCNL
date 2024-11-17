@@ -3,8 +3,6 @@ package nl.ealse.ccnl.control.member;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import jakarta.mail.MessagingException;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TextArea;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ioc.ComponentProviderUtil;
@@ -26,8 +24,7 @@ class CancelationMailControllerTest extends FXMLBaseTest {
   @Test
   void doTest() throws MessagingException {
     final ArgumentCaptor<String> arg = ArgumentCaptor.forClass(String.class);
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+    Assertions.assertTrue(runFX(() -> {
       Member m = new Member();
       m.setMemberNumber(4444);
       m.setInitials("tester");
@@ -37,8 +34,8 @@ class CancelationMailControllerTest extends FXMLBaseTest {
       controller.onApplicationEvent(event);
       setContent();
       controller.sendMail();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
     verify(mailService).sendMail(anyString(), anyString(), arg.capture());
     Assertions.assertEquals("Beste tester\t\n Dit is een test.", arg.getValue());

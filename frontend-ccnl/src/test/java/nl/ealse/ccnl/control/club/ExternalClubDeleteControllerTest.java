@@ -3,8 +3,6 @@ package nl.ealse.ccnl.control.club;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
@@ -23,12 +21,12 @@ class ExternalClubDeleteControllerTest extends FXMLBaseTest {
   void testController() {
     sut = getTestSubject(ExternalClubDeleteController.class);
     club = club();
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

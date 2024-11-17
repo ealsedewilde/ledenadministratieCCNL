@@ -2,8 +2,6 @@ package nl.ealse.ccnl.control.partner;
 
 import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
@@ -20,12 +18,12 @@ class PartnerControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     partner = externalRelationPartner();
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(PartnerController.class);
       doTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

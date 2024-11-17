@@ -1,7 +1,5 @@
 package nl.ealse.javafx.util;
 
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TextField;
 import nl.ealse.ccnl.test.FXBase;
 import org.junit.jupiter.api.Assertions;
@@ -11,13 +9,13 @@ class ContentUpdateTest extends FXBase {
 
   @Test
   void performTests() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       firstCapitalTest();
       formatInitialsTest();
       formatPostalCodeTest();
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 

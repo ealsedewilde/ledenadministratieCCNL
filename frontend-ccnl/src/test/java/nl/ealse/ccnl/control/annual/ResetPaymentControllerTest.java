@@ -1,8 +1,6 @@
 package nl.ealse.ccnl.control.annual;
 
 import static org.mockito.Mockito.verify;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -19,14 +17,14 @@ class ResetPaymentControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    final AtomicBoolean ar = new AtomicBoolean();
-    Assertions.assertTrue(runFX(new FutureTask<AtomicBoolean>(() -> {
+
+    Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(ResetPaymentCommand.class);
       clickButton();
       sut.executeCommand(null);
       verify(getPageController()).showMessage("Alle betaalgegevens zijn gewist");
-      ar.set(true);
-    }, ar)));
+      return Boolean.TRUE;
+    }));
     
   }
 
