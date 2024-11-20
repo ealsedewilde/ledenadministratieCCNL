@@ -1,6 +1,5 @@
 package nl.ealse.javafx;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -12,7 +11,6 @@ class FXMLLoaderUtilTest extends FXBase {
 
   @Test
   void testFxmlLoading() {
-    AtomicBoolean ar = new AtomicBoolean();
     Assertions.assertTrue(runFX(() -> {
       getPage();
       pageNotFound();

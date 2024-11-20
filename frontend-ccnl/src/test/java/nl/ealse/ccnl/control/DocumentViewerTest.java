@@ -3,7 +3,6 @@ package nl.ealse.ccnl.control;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -19,7 +18,6 @@ class DocumentViewerTest extends FXBase {
 
   @Test
   void testViewer() {
-    AtomicBoolean ar = new AtomicBoolean();
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.DocumentViewer;
@@ -35,7 +34,6 @@ class DocumentControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    AtomicBoolean ar = new AtomicBoolean();
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();

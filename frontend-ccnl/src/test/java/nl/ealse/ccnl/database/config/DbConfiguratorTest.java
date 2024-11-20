@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -36,7 +35,6 @@ class DbConfiguratorTest extends FXMLBaseTest {
 
   @Test
   void testDbConfig() {
-    AtomicBoolean ar = new AtomicBoolean();
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
