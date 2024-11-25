@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.test;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -16,13 +15,17 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 public abstract class FXBase {
 
   static {
-    Platform.startup(() -> {});
+    Platform.startup(() -> {
+    });
     Platform.setImplicitExit(false);
     initializeMainStage();
   }
 
-  protected boolean runFX(Callable<Boolean> work) {
-    FutureTask<Boolean> task = new FutureTask<>(work);
+  protected boolean runFX(Runnable work) {
+    FutureTask<Boolean> task = new FutureTask<>(() -> {
+      work.run();
+      return true;
+    });
     Platform.runLater(task);
     try {
       return task.get(6, TimeUnit.SECONDS);

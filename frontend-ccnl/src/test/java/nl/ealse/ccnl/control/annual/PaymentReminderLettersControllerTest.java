@@ -50,18 +50,12 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
   @Test
   void test() {
-
     File exportFile = new File(tempDir, "test.docx");
     when(fileChooser.showSaveDialog()).thenReturn(exportFile);
-
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      return Boolean.TRUE;
     }));
-    
-
   }
 
   private void doTest() {

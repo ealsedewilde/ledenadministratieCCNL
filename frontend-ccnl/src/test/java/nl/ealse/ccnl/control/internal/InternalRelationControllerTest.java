@@ -20,12 +20,10 @@ class InternalRelationControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     rel = internalRelation();
-
     Assertions.assertTrue(runFX(() -> {
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

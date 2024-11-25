@@ -15,13 +15,11 @@ class InvalidAddressControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

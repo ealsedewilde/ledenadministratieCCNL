@@ -13,15 +13,12 @@ class PrimaryPageStarterTest extends FXMLBaseTest {
 
   @Test
   void testSut() {
-
     Assertions.assertTrue(runFX(() -> {
       sut = new PrimaryPageStarter();
       config();
-
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
 
   }
 

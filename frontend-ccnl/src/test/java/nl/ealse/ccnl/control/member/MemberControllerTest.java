@@ -33,15 +33,11 @@ class MemberControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
       testFormController();
-      return Boolean.TRUE;
     }));
-    
 
   }
 

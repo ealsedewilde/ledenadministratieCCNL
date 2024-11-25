@@ -25,14 +25,12 @@ class ExcelImportControllerTest extends FXMLBaseTest {
 
   @Test
   void testImport() {
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       setFileChooser();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
 
   }
 

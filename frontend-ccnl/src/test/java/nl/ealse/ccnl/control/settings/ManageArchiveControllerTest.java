@@ -18,14 +18,12 @@ class ManageArchiveControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       referenceYear();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

@@ -19,16 +19,13 @@ class PaymentReminderReportControllerTest extends FXMLBaseTest {
 
   @Test
   void test() {
-
     Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(PaymentReminderReportCommand.class);
       sut.setup();
       setFileChooser();
       sut.executeCommand(null);
       verify(getPageController()).showMessage("Herinneringen overzicht is aangemaakt");
-      return Boolean.TRUE;
     }));
-    
   }
 
 

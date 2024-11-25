@@ -25,13 +25,11 @@ class BackupRestoreControllerTest extends FXMLBaseTest {
 
   @Test
   void testBackupController() {
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       backup();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   @Test
@@ -40,9 +38,9 @@ class BackupRestoreControllerTest extends FXMLBaseTest {
     Assertions.assertTrue(runFX(() -> {
       prepare();
       restore();
-      return Boolean.TRUE;
+
     }));
-    
+
   }
 
   private void backup() {

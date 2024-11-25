@@ -29,9 +29,9 @@ class AddDocumentControllerTest extends FXMLBaseTest {
       prepare();
       setFileChooser();
       doTest();
-      return Boolean.TRUE;
+
     }));
-    
+
   }
 
   private void doTest() {

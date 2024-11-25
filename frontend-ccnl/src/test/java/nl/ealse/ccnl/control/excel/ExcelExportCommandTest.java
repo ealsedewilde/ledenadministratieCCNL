@@ -31,14 +31,10 @@ class ExcelExportCommandTest extends FXMLBaseTest {
   void executeCommandTest() {
     File exportFile = new File(tempDir, "export.xlsx");
     when(fileChooser.showSaveDialog()).thenReturn(exportFile);
-
-
     Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(ExcelExportCommand.class);
       doTest();
-      return Boolean.TRUE;
     }));
-    
 
   }
 

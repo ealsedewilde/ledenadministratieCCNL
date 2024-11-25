@@ -15,14 +15,12 @@ class ExternalOtherSearchControllerTest extends FXMLBaseTest {
 
   @Test
   void performTests() {
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       testController();
       testSearch();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void prepare() {

@@ -22,14 +22,12 @@ class ManageTemplateControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       initTemplateId();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

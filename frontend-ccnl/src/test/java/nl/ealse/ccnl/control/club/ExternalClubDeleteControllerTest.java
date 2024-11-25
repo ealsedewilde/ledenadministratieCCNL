@@ -21,13 +21,11 @@ class ExternalClubDeleteControllerTest extends FXMLBaseTest {
   void testController() {
     sut = getTestSubject(ExternalClubDeleteController.class);
     club = club();
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

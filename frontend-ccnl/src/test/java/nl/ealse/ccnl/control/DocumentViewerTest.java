@@ -21,9 +21,8 @@ class DocumentViewerTest extends FXBase {
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

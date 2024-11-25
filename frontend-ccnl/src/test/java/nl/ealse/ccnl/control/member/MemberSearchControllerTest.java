@@ -40,7 +40,6 @@ class MemberSearchControllerTest extends FXMLBaseTest {
 
   @Test
   void testSearch() {
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.AMEND_MEMBER);
@@ -65,10 +64,8 @@ class MemberSearchControllerTest extends FXMLBaseTest {
       searchField("1234aa");
       sut.search();
       sut.reset();
-
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void prepare() {

@@ -14,12 +14,10 @@ class ImageCellTest extends FXBase {
 
   @Test
   void performTests() {
-
     Assertions.assertTrue(runFX(() -> {
       testCell();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   @SuppressWarnings("unchecked")

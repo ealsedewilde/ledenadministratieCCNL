@@ -39,14 +39,12 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
   void testController() {
     File sepaFile = new File(tempDir, "sepa.xml");
     when(fileChooser.showSaveDialog()).thenReturn(sepaFile);
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       setFileChooser();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

@@ -34,14 +34,12 @@ class AddressListControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       setFileChooser();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

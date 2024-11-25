@@ -38,9 +38,8 @@ class DbConfiguratorTest extends FXMLBaseTest {
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      return Boolean.TRUE;
-    }));
-    
+   }));
+
   }
 
   private void doTest() {

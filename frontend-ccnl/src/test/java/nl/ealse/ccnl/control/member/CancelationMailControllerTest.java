@@ -34,9 +34,8 @@ class CancelationMailControllerTest extends FXMLBaseTest {
       controller.onApplicationEvent(event);
       setContent();
       controller.sendMail();
-      return Boolean.TRUE;
     }));
-    
+
     verify(mailService).sendMail(anyString(), anyString(), arg.capture());
     Assertions.assertEquals("Beste tester\t\n Dit is een test.", arg.getValue());
   }

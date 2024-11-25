@@ -17,12 +17,9 @@ class EmailValidatorTest extends FXBase {
 
   @Test
   void performTests() {
-
     Assertions.assertTrue(runFX(() -> {
       testSut();
-      return Boolean.TRUE;
     }));
-    
   }
 
   private void testSut() {

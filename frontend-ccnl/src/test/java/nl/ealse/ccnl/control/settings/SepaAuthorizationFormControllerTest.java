@@ -21,13 +21,11 @@ class SepaAuthorizationFormControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-
     Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(SepaAuthorizationFormCommand.class);
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

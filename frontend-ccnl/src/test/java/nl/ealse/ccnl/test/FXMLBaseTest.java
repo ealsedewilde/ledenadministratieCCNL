@@ -88,6 +88,7 @@ public abstract class FXMLBaseTest extends FXBase {
 
   /**
    * Get a component with mocks for the related component.
+   * 
    * @param <T>
    * @param clazz
    * @return

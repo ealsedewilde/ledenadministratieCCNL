@@ -43,8 +43,6 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
 
   @Test
   void doTest() {
-
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       Member m = new Member();
@@ -68,9 +66,8 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
       controller.printPDF();
       Assertions.assertEquals(2, PrintCount.getCount());
       controller.closePDF();
-      return Boolean.TRUE;
     }));
-    
+
     verify(documentService).generateWordDocument(any(LetterData.class));
     controller.getLetterText();
   }

@@ -18,13 +18,11 @@ class PartnerControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     partner = externalRelationPartner();
-
     Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(PartnerController.class);
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

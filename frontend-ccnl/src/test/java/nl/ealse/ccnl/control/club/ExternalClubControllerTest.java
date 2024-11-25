@@ -18,13 +18,11 @@ class ExternalClubControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     club = club();
-
     Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(ExternalClubController.class);
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

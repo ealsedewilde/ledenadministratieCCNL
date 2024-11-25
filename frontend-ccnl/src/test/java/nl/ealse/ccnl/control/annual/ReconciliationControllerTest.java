@@ -42,14 +42,11 @@ class ReconciliationControllerTest extends FXMLBaseTest {
   void testController() {
     File reconcileFile = new File(tempDir, "reconcile.xml");
     when(fileChooser.showOpenDialog()).thenReturn(reconcileFile);
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       setFileChooser();
       doTest();
-      return Boolean.TRUE;
     }));
-    
   }
 
   private void doTest() {

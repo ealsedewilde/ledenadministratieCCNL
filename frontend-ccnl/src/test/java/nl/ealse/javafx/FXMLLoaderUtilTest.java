@@ -15,10 +15,8 @@ class FXMLLoaderUtilTest extends FXBase {
       getPage();
       pageNotFound();
       pageInError();
-
-      return Boolean.TRUE;
     }));
-    
+
   }
 
 

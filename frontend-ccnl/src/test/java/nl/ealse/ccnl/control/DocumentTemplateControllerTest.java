@@ -60,10 +60,8 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
 
       sut.saveText();
       verify(documentService).persistDocumentemplate(any(DocumentTemplate.class));
-
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void initFXML() {

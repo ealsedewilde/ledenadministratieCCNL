@@ -19,13 +19,11 @@ class ExternalOtherDeleteControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     relation = externalRelationOther();
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

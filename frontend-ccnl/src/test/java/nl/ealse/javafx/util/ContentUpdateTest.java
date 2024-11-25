@@ -9,14 +9,12 @@ class ContentUpdateTest extends FXBase {
 
   @Test
   void performTests() {
-
     Assertions.assertTrue(runFX(() -> {
       firstCapitalTest();
       formatInitialsTest();
       formatPostalCodeTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void firstCapitalTest() {

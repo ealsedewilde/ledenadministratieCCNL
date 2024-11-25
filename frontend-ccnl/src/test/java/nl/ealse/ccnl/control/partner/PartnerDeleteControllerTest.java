@@ -20,13 +20,11 @@ class PartnerDeleteControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     partner = externalRelationPartner();
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

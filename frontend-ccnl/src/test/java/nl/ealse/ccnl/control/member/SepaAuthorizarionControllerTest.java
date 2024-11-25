@@ -28,13 +28,11 @@ class SepaAuthorizarionControllerTest extends FXMLBaseTest {
   @Test
   void testController() {
     m = member();
-
     Assertions.assertTrue(runFX(() -> {
       prepare();
       doTest();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void doTest() {

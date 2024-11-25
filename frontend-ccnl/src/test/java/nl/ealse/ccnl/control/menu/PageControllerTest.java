@@ -20,12 +20,10 @@ class PageControllerTest extends FXBase {
 
   @Test
   void performTests() {
-
     Assertions.assertTrue(runFX(() -> {
       testController();
-      return Boolean.TRUE;
     }));
-    
+
   }
 
   private void testController() {
