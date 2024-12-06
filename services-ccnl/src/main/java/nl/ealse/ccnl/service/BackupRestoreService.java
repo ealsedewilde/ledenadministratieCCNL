@@ -35,7 +35,7 @@ public class BackupRestoreService {
   private static final String RESTORE_SQL = "RUNSCRIPT FROM '%s' COMPRESSION ZIP";
 
 
-  private BackupRestoreService() {
+  public BackupRestoreService() {
     log.info("Service created");
   }
 

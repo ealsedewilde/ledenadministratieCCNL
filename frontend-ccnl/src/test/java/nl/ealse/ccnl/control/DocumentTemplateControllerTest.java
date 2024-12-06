@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.application.Platform;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -33,7 +32,6 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
   @Test
   void onEvent() {
 
-    Platform.setImplicitExit(false);
     Assertions.assertTrue(runFX(() -> {
       documentService = mock(DocumentService.class);
       sut = new Tester(getPageController(), documentService);
@@ -41,7 +39,7 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
       sut.textHelp();
       Stage dialog = sut.getStage();
       assertNotNull(dialog);
-      double height = dialog.getScene().getHeight();
+      int height = (int) dialog.getScene().getHeight();
       assertEquals(330, height);
 
       sut.initializeTemplates();

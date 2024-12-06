@@ -11,9 +11,15 @@ import nl.ealse.ccnl.MainStage;
 import nl.ealse.javafx.ImagesMap;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+/**
+ * All unit tests that need to run in the JavaFx application thread must extend this class
+ */
 @Slf4j
 public abstract class FXBase {
 
+  /**
+   * To enhance performance, all JavaFx test should run in the same tookit
+   */
   static {
     Platform.startup(() -> {
     });
@@ -21,6 +27,11 @@ public abstract class FXBase {
     initializeMainStage();
   }
 
+  /**
+   * Controlled run of some work in the JavaFx application thread.
+   * @param work
+   * @return true when successful
+   */
   protected boolean runFX(Runnable work) {
     FutureTask<Boolean> task = new FutureTask<>(() -> {
       work.run();
@@ -28,6 +39,7 @@ public abstract class FXBase {
     });
     Platform.runLater(task);
     try {
+      // Safeguard for hanging tests. Such tests time out after 6 seconds.
       return task.get(6, TimeUnit.SECONDS);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
       log.error("Exception in Runnable", e);

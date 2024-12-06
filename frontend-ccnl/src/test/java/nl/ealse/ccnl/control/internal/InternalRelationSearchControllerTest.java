@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.internal;
 
 import java.util.Map;
-import javafx.application.Platform;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
 import nl.ealse.ccnl.service.relation.SearchItem;
@@ -41,7 +40,6 @@ class InternalRelationSearchControllerTest extends FXMLBaseTest {
     Assertions.assertEquals("Opzoeken functie", sut.headerText(null));
     Assertions.assertEquals("Intern nr.", sut.columnName(0));
     Assertions.assertEquals("Gevonden functies", sut.resultHeaderText(null));
-    Platform.setImplicitExit(false);
   }
 
 

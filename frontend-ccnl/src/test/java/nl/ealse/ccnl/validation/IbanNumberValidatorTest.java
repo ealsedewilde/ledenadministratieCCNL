@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.validation;
 
-import javafx.application.Platform;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -43,7 +42,6 @@ class IbanNumberValidatorTest extends FXBase {
     Assertions.assertEquals("NL91ABNA0417164300", result);
 
     sut.reset();
-    Platform.setImplicitExit(false);
   }
 
 

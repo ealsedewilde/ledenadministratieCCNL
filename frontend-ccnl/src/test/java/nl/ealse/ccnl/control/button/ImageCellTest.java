@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.button;
 
 import static org.mockito.Mockito.mock;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.test.FXBase;
@@ -28,7 +27,6 @@ class ImageCellTest extends FXBase {
     Assertions.assertNull(sut.getGraphic());
     sut.updateItem(null, false);
     Assertions.assertNotNull(sut.getGraphic());
-    Platform.setImplicitExit(false);
   }
 
 }

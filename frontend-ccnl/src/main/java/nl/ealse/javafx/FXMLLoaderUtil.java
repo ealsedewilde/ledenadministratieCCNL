@@ -23,9 +23,9 @@ public class FXMLLoaderUtil {
 
   private final String FXML_TYPE = ".fxml";
 
-  private final Class<FXMLLoaderUtil> THIS_CLASS = FXMLLoaderUtil.class;
+  private final ClassLoader CLASSLOADER = FXMLLoaderUtil.class.getClassLoader();
 
-  private final String FXML_DIRECTORY = "/" + ApplicationProperties.getProperty("fxml.dir");
+  private final String FXML_DIRECTORY = ApplicationProperties.getProperty("fxml.dir");
   
   private final Callback<Class<?>, Object> CONTROLLER_FACTORY = clazz -> {
     try { 
@@ -65,12 +65,12 @@ public class FXMLLoaderUtil {
    * @return
    */
   private Parent loadFXML(String fxmlName,FXMLLoader loader) {
-    String fqFxmlName = FXML_DIRECTORY + fxmlName + FXML_TYPE;
+    String fqFxmlName = new StringBuilder(FXML_DIRECTORY).append(fxmlName).append(FXML_TYPE).toString();
     try {
-      URL fxmlUrl = THIS_CLASS.getResource(fqFxmlName);
+      URL fxmlUrl = CLASSLOADER.getResource(fqFxmlName);
       if (fxmlUrl != null) {
-        loader.setLocation(THIS_CLASS.getResource(fqFxmlName));
-        log.info(loader.getLocation().toString());
+        loader.setLocation(fxmlUrl);
+        log.info(fqFxmlName);
         return loader.load();
       } else {
         log.error("Unknown page " + fqFxmlName);

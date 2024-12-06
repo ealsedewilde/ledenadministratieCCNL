@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.other;
 
 import java.util.Map;
-import javafx.application.Platform;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
 import nl.ealse.ccnl.service.relation.SearchItem;
@@ -31,7 +30,6 @@ class ExternalOtherSearchControllerTest extends FXMLBaseTest {
     Assertions.assertEquals("Opzoeken externe relatie", sut.headerText(null));
     Assertions.assertEquals("Relatie nr.", sut.columnName(0));
     Assertions.assertEquals("Gevonden externe relaties", sut.resultHeaderText(null));
-    Platform.setImplicitExit(false);
   }
 
   private void testController() {

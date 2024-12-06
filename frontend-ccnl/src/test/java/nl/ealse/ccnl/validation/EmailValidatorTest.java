@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.validation;
 
-import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import nl.ealse.ccnl.test.FXBase;
@@ -36,7 +35,6 @@ class EmailValidatorTest extends FXBase {
     Assertions.assertTrue(errorMessageLabel.isVisible());
 
     sut.reset();
-    Platform.setImplicitExit(false);
   }
 
   @BeforeAll

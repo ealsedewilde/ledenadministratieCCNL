@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.partner;
 
 import java.util.Map;
-import javafx.application.Platform;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.PartnerSelectionEvent;
 import nl.ealse.ccnl.service.relation.SearchItem;
@@ -31,7 +30,6 @@ class PartnerSearchControllerTest extends FXMLBaseTest {
     Assertions.assertEquals("Opzoeken adverteerder", sut.headerText(null));
     Assertions.assertEquals("Partner nr.", sut.columnName(0));
     Assertions.assertEquals("Gevonden adverteerders", sut.resultHeaderText(null));
-    Platform.setImplicitExit(false);
   }
 
   private void testController() {
