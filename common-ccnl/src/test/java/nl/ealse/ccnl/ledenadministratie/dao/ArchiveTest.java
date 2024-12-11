@@ -35,7 +35,9 @@ class ArchiveTest {
     Assertions.assertEquals("2804 TV", am.getMember().getAddress().getPostalCode());
     boolean eq = archivedMember.getId().equals(am.getId());
     Assertions.assertTrue(eq);
-    
+    archivedMemberRepository.deleteObseleteArchivedMembers(2020);
+    archiveList = archivedMemberRepository.findAll();
+    Assertions.assertTrue(archiveList.isEmpty());
   }
   
   private Member initializedModel() {

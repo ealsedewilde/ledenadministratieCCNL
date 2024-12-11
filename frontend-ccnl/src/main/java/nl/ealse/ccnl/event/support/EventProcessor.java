@@ -44,7 +44,7 @@ public class EventProcessor {
   /**
    * The key of this Map is the class of the event.
    */
-  private final Map<Class<?>, EventContext> eventClassMapping = new HashMap<>();
+  private final Map<String, EventContext> eventClassMapping = new HashMap<>();
   private final List<EventContext> commandMapping = new ArrayList<>();
 
   private EventProcessor() {}
@@ -86,13 +86,7 @@ public class EventProcessor {
           break;
         case "eventClass":
           Type eventType = value.asClass();
-          try {
-            Class<?> eventClass = Class.forName(eventType.name().toString());
-            eventClassMapping.put(eventClass, eventContext);
-          } catch (ClassNotFoundException e) {
-            // This can never happens.
-            log.error("Unable to find event class", e);
-          }
+          eventClassMapping.put(eventType.name().toString(), eventContext);
           break;
         case "choiceGroup":
           ChoiceGroup choiceGroup = ChoiceGroup.valueOf(value.asEnum());
@@ -107,13 +101,7 @@ public class EventProcessor {
 
     });
     if (values.isEmpty()) {
-      try {
-        Class<?> eventClass = Class.forName(eventContext.getParametersClassName());
-        eventClassMapping.put(eventClass, eventContext);
-      } catch (ClassNotFoundException e) {
-        // This can never happens.
-        log.error("Unable to find event class", e);
-      }
+      eventClassMapping.put(eventContext.getParametersClassName(), eventContext);
     }
 
   }
@@ -137,7 +125,7 @@ public class EventProcessor {
       }
     } else {
       Class<?> eventClass = event.getClass();
-      EventContext eventContext = eventClassMapping.get(eventClass);
+      EventContext eventContext = eventClassMapping.get(eventClass.getName());
       invokeMethod(event, eventContext);
     }
 
@@ -200,7 +188,27 @@ public class EventProcessor {
         log.error("Unable to instantiate event target", e);
       }
     }
+    
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("targetClassName: ").append(targetClassName);
+      sb.append(" targetMethodName: ").append(targetMethodName);
+      sb.append(" parametersClassName: ").append(parametersClassName);
+      return sb.toString();
+    }
 
+
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("menuChoiceMapping" ).append(menuChoiceMapping.toString());
+    sb.append("\nchoiceGroupMapping" ).append(choiceGroupMapping.toString());
+    sb.append("\ncommandMapping" ).append(commandMapping.toString());
+    sb.append("\neventClassMapping" ).append(eventClassMapping.toString());
+    return sb.toString();
   }
 
 }

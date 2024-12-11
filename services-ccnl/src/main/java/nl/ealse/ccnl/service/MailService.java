@@ -31,6 +31,7 @@ public class MailService {
   private final DocumentService documentService;
 
   public MailService(DocumentService documentService) {
+    log.info("Service created");
     this.documentService = documentService;
     this.session = initialize();
   }

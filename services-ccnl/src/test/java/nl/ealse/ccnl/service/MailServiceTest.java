@@ -19,9 +19,8 @@ class MailServiceTest {
 
   @Test
   void testSendMail() {
-    MailMessage msg;
     try {
-      msg = sut.sendMail("ealsedewilde@gmail.com", "Testbericht", "Dit is een test");
+      sut.sendMail("ealsedewilde@gmail.com", "Testbericht", "Dit is een test");
     } catch (MessagingException e) {
       String error = e.getMessage();
       assertEquals("Couldn't connect to host, port: localhost, 25; timeout -1", error);

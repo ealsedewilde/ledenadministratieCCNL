@@ -80,7 +80,7 @@ public abstract class BaseRepository<T> {
   public void deleteById(Object id) {
     Optional<T> m = findById(id);
     if (m.isPresent()) {
-      getEntityManager().remove(m.get());
+      TransactionUtil.inTransction(() -> getEntityManager().remove(m.get()));
     }
   }
 

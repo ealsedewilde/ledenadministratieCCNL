@@ -27,7 +27,7 @@ class ExternalImportTest {
   @Test
   void testImportClub() {
     sut = new ExternalClubImport(repository, ProcessType.REPLACE);
-    sut.importExternalRelation(club);
+    sut.importRelation(club);
     verify(repository).save(clubRelation);
     sut.finalizeImport();
     verify(repository).deleteById(Integer.valueOf(1111));
@@ -41,12 +41,13 @@ class ExternalImportTest {
     when(repository.findById(any(Integer.class))).thenReturn(Optional.of(clubRelation));
 
     List<Number> clubs = new ArrayList<>();
-    clubs.add(Integer.valueOf(8888));
+    clubs.add(Integer.valueOf(8288));
     clubs.add(Integer.valueOf(1111));
     when(repository.getAllRelationNumbers()).thenReturn(clubs);
 
     club = mock(CCNLClub.class);
-    when(club.getClubNummer()).thenReturn(8888);
+    when(club.getClubNummer()).thenReturn(8288);
+    when(club.getRelatienummer()).thenReturn(8288);
     when(club.getPlaats()).thenReturn("Ons Dorp");
     when(club.getPostcode()).thenReturn("1234 AA");
     when(club.getStraat()).thenReturn("Brink 1");

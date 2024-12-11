@@ -1,6 +1,5 @@
 package nl.ealse.ccnl.ledenadministratie.excelimport;
 
-import java.util.List;
 import java.util.Optional;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.lid.CCNLLid;
@@ -9,37 +8,13 @@ import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.util.DateUtil;
 
-public class MemberImport {
+public class MemberImport extends BaseImport<Member, CCNLLid> {
   private final MemberRepository repository;
 
-  private final ProcessType processType;
-
-  private final List<Number> existingNumbers;
-
   public MemberImport(MemberRepository repository, ProcessType processType) {
+    super(repository, processType);
     this.repository = repository;
-    this.processType = processType;
-    this.existingNumbers = repository.getAllMemberNumbers();
-  }
-
-  public void importMember(CCNLLid lid) {
-    Optional<Member> optionalRelation = repository.findById(lid.getRelatienummer());
-    Member member;
-    if (optionalRelation.isEmpty()) {
-      // ProcessType.ADD, ProcessType.ADD_OVERWRITE and ProcessType.REPLACE
-      member = new Member();
-      fillMember(lid, member);
-      repository.save(member);
-    } else if (processType != ProcessType.ADD) {
-      // ProcessType.ADD_OVERWRITE and ProcessType.REPLACE
-      member = optionalRelation.get();
-      fillMember(lid, member);
-      repository.save(member);
-      if (processType == ProcessType.REPLACE) {
-        existingNumbers.remove(Integer.valueOf(lid.getRelatienummer()));
-      }
-    }
-
+    setExistingNumbers(repository.getAllMemberNumbers());
   }
 
   public void lastYearMembership(CCNLLid lid) {
@@ -67,22 +42,6 @@ public class MemberImport {
     repository.save(updateMember);
   }
 
-  public void finalizeImport() {
-    if (processType == ProcessType.REPLACE) {
-      for (Number nr : existingNumbers) {
-        Integer id;
-        if (nr instanceof Integer i) {
-          id = i;
-        } else {
-          id = Integer.valueOf(nr.intValue());
-        }
-        repository.deleteById(id);
-      }
-
-    }
-  }
-
-
   private Member getMemberToUpdate(CCNLLid lid) {
     Member updateMember;
     Optional<Member> member = repository.findById(lid.getLidNummer());
@@ -90,12 +49,18 @@ public class MemberImport {
       updateMember = member.get();
     } else {
       updateMember = new Member();
-      fillMember(lid, updateMember);
+      fillRelation(lid, updateMember);
     }
     return updateMember;
   }
 
-  private void fillMember(CCNLLid lid, Member member) {
+  @Override
+  protected Member newInstance() {
+    return new Member();
+  }
+
+  @Override
+  public void fillRelation(CCNLLid lid, Member member) {
     member.setAddress(AddressMapping.mapAddress(lid));
     member.setCurrentYearPaid(lid.isHeeftBetaald());
     member.setEmail(lid.getEmail());
@@ -118,6 +83,11 @@ public class MemberImport {
       member.setPaymentMethod(PaymentMethod.UNKNOWN);
     }
     member.setTelephoneNumber(lid.getTelefoon());
+    
+  }
+  @Override
+  protected boolean validRelationNumber(int relatienummer) {
+    return relatienummer > 0 && relatienummer < 5000;
   }
 
 }

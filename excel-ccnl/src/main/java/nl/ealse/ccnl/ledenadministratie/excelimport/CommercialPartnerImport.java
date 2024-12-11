@@ -16,4 +16,9 @@ public class CommercialPartnerImport extends ExternalRelationImport<ExternalRela
     return new ExternalRelationPartner();
   }
 
+  @Override
+  protected boolean validRelationNumber(int relatienummer) {
+    return 85 == relatienummer / 100;
+  }
+
 }

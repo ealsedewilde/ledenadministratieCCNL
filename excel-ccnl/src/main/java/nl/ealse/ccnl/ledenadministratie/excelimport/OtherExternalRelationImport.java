@@ -16,4 +16,9 @@ public class OtherExternalRelationImport extends ExternalRelationImport<External
     return new ExternalRelationOther();
   }
 
+  @Override
+  protected boolean validRelationNumber(int relatienummer) {
+    return 84 == relatienummer / 100;
+  }
+
 }

@@ -25,7 +25,7 @@ class MemberImportTest {
   @Test
   void testImportMember() {
     sut = new MemberImport(repository, ProcessType.REPLACE);
-    sut.importMember(lid);
+    sut.importRelation(lid);
     verify(repository).save(m);
     sut.finalizeImport();
     verify(repository).deleteById(Integer.valueOf(1111));

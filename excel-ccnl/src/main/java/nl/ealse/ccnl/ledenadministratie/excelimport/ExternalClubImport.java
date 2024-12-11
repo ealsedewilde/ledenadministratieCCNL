@@ -5,14 +5,14 @@ import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.club.CCNLClub;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 
-public class ExternalClubImport extends ExternalImport<ExternalRelationClub, CCNLClub> {
+public class ExternalClubImport extends BaseImport<ExternalRelationClub, CCNLClub> {
 
   public ExternalClubImport(ExternalRelationClubRepository repository, ProcessType processType) {
     super(repository, processType);
     setExistingNumbers(repository.getAllRelationNumbers());
   }
 
-  protected void fillEntity(CCNLClub ccnlPartner, ExternalRelationClub relation) {
+  public void fillRelation(CCNLClub ccnlPartner, ExternalRelationClub relation) {
     relation.setContactName(ccnlPartner.getContactpersoon());
     relation.setContactNamePrefix(ccnlPartner.getAanhef());
     relation.setRelationName(ccnlPartner.getClubNaam());
@@ -28,8 +28,8 @@ public class ExternalClubImport extends ExternalImport<ExternalRelationClub, CCN
   }
 
   @Override
-  protected boolean process(int relatienummer) {
-    return true;
+  protected boolean validRelationNumber(int relatienummer) {
+    return 82 == relatienummer / 100;
   }
 
 }

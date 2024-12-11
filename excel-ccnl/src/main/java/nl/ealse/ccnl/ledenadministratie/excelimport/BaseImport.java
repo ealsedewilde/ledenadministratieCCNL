@@ -3,35 +3,38 @@ package nl.ealse.ccnl.ledenadministratie.excelimport;
 import java.util.List;
 import java.util.Optional;
 import lombok.Setter;
-import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationRepository;
+import nl.ealse.ccnl.ledenadministratie.dao.BaseRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLAdres;
-import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 
-public abstract class ExternalImport<T extends ExternalRelation, S extends CCNLAdres> {
-
-  private final ExternalRelationRepository<T> repository;
-
+public abstract class BaseImport<T extends Object, S extends CCNLAdres> {
+  
+  private final BaseRepository<T> repository;
   private final ProcessType processType;
-
+  
   @Setter
   List<Number> existingNumbers;
-
-  protected ExternalImport(ExternalRelationRepository<T> otherRepository, ProcessType processType) {
-    this.repository = otherRepository;
+  
+  protected BaseImport(BaseRepository<T> repository, ProcessType processType) {
+    this.repository = repository;
     this.processType = processType;
   }
-
-  public void importExternalRelation(S source) {
-    if (process(source.getRelatienummer())) {
+  
+  /**
+   * Import a relation from Excel into the database;
+   *
+   * @param source - Excel representation of the relation
+   */
+  public void importRelation(S source) {
+    if (validRelationNumber(source.getRelatienummer())) {
       Optional<T> optionalRelation = repository.findById(source.getRelatienummer());
       T relation;
       if (optionalRelation.isEmpty()) {
         relation = newInstance();
-        fillExternalRelation(source, relation);
+        fillRelation(source, relation);
         repository.save(relation);
       } else if (processType != ProcessType.ADD) {
         relation = optionalRelation.get();
-        fillExternalRelation(source, relation);
+        fillRelation(source, relation);
         repository.save(relation);
         if (processType == ProcessType.REPLACE) {
           existingNumbers.remove(Integer.valueOf(source.getRelatienummer()));
@@ -40,6 +43,9 @@ public abstract class ExternalImport<T extends ExternalRelation, S extends CCNLA
     }
   }
 
+  /**
+   * When the Excel contains all relations, remove obsolete relations from the database.
+   */
   public void finalizeImport() {
     if (processType == ProcessType.REPLACE) {
       for (Number nr : existingNumbers) {
@@ -54,16 +60,11 @@ public abstract class ExternalImport<T extends ExternalRelation, S extends CCNLA
 
     }
   }
-
-  private void fillExternalRelation(S source, T relation) {
-    fillEntity(source, relation);
-    relation.setAddress(AddressMapping.mapAddress(source));
-  }
-
-  protected abstract boolean process(int relatienummer);
-
-  protected abstract void fillEntity(S source, T relation);
-
+  
+  protected abstract boolean validRelationNumber(int relatienummer);
+  
   protected abstract T newInstance();
+  
+  public abstract void fillRelation(S source, T relation);
 
 }

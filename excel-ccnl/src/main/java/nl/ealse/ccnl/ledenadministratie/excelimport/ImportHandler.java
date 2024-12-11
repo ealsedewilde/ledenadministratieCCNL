@@ -86,7 +86,7 @@ public class ImportHandler {
       CCNLLidSheet leden = workbook.getSheet(def, CCNLLidSheet.class);
       switch (def) {
         case LEDEN:
-          leden.forEach(importHandler::importMember);
+          leden.forEach(importHandler::importRelation);
           break;
         case OPZEGGEN_VOLGEND_JAAR:
           leden.forEach(importHandler::lastYearMembership);
@@ -117,7 +117,7 @@ public class ImportHandler {
         new CommercialPartnerImport(partnerRepository, importType);
     partners.forEach(partner -> {
       if (partner.getPartnerNummer() >= 8500) {
-        importHandler.importExternalRelation(partner);
+        importHandler.importRelation(partner);
       }
     });
     importHandler.finalizeImport();
@@ -127,7 +127,7 @@ public class ImportHandler {
       throws SheetNotFoundException {
     CCNLClubSheet clubs = workbook.getSheet(SheetDefinition.CLUBS, CCNLClubSheet.class);
     final ExternalClubImport importHandler = new ExternalClubImport(clubRepository, importType);
-    clubs.forEach(importHandler::importExternalRelation);
+    clubs.forEach(importHandler::importRelation);
     importHandler.finalizeImport();
   }
 
@@ -138,7 +138,7 @@ public class ImportHandler {
         new OtherExternalRelationImport(otherRepository, importType);
     partners.forEach(partner -> {
       if (partner.getPartnerNummer() < 8500) {
-        importHandler.importExternalRelation(partner);
+        importHandler.importRelation(partner);
       }
     });
     importHandler.finalizeImport();
@@ -149,7 +149,7 @@ public class ImportHandler {
     CCNLInternSheet functies = workbook.getSheet(SheetDefinition.INTERN, CCNLInternSheet.class);
     InternalRelationImport importHandler =
         new InternalRelationImport(internalRepository, importType);
-    functies.forEach(importHandler::importInternalRelation);
+    functies.forEach(importHandler::importRelation);
     importHandler.finalizeImport();
   }
 

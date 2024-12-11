@@ -7,14 +7,14 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.ledenadministratie.util.DateUtil;
 
 public abstract class ExternalRelationImport<T extends ExternalRelation>
-    extends ExternalImport<T, CCNLPartner> {
+    extends BaseImport<T, CCNLPartner> {
 
   protected ExternalRelationImport(ExternalRelationRepository<T> repository,
       ProcessType processType) {
     super(repository, processType);
   }
 
-  protected void fillEntity(CCNLPartner ccnlPartner, T relation) {
+  public void fillRelation(CCNLPartner ccnlPartner, T relation) {
     relation.setEmail(ccnlPartner.getEmail());
     relation.setContactName(ccnlPartner.getContactpersoon());
     relation.setContactNamePrefix(ccnlPartner.getAanhef());
@@ -26,11 +26,6 @@ public abstract class ExternalRelationImport<T extends ExternalRelation>
     relation.setModificationDate(LocalDate.now());
 
     relation.setAddress(AddressMapping.mapAddress(ccnlPartner));
-  }
-
-  @Override
-  protected boolean process(int relatienummer) {
-    return relatienummer < 8500;
   }
 
 }
