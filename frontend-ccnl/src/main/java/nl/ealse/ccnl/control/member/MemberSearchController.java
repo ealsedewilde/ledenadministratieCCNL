@@ -47,7 +47,7 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
 
   @Override
   protected List<Member> doSearch(SearchItem searchItem, String value) {
-    if (getCurrentMenuChoice() == MenuChoice.PAYMENT_AUTHORIZATION) {
+    if (MenuChoice.PAYMENT_AUTHORIZATION == getCurrentMenuChoice()) {
       return service.searchMemberWithoutSepa(searchItem, value);
     }
     return service.searchMember(searchItem, value);
@@ -74,6 +74,9 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
 
   @Override
   protected String resultHeaderText(MenuChoice currentMenuChoice) {
+    if (MenuChoice.PAYMENT_AUTHORIZATION == getCurrentMenuChoice()) {
+      return "Gevonden leden zonder SEPA machtiging";
+    }
     return "Gevonden leden";
   }
 

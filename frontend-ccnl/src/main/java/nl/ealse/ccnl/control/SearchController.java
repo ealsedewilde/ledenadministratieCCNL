@@ -122,10 +122,18 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
    */
   @FXML
   public void reset() {
-    tableView.getItems().clear();
-    result.setVisible(false);
     searchCriterium.getSelectionModel().selectFirst();
     searchField.setText(null);
+    resetResult();
+  }
+  
+  /**
+   * Reset the search page result to its initial state.
+   */
+  @FXML
+  public void resetResult() {
+    tableView.getItems().clear();
+    result.setVisible(false);
     searchField.requestFocus();
     errorMessage.setVisible(false);
   }

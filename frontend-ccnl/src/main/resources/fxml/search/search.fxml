@@ -17,9 +17,9 @@
 				<HBox prefWidth="850.0" style="-fx-spacing: 20.0;">
 					<children>
 						<Label text="Zoeken op:" />
-						<ChoiceBox fx:id="searchCriterium" prefHeight="25.0" prefWidth="150.0" />
+						<ChoiceBox fx:id="searchCriterium" prefHeight="25.0" prefWidth="150.0" onAction="#resetResult"/>
 						<Label text="Zoekgegeven:" />
-						<TextField fx:id="searchField" maxWidth="300" />
+						<TextField fx:id="searchField" maxWidth="300" onKeyPressed="#resetResult"/>
 						<Label fx:id="errorMessage" styleClass="required" alignment="TOP_LEFT" visible="false"
 							minHeight="40" />
 					</children>
