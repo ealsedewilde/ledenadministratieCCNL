@@ -5,6 +5,7 @@ import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_CLUB;
 import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_EXTERNAL;
 import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_INTERNAL;
 import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_MEMBER;
+import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_PA_MEMBER;
 import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_PARTNER;
 import lombok.Getter;
 
@@ -16,7 +17,7 @@ import lombok.Getter;
  */
 public enum MenuChoice {
   NEW_MEMBER, AMEND_MEMBER(SEARCH_MEMBER), CANCEL_MEMBERSHIP(SEARCH_MEMBER), PAYMENT_AUTHORIZATION(
-      SEARCH_MEMBER),
+      SEARCH_PA_MEMBER),
   //
   NEW_PARTNER, AMEND_PARTNER(SEARCH_PARTNER), DELETE_PARTNER(SEARCH_PARTNER),
   //

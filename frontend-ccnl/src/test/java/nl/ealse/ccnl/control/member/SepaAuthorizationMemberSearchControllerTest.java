@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
-class MemberSearchControllerTest extends FXMLBaseTest {
+class SepaAuthorizationMemberSearchControllerTest  extends FXMLBaseTest {
 
   private static MemberService service;
   private static Member m;
@@ -36,17 +36,17 @@ class MemberSearchControllerTest extends FXMLBaseTest {
   private static SearchItem si = SearchItem.NUMBER;
   private static String sv = "1234";
 
-  private MemberSearchController sut;
+  private SepaAuthorizationMemberSearchController sut;
 
   @Test
   void testSearch() {
     Assertions.assertTrue(runFX(() -> {
       prepare();
-      MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.AMEND_MEMBER);
+      MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.PAYMENT_AUTHORIZATION);
       sut.searchMember(event);
 
       sut.doSearch(si, sv);
-      verify(service).searchMember(si, sv);
+      verify(service).searchMemberWithoutSepa(si, sv);
 
       MouseEvent me = mock(MouseEvent.class);
       TableRow<Member> row = new TableRow<>();
@@ -69,7 +69,7 @@ class MemberSearchControllerTest extends FXMLBaseTest {
   }
 
   private void prepare() {
-    sut = getTestSubject(MemberSearchController.class);
+    sut = getTestSubject(SepaAuthorizationMemberSearchController.class);
 
   }
 
@@ -80,7 +80,7 @@ class MemberSearchControllerTest extends FXMLBaseTest {
     m = member();
     List<Member> members = new ArrayList<>();
     members.add(m);
-    when(service.searchMember(any(SearchItem.class), anyString())).thenReturn(members);
+    when(service.searchMemberWithoutSepa(any(SearchItem.class), anyString())).thenReturn(members);
   }
 
   private static Member member() {
@@ -111,5 +111,4 @@ class MemberSearchControllerTest extends FXMLBaseTest {
     }
 
   }
-
 }

@@ -16,7 +16,7 @@ import nl.ealse.ccnl.service.relation.SearchItem;
 public class MemberSearchController extends SearchController<Member, MemberSeLectionEvent> {
 
   private final PageController pageController;
-  private final MemberService service;
+  protected final MemberService service;
 
    public MemberSearchController(PageController pageController, MemberService service) {
     this.pageController = pageController;
@@ -47,9 +47,6 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
 
   @Override
   protected List<Member> doSearch(SearchItem searchItem, String value) {
-    if (MenuChoice.PAYMENT_AUTHORIZATION == getCurrentMenuChoice()) {
-      return service.searchMemberWithoutSepa(searchItem, value);
-    }
     return service.searchMember(searchItem, value);
   }
 
@@ -59,7 +56,6 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
       case MAGAZINE_INVALID_ADDRESS -> "Ongeldig adres - Opzoeken lid";
       case CANCEL_MEMBERSHIP -> "Opzeggen - Opzoeken lid";
       case AMEND_MEMBER -> "Opzoeken te wijzigen lid";
-      case PAYMENT_AUTHORIZATION -> "SEPA-machtiging - Opzoeken lid";
       case ADD_DOCUMENT -> "Document toevoegen - Opzoeken lid";
       case VIEW_DOCUMENT ->"Documenten inzien - Opzoeken lid";
       case DELETE_DOCUMENT -> "Documenten verwijderen - Opzoeken lid";
@@ -74,9 +70,6 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
 
   @Override
   protected String resultHeaderText(MenuChoice currentMenuChoice) {
-    if (MenuChoice.PAYMENT_AUTHORIZATION == getCurrentMenuChoice()) {
-      return "Gevonden leden zonder SEPA machtiging";
-    }
     return "Gevonden leden";
   }
 
