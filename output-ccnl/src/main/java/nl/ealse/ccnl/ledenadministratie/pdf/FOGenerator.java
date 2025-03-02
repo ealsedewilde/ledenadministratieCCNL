@@ -6,6 +6,7 @@ import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.LIST_ENTR
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.MAIL;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NAME;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.NUMBER;
+import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.AMOUNT;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.ORDERED_LIST;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.PAGE;
 import static nl.ealse.ccnl.ledenadministratie.output.LetterData.Token.UNORDERED_LIST;
@@ -20,6 +21,8 @@ import nl.ealse.ccnl.ledenadministratie.output.GeneratorException;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData.Token;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.AddressSnippet;
+import nl.ealse.ccnl.ledenadministratie.pdf.content.AmountSnippet;
+import nl.ealse.ccnl.ledenadministratie.pdf.content.ContentSnippet;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.NameSnippet;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.NumberSnippet;
@@ -82,99 +85,132 @@ public class FOGenerator {
 
   public FOContent generateFO(LetterData data) {
     FOContent content = new FOContent();
-    LineContext context = new LineContext();
-    StringJoiner sj = context.newStringJoiner();
+    LineContext lineContext = new LineContext();
+    StringJoiner sj = lineContext.newStringJoiner();
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(FOGenerator.class.getResourceAsStream(TEMPLATE),
             StandardCharsets.UTF_8))) {
-      String line = reader.readLine();
-      while (line != null && line.indexOf(CONTENT_START) == -1) {
-        sj.add(line);
-        line = reader.readLine();
-      }
-      content.setPreContent(sj.toString());
-      sj = context.newStringJoiner();
-      while (line != null && line.indexOf(CONTENT_END) == -1) {
-        if (line.indexOf(NAW_TOKEN) != -1) {
-          content.getContentSnippets().add(new StringSnippet(sj.toString()));
-          content.getContentSnippets().add(new AddressSnippet());
-          sj = context.newStringJoiner();
-        } else if (line.indexOf(CONTENT_TOKEN) != -1) {
-          insertContent(content, context, data);
-          sj = context.getStringJoiner();
-        } else {
-          sj.add(line);
-        }
-        line = reader.readLine();
-      }
-      if (line != null) {
-        sj.add(line);
-        content.getContentSnippets().add(new StringSnippet(sj.toString()));
-
-        line = reader.readLine();
-        sj = context.newStringJoiner();
-        while (line != null) {
-          sj.add(line);
-          line = reader.readLine();
-        }
-        content.setPostContent(sj.toString());
-      }
+      String templateLine = generatePreContent(content, sj, reader);
+      
+      templateLine = generateContent(data, content, lineContext, reader, templateLine);
+      
+      generatePostContent(content, lineContext, reader, templateLine);
       return content;
     } catch (IOException e) {
       throw new GeneratorException("Error generating XSL-FO", e);
     }
   }
 
-  private void insertContent(FOContent content, LineContext context, LetterData data) {
-    StringJoiner sj = context.getStringJoiner();
+  private String generatePreContent(FOContent content, StringJoiner sj, BufferedReader reader)
+      throws IOException {
+    String templateLine = reader.readLine();
+    while (templateLine != null && templateLine.indexOf(CONTENT_START) == -1) {
+      sj.add(templateLine);
+      templateLine = reader.readLine();
+    }
+    content.setPreContent(sj.toString());
+    return templateLine;
+  }
+
+  private String generateContent(LetterData data, FOContent content, LineContext context,
+      BufferedReader reader, String templateLine) throws IOException {
+    StringJoiner sj = context.newStringJoiner();
+    while (templateLine != null && templateLine.indexOf(CONTENT_END) == -1) {
+      if (templateLine.indexOf(NAW_TOKEN) != -1) {
+        content.getContentSnippets().add(new StringSnippet(sj.toString()));
+        content.getContentSnippets().add(new AddressSnippet());
+        sj = context.newStringJoiner();
+      } else if (templateLine.indexOf(CONTENT_TOKEN) != -1) {
+        insertContent(content, context, data);
+        sj = context.getStringJoiner();
+      } else {
+        sj.add(templateLine);
+      }
+      templateLine = reader.readLine();
+    }
+    if (templateLine != null) {
+      sj.add(templateLine);
+      content.getContentSnippets().add(new StringSnippet(sj.toString()));
+      templateLine = reader.readLine();
+    }
+    return templateLine;
+  }
+
+  private void generatePostContent(FOContent content, LineContext lineContext,
+      BufferedReader reader, String templateLine) throws IOException {
+    if (templateLine != null) {
+      StringJoiner sj = lineContext.newStringJoiner();
+      while (templateLine != null) {
+        sj.add(templateLine);
+        templateLine = reader.readLine();
+      }
+      content.setPostContent(sj.toString());
+    }
+  }
+
+  private void insertContent(FOContent content, LineContext lineContext, LetterData data) {
+    StringJoiner sj = lineContext.getStringJoiner();
     sj.add(NEW_PARAGRAPH);
 
-    String[] lines = data.content().split("\\r?\\n");
-    for (String line : lines) {
-      boolean placeholder = handlePlaceholders(content, context, line);
-      sj = context.getStringJoiner();
-      if (line.length() == 0) {
-        if (!context.isEmptyLine()) {
-          sj.add(BLOCK_END);
-          context.setEmptyLine(true);
-        } else {
-          sj.add(EMPTY_LINE);
-        }
-        context.setAfterLink(false);
-      } else if (line.indexOf(Token.START) > -1) {
-        configureContext(context, line);
-        continue;
-      } else if (context.isEmptyLine()) {
-        context.setEmptyLine(false);
-        sj.add(NEW_PARAGRAPH);
-      } else if (context.isAfterLink()) {
-        sj.add(NEW_LINE);
-        context.setAfterLink(false);
-      }
-      if (!placeholder) {
-        sj.add(line);
-      }
+    String[] dataLines = data.content().split("\\r?\\n");
+    for (String dataLine : dataLines) {
+      sj = lineContext.getStringJoiner();
+      if (dataLine.isEmpty()) {
+        handleEmptyDataLine(lineContext, sj);
+      } else {
+        ContentContext context = new ContentContext(content, lineContext, dataLine);
+        handleNonEmptyDataLine(context, sj);
+      }  
     }
     sj.add(BLOCK_END);
   }
 
-  private void configureContext(LineContext context, String line) {
+  private void handleEmptyDataLine(LineContext context, StringJoiner sj) {
+    if (!context.isEmptyLine()) {
+      sj.add(BLOCK_END);
+      context.setEmptyLine(true);
+    } else {
+      sj.add(EMPTY_LINE);
+    }
+    context.setAfterLink(false);
+  }
+
+  private void handleNonEmptyDataLine(ContentContext contentContext, StringJoiner sj) {
+    boolean placeholder = handlePlaceholders(new PlaceholderContext(contentContext));
+    LineContext lineContext = contentContext.getLineContext();
+    String dataLine = contentContext.getDataLine();
+    if (dataLine.indexOf(Token.START) > -1) {
+      configureContent(lineContext, dataLine);
+      return;
+    } else if (lineContext.isEmptyLine()) {
+      lineContext.setEmptyLine(false);
+      sj.add(NEW_PARAGRAPH);
+    } else if (lineContext.isAfterLink()) {
+      sj.add(NEW_LINE);
+      lineContext.setAfterLink(false);
+    }
+    if (!placeholder) {
+      sj.add(dataLine);
+    }
+  }
+
+  private void configureContent(LineContext context, String dataLine) {
     StringJoiner sj = context.getStringJoiner();
-    if (line.indexOf(MAIL.symbol()) > -1) {
-      makeLink(context, line, "mailto:");
-    } else if (line.indexOf(LINK.symbol()) > -1) {
-      makeLink(context, line, "");
-    } else if (line.indexOf(ORDERED_LIST.symbol()) > -1) {
+    if (dataLine.indexOf(MAIL.symbol()) > -1) {
+      makeLink(context, dataLine, "mailto:");
+    } else if (dataLine.indexOf(LINK.symbol()) > -1) {
+      makeLink(context, dataLine, "");
+    } else if (dataLine.indexOf(ORDERED_LIST.symbol()) > -1) {
       context.setListCount(1);
       makeList(context);
-    } else if (line.indexOf(UNORDERED_LIST.symbol()) > -1) {
+    } else if (dataLine.indexOf(UNORDERED_LIST.symbol()) > -1) {
       context.setListCount(-1);
       makeList(context);
-    } else if (line.indexOf(LIST_ENTRY.symbol()) > -1) {
-      makeListEntry(context, line);
-    } else if (line.indexOf(PAGE.symbol()) > -1) {
+    } else if (dataLine.indexOf(LIST_ENTRY.symbol()) > -1) {
+      makeListEntry(context, dataLine);
+    } else if (dataLine.indexOf(PAGE.symbol()) > -1) {
       makePageBreak(context);
-    } else if (line.indexOf(FINALIZE.symbol()) > -1) {
+    } else if (dataLine.indexOf(FINALIZE.symbol()) > -1) {
       // Entering signature of the letter
       context.setEmptyLine(false);
       sj.add(BLOCK_LINE_BREAK);
@@ -200,73 +236,65 @@ public class FOGenerator {
     }
   }
 
-  private void makeListEntry(LineContext context, String line) {
+  private void makeListEntry(LineContext context, String dataLine) {
     if (context.getListCount() == -1) {
-      context.getStringJoiner().add(String.format(LIST_ITEM, "*", line));
+      context.getStringJoiner().add(String.format(LIST_ITEM, "*", dataLine));
     } else {
       String count = Integer.toString(context.getListCount()) + ".";
-      context.getStringJoiner().add(String.format(LIST_ITEM, count, line.substring(6)));
+      context.getStringJoiner().add(String.format(LIST_ITEM, count, dataLine.substring(6)));
       context.incrementListCount();
     }
   }
 
-  private void makeLink(LineContext context, String line, String prefix) {
+  private void makeLink(LineContext context, String dataLine, String prefix) {
     StringJoiner sj = context.getStringJoiner();
-    int start = line.indexOf(Token.START);
-    String before = line.substring(0, start);
-    if (before.length() > 0) {
+    int start = dataLine.indexOf(Token.START);
+    String before = dataLine.substring(0, start);
+    if (!before.isEmpty()) {
       sj.add(before);
     } else if (!context.isEmptyLine()) {
       sj.add(NEW_LINE);
     }
-    int end = line.indexOf(Token.END);
-    String link = line.substring(start + 7, end);
+    int end = dataLine.indexOf(Token.END);
+    String link = dataLine.substring(start + 7, end);
     sj.add(String.format(BASIC_LINK, prefix + link, link));
-    String after = line.substring(end + 2);
-    if (after.length() > 0) {
+    String after = dataLine.substring(end + 2);
+    if (!after.isEmpty()) {
       sj.add(after);
     }
     context.setAfterLink(true);
   }
 
-  private boolean handlePlaceholders(FOContent content, LineContext context, String line) {
-    int nameIx = line.indexOf(NAME.symbol());
-    boolean placeholderPresent = false;
-    StringJoiner sj = context.getStringJoiner();
-    if (nameIx != -1) {
-      if (nameIx > 0) {
-        if (context.isEmptyLine()) {
-          context.setEmptyLine(false);
-          sj.add(NEW_PARAGRAPH);
-        }
-        sj.add(line.subSequence(0, nameIx));
-        content.getContentSnippets().add(new StringSnippet(sj.toString()));
-        content.getContentSnippets().add(new NameSnippet());
-        nameIx = nameIx + NAME.symbol().length();
-        sj = context.newStringJoiner();
-        sj.add(line.substring(nameIx));
-      }
-      placeholderPresent = true;
-    }
-    int numberIx = line.indexOf(NUMBER.symbol());
-    if (numberIx != -1) {
-      if (numberIx > 0) {
-        if (context.isEmptyLine()) {
-          context.setEmptyLine(false);
-          sj.add(NEW_PARAGRAPH);
-        }
-        sj.add(line.subSequence(0, numberIx));
-        content.getContentSnippets().add(new StringSnippet(sj.toString()));
-        content.getContentSnippets().add(new NumberSnippet());
-        numberIx = numberIx + NUMBER.symbol().length();
-        sj = context.newStringJoiner();
-        sj.add(line.substring(numberIx));
-      }
-      placeholderPresent = true;
-    }
-    return placeholderPresent;
+  private boolean handlePlaceholders(PlaceholderContext placeholderContext) {
+    handlePlaceholder(NAME, placeholderContext);
+    handlePlaceholder(NUMBER, placeholderContext);
+    handlePlaceholder(AMOUNT, placeholderContext);
+    return placeholderContext.isPlaceholderPresent();
   }
 
+  private void handlePlaceholder(LetterData.Token placeholder, PlaceholderContext placeholderContext) {
+    FOContent content = placeholderContext.getFOContent();
+    LineContext context = placeholderContext.getLineContext();
+    String dataLine = placeholderContext.getDataLine();
+    StringJoiner sj = context.getStringJoiner();
+    
+    int placeholderIx = dataLine.indexOf(placeholder.symbol());
+    if (placeholderIx != -1) {
+      if (context.isEmptyLine()) {
+        context.setEmptyLine(false);
+        sj.add(NEW_PARAGRAPH);
+      }
+      if (placeholderIx > 0) {
+        sj.add(dataLine.subSequence(0, placeholderIx));
+        content.getContentSnippets().add(new StringSnippet(sj.toString()));
+      }
+      content.getContentSnippets().add(PlaceholderContext.newContentSnippet(placeholder));
+      placeholderIx = placeholderIx + placeholder.symbol().length();
+      sj = context.newStringJoiner();
+      sj.add(dataLine.substring(placeholderIx));
+      placeholderContext.setPlaceholderPresent(true);
+    }
+  }
 
   @Data
   private static class LineContext {
@@ -291,6 +319,49 @@ public class FOGenerator {
       return stringJoiner;
     }
 
+  }
+  
+  @Data
+  private static class ContentContext {
+    private final FOContent content;
+    
+    private final LineContext lineContext;
+    
+    private final String dataLine;
+  }
+  
+  @Data
+  private static class PlaceholderContext {
+    private final ContentContext contentContext;
+    
+    public FOContent getFOContent() {
+      return contentContext.getContent();
+    }
+    
+    public LineContext getLineContext() {
+      return contentContext.getLineContext();
+    }
+    
+    public String getDataLine() {
+      return contentContext.getDataLine();
+    }
+    
+    private boolean placeholderPresent;
+    
+    public static ContentSnippet newContentSnippet(LetterData.Token placeholder) {
+      switch(placeholder) {
+        case NAME:
+          return new NameSnippet();
+        case NUMBER:
+          return new NumberSnippet();
+        case AMOUNT:
+          return new AmountSnippet();
+        default:
+          throw new GeneratorException("logic error");
+      }
+    }
+
+    
   }
 
 }

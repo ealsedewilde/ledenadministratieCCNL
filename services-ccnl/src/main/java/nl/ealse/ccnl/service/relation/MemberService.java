@@ -74,6 +74,15 @@ public class MemberService {
   }
 
   /**
+   * Find members with valid address whom pay not enough.
+   *
+   * @return list of non paying members with valid address
+   */
+  public List<Member> findMembersCurrentYearPartlyPaid() {
+    return dao.findMembersCurrentYearPartlyPaidLetters();
+  }
+
+  /**
    * Find not paying members with valid address.
    *
    * @param paymentMethod - payment method for a member

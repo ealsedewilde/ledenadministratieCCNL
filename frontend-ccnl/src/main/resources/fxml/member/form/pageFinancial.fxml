@@ -34,20 +34,27 @@
 
         <Label text="Heeft betaald" GridPane.columnIndex="0" GridPane.rowIndex="7" />
         <CheckBox fx:id="currentYearPaid" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+        
+	      <Label fx:id="amountPaidL" text="Betaald deelbedrag" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="8">
+          <TextField fx:id="amountPaid" maxWidth="80" />
+          <Label fx:id="amountPaidE" styleClass="required" 
+            visible="false" />
+        </HBox>
 
-        <Label text="Betaaldatum" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <Label text="Betaaldatum" GridPane.columnIndex="0" GridPane.rowIndex="9" />
         <DatePicker fx:id="paymentDate" maxWidth="146" GridPane.columnIndex="1"
-          GridPane.rowIndex="8" />
+          GridPane.rowIndex="9" />
 
-        <Label text="Pas ontvangen" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-        <CheckBox fx:id="membercardIssued" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+        <Label text="Pas ontvangen" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+        <CheckBox fx:id="membercardIssued" GridPane.columnIndex="1" GridPane.rowIndex="10" />
 
         <Label text="Betaal info" GridPane.valignment="TOP" GridPane.columnIndex="0"
-          GridPane.rowIndex="10" />
+          GridPane.rowIndex="11" />
         <TextArea fx:id="paymentInfo" prefHeight="100.0" prefWidth="400.0"
-          GridPane.columnIndex="1" GridPane.rowIndex="10" />
+          GridPane.columnIndex="1" GridPane.rowIndex="11" />
 
-        <Label fx:id="sepaLabel" text="Sepa Machtiging" GridPane.columnIndex="0" GridPane.rowIndex="11" />
-        <SearchButton fx:id="sepaButton" text="Machtiging tonen" onAction="#showSepaAuthorization" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+        <Label fx:id="sepaLabel" text="Sepa Machtiging" GridPane.columnIndex="0" GridPane.rowIndex="12" />
+        <SearchButton fx:id="sepaButton" text="Machtiging tonen" onAction="#showSepaAuthorization" GridPane.columnIndex="1" GridPane.rowIndex="12" />
 	</children>
 </GridPane>

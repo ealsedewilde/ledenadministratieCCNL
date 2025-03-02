@@ -1,11 +1,13 @@
 package nl.ealse.ccnl.ledenadministratie.model;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Lob;
 import jakarta.persistence.MappedSuperclass;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 
@@ -43,6 +45,8 @@ public class MemberBase implements AddressOwner {
   private boolean membercardIssued;
   @Lob
   private String paymentInfo;
+  @Column (precision = 5, scale = 2 )
+  private BigDecimal amountPaid = BigDecimal.ZERO;
 
   private boolean noMagazine;
 

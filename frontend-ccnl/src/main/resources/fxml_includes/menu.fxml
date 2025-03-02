@@ -101,6 +101,8 @@
               text="Leden met Automatische Incasso" />
             <MenuItem onAction="#action" id="PRODUCE_REMINDER_LETTERS_BT" mnemonicParsing="false"
               text="Leden met Overboeking" />
+            <MenuItem onAction="#action" id="PRODUCE_REMINDER_LETTERS_BT_X" mnemonicParsing="false"
+              text="Leden Overboeking deels betaald" />
           </items>
         </Menu>
         <MenuItem onAction="#action" id="ANNUAL_ROLLOVER" mnemonicParsing="false" text="Jaarovergang" />

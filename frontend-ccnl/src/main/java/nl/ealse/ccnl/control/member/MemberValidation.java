@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.member;
 
 import nl.ealse.ccnl.control.address.AddressValidation;
+import nl.ealse.ccnl.validation.AmountValidator;
 import nl.ealse.ccnl.validation.EmailValidator;
 import nl.ealse.ccnl.validation.IbanNumberValidator;
 
@@ -19,6 +20,10 @@ public class MemberValidation extends AddressValidation {
         controller.getIbanNumber(), controller.getIbanNumberE());
     addValidator(controller.getPaymentMethod(), ddValidator);
     addValidator(controller.getIbanNumber(), ddValidator);
+    
+    AmountValidator amountValidator = new AmountValidator(controller.getAmountPaid(), controller.getAmountPaidE());
+    addValidator(controller.getAmountPaid(), amountValidator);
+    
     required(controller.getInitials(), controller.getInitialsE());
     required(controller.getLastName(), controller.getLastNameE());
 

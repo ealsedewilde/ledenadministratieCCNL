@@ -71,6 +71,14 @@ public class PaymentReminderLettersController extends DocumentTemplateController
     headerText.setText("Herinneringsbrief leden met Overboeking");
   }
 
+  @EventListener(menuChoice = MenuChoice.PRODUCE_REMINDER_LETTERS_BT_X)
+  public void remindersBTx(MenuChoiceEvent event) {
+    pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
+    selectedMembers = memberService.findMembersCurrentYearPartlyPaid();
+    initTemplates(true);
+    headerText.setText("Herinneringsbrief Overboeking deels betaald");
+  }
+
   @EventListener(menuChoice = MenuChoice.PRODUCE_REMINDER_LETTERS_DD)
   public void remindersDD(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);

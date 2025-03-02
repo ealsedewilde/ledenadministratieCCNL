@@ -7,8 +7,8 @@ import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import org.apache.commons.validator.routines.IBANValidator;
 
 /**
- * Formats the IBNA-number by removing spaces and make it upper case.
- * The formatted IBAN-NUMBEr get validated.
+ * Formats the IBAN-number by removing spaces and make it upper case.
+ * The formatted IBAN-NUMBER is validated.
  */
 public class IbanNumberValidator extends AbstractValidator {
 
@@ -27,23 +27,25 @@ public class IbanNumberValidator extends AbstractValidator {
 
   @Override
   public void validate() {
-    boolean result = true;
+    boolean valid = true;
     String ibanNumber = ibanNumberField.getText();
     if (ibanNumber == null || ibanNumber.isEmpty()) {
       if (PaymentMethodMapper.DIRECT_DEBIT
           .equals(paymentMethod.getSelectionModel().getSelectedItem())) {
         errorMessageLabel.setText("Invullen a.u.b.");
-        result = false;
+        valid = false;
       }
     } else {
       ibanNumber = ibanNumber.replaceAll("\\s", "");
       ibanNumber = ibanNumber.toUpperCase();
       ibanNumberField.setText(ibanNumber);
-      result = ibanValidator.isValid(ibanNumber);
-      errorMessageLabel.setText("IBAN-nummer onjuist");
+      valid = ibanValidator.isValid(ibanNumber);
+      if (!valid) {
+        errorMessageLabel.setText("IBAN-nummer onjuist");
+      }
     }
-    errorMessageLabel.setVisible(!result);
-    setValid(result);
+    errorMessageLabel.setVisible(!valid);
+    setValid(valid);
   }
 
 }

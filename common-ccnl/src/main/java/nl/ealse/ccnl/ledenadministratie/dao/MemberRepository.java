@@ -20,6 +20,11 @@ public class MemberRepository extends BaseRepository<Member> {
     return query.getResultList();
   }
 
+  public List<Member> findMembersCurrentYearPartlyPaidLetters() {
+      return executeQuery("SELECT M FROM Member M WHERE "
+          + "M.address.addressInvalid = FALSE AND M.amountPaid > 0 ORDER BY M.memberNumber");
+ }
+
   public List<Member> findMembersCurrentYearNotPaidLetters(Set<MembershipStatus> statuses,
       Set<PaymentMethod> paymentMethods) {
       return executeQuery("SELECT M FROM Member M WHERE M.currentYearPaid = FALSE "

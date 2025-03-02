@@ -59,6 +59,11 @@ public record LetterData(List<Member> members, String content) {
      */
     NUMBER("<<nummer>>"),
 
+    /**
+     * Placeholder for addresse's member number.
+     */
+    AMOUNT("<<bedrag>>"),
+
     FINALIZE("{{afsluiting}}");
 
     /**

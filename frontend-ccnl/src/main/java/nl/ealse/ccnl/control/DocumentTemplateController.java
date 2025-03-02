@@ -97,7 +97,7 @@ public abstract class DocumentTemplateController {
     if (this.dialog == null) {
       double height;
       if (templateContext.documentType != DocumentTemplateType.MEMBERSHIP_CANCELATION_MAIL) {
-        height = 330;
+        height = 350;
       } else {
         height = 100;
       }

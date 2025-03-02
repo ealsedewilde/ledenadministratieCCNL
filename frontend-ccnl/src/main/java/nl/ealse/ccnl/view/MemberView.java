@@ -86,6 +86,17 @@ public abstract class MemberView extends AddressView {
   private CheckBox currentYearPaid;
 
   @FXML
+  @Mapping(ignore = true)
+  private Label amountPaidL;
+
+  @FXML
+  private TextField amountPaid;
+
+  @FXML
+  @Mapping(ignore = true)
+  private Label amountPaidE;
+
+  @FXML
   private DatePicker paymentDate;
 
   @FXML

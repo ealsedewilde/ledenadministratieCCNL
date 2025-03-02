@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.ledenadministratie.dao;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
@@ -21,6 +22,11 @@ class MemberRepositoryTest {
     EnumSet<MembershipStatus> statuses =
         EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
     List<Member> members = sut.findMembersCurrentYearNotPaid(statuses, EnumSet.of(PaymentMethod.DIRECT_DEBIT));
+    Assertions.assertFalse(members.isEmpty());
+    
+    owner.setAmountPaid(new BigDecimal("30"));
+    sut.save(owner);
+    members = sut.findMembersCurrentYearPartlyPaidLetters();
     Assertions.assertFalse(members.isEmpty());
 
  

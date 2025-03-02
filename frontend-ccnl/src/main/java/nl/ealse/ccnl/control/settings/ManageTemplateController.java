@@ -79,7 +79,7 @@ public class ManageTemplateController {
     this.dialog.getIcons().add(ImagesMap.get("info.png"));
 
     dialog.initOwner(MainStage.getStage());
-    letterHelpScene = new Scene(FXMLLoaderUtil.getPage("dialog/texthelp"), 550, 330);
+    letterHelpScene = new Scene(FXMLLoaderUtil.getPage("dialog/texthelp"), 550, 350);
     mailHelpScene = new Scene(FXMLLoaderUtil.getPage("dialog/mailhelp"), 550, 150);
   }
 

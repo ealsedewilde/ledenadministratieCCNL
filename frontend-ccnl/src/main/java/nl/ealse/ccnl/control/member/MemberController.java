@@ -68,6 +68,7 @@ public class MemberController extends MemberView {
 
     getIbanNumber().textProperty()
         .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
+    getPaymentMethod().valueProperty().addListener((observable, oldValue, newValue) -> amountPaidVisibility(newValue));
   }
 
   @FXML
@@ -129,6 +130,13 @@ public class MemberController extends MemberView {
     } else {
       getSepaButton().setVisible(true);
       getSepaLabel().setVisible(true);
+    }
+    if (PaymentMethod.BANK_TRANSFER == selectedMember.getPaymentMethod()) {
+      getAmountPaidL().setVisible(true);
+      getAmountPaid().setVisible(true);
+    } else {
+      getAmountPaidL().setVisible(false);
+      getAmountPaid().setVisible(false);
     }
     formController.getValidator().initialize();
     formController.getSaveButton().setDisable(currentMenuChoice == MenuChoice.NEW_MEMBER);
@@ -244,6 +252,17 @@ public class MemberController extends MemberView {
       getIbanOwnerName().setText(null);
     }
     setIbanControls(ibanNumber);
+  }
+  
+  void amountPaidVisibility(Object newValue) {
+    if (PaymentMethodMapper.BANK_TRANSFER.equals(newValue)) {
+      getAmountPaidL().setVisible(true);
+      getAmountPaid().setVisible(true);
+    } else {
+      getAmountPaidL().setVisible(false);
+      getAmountPaid().setVisible(false);
+    }
+    
   }
 
   private void setIbanControls(String ibanNumber) {
