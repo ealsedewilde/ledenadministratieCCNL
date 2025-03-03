@@ -93,8 +93,14 @@
           text="Incassobestand aanmaken" />
         <MenuItem onAction="#action" id="RECONCILE_PAYMENTS" mnemonicParsing="false"
           text="Betalingen afletteren" />
-        <MenuItem onAction="#action" id="PRODUCE_REMINDER_REPORT" mnemonicParsing="false"
-          text="Overzicht Herinneringen" />
+        <Menu mnemonicParsing="false" text="Overzicht Herinneringen">
+        	<items>
+        		<MenuItem onAction="#action" id="PRODUCE_REMINDER_REPORT" mnemonicParsing="false"
+          		text="Overzicht niet betalers" />
+        		<MenuItem onAction="#action" id="PRODUCE_REMINDER_PARTLY_PAID_REPORT" mnemonicParsing="false"
+          		text="Overzicht deelbetalers" />
+        	</items>
+        </Menu>  
         <Menu mnemonicParsing="false" text="Herinneringsbrieven aanmaken">
           <items>
             <MenuItem onAction="#action" id="PRODUCE_REMINDER_LETTERS_DD" mnemonicParsing="false"

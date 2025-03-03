@@ -131,6 +131,10 @@ public class ExportService {
     makeFile(selectedFile, MembershipStatus.OVERDUE);
   }
 
+  public void exportPartlyPaid(File selectedFile) throws IOException {
+    makeFile(selectedFile, MembershipStatus.OVERDUE);
+  }
+
   public void exportAfterApril(File selectedFile) throws IOException {
     makeFile(selectedFile, MembershipStatus.AFTER_APRIL);
   }
@@ -143,17 +147,27 @@ public class ExportService {
     }
   }
 
-  public void paymentReminderReport(File selectedFile) throws IOException {
+  public void paymentReminderReport(ReportType reportType, File selectedFile) throws IOException {
     try (Ledenbestand targetFile = new Ledenbestand(selectedFile)) {
       targetFile.addMemberHeading();
       EnumSet<MembershipStatus> statuses =
           EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
-      EnumSet<PaymentMethod> paymentMethods =
-          EnumSet.of(PaymentMethod.BANK_TRANSFER, PaymentMethod.DIRECT_DEBIT);
-      List<Member> selectedMembers =
-          memberRepository.findMembersCurrentYearNotPaid(statuses, paymentMethods);
+      List<Member> selectedMembers;
+      if (ReportType.NOT_PAID == reportType) {
+        EnumSet<PaymentMethod> paymentMethods =
+            EnumSet.of(PaymentMethod.BANK_TRANSFER, PaymentMethod.DIRECT_DEBIT);
+        selectedMembers =
+            memberRepository.findMembersCurrentYearNotPaid(statuses, paymentMethods);
+      } else {
+        selectedMembers =
+            memberRepository.findMembersCurrentYearPartlyPaid(statuses);
+      }
       selectedMembers.forEach(targetFile::addMember);
     }
+  }
+  
+  public enum ReportType {
+    NOT_PAID, PARTLY_PAID
   }
 
 }

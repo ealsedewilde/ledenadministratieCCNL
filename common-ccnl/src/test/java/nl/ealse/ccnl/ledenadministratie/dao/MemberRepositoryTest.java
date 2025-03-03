@@ -25,8 +25,10 @@ class MemberRepositoryTest {
     Assertions.assertFalse(members.isEmpty());
     
     owner.setAmountPaid(new BigDecimal("30"));
+    owner.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
     sut.save(owner);
-    members = sut.findMembersCurrentYearPartlyPaidLetters();
+    members = sut.findMembersCurrentYearPartlyPaidLetters(statuses);
+    System.out.println("Ealse 1:" + members.size());
     Assertions.assertFalse(members.isEmpty());
 
  

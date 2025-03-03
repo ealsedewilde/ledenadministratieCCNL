@@ -79,7 +79,7 @@ public class MemberService {
    * @return list of non paying members with valid address
    */
   public List<Member> findMembersCurrentYearPartlyPaid() {
-    return dao.findMembersCurrentYearPartlyPaidLetters();
+    return findMembers(null);
   }
 
   /**
@@ -89,9 +89,17 @@ public class MemberService {
    * @return list of non paying members with valid address
    */
   public List<Member> findMembersCurrentYearNotPaid(PaymentMethod paymentMethod) {
+    return findMembers(paymentMethod);
+  }
+  
+  private List<Member> findMembers(PaymentMethod paymentMethod) {
     EnumSet<MembershipStatus> statuses =
         EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
-    return dao.findMembersCurrentYearNotPaidLetters(statuses, EnumSet.of(paymentMethod));
+    if (paymentMethod == null) {
+      return dao.findMembersCurrentYearPartlyPaidLetters(statuses);
+    }
+    EnumSet<PaymentMethod> paymentMethods = EnumSet.of(paymentMethod);
+    return dao.findMembersCurrentYearNotPaidLetters(statuses, paymentMethods);
   }
 
 }

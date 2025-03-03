@@ -1,9 +1,12 @@
 package nl.ealse.ccnl.control.annual;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
+import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -23,8 +26,12 @@ class PaymentReminderReportControllerTest extends FXMLBaseTest {
       sut = getTestSubject(PaymentReminderReportCommand.class);
       sut.setup();
       setFileChooser();
-      sut.executeCommand(null);
+      sut.executeCommandForNotPaid(
+          new MenuChoiceEvent(fileChooser, MenuChoice.PRODUCE_REMINDER_REPORT));
       verify(getPageController()).showMessage("Herinneringen overzicht is aangemaakt");
+      sut.executeCommandForPartlyPaid(
+          new MenuChoiceEvent(fileChooser, MenuChoice.PRODUCE_REMINDER_PARTLY_PAID_REPORT));
+      verify(getPageController(), times(2)).showMessage("Herinneringen overzicht is aangemaakt");
     }));
   }
 

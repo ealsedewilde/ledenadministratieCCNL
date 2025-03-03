@@ -19,6 +19,7 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
+import nl.ealse.ccnl.service.excelexport.ExportService.ReportType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -85,7 +86,10 @@ class ExportServiceTest {
   void paymentReminderTest() {
     File selectedFile = new File(tempDir, "paymentReminder.xlsx");
     try {
-      sut.paymentReminderReport(selectedFile);
+      sut.paymentReminderReport(ReportType.NOT_PAID, selectedFile);
+      Assertions.assertTrue(selectedFile.exists());
+      selectedFile = new File(tempDir, "paymentReminder2.xlsx");
+      sut.paymentReminderReport(ReportType.PARTLY_PAID, selectedFile);
       Assertions.assertTrue(selectedFile.exists());
     } catch (IOException e) {
       Assertions.fail(e.getMessage());

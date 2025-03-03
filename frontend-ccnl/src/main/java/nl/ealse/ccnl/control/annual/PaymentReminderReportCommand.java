@@ -11,6 +11,7 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.service.excelexport.ExportService;
+import nl.ealse.ccnl.service.excelexport.ExportService.ReportType;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
@@ -36,11 +37,20 @@ public class PaymentReminderReportCommand {
   }
 
   @EventListener(menuChoice = MenuChoice.PRODUCE_REMINDER_REPORT)
-  public void executeCommand(MenuChoiceEvent event) {
+  public void executeCommandForNotPaid(MenuChoiceEvent event) {
+    executeCommand(event.getMenuChoice());
+  }
+
+  @EventListener(menuChoice = MenuChoice.PRODUCE_REMINDER_PARTLY_PAID_REPORT)
+  public void executeCommandForPartlyPaid(MenuChoiceEvent event) {
+    executeCommand(event.getMenuChoice());
+  }
+  
+  private void executeCommand(MenuChoice reportType) {
     File reportFile = fileChooser.showSaveDialog();
     if (reportFile != null) {
       pageController.showPermanentMessage("Herinneringen overzicht wordt aangemaakt");
-      ReminderTask reminderTask = new ReminderTask(this, reportFile);
+      ReminderTask reminderTask = new ReminderTask(this, reportType, reportFile);
       reminderTask.executeTask();
     }
   }
@@ -49,16 +59,22 @@ public class PaymentReminderReportCommand {
 
     private final ExportService exportService;
     private final File reportFile;
+    private final MenuChoice reportType; 
 
-    ReminderTask(PaymentReminderReportCommand command, File reportFile) {
+    ReminderTask(PaymentReminderReportCommand command, MenuChoice reportType, File reportFile) {
       this.exportService = command.exportService;
       this.reportFile = reportFile;
+      this.reportType = reportType;
     }
 
     @Override
     protected String call() {
       try {
-        exportService.paymentReminderReport(reportFile);
+        if (MenuChoice.PRODUCE_REMINDER_REPORT == reportType) {
+          exportService.paymentReminderReport(ReportType.NOT_PAID, reportFile);
+        } else {
+          exportService.paymentReminderReport(ReportType.PARTLY_PAID, reportFile);
+        }
         return "Herinneringen overzicht is aangemaakt";
       } catch (IOException e) {
         log.error("failed to create Excel", e);
