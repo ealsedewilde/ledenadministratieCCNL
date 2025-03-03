@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
@@ -88,6 +89,7 @@ public class ReconciliationService {
       member.setPaymentDate(null);
       member.setPaymentInfo(null);
       member.setMembercardIssued(false);
+      member.setAmountPaid(BigDecimal.ZERO);
     });
     dao.deleteAll();
   }

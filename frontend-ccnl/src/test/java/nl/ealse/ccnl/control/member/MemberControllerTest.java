@@ -72,6 +72,8 @@ class MemberControllerTest extends FXMLBaseTest {
     controller.closePDF();
     event = new MemberSeLectionEvent(controller, MenuChoice.NEW_MEMBER, m);
     controller.newMember(event);
+    
+    amountPaidTest();
 
   }
 
@@ -117,6 +119,21 @@ class MemberControllerTest extends FXMLBaseTest {
     controller.getLastNamePrefix().setText("de");
     controller.getLastName().setText("Tester");
     controller.getIbanNumber().setText("foo");
+  }
+  
+  private void amountPaidTest() {
+    controller.getAmountPaid().setVisible(true);
+    controller.setAmountPaid(true);
+    String result = controller.getAmountPaid().getText();
+    controller.setAmountPaid(false);
+    Assertions.assertEquals("35,00", result);
+    result = controller.getAmountPaid().getText();
+    Assertions.assertEquals("0,00", result);
+    
+    controller.amountPaidVisibility("overboeking");
+    Assertions.assertTrue(controller.getAmountPaid().isVisible());
+    controller.amountPaidVisibility("automatische incasso");
+    Assertions.assertFalse(controller.getAmountPaid().isVisible());
   }
 
   private FormController getFormController() {

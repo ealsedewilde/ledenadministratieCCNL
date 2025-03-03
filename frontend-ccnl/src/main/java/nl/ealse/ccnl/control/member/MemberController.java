@@ -17,6 +17,7 @@ import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
+import nl.ealse.ccnl.ledenadministratie.util.AmountToPay;
 import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
@@ -69,6 +70,7 @@ public class MemberController extends MemberView {
     getIbanNumber().textProperty()
         .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
     getPaymentMethod().valueProperty().addListener((observable, oldValue, newValue) -> amountPaidVisibility(newValue));
+    getCurrentYearPaid().selectedProperty().addListener((observable, oldValue, newValue) -> setAmountPaid(newValue));
   }
 
   @FXML
@@ -252,6 +254,16 @@ public class MemberController extends MemberView {
       getIbanOwnerName().setText(null);
     }
     setIbanControls(ibanNumber);
+  }
+  
+  void setAmountPaid(boolean checked) {
+    if (getAmountPaid().isVisible()) {
+      if (checked) {
+        getAmountPaid().setText(AmountToPay.amountToPayDefault());
+      } else {
+        getAmountPaid().setText("0,00");
+      }
+    }
   }
   
   void amountPaidVisibility(Object newValue) {

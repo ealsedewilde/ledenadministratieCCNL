@@ -35,7 +35,7 @@
         <Label text="Heeft betaald" GridPane.columnIndex="0" GridPane.rowIndex="7" />
         <CheckBox fx:id="currentYearPaid" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         
-	      <Label fx:id="amountPaidL" text="Betaald deelbedrag" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+	      <Label fx:id="amountPaidL" text="Betaald bedrag" GridPane.columnIndex="0" GridPane.rowIndex="8" />
         <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="8">
           <TextField fx:id="amountPaid" maxWidth="80" />
           <Label fx:id="amountPaidE" styleClass="required" 

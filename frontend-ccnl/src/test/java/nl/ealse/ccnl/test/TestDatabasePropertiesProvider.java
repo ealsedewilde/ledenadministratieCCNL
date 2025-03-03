@@ -13,6 +13,9 @@ public class TestDatabasePropertiesProvider implements DatabasePropertiesProvide
     props.put("ccnl.mail.properties.mail.smtp.auth", "false");
     props.put("ccnl.mail.properties.mail.smtp.starttls.enable", "false");
     props.put("ccnl.mail.subject", "test mail");
+    
+    props.put("ccnl.contributie.incasso", "32,50");
+    props.put("ccnl.contributie.overboeken", "35,00");
     return props;
   }
 
