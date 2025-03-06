@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
@@ -30,7 +31,7 @@ public class SepaDirectDebitService {
 
   private final SepaIncassoGenerator generator;
 
-  public  SepaDirectDebitService(SepaIncassoGenerator generator) {
+  public SepaDirectDebitService(SepaIncassoGenerator generator) {
     log.info("Service created");
     this.generator = generator;
   }
@@ -64,8 +65,7 @@ public class SepaDirectDebitService {
   }
 
   public MappingResult saveProperty(FlatProperty prop) {
-    EntityManager em = EntityManagerProvider.getEntityManager();
-    DirectDebitConfig config = em.find(DirectDebitConfig.class, 1);
+    final DirectDebitConfig config = IncassoProperties.getProperties();
     MappingResult result = new MappingResult();
     switch (prop.fpk) {
       case ACC_NAME:
@@ -152,11 +152,15 @@ public class SepaDirectDebitService {
       default:
         break;
     }
-    if (!result.isValid()) {
+    EntityManager em = EntityManagerProvider.getEntityManager();
+    if (result.isValid()) {
+      TransactionUtil.inTransction(() -> em.merge(config));
+    } else {
       em.clear();
     }
     return result;
   }
+
 
   @Data
   public static class MappingResult {

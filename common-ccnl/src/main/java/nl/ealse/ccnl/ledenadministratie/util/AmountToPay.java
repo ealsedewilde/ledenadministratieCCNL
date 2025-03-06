@@ -10,20 +10,17 @@ import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 @UtilityClass
 public class AmountToPay {
   
-  private String DEFAULT_AMOUNT_EURO = DatabaseProperties.getProperty("ccnl.contributie.overboeken");
-  private String DEFAULT_AMOUNT_STRING = DEFAULT_AMOUNT_EURO.replace("€", "").trim();
-  private BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(AmountFormatter.parse(DEFAULT_AMOUNT_STRING));
-  
   public String amountToPayDefault() {
-    return DEFAULT_AMOUNT_STRING;
+    // do not cache the setting; it might be changed by the user.
+    return DatabaseProperties.getProperty("ccnl.contributie.overboeken").replace("€", "").trim();
   }
-  
   
   public String amountToPayAsString(BigDecimal amountPaid) {
     if (BigDecimal.ZERO.compareTo(amountPaid) == 0) {
-      return DEFAULT_AMOUNT_EURO;
+      return DatabaseProperties.getProperty("ccnl.contributie.overboeken");
     }
-    return AmountFormatter.format(DEFAULT_AMOUNT.subtract(amountPaid));
+    BigDecimal defaultAmount = BigDecimal.valueOf(AmountFormatter.parse(amountToPayDefault()));
+    return AmountFormatter.format(defaultAmount.subtract(amountPaid));
   }
 
 }

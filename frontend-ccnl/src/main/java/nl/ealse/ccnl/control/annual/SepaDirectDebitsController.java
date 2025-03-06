@@ -17,6 +17,7 @@ import nl.ealse.ccnl.control.StageBuilder;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.dd.service.DirectDebitAmountService;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
@@ -33,10 +34,12 @@ import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
  */
 @Slf4j
 public class SepaDirectDebitsController {
-  
+
   private final PageController pageController;
 
   private final SepaDirectDebitService service;
+
+  private final DirectDebitAmountService ddaService;
 
   private File selectedFile;
 
@@ -66,12 +69,14 @@ public class SepaDirectDebitsController {
   @FXML
   private TableColumn<FlatProperty, String> descriptionColumn;
 
-   public SepaDirectDebitsController(PageController pageController, SepaDirectDebitService service) {
+  public SepaDirectDebitsController(PageController pageController, SepaDirectDebitService service,
+      DirectDebitAmountService ddaService) {
     this.pageController = pageController;
     this.service = service;
+    this.ddaService = ddaService;
     setup();
   }
-  
+
   private void setup() {
     messagesStage = new StageBuilder().fxml("dialog/directDebitMessages", this)
         .title("Incassomeldingen").size(600, 400).build();
@@ -87,7 +92,7 @@ public class SepaDirectDebitsController {
       t.getRowValue().setDescription(t.getNewValue());
       saveProperty(t.getRowValue());
     });
-   fileChooser = new WrappedFileChooser(FileExtension.XML);
+    fileChooser = new WrappedFileChooser(FileExtension.XML);
     fileChooser.setInitialDirectory(IncassoProperties::getIncassoDirectory);
   }
 
@@ -148,7 +153,10 @@ public class SepaDirectDebitsController {
       errorMessageLabel.setVisible(false);
       if (FlatPropertyKey.DD_DIR == newValue.getFpk()) {
         fileChooser.setInitialDirectory(newValue::getValue);
+      } else if (FlatPropertyKey.DD_AMOUNT == newValue.getFpk()) {
+        ddaService.saveFlatProperty(newValue);
       }
+
     }
   }
 

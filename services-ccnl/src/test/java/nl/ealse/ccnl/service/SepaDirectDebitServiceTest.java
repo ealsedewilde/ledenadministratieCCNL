@@ -7,6 +7,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +142,9 @@ class SepaDirectDebitServiceTest {
   @BeforeEach
   void resetEntityManager() {
     reset(em);
+    EntityTransaction t = mock(EntityTransaction.class);
+    when(em.getTransaction()).thenReturn(t);
+
   }
   
   @BeforeAll

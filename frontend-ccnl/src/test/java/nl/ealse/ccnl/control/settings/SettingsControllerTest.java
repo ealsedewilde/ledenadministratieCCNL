@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -50,7 +51,7 @@ class SettingsControllerTest extends FXMLBaseTest {
       sut.editSetting(mouseEvent);
       context.verify(() -> EventPublisher.publishEvent(any(SettingSelectionEvent.class)));
     }
-
+    
     sut.save();
     verify(getPageController(), never()).showMessage("Instelling is opgeslagen");
     setInput();
@@ -80,15 +81,16 @@ class SettingsControllerTest extends FXMLBaseTest {
     List<Setting> settings = new ArrayList<>();
     settings.add(setting);
     when(service.findByOrderBySettingsGroupAscKeyAsc()).thenReturn(settings);
+    when(service.getSetting(Optional.of("ccnl.contributie"), "incasso")).thenReturn(Optional.of(setting));
     mouseEvent = mock(MouseEvent.class);
   }
 
   private static Setting setting() {
     Setting s = new Setting();
     s.setDescription("Setting1");
-    s.setKey("key1");
-    s.setSettingsGroup("group1");
-    s.setValue("value1");
+    s.setKey("overboeken");
+    s.setSettingsGroup("ccnl.contributie");
+    s.setValue("€ 35,00");
     s.prePersist();
     return s;
   }

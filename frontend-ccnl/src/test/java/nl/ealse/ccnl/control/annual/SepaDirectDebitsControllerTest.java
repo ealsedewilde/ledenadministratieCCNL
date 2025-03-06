@@ -11,6 +11,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
 import nl.ealse.ccnl.service.SepaDirectDebitService;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
@@ -55,10 +56,10 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
 
     sut.generateDirectDebits();
     verify(getPageController()).showMessage("Incassobestand is aangemaakt");
-
+    
     Label errorMessageLabel = errorMessageLabel();
     DDConfigAmountEntry entry = new DDConfigAmountEntry();
-    entry.setValue(BigDecimal.valueOf(27, 5));
+    entry.setValue(BigDecimal.valueOf(2750, 2));
     entry.setDescription("Contributie");
     FlatProperty fp = new FlatProperty(FlatPropertyKey.DD_AMOUNT, entry);
     sut.saveProperty(fp);
@@ -74,6 +75,9 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
   private void prepare() {
     sut = getTestSubject(SepaDirectDebitsController.class);
     getPageWithFxController(sut, PageName.DIRECT_DEBITS);
+    DDConfigAmountEntry entry = new DDConfigAmountEntry();
+    entry.setValue(BigDecimal.valueOf(2750, 2));
+    IncassoProperties.getProperties().setDirectDebitAmount(entry);
   }
 
   @BeforeAll

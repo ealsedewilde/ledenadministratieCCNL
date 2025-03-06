@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.dd.service.DirectDebitAmountService;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.event.support.EventPublisher;
@@ -18,13 +19,16 @@ public class SettingsController extends SettingsView {
   private final PageController pageController;
 
   private final SettingsService service;
+  
+  private final DirectDebitAmountService ddaService;
 
   @FXML
   private TableView<Setting> tableView;
 
-  public SettingsController(PageController pageController, SettingsService service) {
+  public SettingsController(PageController pageController, SettingsService service, DirectDebitAmountService ddaService) {
     this.pageController = pageController;
     this.service = service;
+    this.ddaService = ddaService;
   }
 
   @FXML
@@ -40,8 +44,9 @@ public class SettingsController extends SettingsView {
     }
   }
 
-  public void update(Setting selectedSettings, String oldId) {
-    service.save(selectedSettings, oldId);
+  public void update(Setting selectedSetting, String oldId) {
+    service.save(selectedSetting, oldId);
+    ddaService.saveSetting(selectedSetting);
     refresh("Instelling is bijgewerkt");
   }
 

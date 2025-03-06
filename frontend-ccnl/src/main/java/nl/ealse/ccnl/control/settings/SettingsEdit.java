@@ -14,7 +14,7 @@ public class SettingsEdit extends SettingsView {
 
   private final SettingsController controller;
 
-  private Setting selectedSettings;
+  private Setting selectedSetting;
   
   private Stage editStage;
 
@@ -37,28 +37,28 @@ public class SettingsEdit extends SettingsView {
   @FXML
   void update() {
     if (valid()) {
-      selectedSettings.setKey(getKey().getText());
-      selectedSettings.setValue(getValue().getText());
-      selectedSettings.setDescription(getDescription().getText());
-      selectedSettings.setSettingsGroup(getGroup().getText());
-      String oldId = selectedSettings.getId();
-      controller.update(selectedSettings, oldId);
+      selectedSetting.setKey(getKey().getText());
+      selectedSetting.setValue(getValue().getText());
+      selectedSetting.setDescription(getDescription().getText());
+      selectedSetting.setSettingsGroup(getGroup().getText());
+      String oldId = selectedSetting.getId();
+      controller.update(selectedSetting, oldId);
       editStage.close();
     }
   }
 
   @FXML
   void delete() {
-    controller.delete(selectedSettings);
+    controller.delete(selectedSetting);
     editStage.close();
   }
 
   @FXML
   void reset() {
-    getKey().setText(selectedSettings.getKey());
-    getValue().setText(selectedSettings.getValue());
-    getGroup().setText(selectedSettings.getSettingsGroup());
-    getDescription().setText(selectedSettings.getDescription());
+    getKey().setText(selectedSetting.getKey());
+    getValue().setText(selectedSetting.getValue());
+    getGroup().setText(selectedSetting.getSettingsGroup());
+    getDescription().setText(selectedSetting.getDescription());
 
     getKeyE().setVisible(false);
     getValueE().setVisible(false);
@@ -66,7 +66,7 @@ public class SettingsEdit extends SettingsView {
 
   @EventListener
   public void onApplicationEvent(SettingSelectionEvent event) {
-    selectedSettings = event.getSelectedSetting();
+    selectedSetting = event.getSelectedSetting();
     reset();
     if (!editStage.isShowing()) {
       editStage.show();
