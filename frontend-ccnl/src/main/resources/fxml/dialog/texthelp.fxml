@@ -35,7 +35,7 @@
 
     <Label text="{{link:&lt;link&gt;}}" GridPane.rowIndex="7"/>
     <Label text="=" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
-    <Label text="Hyperlink; vervang &lt;link&gt; door de beoogde link" GridPane.rowIndex="67" GridPane.columnIndex="2"/>
+    <Label text="Hyperlink; vervang &lt;link&gt; door de beoogde link" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
 
     <Label text="{{mail:&lt;email&gt;}}" GridPane.rowIndex="8"/>
     <Label text="=" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
