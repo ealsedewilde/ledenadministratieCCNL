@@ -12,6 +12,7 @@ import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
+import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.BankTransaction;
 import nl.ealse.ccnl.ledenadministratie.payment.ReconciliationContext.MemberContext;
 import nl.ealse.ccnl.ledenadministratie.payment.filter.FilterChain;
@@ -124,6 +125,10 @@ public class PaymentHandler {
      */
     boolean payed = mc.getTotalAmount().compareTo(IncassoProperties.getIncassoBedrag()) >= 0;
     m.setCurrentYearPaid(payed);
+    
+    if (PaymentMethod.BANK_TRANSFER == m.getPaymentMethod()) {
+      m.setAmountPaid(mc.getTotalAmount());
+    }
 
     if (mc.isInactief() && payed) {
       String msg = "Betaling ontvangen voor inactief lid " + m.getMemberNumber();

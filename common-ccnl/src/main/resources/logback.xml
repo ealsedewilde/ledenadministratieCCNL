@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+	<import class="ch.qos.logback.core.ConsoleAppender" />
+	<import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder" />
+	<import class="ch.qos.logback.core.rolling.RollingFileAppender" />
+	<import class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" />
 
-  <!-- All log files located in logs file of the project -->
-  <property name="LOGS" value="./logs" />
 
-  <!-- Define the console log format -->
-  <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>
-        %d{ISO8601} %-5level [%t] %C{1}: %msg%n%throwable
-      </Pattern>
-    </layout>
-  </appender>
+	<!-- All log files located in logs file of the project -->
+	<property name="LOGS" value="./logs" />
 
-  <appender name="RollingFileByDate"
-    class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${LOGS}/ledenadministratie.log</file>
-    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-      <Pattern>%d %p %C{1} [%t] %m%n</Pattern>
-    </encoder>
+	<!-- Define the console log format -->
+	<appender name="Console" class="ConsoleAppender">
+		<encoder class="PatternLayoutEncoder">
+			<Pattern>
+				%d{ISO8601} %-5level [%t] %C{1}: %msg%n%throwable
+			</Pattern>
+		</encoder>
+	</appender>
 
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <!-- rollover daily and when the file reaches 1 MegaBytes -->
-      <fileNamePattern>${LOGS}/ledenadministratie-%d{yyyy-MM-dd}.%i.log
-      </fileNamePattern>
-      <timeBasedFileNamingAndTriggeringPolicy
-        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
-        <maxFileSize>10MB</maxFileSize>
-        <maxHistory>10</maxHistory>
-        <cleanHistoryOnStart>true</cleanHistoryOnStart>
-      </timeBasedFileNamingAndTriggeringPolicy>
-    </rollingPolicy>
-  </appender>
+	<appender name="RollingFileByDate" class="RollingFileAppender">
+		<file>${LOGS}/ledenadministratie.log</file>
 
-  <!-- LOG everything at info level -->
-  <root level="info">
-    <appender-ref ref="RollingFileByDate" />
-    <appender-ref ref="Console" />
-  </root>
+		<rollingPolicy class="TimeBasedRollingPolicy">
+			<fileNamePattern>
+				${LOGS}/ledenadministratie-%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>10</maxHistory>
+			<totalSizeCap>1GB</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+		</rollingPolicy>
+
+		<encoder class="PatternLayoutEncoder">
+			<Pattern>%d %p %C{1} [%t] %m%n</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- LOG everything at info level -->
+	<root level="info">
+		<appender-ref ref="RollingFileByDate" />
+		<appender-ref ref="Console" />
+	</root>
 
 </configuration>
