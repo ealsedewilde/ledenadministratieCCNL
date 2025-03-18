@@ -210,6 +210,8 @@ public class DocumentViewer extends BorderPane {
     this.setRight(nextButton);
     this.setLeft(prevButton);
     prevButton.setDisable(true);
+    nextButton.setDisable(false);
+    nextButton.requestFocus();
   }
 
   private void initializePage(double width, double height) {
