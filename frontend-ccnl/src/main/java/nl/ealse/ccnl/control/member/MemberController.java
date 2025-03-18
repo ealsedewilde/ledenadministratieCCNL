@@ -1,5 +1,6 @@
 package nl.ealse.ccnl.control.member;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.StringJoiner;
 import javafx.collections.ObservableList;
@@ -196,6 +197,10 @@ public class MemberController extends MemberView {
         .equals(selectedMember.getAddress().getStreetAndNumber())) {
       // assume that the invalid address is fixed
       model.getAddress().setAddressInvalid(false);
+    }
+    if (model.getAmountPaid().doubleValue() > 0d && model.getPaymentDate() == null) {
+      int year = LocalDate.now().getYear() - 1;
+      model.setPaymentDate(LocalDate.of(year, 12, 1));
     }
 
     service.save(model);

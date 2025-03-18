@@ -49,11 +49,10 @@ public class ReconciliationContext {
         } else {
           log.debug("No Direct Debet for member " + m.getMemberNumber());
         }
-      } else if (m.getPaymentMethod() == PaymentMethod.BANK_TRANSFER && m.isCurrentYearPaid()
+      } else if (m.getPaymentMethod() == PaymentMethod.BANK_TRANSFER && m.getAmountPaid().doubleValue() > 0d
           && referenceDate.isAfter(m.getPaymentDate())) {
         log.debug("Bank Tranfer Payment before reference date " + m.getMemberNumber());
-        BigDecimal btAmount = BigDecimal.valueOf(MemberShipFee.getOverboeken());
-        BankTransaction btt = new BankTransaction(btAmount, m.getPaymentDate(), BookingType.RCDT,
+        BankTransaction btt = new BankTransaction(m.getAmountPaid(), m.getPaymentDate(), BookingType.RCDT,
             BookingType.RCDT.getOmschrijving());
         mc.getBankTransactions().add(btt);
       }
