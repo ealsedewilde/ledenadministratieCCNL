@@ -80,8 +80,7 @@ public class ReconciliationController {
     tableView.getItems().clear();
     tableView.getItems().addAll(service.allFiles());
     LocalDate d = LocalDate.now();
-    int year = d.getYear() - 1;
-    d = LocalDate.of(year, 12, 1);
+    d = LocalDate.of(d.getYear(), 2, 1);
     referenceDate.setValue(d);
     referenceDateE.setVisible(false);
     if (messagesStage.isShowing()) {

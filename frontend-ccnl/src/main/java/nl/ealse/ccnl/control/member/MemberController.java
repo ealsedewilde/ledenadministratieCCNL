@@ -199,8 +199,8 @@ public class MemberController extends MemberView {
       model.getAddress().setAddressInvalid(false);
     }
     if (model.getAmountPaid().doubleValue() > 0d && model.getPaymentDate() == null) {
-      int year = LocalDate.now().getYear() - 1;
-      model.setPaymentDate(LocalDate.of(year, 12, 1));
+      int year = LocalDate.now().getYear();
+      model.setPaymentDate(LocalDate.of(year, 1, 31));
     }
 
     service.save(model);

@@ -31,7 +31,7 @@ public class ReconciliationContext {
   private final List<String> messages = new ArrayList<>();
 
   /**
-   * Construct the context with the payment history before this recinciliation is executed.
+   * Construct the context with the payment history before this reconciliation is executed.
    * 
    * @param members
    * @param referenceDate - start date of the first reconciliation file
