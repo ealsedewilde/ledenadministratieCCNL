@@ -53,8 +53,8 @@ public class SepaIncassoDocumentGenerator {
     try (Ledenbestand incassobestand = new Ledenbestand(context.controlExcelFile())) {
       incassobestand.addMemberHeading();
       for (Member member : context.members()) {
-        String info = sah.hasSepaAuthorization(member.getMemberNumber()) ? "Machtiging: Ja"
-            : "Machtiging: Nee";
+        String info = sah.hasSepaAuthorization(member.getMemberNumber()) ? "Sepa Machtiging: Ja"
+            : "Sepa Machtiging: Nee";
         member.setPaymentInfo(info);
         incassobestand.addMember(member);
 
