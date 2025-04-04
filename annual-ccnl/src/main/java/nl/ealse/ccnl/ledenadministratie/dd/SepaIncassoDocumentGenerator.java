@@ -3,8 +3,6 @@ package nl.ealse.ccnl.ledenadministratie.dd;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dd.model.DirectDebitTransactionInformation9;
@@ -22,7 +20,7 @@ public class SepaIncassoDocumentGenerator {
   private final SepaIncassoContext context;
   private final DocumentBuilder documentBuilder;
   private final PaymentInstructionInformationBuilder paymentInstructionInformationBuilder;
-  
+
   @Getter
   private Document document;
 
@@ -43,18 +41,17 @@ public class SepaIncassoDocumentGenerator {
   }
 
   /**
-   * Generate the Direct Debit document.
-   * This method updates the payment status of members.
+   * Generate the Direct Debit document. This method updates the payment status of members.
    *
    * @throws IncassoException - whenever document generation fails
    */
   public void generateIncassoDocument() throws IncassoException {
-    SepaAuthorizationHelper sah = new SepaAuthorizationHelper(context.sepaNumbers());
     try (Ledenbestand incassobestand = new Ledenbestand(context.controlExcelFile())) {
       incassobestand.addMemberHeading();
       for (Member member : context.members()) {
-        String info = sah.hasSepaAuthorization(member.getMemberNumber()) ? "Sepa Machtiging: Ja"
-            : "Sepa Machtiging: Nee";
+        // when every grant is added convert to a check
+        String info = context.sepaNumbers().contains(member.getMemberNumber()) ? "SEPA Machtiging: Ja"
+            : "SEPA Machtiging: Nee";
         member.setPaymentInfo(info);
         incassobestand.addMember(member);
 
@@ -68,8 +65,7 @@ public class SepaIncassoDocumentGenerator {
               .metSomTransactieBedrag(BigDecimal.valueOf(somTransactieBedrag))
               .metIncassodatum(IncassoProperties.getIncassoDatum()).build();
       document = documentBuilder.metControlSum(BigDecimal.valueOf(somTransactieBedrag))
-          .metCreateDate(LocalDateTime.now())
-          .metMessageId(IncassoProperties.getMessageId())
+          .metCreateDate(LocalDateTime.now()).metMessageId(IncassoProperties.getMessageId())
           .metNumberOfTransactions(aantalTransacties)
           .metPaymentInstructionInformation(paymentInstruction).build();
     } catch (IOException e) {
@@ -116,29 +112,6 @@ public class SepaIncassoDocumentGenerator {
       String msg = "Geen geldige IBAN bij lid: " + member.getMemberNumber();
       context.messages().add(msg);
       throw new IllegalArgumentException(e.getMessage() + " bij lid " + member.getMemberNumber());
-    }
-  }
-
-  private static class SepaAuthorizationHelper {
-
-    private final Iterator<Integer> numbersIterator;
-    private Integer number = Integer.valueOf(0);
-
-    SepaAuthorizationHelper(List<Integer> numbersWithSepa) {
-      this.numbersIterator = numbersWithSepa.iterator();
-    }
-
-    boolean hasSepaAuthorization(Integer memberNumber) {
-      while (numbersIterator.hasNext()) {
-        int result = number.compareTo(memberNumber);
-        if (result == 0) {
-          return true;
-        } else if (result > 0) {
-          return false;
-        }
-        number = numbersIterator.next();
-      }
-      return false;
     }
   }
 

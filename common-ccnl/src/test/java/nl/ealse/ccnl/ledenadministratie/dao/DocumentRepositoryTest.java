@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -32,8 +34,8 @@ class DocumentRepositoryTest {
         dao.findByOwnerAndDocumentType(savedMember, DocumentType.SEPA_AUTHORIZATION);
     Assertions.assertEquals(1, sepaList.size());
     
-    List<Integer> numberList = dao.findMemberNummbersWithSepa();
-    Assertions.assertEquals(1, numberList.size());
+    Set<Integer> numberSet = dao.findMemberNummbersWithSepa().collect(Collectors.toSet());
+    Assertions.assertEquals(1, numberSet.size());
   }
 
   private Document initializeDocument(Member owner) {

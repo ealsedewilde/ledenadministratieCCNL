@@ -7,6 +7,8 @@ import jakarta.xml.bind.Marshaller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.DocumentRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
@@ -48,8 +50,8 @@ public class SepaIncassoGenerator {
     List<Member> members =
         dao.findMemberByPaymentMethodAndMemberStatusAndCurrentYearPaidOrderByMemberNumber(
             PaymentMethod.DIRECT_DEBIT, MembershipStatus.ACTIVE, false);
-    List<Integer> sepaNumbers = documentDao.findMemberNummbersWithSepa();
-
+    // Convert result to HashSet as is has the most efficient contains() implementation
+    Set<Integer> sepaNumbers = documentDao.findMemberNummbersWithSepa().collect(Collectors.toSet());
     SepaIncassoContext context = new SepaIncassoContext(new ArrayList<>(), controlExcelFile, members, sepaNumbers);
     SepaIncassoDocumentGenerator documentGenerator = new SepaIncassoDocumentGenerator(context);
     TransactionUtil.inTransction(documentGenerator::generateIncassoDocument);

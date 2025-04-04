@@ -8,13 +8,12 @@ import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 
 public final class FilterChain {
   private final List<Filter> filters = new ArrayList<>();
-  private final LidnummerFilter lidnummerFilter;
 
-  public FilterChain(List<Member> members, LocalDate referenceDate) {
-    lidnummerFilter = new LidnummerFilter(members);
+  public FilterChain(List<String> messageList, List<Member> members, LocalDate referenceDate) {
     filters.add(new PeildatumFilter(referenceDate));
-    filters.add(new BedragFilter());
     filters.add(new BoekingTypeFilter());
+    filters.add(new LidnummerFilter(messageList, members));
+    filters.add(new BedragFilter(members));
   }
 
   public boolean filter(IngBooking booking) {
@@ -23,7 +22,6 @@ public final class FilterChain {
         return false;
       }
     }
-    lidnummerFilter.doFilter(booking);
     return true;
   }
 

@@ -19,7 +19,7 @@ class LidnummerFilterTest extends FilterTestBase {
     m.getAddress().setPostalCode("1234 AA");
     m.getAddress().setStreet("Straat");
     members.add(m);
-    LidnummerFilter filter = new LidnummerFilter(members);
+    LidnummerFilter filter = new LidnummerFilter(new ArrayList<String>(), members);
     Iterator<IngBooking> itr = init();
     IngBooking b = itr.next();
     filter.doFilter(b);

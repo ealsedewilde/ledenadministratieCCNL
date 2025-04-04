@@ -66,6 +66,7 @@ public class IngBooking implements Comparable<IngBooking> {
   private String omschrijving;
   private String stornoInfo;
   private BookingType bookingType;
+  private String bookingTypeSub;
   private CancelReason cancelReason;
 
   private LocalDate boekdatum;
@@ -165,9 +166,16 @@ public class IngBooking implements Comparable<IngBooking> {
   public BookingType getTypebooking() {
     if (bookingType == null) {
       String type = getValue(Token.BOOKING_TYPE);
-      bookingType = BookingType.valueOf(type);
+      bookingType = BookingType.toBookingType(type);
     }
     return bookingType;
+  }
+
+  public String getTypebookingSub() {
+    if (bookingTypeSub == null) {
+      bookingTypeSub = getValue(Token.BOOKING_TYPE_SUB);
+    }
+    return bookingTypeSub;
   }
 
   public CancelReason getStornoReden() {
@@ -258,7 +266,7 @@ public class IngBooking implements Comparable<IngBooking> {
   }
 
   private enum Token {
-    BOOKING_TYPE, BEDRAG, BOEKDATUM, DEBET, NAAM, POSTCODE, ADRES, TEGEN_REKENING, OMSCHRIJVING, STORNO_INFO, CANCEL_REASON
+    BOOKING_TYPE, BOOKING_TYPE_SUB, BEDRAG, BOEKDATUM, DEBET, NAAM, POSTCODE, ADRES, TEGEN_REKENING, OMSCHRIJVING, STORNO_INFO, CANCEL_REASON
   }
 
   private static final class XPathConfig {
@@ -284,6 +292,8 @@ public class IngBooking implements Comparable<IngBooking> {
             xpath.compile("ing:NtryDtls/ing:TxDtls/ing:RtrInf/ing:Rsn/ing:Cd"));
         debitExpressions.put(Token.BOOKING_TYPE,
             xpath.compile("ing:BkTxCd/ing:Domn/ing:Fmly/ing:Cd"));
+        debitExpressions.put(Token.BOOKING_TYPE_SUB,
+            xpath.compile("ing:BkTxCd/ing:Domn/ing:Fmly/ing:SubFmlyCd"));
 
         creditExpressions.putAll(debitExpressions);
 

@@ -10,8 +10,8 @@ public class OmschrijvingStrategie implements LidnummerStrategie {
 
   @Override
   public void bepaalLidnummer(IngBooking booking) {
-    String omschrijving = booking.getOmschrijving().toLowerCase();
-    int ix = omschrijving.indexOf("lid");
+    String omschrijving = booking.getOmschrijving().toLowerCase().trim();
+    int ix = omschrijving.toLowerCase().indexOf("lid");
     if (ix > -1) {
       log.debug("lid indicatie gevonden " + omschrijving);
       NummerHelper nh = new NummerHelper(booking, omschrijving);
@@ -50,6 +50,9 @@ public class OmschrijvingStrategie implements LidnummerStrategie {
     private void bepaalNummer() {
       StringBuilder sb = new StringBuilder();
       int ix = tekens.length - 1;
+      while (!Character.isDigit(tekens[ix])) {
+        ix--;
+      }
       while (Character.isDigit(tekens[ix])) {
         sb.append(tekens[ix--]);
       }

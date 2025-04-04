@@ -2,6 +2,7 @@ package nl.ealse.ccnl.ledenadministratie.dao;
 
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import java.util.stream.Stream;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -29,11 +30,11 @@ public class DocumentRepository extends BaseRepository<Document> {
     return executeQuery("SELECT D FROM Document D WHERE D.owner = ?1 AND D.documentType = ?2", owner, type);
   }
 
-  public List<Integer> findMemberNummbersWithSepa() {
+  public Stream<Integer> findMemberNummbersWithSepa() {
     TypedQuery<Integer> query = getEntityManager().createQuery(
         "SELECT D.owner.memberNumber FROM Document D WHERE D.documentType = nl.ealse.ccnl.ledenadministratie.model.DocumentType.SEPA_AUTHORIZATION ORDER BY D.owner.memberNumber",
         Integer.class);
-    return query.getResultList();
+    return query.getResultStream();
   }
 
 }

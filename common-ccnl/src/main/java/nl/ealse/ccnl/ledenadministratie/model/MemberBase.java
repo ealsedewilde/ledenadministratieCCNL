@@ -54,16 +54,5 @@ public class MemberBase implements AddressOwner {
   private String memberInfo;
   private LocalDate memberSince;
   private LocalDate modificationDate;
-  
-  public void setPaymentInfo(String info) {
-    if (info == null) {
-      paymentInfo = null;
-    } else if (paymentInfo == null) {
-      paymentInfo = info;
-    } else {
-      paymentInfo = String.join(", ", paymentInfo, info);
-    }
-    
-  }
 
 }

@@ -10,26 +10,35 @@ import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
+import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import org.junit.jupiter.api.Test;
 
 class PaymentHandlerTest {
   
+  private static final EnumSet<MembershipStatus> statuses =
+      EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);
+
+  
   private MemberRepository memberRepository;
   
   private PaymentHandler sut;
   
-  private int n = 1234;
+  private int n = 9999;
   
   @Test
   void handlePayment() {
     memberRepository = mock(MemberRepository.class);
     Optional<Member> om = Optional.of(member());
+    List<Member>  ml = new ArrayList<>();
+    ml.add(member());
     when(memberRepository.findById(any(int.class))).thenReturn(om);
+    when(memberRepository.findMembersByStatuses(statuses)).thenReturn(ml);
     sut = new PaymentHandler(memberRepository);
     List<PaymentFile> files = new ArrayList<>();
     files.add(paymentFile());

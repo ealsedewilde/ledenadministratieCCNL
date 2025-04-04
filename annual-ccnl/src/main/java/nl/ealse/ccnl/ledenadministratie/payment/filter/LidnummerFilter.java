@@ -16,9 +16,11 @@ import nl.ealse.ccnl.ledenadministratie.payment.strategy.LidnummerBepaling;
 @Slf4j
 public class LidnummerFilter implements Filter {
 
+  private final List<String> messageList;
   private final LidnummerBepaling lidnummerBepaling;
 
-  public LidnummerFilter(List<Member> members) {
+  public LidnummerFilter(List<String> messageList, List<Member> members) {
+    this.messageList = messageList;
     this.lidnummerBepaling = new LidnummerBepaling(members);
   }
 
@@ -26,6 +28,11 @@ public class LidnummerFilter implements Filter {
   public boolean doFilter(IngBooking booking) {
     lidnummerBepaling.bepaalLidnummer(booking);
     if (booking.getLidnummer() == 0) {
+      String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", 
+          booking.getNaam(),
+          booking.getOmschrijving());
+      log.warn(msg);
+      messageList.add(msg);
       return false;
     }
     log.debug("Lidnummer: " + booking.getLidnummer());

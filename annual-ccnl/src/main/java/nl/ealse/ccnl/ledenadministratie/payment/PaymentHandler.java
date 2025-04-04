@@ -51,7 +51,7 @@ public class PaymentHandler {
         ReconciliationContext.newInstance(members, referenceDate, includeDD);
 
     // Initialize the reconciliation process
-    final FilterChain filterChain = new FilterChain(members, referenceDate);
+    final FilterChain filterChain = new FilterChain(rc.getMessages(), members, referenceDate);
     final List<IngBooking> bookingList = new ArrayList<>();
 
     // Reconcile the payment file(s).
@@ -59,15 +59,8 @@ public class PaymentHandler {
         paymentFiles.stream().map(PaymentFileIterable::new).toList();
     paymentFileIterables.forEach(pf -> pf.forEach(booking -> {
       if (filterChain.filter(booking)) {
-        if (booking.getLidnummer() == 0) {
-          String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", booking.getNaam(),
-              booking.getOmschrijving());
-          log.warn(msg);
-          rc.getMessages().add(msg);
-        } else {
-          log.info("boeking voor lid: " + booking.getLidnummer());
-          bookingList.add(booking);
-        }
+        log.info("boeking voor lid: " + booking.getLidnummer());
+        bookingList.add(booking);
       }
     }));
 
