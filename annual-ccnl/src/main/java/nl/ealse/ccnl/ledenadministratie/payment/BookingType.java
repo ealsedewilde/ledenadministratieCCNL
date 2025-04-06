@@ -1,8 +1,10 @@
 package nl.ealse.ccnl.ledenadministratie.payment;
 
 public enum BookingType {
+  
+  // Issued, Received or Cash
 
-  ICDT, RCDT, IRCT("Terugbetaling"), RRCT, RDDT("Incasso"), CCRD("Pinbetaling"), IDDT("Stornering"), NA("n.v.t.");
+  ICDT, RCDT, IRCT, RRCT, RDDT("Ontvangen Incasso"), CCRD("Pinbetaling"), IDDT("Incacco/Stornering"), OTHER("n.v.t.");
   
   private final String omschrijving;
   
@@ -24,7 +26,7 @@ public enum BookingType {
         return t;
       }
     }
-    return NA;
+    return OTHER;
     
   }
 

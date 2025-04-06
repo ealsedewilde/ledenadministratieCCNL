@@ -3,13 +3,14 @@ package nl.ealse.ccnl.ledenadministratie.payment.filter;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
+import nl.ealse.ccnl.ledenadministratie.payment.BookingType;
 import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 import nl.ealse.ccnl.ledenadministratie.payment.strategy.LidnummerBepaling;
 
 /**
- * Het laatste toe te passen filter.
- * Hierbij wordt geprobeerd het lidnummer te koppelen aan een boeking.
- * Dit gebeurt op basis van een aantal benaderingen.
+ * Het laatste toe te passen filter. Hierbij wordt geprobeerd het lidnummer te koppelen aan een
+ * boeking. Dit gebeurt op basis van een aantal benaderingen.
+ * 
  * @author ealse
  *
  */
@@ -27,12 +28,15 @@ public class LidnummerFilter implements Filter {
   @Override
   public boolean doFilter(IngBooking booking) {
     lidnummerBepaling.bepaalLidnummer(booking);
+    // IRCT is een eenmalige betaling door de club (onkostenvergoeding of terugbetaling contributie).
+    // Bij terugbetaling contributie wordt altijd het lidnummer opgegeven.
     if (booking.getLidnummer() == 0) {
-      String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", 
-          booking.getNaam(),
-          booking.getOmschrijving());
-      log.warn(msg);
-      messageList.add(msg);
+      if (BookingType.IRCT != booking.getTypebooking()) {
+        String msg = String.format("Geen lidnummer te bepalen voor %s (%s)", booking.getNaam(),
+            booking.getOmschrijving());
+        log.warn(msg);
+        messageList.add(msg);
+      }
       return false;
     }
     log.debug("Lidnummer: " + booking.getLidnummer());

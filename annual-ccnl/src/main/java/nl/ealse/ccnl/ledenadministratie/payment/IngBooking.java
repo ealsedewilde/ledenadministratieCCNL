@@ -204,7 +204,7 @@ public class IngBooking implements Comparable<IngBooking> {
   }
 
   public boolean isStornering() {
-    return BookingType.IDDT.equals(getTypebooking());
+    return BookingType.IDDT.equals(getTypebooking()) && "UPDD".equals(getTypebookingSub());
   }
 
   public boolean isContributie() {
