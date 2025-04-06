@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.payment.IngBooking;
 import nl.ealse.ccnl.ledenadministratie.payment.MemberShipFee;
 
@@ -32,8 +31,9 @@ public class BedragFilter implements Filter {
       Member member = members.get(booking.getLidnummer());
       if (member == null) {
         log.info("member not found for " + booking.getLidnummer());
+        return false;
       }
-      return member != null && PaymentMethod.BANK_TRANSFER == member.getPaymentMethod();
+      return true;
     }
   }
 
