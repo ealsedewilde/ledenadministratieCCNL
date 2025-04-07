@@ -191,6 +191,7 @@ INSERT INTO "PUBLIC"."SETTING" VALUES('password', '', 'ccnl.mail', '**********',
 INSERT INTO "PUBLIC"."SETTING" VALUES('mail.smtp.starttls.enable', '', 'ccnl.mail.properties', 'true', 'ccnl.mail.properties.mail.smtp.starttls.enable'); 
 INSERT INTO "PUBLIC"."SETTING" VALUES('mail.smtp.auth', '', 'ccnl.mail.properties', 'true', 'ccnl.mail.properties.mail.smtp.auth');       
 INSERT INTO "PUBLIC"."SETTING" VALUES('number', 'Volgnummer clubblad', 'ccnl.magazine', '366', 'ccnl.magazine.number');       
+INSERT INTO "PUBLIC"."SETTING" VALUES('extra_ledenadmin', 'Aantal extra clubbladen voor de ledenadministratie', 'ccnl.magazine', '0', 'ccnl.magazine.extra_ledenadmin');       
 INSERT INTO "PUBLIC"."SETTING" VALUES('db', 'Database Backup-/Restore directory', 'ccnl.directory', 'C:/temp', 'ccnl.directory.db');          
 INSERT INTO "PUBLIC"."SETTING" VALUES('sepa', 'Basis directory voor SEPA formulieren', 'ccnl.directory', 'C:/temp/ledenadministratie', 'ccnl.directory.sepa');               
 INSERT INTO "PUBLIC"."SETTING" VALUES('excel', 'Directory voor Excel import en export', 'ccnl.directory', 'C:/temp', 'ccnl.directory.excel'); 

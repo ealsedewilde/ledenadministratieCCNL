@@ -6,6 +6,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationPartnerRepository;
@@ -38,9 +39,8 @@ public class ExportAddressService {
   public ExportAddressService(ExternalRelationPartnerRepository commercialPartnerRepository,
       ExternalRelationClubRepository externalRelationClubRepository,
       ExternalRelationOtherRepository externalRelationOtherRepository,
-      InternalRelationRepository internalRelationRepository,
-      MemberRepository memberRepository) {
-    
+      InternalRelationRepository internalRelationRepository, MemberRepository memberRepository) {
+
     log.info("Service created");
     this.commercialPartnerRepository = commercialPartnerRepository;
     this.externalRelationClubRepository = externalRelationClubRepository;
@@ -113,14 +113,17 @@ public class ExportAddressService {
   }
 
   private void extraMagazines(Adresbestand targetFile) {
-    int nummerLedenadministratie =
-        Integer.parseInt(CCNLColumnProperties.getProperty("nummer_ledenadministratie"));
-    Optional<InternalRelation> ledenadministratie =
-        internalRelationRepository.findById(nummerLedenadministratie);
-    if (ledenadministratie.isPresent()) {
-      int aantalBladen = Integer.parseInt(CCNLColumnProperties.getProperty("aantal_bladen"));
-      for (int ix = 0; ix < aantalBladen; ix++) {
-        targetFile.addInternalRelation(ledenadministratie.get());
+    int aantalBladen =
+        Integer.parseInt(DatabaseProperties.getProperty("ccnl.magazine.extra_ledenadmin", "0"));
+    if (aantalBladen > 0) {
+      int nummerLedenadministratie =
+          Integer.parseInt(CCNLColumnProperties.getProperty("nummer_ledenadministratie"));
+      Optional<InternalRelation> ledenadministratie =
+          internalRelationRepository.findById(nummerLedenadministratie);
+      if (ledenadministratie.isPresent()) {
+        for (int ix = 0; ix < aantalBladen; ix++) {
+          targetFile.addInternalRelation(ledenadministratie.get());
+        }
       }
     }
 
