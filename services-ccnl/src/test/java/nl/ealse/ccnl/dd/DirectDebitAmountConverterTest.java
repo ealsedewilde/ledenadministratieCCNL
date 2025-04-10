@@ -2,6 +2,7 @@ package nl.ealse.ccnl.dd;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
@@ -38,13 +39,13 @@ class DirectDebitAmountConverterTest {
   @BeforeAll
   static void initConfig() {
     em = EntityManagerProvider.getEntityManager();
-    
     setting = new Setting();
     setting.setDescription("incassobedrag");
     setting.setSettingsGroup("ccnl.contributie");
     setting.setKey("incasso");
     setting.setValue("€ 32,50");
     setting.prePersist();
+    when(em.find(Setting.class, "ccnl.contributie.incasso")).thenReturn(setting);
   }
 
 
