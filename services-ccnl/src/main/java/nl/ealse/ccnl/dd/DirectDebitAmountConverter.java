@@ -25,8 +25,6 @@ import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
 @UtilityClass
 public class DirectDebitAmountConverter {
   
-  private final String GROUP = "ccnl.contributie";
-  private final String KEY = "incasso";
   private final String ID = "ccnl.contributie.incasso";
   
   /**
@@ -36,12 +34,9 @@ public class DirectDebitAmountConverter {
    */
   public void saveFlatProperty(FlatProperty property) {
     if (FlatPropertyKey.DD_AMOUNT == property.getFpk()) {
-      Setting incassoSetting = new Setting();
-      incassoSetting.setSettingsGroup(GROUP);
-      incassoSetting.setKey(KEY);
-      incassoSetting.setId(ID);
+      final EntityManager em = EntityManagerProvider.getEntityManager();
+      Setting incassoSetting = em.find(Setting.class, ID);
       incassoSetting.setValue(property.getValue());
-      incassoSetting.setDescription(property.getDescription());
       persist(incassoSetting);
     }
     
@@ -58,7 +53,6 @@ public class DirectDebitAmountConverter {
       DDConfigAmountEntry entry = config.getDirectDebitAmount();
       BigDecimal amount = BigDecimal.valueOf(AmountFormatter.parse(setting.getValue()));
       entry.setValue(amount);
-      entry.setDescription(setting.getDescription());
       persist(config);
     }
     

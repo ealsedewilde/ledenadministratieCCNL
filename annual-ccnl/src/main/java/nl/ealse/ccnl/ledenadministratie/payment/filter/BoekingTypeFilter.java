@@ -22,7 +22,13 @@ public class BoekingTypeFilter implements Filter {
       case IDDT:
         // Automatische incasso alleen stornering meenemen)
         return "UPDD".equals(booking.getTypebookingSub());
-      case IRCT, RRCT:
+      /*
+      Contributie terugbetaling blijkt niet goed te onderkennen
+      case IRCT:
+        String description = booking.getOmschrijving().toLowerCase();
+        return description.indexOf("declaratie") == -1;
+      */  
+      case RRCT:
         return true;
       default:
         return false;

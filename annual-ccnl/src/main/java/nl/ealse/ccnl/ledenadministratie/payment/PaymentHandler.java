@@ -116,19 +116,20 @@ public class PaymentHandler {
      * We accept that a Bank Transfer member sometimes just
      * pays the Direct Debit amount.
      */
-    boolean payed = mc.getTotalAmount().compareTo(IncassoProperties.getIncassoBedrag()) >= 0;
+    BigDecimal totalAmount = mc.getTotalAmount();
+    boolean payed = totalAmount.compareTo(IncassoProperties.getIncassoBedrag()) >= 0;
     m.setCurrentYearPaid(payed);
     
     if (PaymentMethod.BANK_TRANSFER == m.getPaymentMethod()) {
-      m.setAmountPaid(mc.getTotalAmount());
+      m.setAmountPaid(totalAmount);
     }
 
     if (mc.isInactief() && payed) {
       String msg = "Betaling ontvangen voor inactief lid " + m.getMemberNumber();
       rc.getMessages().add(msg);
-    } else if (mc.getTotalAmount().compareTo(bankTransferAmount) > 0) {
+    } else if (totalAmount.compareTo(bankTransferAmount) > 0) {
       // The total amount is larger than the Bank Transfer amount; the member payed too much
-      String amountString = AmountFormatter.format(mc.getTotalAmount());
+      String amountString = AmountFormatter.format(totalAmount);
       String msg =
           String.format("Lid %d heeft totaal %s betaald", m.getMemberNumber(), amountString);
       rc.getMessages().add(msg);

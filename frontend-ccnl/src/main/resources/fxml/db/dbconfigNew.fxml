@@ -7,9 +7,9 @@
 <?import nl.ealse.ccnl.control.button.*?>
 
 <VBox prefHeight="240.0" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx"
-	xmlns:fx="http://javafx.com/fxml">
+	xmlns:fx="http://javafx.com/fxml" onKeyPressed="#enter">
 	<children>
-		<VBox onKeyPressed="#enter">
+		<VBox>
 			<children>
 				<HBox>
 					<children>

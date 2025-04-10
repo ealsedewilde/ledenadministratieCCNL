@@ -25,7 +25,7 @@ public class ReconciliationContext {
 
   private static final BankTransaction DD_TRANSACTION =
       new BankTransaction(IncassoProperties.getIncassoBedrag(), IncassoProperties.getIncassoDatum(),
-          BookingType.RDDT, IncassoProperties.getIncassoReden());
+          BookingType.IDDT, IncassoProperties.getIncassoReden());
 
   private final Map<Integer, MemberContext> contexts = new HashMap<>();
   private final List<String> messages = new ArrayList<>();

@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.*?>
 <?import nl.ealse.ccnl.control.button.*?>
 
-<VBox prefHeight="167.0" prefWidth="400.0" spacing="20.0"
+<VBox prefHeight="167.0" prefWidth="400.0" spacing="20.0"  onKeyPressed="#enter"
 	xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<VBox onKeyPressed="#enter">
+		<VBox>
 			<children>
 				<Label text="Database folder" />
 				<TextField fx:id="dbFolder" disable="true"/>

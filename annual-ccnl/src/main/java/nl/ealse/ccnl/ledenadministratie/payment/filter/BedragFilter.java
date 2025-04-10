@@ -25,7 +25,7 @@ public class BedragFilter implements Filter {
       bedrag = bedrag * -1;
     }
     
-   if (bedrag >= MemberShipFee.getIncasso()) {
+   if (bedrag >= MemberShipFee.getIncasso() && bedrag <= MemberShipFee.getOverboeken()) {
       return true;
     } else {
       Member member = members.get(booking.getLidnummer());
