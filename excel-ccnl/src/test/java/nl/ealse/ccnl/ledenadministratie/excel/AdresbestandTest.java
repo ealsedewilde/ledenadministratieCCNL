@@ -23,8 +23,7 @@ class AdresbestandTest {
   void testAdrebestand() {
     File f = new File(tempDir, "adressenTest.xlsx");
     try {
-      sut = new Adresbestand(f);
-      sut.addHeading();
+      sut = new Adresbestand(f, false);
       sut.addMember(member());
       sut.addClub(club());
       sut.addExternalRelation(relation());

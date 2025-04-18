@@ -24,6 +24,12 @@
           visible="false" />
       </children>
     </HBox>
+    <HBox spacing="20">
+      <children>
+        <Label text="Met ledenpas kolom" />
+        <CheckBox fx:id="passColumn"/>
+      </children>
+    </HBox>
     <SaveButton text="Adressenbestand aanmaken" onAction="#generateAddressList" />
   </children>
 </VBox>

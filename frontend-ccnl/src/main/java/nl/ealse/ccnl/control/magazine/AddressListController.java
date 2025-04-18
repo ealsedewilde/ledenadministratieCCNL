@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.Setter;
@@ -46,6 +47,9 @@ public class AddressListController {
   private TextField magazineNumber;
   @FXML
   private Label magazineNumberE;
+
+  @FXML
+  private CheckBox passColumn;
 
   public AddressListController(PageController pageController, ExportAddressService magazineService,
       SettingsService service) {
@@ -153,7 +157,7 @@ public class AddressListController {
 
     @Override
     protected void executeWork() throws IOException {
-      controller.magazineService.generateMagazineAddressFile(addressFile);
+      controller.magazineService.generateMagazineAddressFile(addressFile, controller.passColumn.isSelected());
       Setting setting = getSetting();
       setting.setValue(controller.magazineNumber.getText());
       controller.service.save(setting);

@@ -8,7 +8,7 @@ import java.util.List;
 import nl.ealse.ccnl.ledenadministratie.excel.base.AdresColumnDefinition;
 import nl.ealse.ccnl.ledenadministratie.excel.base.CCNLBestand;
 import nl.ealse.ccnl.ledenadministratie.excel.base.ColumnDefinition;
-import nl.ealse.ccnl.ledenadministratie.excel.lid.LidColumnDefinition;
+import nl.ealse.ccnl.ledenadministratie.excel.lid.MagazineColumnDefinition;
 import nl.ealse.ccnl.ledenadministratie.excelexport.CommercialPartnerAddressExport;
 import nl.ealse.ccnl.ledenadministratie.excelexport.ExternalClubExport;
 import nl.ealse.ccnl.ledenadministratie.excelexport.InternalRelationAddressExport;
@@ -20,23 +20,35 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 
 public class Adresbestand extends CCNLBestand {
 
-  public Adresbestand(File bestand) throws IOException {
+  private final boolean passColumn;
+
+  public Adresbestand(File bestand, boolean passColumn) throws IOException {
     super(bestand);
+    this.passColumn = passColumn;
     addSheet("Adressen");
+    addHeading();
   }
 
   public void addHeading() {
     addRow();
     List<ColumnDefinition> list = new ArrayList<>();
     for (int ix = 0; ix < 4; ix++) {
-      list.add(LidColumnDefinition.values()[ix]);
+      list.add(MagazineColumnDefinition.values()[ix]);
     }
     list.addAll(Arrays.asList(AdresColumnDefinition.values()));
+    if (passColumn) {
+      list.add(MagazineColumnDefinition.PAS_MEESTUREN);
+    }
     list.forEach(c -> addCell(c.heading(), CCNLColumnProperties.getKolomnummer(c)));
   }
 
   public void addMember(Member member) {
     MemberAddressExport.addMember(this, member);
+    if (passColumn) {
+      addCell(CCNLColumnProperties.getPropertyPasMeesturen(),
+          CCNLColumnProperties.getKolomnummer(MagazineColumnDefinition.PAS_MEESTUREN));
+    }
+
   }
 
   public void addClub(ExternalRelationClub club) {

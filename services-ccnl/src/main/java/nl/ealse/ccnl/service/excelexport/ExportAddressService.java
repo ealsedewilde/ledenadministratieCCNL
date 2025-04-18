@@ -53,15 +53,16 @@ public class ExportAddressService {
    * Export all addresses to an Excel file on the local filesystem.
    *
    * @param addressFile - location for the target Excel file
+   * @param passColumn - add extra column for address who should receive a membership pass
    * @return generated wrapper around Excel file
    * @throws IOException - in case generating the file fails
    */
-  public Adresbestand generateMagazineAddressFile(File addressFile) throws IOException {
-    try (Adresbestand targetFile = new Adresbestand(addressFile)) {
+  public Adresbestand generateMagazineAddressFile(File addressFile, boolean passColumn) throws IOException {
+    try (Adresbestand targetFile = new Adresbestand(addressFile, passColumn)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
       activeMembers.forEach(member -> {
-        if (!member.isNoMagazine() && !member.getAddress().isAddressInvalid()) {
+        if ((passColumn || !member.isNoMagazine()) && !member.getAddress().isAddressInvalid()) {
           targetFile.addMember(member);
         }
       });
@@ -82,7 +83,7 @@ public class ExportAddressService {
   }
 
   public Adresbestand generateCardAddressFile(File addressFile) throws IOException {
-    try (Adresbestand targetFile = new Adresbestand(addressFile)) {
+    try (Adresbestand targetFile = new Adresbestand(addressFile, false)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
       activeMembers.forEach(member -> {
@@ -95,7 +96,7 @@ public class ExportAddressService {
   }
 
   public Adresbestand generateMemberListFileByNumber(File addressFile) throws IOException {
-    try (Adresbestand targetFile = new Adresbestand(addressFile)) {
+    try (Adresbestand targetFile = new Adresbestand(addressFile, false)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatuses(statuses);
       activeMembers.forEach(targetFile::addMember);
@@ -104,7 +105,7 @@ public class ExportAddressService {
   }
 
   public Adresbestand generateMemberListFileByName(File addressFile) throws IOException {
-    try (Adresbestand targetFile = new Adresbestand(addressFile)) {
+    try (Adresbestand targetFile = new Adresbestand(addressFile, false)) {
 
       List<Member> activeMembers = memberRepository.findMembersByStatusesOrderByName(statuses);
       activeMembers.forEach(targetFile::addMember);

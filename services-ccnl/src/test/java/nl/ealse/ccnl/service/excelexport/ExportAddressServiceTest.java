@@ -40,7 +40,7 @@ class ExportAddressServiceTest {
       sut.generateCardAddressFile(cardFile);
       Assertions.assertTrue(cardFile.exists());
       File magazineFile = new File(tempDir, "magazine.xlsx");
-      sut.generateMagazineAddressFile(magazineFile);
+      sut.generateMagazineAddressFile(magazineFile, true);
       Assertions.assertTrue(magazineFile.exists());
       File onNumberFile = new File(tempDir, "onNumberFile.xlsx");
       sut.generateMemberListFileByNumber(onNumberFile);

@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 
 /**
  * Database backup / restore.
@@ -75,22 +76,15 @@ public class BackupRestoreService {
     boolean valid = restoreFileValid(backupName);
     if (valid) {
       EntityManager em = EntityManagerProvider.getEntityManager();
-      String queryString = String.format(RESTORE_SQL, backupName.getAbsolutePath());
-      Query q = em.createNativeQuery(queryString);
-      em.getTransaction().begin();
-      try {
+      TransactionUtil.inTransction(()-> {
+        String queryString = String.format(RESTORE_SQL, backupName.getAbsolutePath());
+        Query q = em.createNativeQuery(queryString);
         int result = q.executeUpdate();
         log.info("Restore count: " + result);
-        em.getTransaction().commit();
-        em.clear();
-        // reload to reflect the restored data
-        DatabaseProperties.initialize();
-      } catch (Exception e) {
-        log.error("Restore failed", e);
-        em.getTransaction().rollback();
-        throw e;
-      }
-
+      });
+      em.clear();
+      // reload to reflect the restored data
+      DatabaseProperties.initialize();
     }
     return valid;
   }

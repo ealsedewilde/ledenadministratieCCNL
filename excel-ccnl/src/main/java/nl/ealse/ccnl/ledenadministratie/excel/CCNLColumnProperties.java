@@ -7,6 +7,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.excel.base.ColumnDefinition;
 import nl.ealse.ccnl.ledenadministratie.excel.lid.LidColumnDefinition;
+import nl.ealse.ccnl.ledenadministratie.excel.lid.MagazineColumnDefinition;
 
 @Slf4j
 @UtilityClass
@@ -59,6 +60,13 @@ public class CCNLColumnProperties {
   public String getPropertyHeeftBetaald() {
     String waarde =
         properties.getProperty(LidColumnDefinition.Property.HEEFT_BETAALD_JA.name().toLowerCase());
+    return getFirstValue(waarde);
+
+  }
+
+  public String getPropertyPasMeesturen() {
+    String waarde =
+        properties.getProperty(MagazineColumnDefinition.Property.PAS_MEESTUREN_JA.name().toLowerCase());
     return getFirstValue(waarde);
 
   }
