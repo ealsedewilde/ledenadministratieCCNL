@@ -37,11 +37,10 @@ class ArchiefbestandTest {
   
   
   private ArchivedMember member() {
-    ArchivedMember am = new ArchivedMember();
+    MemberBase m = new MemberBase();
+    ArchivedMember am = new ArchivedMember(m);
     ArchiveId id = new ArchiveId();
     am.setId(id);
-    MemberBase m = new MemberBase();
-    am.setMember(m);
     id.setArchiveYear(2019);
     id.setMemberNumber(1234);
     Address a = m.getAddress();

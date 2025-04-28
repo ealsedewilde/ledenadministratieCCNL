@@ -269,7 +269,7 @@ public class DocumentViewer extends BorderPane {
   }
 
   private String getStageTitle(Member member) {
-    return String.format(windowTitle.toString(), member.getId(), member.getFullName());
+    return String.format(windowTitle.toString(), member.getMemberNumber(), member.getFullName());
   }
 
   private byte[] toByteArray(File selectedFile) {

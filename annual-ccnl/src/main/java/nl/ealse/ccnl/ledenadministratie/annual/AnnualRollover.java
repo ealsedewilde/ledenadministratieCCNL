@@ -61,9 +61,8 @@ public class AnnualRollover {
         ArchiveId archiveId = new ArchiveId();
         archiveId.setArchiveYear(LocalDate.now().getYear());
         archiveId.setMemberNumber(member.getMemberNumber());
-        ArchivedMember archivedMember = new ArchivedMember();
+        ArchivedMember archivedMember = new ArchivedMember(member);
         archivedMember.setId(archiveId);
-        archivedMember.setMember(member);
         archiveList.add(archivedMember);
       }
     }

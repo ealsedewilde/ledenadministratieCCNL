@@ -49,15 +49,13 @@ class ExportArchiveServiceTest {
    
   private void setup() {
     List<ArchivedMember> archiveMembers = new ArrayList<>();
-    ArchivedMember member = new ArchivedMember();
+    Member m = new Member();
+    ArchivedMember member = new ArchivedMember(m);
     archiveMembers.add(member);
     ArchiveId id = new ArchiveId();
     member.setId(id);
-    member.setMember(null);
     id.setMemberNumber(1234);
     id.setArchiveYear(2018);
-    Member m = new Member();
-    member.setMember(m);
     when(archiveRepository.findAllByYearAndMemberNumber()).thenReturn(archiveMembers);
   }
   

@@ -24,15 +24,14 @@ class ArchiveTest {
     archiveId.setArchiveYear(2020);
     archiveId.setMemberNumber(member.getMemberNumber());
 
-    ArchivedMember archivedMember = new ArchivedMember();
+    ArchivedMember archivedMember = new ArchivedMember(member);
     archivedMember.setId(archiveId);
-    archivedMember.setMember(member);
     archivedMemberRepository.saveAndFlush(archivedMember);
 
     List<ArchivedMember> archiveList = archivedMemberRepository.findAll();
     Assertions.assertEquals(1, archiveList.size());
     ArchivedMember am = archiveList.get(0);
-    Assertions.assertEquals("2804 TV", am.getMember().getAddress().getPostalCode());
+    Assertions.assertEquals("2804 TV", am.getAddress().getPostalCode());
     boolean eq = archivedMember.getId().equals(am.getId());
     Assertions.assertTrue(eq);
     archivedMemberRepository.deleteObseleteArchivedMembers(2020);

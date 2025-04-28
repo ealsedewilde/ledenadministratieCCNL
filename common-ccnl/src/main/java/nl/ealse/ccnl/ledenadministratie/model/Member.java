@@ -32,10 +32,6 @@ public class Member extends MemberBase {
   @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
   private List<Document> documents;
 
-  public int getId() {
-    return getMemberNumber();
-  }
-
   public boolean hasFirstName() {
     return getInitials() != null && getInitials().indexOf('.') == -1;
   }
