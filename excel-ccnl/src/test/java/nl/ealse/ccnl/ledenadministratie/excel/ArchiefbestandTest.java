@@ -3,9 +3,8 @@ package nl.ealse.ccnl.ledenadministratie.excel;
 import java.io.File;
 import java.io.IOException;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
-import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
-import nl.ealse.ccnl.ledenadministratie.model.MemberBase;
+import nl.ealse.ccnl.ledenadministratie.model.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -37,12 +36,8 @@ class ArchiefbestandTest {
   
   
   private ArchivedMember member() {
-    MemberBase m = new MemberBase();
-    ArchivedMember am = new ArchivedMember(m);
-    ArchiveId id = new ArchiveId();
-    am.setId(id);
-    id.setArchiveYear(2019);
-    id.setMemberNumber(1234);
+    Member m = new Member();
+    m.setMemberNumber(1234);
     Address a = m.getAddress();
     a.setStreet("straat");
     a.setAddressNumber("99");
@@ -51,6 +46,7 @@ class ArchiefbestandTest {
     m.setInitials("T.");
     m.setLastName("Tester");
     m.setEmail("tester@Test.nl");
+    ArchivedMember am = new ArchivedMember(m);
     return am;
   }
 

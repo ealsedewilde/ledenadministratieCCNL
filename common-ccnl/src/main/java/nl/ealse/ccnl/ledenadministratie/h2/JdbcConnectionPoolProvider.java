@@ -17,18 +17,19 @@ public class JdbcConnectionPoolProvider implements ConnectionProvider, Configura
 
   @Override
   public boolean isUnwrappableAs(Class<?> unwrapType) {
-    return ConnectionProvider.class.equals(unwrapType)
-        || JdbcConnectionPoolProvider.class.isAssignableFrom(unwrapType);
+    try {
+      return cp.isWrapperFor(unwrapType);
+    } catch (SQLException e) {
+      throw new UnknownUnwrapTypeException(unwrapType, e);
+    }
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public <T> T unwrap(Class<T> unwrapType) {
-    if (ConnectionProvider.class.equals(unwrapType)
-        || JdbcConnectionPoolProvider.class.isAssignableFrom(unwrapType)) {
-      return (T) this;
-    } else {
-      throw new UnknownUnwrapTypeException(unwrapType);
+    try {
+      return cp.unwrap(unwrapType);
+    } catch (SQLException e) {
+      throw new UnknownUnwrapTypeException(unwrapType, e);
     }
   }
 

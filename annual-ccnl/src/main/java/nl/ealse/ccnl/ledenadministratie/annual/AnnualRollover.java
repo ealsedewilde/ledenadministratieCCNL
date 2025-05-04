@@ -8,7 +8,6 @@ import java.util.List;
 import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
-import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
@@ -58,11 +57,7 @@ public class AnnualRollover {
         // This is a very unusual situation
         itr.remove();
       } else {
-        ArchiveId archiveId = new ArchiveId();
-        archiveId.setArchiveYear(LocalDate.now().getYear());
-        archiveId.setMemberNumber(member.getMemberNumber());
         ArchivedMember archivedMember = new ArchivedMember(member);
-        archivedMember.setId(archiveId);
         archiveList.add(archivedMember);
       }
     }

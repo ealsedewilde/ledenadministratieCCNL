@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
-import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import org.junit.jupiter.api.Assertions;
@@ -50,12 +49,9 @@ class ExportArchiveServiceTest {
   private void setup() {
     List<ArchivedMember> archiveMembers = new ArrayList<>();
     Member m = new Member();
+    m.setMemberNumber(1234);
     ArchivedMember member = new ArchivedMember(m);
     archiveMembers.add(member);
-    ArchiveId id = new ArchiveId();
-    member.setId(id);
-    id.setMemberNumber(1234);
-    id.setArchiveYear(2018);
     when(archiveRepository.findAllByYearAndMemberNumber()).thenReturn(archiveMembers);
   }
   

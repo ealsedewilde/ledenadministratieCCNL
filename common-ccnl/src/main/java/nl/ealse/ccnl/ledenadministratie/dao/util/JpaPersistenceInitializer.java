@@ -32,6 +32,7 @@ public class JpaPersistenceInitializer implements PersistenceInitializer {
             ApplicationProperties.getProperty("database.user"));
         properties.put(JdbcSettings.JAKARTA_JDBC_PASSWORD,
             ApplicationProperties.getProperty("database.password", ""));
+        
         emf = Persistence.createEntityManagerFactory("nl.ealse.ccnl.leden", properties);
         log.info("EntityManagerFactory created");
       } else {

@@ -3,7 +3,6 @@ package nl.ealse.ccnl.ledenadministratie.dao;
 import java.time.LocalDate;
 import java.util.List;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
-import nl.ealse.ccnl.ledenadministratie.model.ArchiveId;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
@@ -20,12 +19,8 @@ class ArchiveTest {
   void testArchive() {
     Member member = memberRepository.saveAndFlush(initializedModel());
 
-    ArchiveId archiveId = new ArchiveId();
-    archiveId.setArchiveYear(2020);
-    archiveId.setMemberNumber(member.getMemberNumber());
-
-    ArchivedMember archivedMember = new ArchivedMember(member);
-    archivedMember.setId(archiveId);
+   ArchivedMember archivedMember = new ArchivedMember(member);
+   archivedMember.getId().setArchiveYear(2020);
     archivedMemberRepository.saveAndFlush(archivedMember);
 
     List<ArchivedMember> archiveList = archivedMemberRepository.findAll();

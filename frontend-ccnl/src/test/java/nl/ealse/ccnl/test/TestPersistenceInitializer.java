@@ -6,8 +6,6 @@ import jakarta.persistence.Persistence;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,20 +18,23 @@ import org.hibernate.cfg.JdbcSettings;
 
 public class TestPersistenceInitializer implements PersistenceInitializer {
   // nl.ealse.ccnl.test TestPersistenceInitializer
+  EntityManagerFactory emf;
+
   @Override
   public EntityManager initializePersistence() {
-    String dbUrl = "jdbc:h2:mem:test";
-    Map<String, String> properties = new HashMap<>();
-    properties.put("jakarta.persistence.schema-generation.database.action", "create");
-    properties.put(JdbcSettings.JAKARTA_JDBC_URL, dbUrl);
-    properties.put(JdbcSettings.JAKARTA_JDBC_USER,
-        ApplicationProperties.getProperty("database.user"));
-    properties.put(JdbcSettings.JAKARTA_JDBC_PASSWORD,
-        ApplicationProperties.getProperty("database.password", ""));
-    EntityManagerFactory emf =
-        Persistence.createEntityManagerFactory("nl.ealse.ccnl.leden", properties);
+    if (emf == null) {
+      String dbUrl = "jdbc:h2:mem:test";
+      Map<String, String> properties = new HashMap<>();
+      properties.put("jakarta.persistence.schema-generation.database.action", "create");
+      properties.put(JdbcSettings.JAKARTA_JDBC_URL, dbUrl);
+      properties.put(JdbcSettings.JAKARTA_JDBC_USER,
+          ApplicationProperties.getProperty("database.user"));
+      properties.put(JdbcSettings.JAKARTA_JDBC_PASSWORD,
+          ApplicationProperties.getProperty("database.password", ""));
+      emf = Persistence.createEntityManagerFactory("nl.ealse.ccnl.leden", properties);
+    }
     EntityManager em = emf.createEntityManager();
-      loadInitSql(em);
+    loadInitSql(em);
     return em;
   }
 
@@ -42,7 +43,7 @@ public class TestPersistenceInitializer implements PersistenceInitializer {
     // nothing
 
   }
-  
+
   private void loadInitSql(EntityManager em) {
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/init.sql")))) {
@@ -66,12 +67,12 @@ public class TestPersistenceInitializer implements PersistenceInitializer {
         } catch (IOException e) {
           throw new DatabaseException("Error reading init.sql", e);
         }
-        
+
       });
     } catch (IOException e) {
       throw new DatabaseException("Error reading init.sql", e);
     }
-    
+
   }
 
 
