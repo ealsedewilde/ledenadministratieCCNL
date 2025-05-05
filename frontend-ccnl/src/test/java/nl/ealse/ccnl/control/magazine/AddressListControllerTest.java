@@ -10,7 +10,7 @@ import java.util.Optional;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ioc.ComponentProvider;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 import nl.ealse.ccnl.service.excelexport.ExportAddressService;
@@ -71,7 +71,7 @@ class AddressListControllerTest extends FXMLBaseTest {
   static void setup() {
 
     mock(ExportAddressService.class);
-    service = ComponentProviderUtil.getComponent(SettingsService.class);
+    service = ComponentProvider.getComponent(SettingsService.class);
     Setting s = new Setting();
     s.setKey(SETTING_KEY);
     s.setSettingsGroup(SETTING_GROUP);

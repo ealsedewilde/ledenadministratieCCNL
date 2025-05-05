@@ -11,7 +11,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.support.EventProcessor;
 import nl.ealse.ccnl.ioc.ComponentProviderException;
-import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ioc.ComponentProvider;
 import nl.ealse.javafx.FXMLLoadException;
 
 /**
@@ -31,7 +31,7 @@ public abstract class FXMLBaseTest extends FXBase {
   }
 
   protected PageController getPageController() {
-    return ComponentProviderUtil.getComponent(PageController.class);
+    return ComponentProvider.getComponent(PageController.class);
   }
 
   /**
@@ -100,7 +100,7 @@ public abstract class FXMLBaseTest extends FXBase {
     Object[] parms = new Object[parmTypes.length];
     for (int ix = 0; ix < parmTypes.length; ix++) {
       Class<?> parmType = parmTypes[ix];
-      Object parmMock = ComponentProviderUtil.getComponent(parmType);
+      Object parmMock = ComponentProvider.getComponent(parmType);
       parms[ix] = parmMock;
     }
     try {

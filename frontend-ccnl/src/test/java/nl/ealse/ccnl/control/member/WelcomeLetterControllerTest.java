@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ioc.ComponentProvider;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -86,7 +86,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
   static void setup() {
     pdf = getBlob("/welkom.pdf");
     docx = getBlob("/welkom.docx");
-    documentService = ComponentProviderUtil.getComponent(DocumentService.class);
+    documentService = ComponentProvider.getComponent(DocumentService.class);
     when(documentService.generatePDF(any(LetterData.class))).thenReturn(pdf);
     when(documentService.generateWordDocument(any(LetterData.class))).thenReturn(docx);
     List<Document> documents = new ArrayList<>();

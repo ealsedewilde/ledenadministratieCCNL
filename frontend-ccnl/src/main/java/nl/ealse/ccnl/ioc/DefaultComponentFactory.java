@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * </ol>
  */
 @Slf4j
-public class DefaultComponentProvider implements ComponentProvider {
+public class DefaultComponentFactory implements ComponentFactory {
   
   private final Map<Class<?>, Object> componentMap = new HashMap<>();
   

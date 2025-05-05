@@ -11,7 +11,7 @@ import javafx.scene.Parent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.form.FormController;
-import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ioc.ComponentProvider;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -79,9 +79,9 @@ class MemberControllerTest extends FXMLBaseTest {
 
   private void prepare() {
     m = getMember();
-    service = ComponentProviderUtil.getComponent(MemberService.class);
+    service = ComponentProvider.getComponent(MemberService.class);
     reset(service);
-    documentService = ComponentProviderUtil.getComponent(DocumentService.class);
+    documentService = ComponentProvider.getComponent(DocumentService.class);
     when(documentService.findSepaAuthorization(m)).thenReturn(Optional.empty());
     controller = getTestSubject(MemberController.class);
     formController = getFormController();

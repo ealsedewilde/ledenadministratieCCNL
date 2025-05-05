@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ioc.ComponentProvider;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
 import nl.ealse.ccnl.service.SepaDirectDebitService;
@@ -82,7 +82,7 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    service = ComponentProviderUtil.getComponent(SepaDirectDebitService.class);
+    service = ComponentProvider.getComponent(SepaDirectDebitService.class);
     result = new MappingResult();
     result.setValid(true);
     when(service.saveProperty(any(FlatProperty.class))).thenReturn(result);

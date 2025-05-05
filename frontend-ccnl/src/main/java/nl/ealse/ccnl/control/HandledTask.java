@@ -3,7 +3,7 @@ package nl.ealse.ccnl.control;
 import javafx.concurrent.Task;
 import nl.ealse.ccnl.TaskExecutor;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ioc.ComponentProvider;
 
 /**
  * A asynchronous task task sends a result message to be shown.
@@ -16,7 +16,7 @@ public abstract class HandledTask extends Task<String> {
   }
   
   private void initialize() {
-    PageController pageController = ComponentProviderUtil.getComponent(PageController.class);
+    PageController pageController = ComponentProvider.getComponent(PageController.class);
     this.setOnSucceeded(evt -> pageController.showMessage(evt.getSource().getValue().toString()));
     this.setOnFailed(evt -> {
       Throwable t = evt.getSource().getException();
@@ -25,7 +25,7 @@ public abstract class HandledTask extends Task<String> {
   }
   
   public void executeTask() {
-    ComponentProviderUtil.getComponent(TaskExecutor.class).execute(this);
+    ComponentProvider.getComponent(TaskExecutor.class).execute(this);
   }
 
 }

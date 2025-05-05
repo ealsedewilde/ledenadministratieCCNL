@@ -6,13 +6,13 @@ import java.util.Map;
 import nl.ealse.ccnl.TaskExecutor;
 import nl.ealse.ccnl.TestExecutor;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ioc.ComponentFactory;
 
-public class TestComponentProvider implements ComponentProvider {
+public class TestComponentFactory implements ComponentFactory {
 
   private final Map<Class<?>, Object> mocks = new HashMap<>();
 
-  public TestComponentProvider() {
+  public TestComponentFactory() {
     mocks.put(PageController.class, mock(PageController.class));
     mocks.put(TaskExecutor.class, new TestExecutor());
   }

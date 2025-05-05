@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 class ControllerProviderTest extends FXBase {
   
-  private final ComponentProvider provider = new DefaultComponentProvider();
+  private final ComponentFactory provider = new DefaultComponentFactory();
   private final Map<Class<?>, Object> componentMap = new HashMap<>();
 
   

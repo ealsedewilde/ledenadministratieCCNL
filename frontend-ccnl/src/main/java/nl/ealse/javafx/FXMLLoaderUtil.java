@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.util.Callback;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ioc.ComponentProvider;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
 
 /**
@@ -29,7 +29,7 @@ public class FXMLLoaderUtil {
   
   private final Callback<Class<?>, Object> CONTROLLER_FACTORY = clazz -> {
     try { 
-      return ComponentProviderUtil.getComponent(clazz);
+      return ComponentProvider.getComponent(clazz);
     } catch (Exception e) {
       String msg = "failed to get controller";
       log.error(msg, e);

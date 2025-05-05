@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ioc.ComponentProviderUtil;
+import nl.ealse.ccnl.ioc.ComponentProvider;
 import nl.ealse.ccnl.service.BackupRestoreService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
@@ -74,7 +74,7 @@ class BackupRestoreControllerTest extends FXMLBaseTest {
     fileChooser = mock(WrappedFileChooser.class);
     when(fileChooser.showSaveDialog()).thenReturn(zip);
     when(fileChooser.showOpenDialog()).thenReturn(zip);
-    service = ComponentProviderUtil.getComponent(BackupRestoreService.class);
+    service = ComponentProvider.getComponent(BackupRestoreService.class);
     when(service.restoreDatabase(zip)).thenReturn(Boolean.FALSE);
   }
 
