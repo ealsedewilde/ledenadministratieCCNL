@@ -106,6 +106,11 @@ class DocumentTemplateControllerTest extends FXMLBaseTest {
       return documentService;
     }
 
+    @Override
+    protected void reInitialize() {
+      initializeTemplates();
+    }
+
   }
 
 }

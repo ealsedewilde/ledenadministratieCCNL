@@ -10,8 +10,10 @@ import javax.print.PrintService;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.DocumentViewer;
+import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
+import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -33,10 +35,16 @@ public class WelcomeLetterController extends DocumentTemplateController {
 
   private DocumentViewer documentViewer;
 
-   public WelcomeLetterController(PageController pageController, DocumentService documentService) {
+  public WelcomeLetterController(PageController pageController, DocumentService documentService) {
     super(DocumentTemplateContext.WELCOME_LETTER);
     this.pageController = pageController;
     this.documentService = documentService;
+  }
+
+  @EventListener(menuChoice = MenuChoice.WELCOME_LETTER)
+  public void welcomeLetter(MemberSeLectionEvent event) {
+    this.selectedMember = event.getSelectedEntity();
+    pageController.setActivePage(PageName.WELCOME_LETTER);
   }
 
   @EventListener
@@ -44,7 +52,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
     this.selectedMember = event.getMember();
     pageController.setActivePage(PageName.WELCOME_LETTER);
   }
-  
+
   @FXML
   protected void initialize() {
     initializeTemplates();
@@ -150,6 +158,11 @@ public class WelcomeLetterController extends DocumentTemplateController {
   @Override
   protected DocumentService getDocumentService() {
     return documentService;
+  }
+
+  @Override
+  protected void reInitialize() {
+    initializeTemplates();
   }
 
 }

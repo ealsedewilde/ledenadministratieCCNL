@@ -72,6 +72,7 @@
       <items>
         <MenuItem onAction="#action" id="ADD_DOCUMENT" mnemonicParsing="false" text="Toevoegen" />
         <MenuItem onAction="#action" id="VIEW_DOCUMENT" mnemonicParsing="false" text="Inzien" />
+        <MenuItem onAction="#action" id="WELCOME_LETTER" mnemonicParsing="false" text="Welkomsbrief aanmaken" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Overzichten">

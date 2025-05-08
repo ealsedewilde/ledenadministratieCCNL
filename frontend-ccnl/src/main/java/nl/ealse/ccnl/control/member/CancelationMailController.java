@@ -135,4 +135,9 @@ public class CancelationMailController extends DocumentTemplateController {
     return documentService;
   }
 
+  @Override
+  protected void reInitialize() {
+    initializeTemplates();
+  }
+
 }

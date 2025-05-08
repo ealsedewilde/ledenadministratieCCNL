@@ -65,18 +65,19 @@ public abstract class DocumentTemplateController {
   protected void initializeTemplates() {
     templates = getDocumentService().findDocumentTemplates(templateContext.documentType);
     initializeTextSelection();
-  }
+    selectText();
+    }
 
   protected void initializeTemplates(boolean withSepa) {
     templates = getDocumentService().findDocumentTemplates(templateContext.documentType, withSepa);
     initializeTextSelection();
+    selectText();
   }
 
   private void initializeTextSelection() {
     textSelection.getItems().clear();
     templates.forEach(template -> textSelection.getItems().add(template.getTemplateID().getName()));
     textSelection.getSelectionModel().selectFirst();
-    selectText();
   }
 
   @FXML
@@ -125,12 +126,20 @@ public abstract class DocumentTemplateController {
       template.setIncludeSepaForm(addSepa.isSelected());
       getDocumentService().persistDocumentemplate(template);
       getPageController().showMessage("DocumentTemplate is opgeslagen");
+      reInitialize();
+      textSelection.getSelectionModel().select(name);
+      selectText();
     }
   }
 
   protected abstract PageController getPageController();
 
   protected abstract DocumentService getDocumentService();
+  
+  /**
+   * Reinitialize the templates list after adding/changing a template.
+   */
+  protected abstract void reInitialize();
 
   /**
    * Context for the three sub classes of the DocumentTemplateController.

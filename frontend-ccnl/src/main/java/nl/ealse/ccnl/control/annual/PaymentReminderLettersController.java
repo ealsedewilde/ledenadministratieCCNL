@@ -45,6 +45,8 @@ public class PaymentReminderLettersController extends DocumentTemplateController
 
   @FXML
   private Label headerText;
+  
+  private MenuChoice currentMenuChoice;
 
   public PaymentReminderLettersController(PageController pageController,
       DocumentService documentService, MemberService memberService,
@@ -67,7 +69,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   public void remindersBT(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.BANK_TRANSFER);
-    initTemplates(true);
+    initTemplates(event.getMenuChoice());
     headerText.setText("Herinneringsbrief leden met Overboeking");
   }
 
@@ -75,7 +77,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   public void remindersBTx(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     selectedMembers = memberService.findMembersCurrentYearPartlyPaid();
-    initTemplates(true);
+    initTemplates(event.getMenuChoice());
     headerText.setText("Herinneringsbrief Overboeking deels betaald");
   }
 
@@ -83,11 +85,13 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   public void remindersDD(MenuChoiceEvent event) {
     pageController.setActivePage(PageName.PAYMENT_REMINDER_LETTERS);
     selectedMembers = memberService.findMembersCurrentYearNotPaid(PaymentMethod.DIRECT_DEBIT);
-    initTemplates(false);
+    initTemplates(event.getMenuChoice());
     headerText.setText("Herinneringsbrief leden met Automatische Incasso");
   }
 
-  private void initTemplates(boolean withSepa) {
+  private void initTemplates(MenuChoice menuChoice) {
+    currentMenuChoice = menuChoice;
+    boolean withSepa = currentMenuChoice != MenuChoice.PRODUCE_REMINDER_LETTERS_DD;
     initializeTemplates(withSepa);
     showSepa.setVisible(withSepa);
     getAddSepa().setVisible(withSepa);
@@ -229,6 +233,12 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   @Override
   protected DocumentService getDocumentService() {
     return documentService;
+  }
+
+  @Override
+  protected void reInitialize() {
+    boolean withSepa = currentMenuChoice != MenuChoice.PRODUCE_REMINDER_LETTERS_DD;
+    initializeTemplates(withSepa);
   }
 
 }

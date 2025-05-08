@@ -11,7 +11,7 @@ import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 /**
  * Super class of all database repositories.
  *
- * @param <T> persitent entity for the repository
+ * @param <T> persistent entity for the repository
  */
 public abstract class BaseRepository<T> {
 
