@@ -23,7 +23,7 @@ public class ManageArchiveController {
   @FXML
   private Label referenceYearE;
 
-   public ManageArchiveController(PageController pageController, ArchiveService service) {
+  public ManageArchiveController(PageController pageController, ArchiveService service) {
     this.pageController = pageController;
     this.service = service;
   }

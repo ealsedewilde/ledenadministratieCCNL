@@ -3,6 +3,7 @@ package nl.ealse.ccnl.ledenadministratie.dao.util;
 import jakarta.persistence.EntityTransaction;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 
 /**
  * Utility to handle some work in one database transaction.
@@ -10,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class TransactionUtil {
-  
+
   /**
    * Handle work in one database transaction.
    *
@@ -19,7 +20,8 @@ public class TransactionUtil {
    * @throws E exception thrown by the work unit
    */
   public <E extends Exception> void inTransction(UnitOfWork<E> work) throws E {
-    EntityTransaction transaction = EntityManagerProvider.getEntityManager().getTransaction();
+    EntityTransaction transaction =
+        ApplicationContext.getEntityManagerProvider().getEntityManager().getTransaction();
     if (!transaction.isActive()) {
       try {
         transaction.begin();

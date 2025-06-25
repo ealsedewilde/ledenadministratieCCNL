@@ -17,7 +17,8 @@ public class ExternalOtherSearchController
 
   private final PageController pageController;
 
-  public ExternalOtherSearchController(PageController pageController, ExternalOtherService service) {
+  public ExternalOtherSearchController(PageController pageController,
+      ExternalOtherService service) {
     super(service);
     this.pageController = pageController;
   }

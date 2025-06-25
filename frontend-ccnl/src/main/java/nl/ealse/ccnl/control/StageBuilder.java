@@ -12,12 +12,12 @@ import nl.ealse.javafx.ImagesMap;
  * Build info pages.
  */
 public class StageBuilder {
-  
+
   private final Stage stage = new Stage();
   private double width;
   private double height;
   private Parent parent;
-  
+
   public StageBuilder fxml(String fxmlName, Object controller) {
     parent = FXMLLoaderUtil.getPage(fxmlName, controller);
     return this;
@@ -27,7 +27,7 @@ public class StageBuilder {
     stage.setTitle(title);
     return this;
   }
-  
+
   /**
    * Set the dimension of Stage.
    *
@@ -40,7 +40,7 @@ public class StageBuilder {
     this.height = height;
     return this;
   }
-  
+
   /**
    * Build the requested Stage.
    *

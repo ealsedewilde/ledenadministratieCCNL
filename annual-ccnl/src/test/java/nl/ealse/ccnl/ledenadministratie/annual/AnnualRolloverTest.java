@@ -12,12 +12,13 @@ import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
+import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
-class AnnualRolloverTest {
+class AnnualRolloverTest extends ApplicationContextAware {
   
   private final EnumSet<MembershipStatus> statuses = EnumSet.of(MembershipStatus.INACTIVE,
       MembershipStatus.LAST_YEAR_MEMBERSHIP, MembershipStatus.OVERDUE);

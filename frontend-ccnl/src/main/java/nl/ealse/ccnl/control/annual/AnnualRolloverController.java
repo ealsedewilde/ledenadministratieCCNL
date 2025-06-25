@@ -15,7 +15,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.AnnualRolloverService;
 import nl.ealse.ccnl.service.BackupRestoreService;
 import nl.ealse.ccnl.service.excelexport.ExportArchiveService;
@@ -76,7 +76,7 @@ public class AnnualRolloverController {
   private void setup() {
     this.fileChooser = new WrappedFileChooser(FileExtension.ZIP);
     this.fileChooser.setInitialDirectory(
-        () -> DatabaseProperties.getProperty("ccnl.directory.db", DEFAULT_DIR));
+        () -> ApplicationContext.getPreference("ccnl.directory.db", DEFAULT_DIR));
   }
 
   /**
@@ -166,7 +166,8 @@ public class AnnualRolloverController {
 
   protected static class AsyncRolloverStep3 extends HandledTask {
     private final AnnualRolloverController controller;
-    private final String dir = DatabaseProperties.getProperty("ccnl.directory.annual", DEFAULT_DIR);
+    private final String dir =
+        ApplicationContext.getPreference("ccnl.directory.annual", DEFAULT_DIR);
 
     AsyncRolloverStep3(AnnualRolloverController controller) {
       this.controller = controller;

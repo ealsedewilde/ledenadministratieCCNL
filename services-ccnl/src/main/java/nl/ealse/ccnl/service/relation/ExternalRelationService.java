@@ -3,20 +3,19 @@ package nl.ealse.ccnl.service.relation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.ledenadministratie.util.NumberFactory;
 
 @Slf4j
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ExternalRelationService<T extends ExternalRelation> {
+  {log.info("Service created");}
 
   private final NumberFactory numberFactory;
-
-  protected ExternalRelationService(NumberFactory numberFactory) {
-    log.info("Service created");
-    this.numberFactory = numberFactory;
-  }
 
   public Integer getFreeNumber() {
     return numberFactory.getNewNumber();

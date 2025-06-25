@@ -15,7 +15,7 @@ import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
@@ -101,7 +101,7 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    documentService = ComponentProvider.getComponent(DocumentService.class);
+    documentService = ApplicationContext.getComponent(DocumentService.class);
     List<Document> letters = new ArrayList<>();
     when(documentService.findDocuments(any(Member.class), any(DocumentType.class)))
         .thenReturn(letters);
@@ -118,7 +118,7 @@ class PaymentReminderLettersControllerTest extends FXMLBaseTest {
 
     List<Member> members = new ArrayList<>();
     members.add(member());
-    memberService = ComponentProvider.getComponent(MemberService.class);
+    memberService = ApplicationContext.getComponent(MemberService.class);
     when(memberService.findMembersCurrentYearNotPaid(any(PaymentMethod.class))).thenReturn(members);
 
     fileChooser = mock(WrappedFileChooser.class);

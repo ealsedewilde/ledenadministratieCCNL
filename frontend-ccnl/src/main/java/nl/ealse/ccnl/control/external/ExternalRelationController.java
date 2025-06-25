@@ -29,7 +29,8 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
 
   protected MenuChoice currentMenuChoice;
 
-  protected ExternalRelationController(PageController pageController, ExternalRelationService<T> externalRelationService) {
+  protected ExternalRelationController(PageController pageController,
+      ExternalRelationService<T> externalRelationService) {
     this.pageController = pageController;
     this.externalRelationService = externalRelationService;
     this.externalRelationValidation = new ExternalRelationValidation(this);
@@ -37,7 +38,8 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
 
   protected void initializeValidation() {
     externalRelationValidation.initialize();
-    externalRelationValidation.setCallback(valid -> getFormController().getSaveButton().setDisable(!valid));
+    externalRelationValidation
+        .setCallback(valid -> getFormController().getSaveButton().setDisable(!valid));
   }
 
   @FXML

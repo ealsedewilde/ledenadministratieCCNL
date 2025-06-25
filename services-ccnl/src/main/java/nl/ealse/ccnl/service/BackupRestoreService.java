@@ -12,8 +12,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 
 /**
@@ -21,6 +20,7 @@ import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
  */
 @Slf4j
 public class BackupRestoreService {
+  {log.info("Service created");}
 
   @Getter
   private static BackupRestoreService instance = new BackupRestoreService();
@@ -35,11 +35,6 @@ public class BackupRestoreService {
       .format("SCRIPT SIMPLE NOPASSWORDS DROP BLOCKSIZE 524288 TO '%s' COMPRESSION ZIP", TEMP_FILE);
   private static final String RESTORE_SQL = "RUNSCRIPT FROM '%s' COMPRESSION ZIP";
 
-
-  public BackupRestoreService() {
-    log.info("Service created");
-  }
-
   /**
    * Backup the database to a zip file.
    * First create the zip to a local file, because that is fast.
@@ -49,7 +44,7 @@ public class BackupRestoreService {
    * @throws Exception - when creating backup goes wrong
    */
   public void backupDatabase(File backupName) throws Exception {
-    EntityManager em = EntityManagerProvider.getEntityManager();
+    EntityManager em = ApplicationContext.getEntityManagerProvider().getEntityManager();
     Query q = em.createNativeQuery(BACKUP_SQL);
     try {
       @SuppressWarnings("unchecked")
@@ -75,7 +70,7 @@ public class BackupRestoreService {
   public boolean restoreDatabase(File backupName) {
     boolean valid = restoreFileValid(backupName);
     if (valid) {
-      EntityManager em = EntityManagerProvider.getEntityManager();
+      EntityManager em = ApplicationContext.getEntityManagerProvider().getEntityManager();
       TransactionUtil.inTransction(()-> {
         String queryString = String.format(RESTORE_SQL, backupName.getAbsolutePath());
         Query q = em.createNativeQuery(queryString);
@@ -84,7 +79,7 @@ public class BackupRestoreService {
       });
       em.clear();
       // reload to reflect the restored data
-      DatabaseProperties.initialize();
+      ApplicationContext.reloadPreferences();;
     }
     return valid;
   }

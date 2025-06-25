@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import java.util.Optional;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.SettingRepository;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class SettingsServiceTest {
   
   @BeforeAll
   static void setup() {
-    EntityManager em = EntityManagerProvider.getEntityManager();
+    EntityManager em = ApplicationContext.getEntityManagerProvider().getEntityManager();
     EntityTransaction t = mock(EntityTransaction.class);
     when(em.getTransaction()).thenReturn(t);
     dao = mock(SettingRepository.class);

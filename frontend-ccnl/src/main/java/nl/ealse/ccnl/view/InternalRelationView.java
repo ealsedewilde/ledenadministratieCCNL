@@ -25,7 +25,7 @@ public abstract class InternalRelationView extends AddressView {
 
   @FXML
   private TextField telephoneNumber;
-  
+
   @FXML
   private CheckBox noMagazine;
 

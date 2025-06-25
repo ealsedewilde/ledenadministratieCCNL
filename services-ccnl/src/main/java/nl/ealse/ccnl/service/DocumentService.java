@@ -2,6 +2,7 @@ package nl.ealse.ccnl.service;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.DocumentRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.DocumentTemplateRepository;
@@ -18,17 +19,13 @@ import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.ledenadministratie.word.LetterGenerator;
 
 @Slf4j
+@AllArgsConstructor
 public class DocumentService {
+  {log.info("Service created");}
 
   private final DocumentRepository dao;
 
   private final DocumentTemplateRepository templateDao;
-
-  public DocumentService(DocumentRepository dao, DocumentTemplateRepository templateDao) {
-    log.info("Service created");
-    this.dao = dao;
-    this.templateDao = templateDao;
-  }
 
   public List<Document> findDocuments(Member owner) {
     return dao.findByOwnerOrderByCreationDateDesc(owner);

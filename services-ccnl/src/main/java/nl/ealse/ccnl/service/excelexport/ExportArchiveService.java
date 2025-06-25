@@ -3,6 +3,7 @@ package nl.ealse.ccnl.service.excelexport;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.ArchiveRepository;
 import nl.ealse.ccnl.ledenadministratie.excel.Archiefbestand;
@@ -15,14 +16,11 @@ import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
  *
  */
 @Slf4j
+@AllArgsConstructor
 public class ExportArchiveService {
+  {log.info("Service created");}
 
   private final ArchiveRepository archiveRepository;
-
-  public ExportArchiveService(ArchiveRepository archiveRepository) {
-    log.info("Service created");
-    this.archiveRepository = archiveRepository;
-  }
 
   /**
    * Export all data to an Excel file on the local filesystem.

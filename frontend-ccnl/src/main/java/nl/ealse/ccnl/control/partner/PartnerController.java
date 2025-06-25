@@ -18,7 +18,7 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   @Getter
   private FormController formController;
 
-   public PartnerController(PageController pageController, CommercialPartnerService service) {
+  public PartnerController(PageController pageController, CommercialPartnerService service) {
     super(pageController, service);
     this.pageController = pageController;
     setup();

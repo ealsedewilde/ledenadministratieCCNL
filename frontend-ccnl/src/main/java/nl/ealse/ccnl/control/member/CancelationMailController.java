@@ -14,7 +14,7 @@ import nl.ealse.ccnl.control.DocumentTemplateController;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.mail.support.MailMessage;
 import nl.ealse.ccnl.service.DocumentService;
@@ -31,7 +31,7 @@ public class CancelationMailController extends DocumentTemplateController {
 
   private final MailService mailService;
 
-  private String mailSubject = DatabaseProperties.getProperty("ccnl.mail.subject");
+  private String mailSubject = ApplicationContext.getPreference("ccnl.mail.subject");
 
   private Member selectedMember;
 

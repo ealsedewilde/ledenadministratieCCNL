@@ -14,7 +14,7 @@ import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
@@ -77,7 +77,7 @@ class DocumentControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    documentService = ComponentProvider.getComponent(DocumentService.class);
+    documentService = ApplicationContext.getComponent(DocumentService.class);
     document = document();
     List<Document> documents = new ArrayList<>();
     documents.add(document);

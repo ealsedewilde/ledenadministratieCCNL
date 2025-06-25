@@ -72,7 +72,7 @@ public class MemberCancelController extends MemberCancelView {
         if (now.isAfter(incassoDatum)) {
           selectedMember.setMemberStatus(MembershipStatus.AFTER_APRIL);
         }
-      } 
+      }
     }
     ViewModel.modelToView(this, selectedMember);
     initializeInitialsType();

@@ -7,8 +7,8 @@ import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import org.apache.commons.validator.routines.IBANValidator;
 
 /**
- * Formats the IBAN-number by removing spaces and make it upper case.
- * The formatted IBAN-NUMBER is validated.
+ * Formats the IBAN-number by removing spaces and make it upper case. The formatted IBAN-NUMBER is
+ * validated.
  */
 public class IbanNumberValidator extends AbstractValidator {
 

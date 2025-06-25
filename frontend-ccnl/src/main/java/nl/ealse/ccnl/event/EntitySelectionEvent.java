@@ -23,7 +23,7 @@ public class EntitySelectionEvent<T> extends MenuChoiceEvent {
     super(source, menuChoice);
     this.selectedEntity = selectedEntity;
   }
-  
+
   /**
    * This type of event is never a group event.
    */

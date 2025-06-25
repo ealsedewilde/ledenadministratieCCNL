@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationPartnerRepository;
@@ -25,7 +26,9 @@ import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
  *
  */
 @Slf4j
+@AllArgsConstructor
 public class ExportAddressService {
+  {log.info("Service created");}
 
   private static final EnumSet<MembershipStatus> statuses =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.LAST_YEAR_MEMBERSHIP);
@@ -35,19 +38,6 @@ public class ExportAddressService {
   private final ExternalRelationOtherRepository externalRelationOtherRepository;
   private final InternalRelationRepository internalRelationRepository;
   private final MemberRepository memberRepository;
-
-  public ExportAddressService(ExternalRelationPartnerRepository commercialPartnerRepository,
-      ExternalRelationClubRepository externalRelationClubRepository,
-      ExternalRelationOtherRepository externalRelationOtherRepository,
-      InternalRelationRepository internalRelationRepository, MemberRepository memberRepository) {
-
-    log.info("Service created");
-    this.commercialPartnerRepository = commercialPartnerRepository;
-    this.externalRelationClubRepository = externalRelationClubRepository;
-    this.externalRelationOtherRepository = externalRelationOtherRepository;
-    this.internalRelationRepository = internalRelationRepository;
-    this.memberRepository = memberRepository;
-  }
 
   /**
    * Export all addresses to an Excel file on the local filesystem.
@@ -115,7 +105,7 @@ public class ExportAddressService {
 
   private void extraMagazines(Adresbestand targetFile) {
     int aantalBladen =
-        Integer.parseInt(DatabaseProperties.getProperty("ccnl.magazine.extra_ledenadmin", "0"));
+        Integer.parseInt(ApplicationContext.getPreference("ccnl.magazine.extra_ledenadmin", "0"));
     if (aantalBladen > 0) {
       int nummerLedenadministratie =
           Integer.parseInt(CCNLColumnProperties.getProperty("nummer_ledenadministratie"));

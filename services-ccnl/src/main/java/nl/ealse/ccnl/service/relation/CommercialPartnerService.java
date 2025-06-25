@@ -8,12 +8,12 @@ import nl.ealse.ccnl.ledenadministratie.util.PartnerNumberFactory;
 
 @Slf4j
 public class CommercialPartnerService extends ExternalRelationService<ExternalRelationPartner> {
+  {log.info("Service created");}
 
   private final ExternalRelationPartnerRepository dao;
 
   public CommercialPartnerService(ExternalRelationPartnerRepository dao, PartnerNumberFactory numberFactory) {
     super(numberFactory);
-    log.info("Service created");
     this.dao = dao;
   }
 

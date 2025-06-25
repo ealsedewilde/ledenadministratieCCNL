@@ -18,15 +18,16 @@ public class ResetPaymentCommand {
   private final PageController pageController;
 
   private final ReconciliationService reconciliationService;
-  
+
   private Alert confirmation;
 
-  public ResetPaymentCommand(PageController pageController, ReconciliationService reconciliationService) {
+  public ResetPaymentCommand(PageController pageController,
+      ReconciliationService reconciliationService) {
     this.pageController = pageController;
     this.reconciliationService = reconciliationService;
     setup();
   }
-  
+
   private void setup() {
     ButtonType yes = new ButtonType("Definitief Wissen", ButtonData.YES);
     ButtonType no = new ButtonType("Annuleren", ButtonData.NO);

@@ -5,7 +5,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 public class TestExecutor extends TaskExecutor {
@@ -27,8 +27,9 @@ public class TestExecutor extends TaskExecutor {
       WorkerStateEvent evt = new WorkerStateEvent(fxt, WorkerStateEvent.WORKER_STATE_FAILED);
       f.handle(evt);
     } catch (Exception e) {
+      // not possible
     }
-    EntityManagerProvider.cleanup();
+    ApplicationContext.getEntityManagerProvider().getEntityManager().clear();
   }
 
 }

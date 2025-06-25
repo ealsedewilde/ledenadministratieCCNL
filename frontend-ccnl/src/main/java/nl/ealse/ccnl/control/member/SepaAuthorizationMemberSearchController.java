@@ -11,11 +11,12 @@ import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
 
 public class SepaAuthorizationMemberSearchController extends MemberSearchController {
-  
-  public SepaAuthorizationMemberSearchController(PageController pageController, MemberService service) {
+
+  public SepaAuthorizationMemberSearchController(PageController pageController,
+      MemberService service) {
     super(pageController, service);
   }
-  
+
   @Override
   @EventListener(choiceGroup = ChoiceGroup.SEARCH_PA_MEMBER)
   public void searchMember(MenuChoiceEvent event) {
@@ -35,7 +36,7 @@ public class SepaAuthorizationMemberSearchController extends MemberSearchControl
 
   @Override
   protected String resultHeaderText(MenuChoice currentMenuChoice) {
-     return "Gevonden leden zonder SEPA machtiging";
+    return "Gevonden leden zonder SEPA machtiging";
   }
 
 }

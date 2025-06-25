@@ -3,22 +3,20 @@ package nl.ealse.ccnl.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.SettingRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 
 @Slf4j
+@AllArgsConstructor
 public class SettingsService {
+  {log.info("Service created");}
 
   private final SettingRepository dao;
-
-  public SettingsService(SettingRepository dao) {
-    log.info("Service created");
-    this.dao = dao;
-  }
-
+  
   public List<Setting> findByOrderBySettingsGroupAscKeyAsc() {
     return dao.findByOrderBySettingsGroupAscKeyAsc();
   }
@@ -35,7 +33,7 @@ public class SettingsService {
   public void save(Setting setting) {
     setting.prePersist();
     dao.save(setting);
-    DatabaseProperties.initialize();
+    ApplicationContext.reloadPreferences();
   }
 
   public void save(Setting setting, String oldId) {
@@ -49,7 +47,7 @@ public class SettingsService {
         }
       }
       dao.save(setting);
-      DatabaseProperties.initialize();
+      ApplicationContext.reloadPreferences();
     });
   }
 

@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 
 /**
  * Helper for formatting user input before saving.
+ * 
  * @author ealse
  *
  */
@@ -12,7 +13,8 @@ import lombok.experimental.UtilityClass;
 public class ContentUpdate {
 
   /**
-   * Asure that the text begins with a capital symbol.
+   * Assure that the text begins with a capital symbol.
+   * 
    * @param textField - to format
    */
   public void firstCapital(TextField textField) {
@@ -26,6 +28,7 @@ public class ContentUpdate {
 
   /**
    * Place dots between each letter.
+   * 
    * @param initials - to format
    */
   public void formatInitials(TextField initials) {
@@ -42,6 +45,7 @@ public class ContentUpdate {
 
   /**
    * Format a Dutch postalcode.
+   * 
    * @param postalCode - to format
    */
   public void formatPostalCode(TextField postalCode) {

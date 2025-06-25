@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -63,7 +63,7 @@ class BackupRestoreServiceTest {
   @BeforeAll
   static void setup() {
     query = mock(Query.class);
-    em = EntityManagerProvider.getEntityManager();
+    em = ApplicationContext.getEntityManagerProvider().getEntityManager();
     when(em.createNativeQuery(any(String.class))).thenReturn(query);
     EntityTransaction t = mock(EntityTransaction.class);
     when(em.getTransaction()).thenReturn(t);

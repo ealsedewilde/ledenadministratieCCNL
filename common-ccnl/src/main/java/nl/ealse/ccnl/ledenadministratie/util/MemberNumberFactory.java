@@ -1,6 +1,6 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
-import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 
 /**
@@ -12,7 +12,7 @@ import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 public class MemberNumberFactory extends NumberFactory {
 
   private static final String CCNL_MEMBERS =
-      ApplicationProperties.getProperty("ccnl.members");
+      ApplicationContext.getProperty("ccnl.members");
 
   public MemberNumberFactory(MemberRepository dao) {
     super(Integer.valueOf(CCNL_MEMBERS), 0);

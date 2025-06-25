@@ -5,15 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import nl.ealse.ccnl.TaskExecutor;
 import nl.ealse.ccnl.TestExecutor;
-import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.ioc.ComponentFactory;
+import nl.ealse.javafx.print.PrinterService;
 
 public class TestComponentFactory implements ComponentFactory {
 
   private final Map<Class<?>, Object> mocks = new HashMap<>();
 
   public TestComponentFactory() {
-    mocks.put(PageController.class, mock(PageController.class));
+    mocks.put(PrinterService.class, new TestPrinterService());
     mocks.put(TaskExecutor.class, new TestExecutor());
   }
 

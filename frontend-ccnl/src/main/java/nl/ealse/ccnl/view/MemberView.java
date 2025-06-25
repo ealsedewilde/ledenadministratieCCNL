@@ -39,7 +39,7 @@ public abstract class MemberView extends AddressView {
 
   @FXML
   private TextField lastName;
-  
+
   @FXML
   @Mapping(ignore = true)
   private Label lastNameE;

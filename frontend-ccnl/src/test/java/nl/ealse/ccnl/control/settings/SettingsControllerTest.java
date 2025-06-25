@@ -16,7 +16,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
@@ -76,7 +76,7 @@ class SettingsControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    service = ComponentProvider.getComponent(SettingsService.class);
+    service = ApplicationContext.getComponent(SettingsService.class);
     setting = setting();
     List<Setting> settings = new ArrayList<>();
     settings.add(setting);

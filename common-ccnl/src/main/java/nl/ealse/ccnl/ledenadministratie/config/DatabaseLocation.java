@@ -8,8 +8,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 /**
- * Check if we need to override the "spring.datasource.url". Invoke this class before the
- * application is started.
+ * Determine the file location of the database.
  *
  * @author ealse
  */
@@ -35,7 +34,7 @@ public class DatabaseLocation {
         String dbLocation = dbProperties.getProperty("db.locatie");
         databaseUrl = initialize(dbLocation);
       } catch (IOException e) {
-        throw new DatabasePropertyException("Error initializing database location", e);
+        throw new ConfigurationException("Error initializing database location", e);
       }
     }
 

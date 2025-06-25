@@ -7,18 +7,17 @@ import nl.ealse.javafx.FXMLLoaderUtil;
  * Control the form pages for an internal relation.
  */
 public class InternalRelationFormController extends FormController {
-  
+
   private final InternalRelationController controller;
 
   public InternalRelationFormController(InternalRelationController controller) {
     super(2, new InternalRelationValidation(controller));
     this.controller = controller;
   }
-  
+
   @Override
   protected void initializePages() {
-    formPageArray[0] =
-        FXMLLoaderUtil.getPage("internal/form/pageRelation", controller);
+    formPageArray[0] = FXMLLoaderUtil.getPage("internal/form/pageRelation", controller);
     formPageArray[1] = FXMLLoaderUtil.getPage("form/address", controller);
 
     // initialize the submenu for form nsvigation.

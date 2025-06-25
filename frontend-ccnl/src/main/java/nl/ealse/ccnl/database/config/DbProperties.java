@@ -19,7 +19,7 @@ public final class DbProperties {
       """;
 
   private DbProperties() {}
-  
+
   static String writeFile(String dbLocation) {
     try {
       FileWriter writer = new FileWriter(DatabaseLocation.DB_LOCATION_FILE);
@@ -33,7 +33,7 @@ public final class DbProperties {
       return "Kan configuratie niet opslaan";
     }
   }
-  
+
   public static boolean exists() {
     return DatabaseLocation.DB_LOCATION_FILE.exists();
   }

@@ -18,7 +18,7 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
   private final PageController pageController;
   protected final MemberService service;
 
-   public MemberSearchController(PageController pageController, MemberService service) {
+  public MemberSearchController(PageController pageController, MemberService service) {
     this.pageController = pageController;
     this.service = service;
   }
@@ -57,7 +57,7 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
       case CANCEL_MEMBERSHIP -> "Opzeggen - Opzoeken lid";
       case AMEND_MEMBER -> "Opzoeken te wijzigen lid";
       case ADD_DOCUMENT -> "Document toevoegen - Opzoeken lid";
-      case VIEW_DOCUMENT ->"Documenten inzien - Opzoeken lid";
+      case VIEW_DOCUMENT -> "Documenten inzien - Opzoeken lid";
       case DELETE_DOCUMENT -> "Documenten verwijderen - Opzoeken lid";
       default -> "";
     };

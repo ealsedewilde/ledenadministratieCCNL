@@ -40,9 +40,9 @@ import nl.ealse.ccnl.control.button.PrintButton;
 import nl.ealse.ccnl.control.button.SaveButton;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.javafx.util.ImagePrintDocument;
-import nl.ealse.javafx.util.PdfPrintDocument;
-import nl.ealse.javafx.util.PrintDocument;
+import nl.ealse.javafx.print.ImagePrintDocument;
+import nl.ealse.javafx.print.PdfPrintDocument;
+import nl.ealse.javafx.print.PrintDocument;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -217,7 +217,7 @@ public class DocumentViewer extends BorderPane {
   private void initializePage(double width, double height) {
     parent.setPrefWidth(width);
     parent.setPrefHeight(height);
-    
+
     final Stage stage = new Stage();
     documentViewerStage = stage;
     stage.initOwner(MainStage.getStage());
@@ -336,7 +336,7 @@ public class DocumentViewer extends BorderPane {
       VBox root = new VBox();
       root.setPadding(new Insets(10.d));
       instance.scene = new Scene(root);
-      
+
       ScrollPane pane = new ScrollPane();
       instance.parent = pane;
       pane.setContent(instance);
@@ -344,19 +344,19 @@ public class DocumentViewer extends BorderPane {
       pane.setStyle("-fx-background-color:transparent;");
       pane.setFitToWidth(true);
       root.getChildren().add(pane);
-      
+
       buttons = new HBox();
       buttons.setPadding(new Insets(10d, 0d, 0d, 0d));
       buttons.setSpacing(20d);
       root.getChildren().add(buttons);
-    
+
       instance.nextButton = new PagingButton("\u00BB");
       instance.nextButton.setOnAction(e -> instance.nextPage());
       instance.prevButton = new PagingButton("\u00AB");
       instance.prevButton.setOnAction(e -> instance.previousPage());
       instance.header = new Label();
       instance.header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-      
+
       BorderPane.setAlignment(instance.header, Pos.TOP_CENTER);
     }
 

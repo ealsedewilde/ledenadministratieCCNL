@@ -14,10 +14,10 @@ public class MainStage {
 
   @Getter
   private Stage stage;
-  
+
   @Getter
   private Image icon;
-  
+
 
   void setStage(Stage s) {
     stage = s;

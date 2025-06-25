@@ -7,7 +7,7 @@ import javafx.scene.Parent;
  */
 @FunctionalInterface
 public interface PageReference {
-  
+
   public Parent getPage();
 
 }

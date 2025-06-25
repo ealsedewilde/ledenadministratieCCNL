@@ -8,13 +8,12 @@ import nl.ealse.ccnl.ledenadministratie.util.ExternalRelationNumberFactory;
 
 @Slf4j
 public class ExternalOtherService extends ExternalRelationService<ExternalRelationOther> {
-
+  {log.info("Service created");}
   private final ExternalRelationOtherRepository externalRelationDao;
 
   public ExternalOtherService(ExternalRelationOtherRepository externalRelationDao,
       ExternalRelationNumberFactory numberFactory) {
     super(numberFactory);
-    log.info("Service created");
     this.externalRelationDao = externalRelationDao;
   }
 

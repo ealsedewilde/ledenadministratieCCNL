@@ -2,18 +2,25 @@ package nl.ealse.ccnl.ledenadministratie.dao;
 
 import java.time.LocalDate;
 import java.util.List;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ArchivedMember;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ArchiveTest {
   
   private MemberRepository memberRepository = new MemberRepository();
   private ArchiveRepository archivedMemberRepository = new ArchiveRepository();
+  
+  @BeforeAll
+  private static void setup() {
+    ApplicationContext.start();
+  }
   
   @Test
   void testArchive() {

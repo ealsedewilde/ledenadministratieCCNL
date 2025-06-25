@@ -17,7 +17,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.service.relation.SearchItem;
@@ -76,7 +76,7 @@ class SepaAuthorizationMemberSearchControllerTest  extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    service = ComponentProvider.getComponent(MemberService.class);
+    service = ApplicationContext.getComponent(MemberService.class);
     m = member();
     List<Member> members = new ArrayList<>();
     members.add(m);

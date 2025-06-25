@@ -1,9 +1,10 @@
 package nl.ealse.ccnl.ledenadministratie.excel;
 
+import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class CCNLColumnPropertiesTest {
+class CCNLColumnPropertiesTest extends ApplicationContextAware {
   
   @Test
   void testProeprties() {

@@ -8,13 +8,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
-import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoResult;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
@@ -25,16 +25,13 @@ import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEn
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 
 @Slf4j
+@AllArgsConstructor
 public class SepaDirectDebitService {
+  {log.info("Service created");}
 
   private static final DateTimeFormatter DT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
   private final SepaIncassoGenerator generator;
-
-  public SepaDirectDebitService(SepaIncassoGenerator generator) {
-    log.info("Service created");
-    this.generator = generator;
-  }
 
   public List<String> generateSepaDirectDebitFile(File targetFile) throws IncassoException {
     String fileName = targetFile.getAbsolutePath();
@@ -46,7 +43,7 @@ public class SepaDirectDebitService {
 
   public List<FlatProperty> getProperties() {
     List<FlatProperty> propertyList = new ArrayList<>();
-    DirectDebitConfig config = IncassoProperties.getProperties();
+    DirectDebitConfig config = ApplicationContext.getIncassoProperties();
     if (config != null) {
       propertyList.add(new FlatProperty(FlatPropertyKey.DD_DIR, config.getDirectDebitDir()));
       propertyList.add(new FlatProperty(FlatPropertyKey.DD_AMOUNT, config.getDirectDebitAmount()));
@@ -65,7 +62,7 @@ public class SepaDirectDebitService {
   }
 
   public MappingResult saveProperty(FlatProperty prop) {
-    final DirectDebitConfig config = IncassoProperties.getProperties();
+    final DirectDebitConfig config = ApplicationContext.getIncassoProperties();
     MappingResult result = new MappingResult();
     switch (prop.fpk) {
       case ACC_NAME:
@@ -152,7 +149,7 @@ public class SepaDirectDebitService {
       default:
         break;
     }
-    EntityManager em = EntityManagerProvider.getEntityManager();
+    EntityManager em = ApplicationContext.getEntityManagerProvider().getEntityManager();
     if (result.isValid()) {
       TransactionUtil.inTransction(() -> em.merge(config));
     } else {

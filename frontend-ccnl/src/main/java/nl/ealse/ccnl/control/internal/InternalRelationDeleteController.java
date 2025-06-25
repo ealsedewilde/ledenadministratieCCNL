@@ -19,7 +19,7 @@ public class InternalRelationDeleteController extends InternalRelationDeleteView
 
   private InternalRelation selectedEntity;
 
-   public InternalRelationDeleteController(PageController pageController,
+  public InternalRelationDeleteController(PageController pageController,
       InternalRelationService service) {
     this.pageController = pageController;
     this.service = service;

@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 
 /**
- *Format a document type in a TableColumn.
+ * Format a document type in a TableColumn.
  *
- *@author ealse
+ * @author ealse
  *
  */
 @Slf4j

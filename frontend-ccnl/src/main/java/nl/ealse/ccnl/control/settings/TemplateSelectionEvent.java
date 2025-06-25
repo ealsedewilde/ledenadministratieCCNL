@@ -9,7 +9,7 @@ public class TemplateSelectionEvent extends EventObject {
 
   @Getter
   private final boolean newTemplate;
-  
+
   @Getter
   private final transient DocumentTemplate selectedTemplate;
 

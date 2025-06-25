@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationClubRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
@@ -24,28 +25,17 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
  *
  */
 @Slf4j
+@AllArgsConstructor
 public class ExportService {
+  {log.info("Service created");}
 
   private final ExternalRelationPartnerRepository commercialPartnerRepository;
   private final ExternalRelationClubRepository externalRelationClubRepository;
   private final ExternalRelationOtherRepository externalRelationOtherRepository;
   private final InternalRelationRepository internalRelationRepository;
   private final MemberRepository memberRepository;
-
-  public ExportService(ExternalRelationPartnerRepository commercialPartnerRepository,
-      ExternalRelationClubRepository externalRelationClubRepository,
-      ExternalRelationOtherRepository externalRelationOtherRepository,
-      InternalRelationRepository internalRelationRepository,
-      MemberRepository memberRepository) {
-    log.info("Service created");
-    this.commercialPartnerRepository = commercialPartnerRepository;
-    this.externalRelationClubRepository = externalRelationClubRepository;
-    this.externalRelationOtherRepository = externalRelationOtherRepository;
-    this.internalRelationRepository = internalRelationRepository;
-    this.memberRepository = memberRepository;
-  }
-
-  /**
+  
+    /**
    * Export all data to an Excel file on the local filesystem.
    *
    * @param selectedFile - location for the target Excel file

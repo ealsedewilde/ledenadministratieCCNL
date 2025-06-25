@@ -12,7 +12,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
@@ -58,7 +58,7 @@ public abstract class DocumentTemplateController {
     if (this.templateContext.fileType != null) {
       this.fileChooser = new WrappedFileChooser(this.templateContext.fileType);
       this.fileChooser.setInitialDirectory(
-          () -> DatabaseProperties.getProperty("ccnl.directory.workdir", "c:/temp"));
+          () -> ApplicationContext.getPreference("ccnl.directory.workdir", "c:/temp"));
     }
   }
 
@@ -66,7 +66,7 @@ public abstract class DocumentTemplateController {
     templates = getDocumentService().findDocumentTemplates(templateContext.documentType);
     initializeTextSelection();
     selectText();
-    }
+  }
 
   protected void initializeTemplates(boolean withSepa) {
     templates = getDocumentService().findDocumentTemplates(templateContext.documentType, withSepa);
@@ -135,7 +135,7 @@ public abstract class DocumentTemplateController {
   protected abstract PageController getPageController();
 
   protected abstract DocumentService getDocumentService();
-  
+
   /**
    * Reinitialize the templates list after adding/changing a template.
    */

@@ -9,7 +9,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
  */
 @SuppressWarnings("serial")
 public class WelcomeletterEvent extends EventObject {
-  
+
   @Getter
   private final transient Member member;
 

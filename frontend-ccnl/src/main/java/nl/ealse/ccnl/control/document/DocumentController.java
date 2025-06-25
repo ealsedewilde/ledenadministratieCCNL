@@ -15,14 +15,16 @@ import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.javafx.util.PrintException;
-import nl.ealse.javafx.util.PrintUtil;
+import nl.ealse.javafx.print.PrintException;
+import nl.ealse.javafx.print.PrinterService;
 
 public class DocumentController {
 
   private final PageController pageController;
 
   private final DocumentService documentService;
+
+  private final PrinterService printerService;
 
   private Document selectedDocument;
 
@@ -36,9 +38,11 @@ public class DocumentController {
 
   private DocumentViewer documentViewer;
 
-  public DocumentController(PageController pageController, DocumentService documentService) {
+  public DocumentController(PageController pageController, DocumentService documentService,
+      PrinterService printerService) {
     this.pageController = pageController;
     this.documentService = documentService;
+    this.printerService = printerService;
     setup();
   }
 
@@ -79,7 +83,7 @@ public class DocumentController {
   @FXML
   void printDocument() {
     try {
-      PrintUtil.print(documentViewer.getDocument());
+      printerService.print(documentViewer.getDocument());
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
     }

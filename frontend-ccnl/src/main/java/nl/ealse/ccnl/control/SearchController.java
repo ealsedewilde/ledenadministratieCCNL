@@ -71,7 +71,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
 
   @Getter
   private MenuChoice currentMenuChoice;
-  
+
   private Parent parent;
 
   protected SearchController() {
@@ -126,7 +126,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
     searchField.setText(null);
     resetResult();
   }
-  
+
   /**
    * Reset the search page result to its initial state.
    */
@@ -153,7 +153,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
     }
     reset();
   }
-  
+
   protected PageReference getPageReference() {
     return () -> parent;
   }
@@ -168,7 +168,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   protected abstract List<T> doSearch(SearchItem searchItem, String value);
 
   protected abstract E newEntitySelectionEvent(MenuChoice currentMenuChoice);
-  
+
   protected abstract void initializeSearchItems();
 
   protected abstract String headerText(MenuChoice currentMenuChoice);

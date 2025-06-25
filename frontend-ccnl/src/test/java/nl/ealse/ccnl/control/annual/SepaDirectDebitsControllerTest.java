@@ -4,15 +4,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import jakarta.persistence.EntityManager;
 import java.io.File;
 import java.math.BigDecimal;
 import javafx.scene.control.Label;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ioc.ComponentProvider;
-import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
+import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
+import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SepaDirectDebitService;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
@@ -77,12 +79,22 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
     getPageWithFxController(sut, PageName.DIRECT_DEBITS);
     DDConfigAmountEntry entry = new DDConfigAmountEntry();
     entry.setValue(BigDecimal.valueOf(2750, 2));
-    IncassoProperties.getProperties().setDirectDebitAmount(entry);
+    ApplicationContext.getIncassoProperties().setDirectDebitAmount(entry);
+    
+    Setting incassoSetting = new Setting();
+    incassoSetting.setSettingsGroup("ccnl.contributie");
+    incassoSetting.setKey("incasso");
+    incassoSetting.setValue("32,50");
+    incassoSetting.setDescription("Contributie bij automatische incasso");
+    incassoSetting.prePersist();
+    EntityManager em = ApplicationContext.getEntityManagerProvider().getEntityManager();
+    TransactionUtil.inTransction(() -> em.persist(incassoSetting));
+    
   }
 
   @BeforeAll
   static void setup() {
-    service = ComponentProvider.getComponent(SepaDirectDebitService.class);
+    service = ApplicationContext.getComponent(SepaDirectDebitService.class);
     result = new MappingResult();
     result.setValid(true);
     when(service.saveProperty(any(FlatProperty.class))).thenReturn(result);

@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.support.EventProcessor;
-import nl.ealse.ccnl.ioc.ComponentProviderException;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
+import nl.ealse.ccnl.ledenadministratie.config.ConfigurationException;
 import nl.ealse.javafx.FXMLLoadException;
 
 /**
@@ -31,7 +31,7 @@ public abstract class FXMLBaseTest extends FXBase {
   }
 
   protected PageController getPageController() {
-    return ComponentProvider.getComponent(PageController.class);
+    return ApplicationContext.getComponent(PageController.class);
   }
 
   /**
@@ -100,15 +100,16 @@ public abstract class FXMLBaseTest extends FXBase {
     Object[] parms = new Object[parmTypes.length];
     for (int ix = 0; ix < parmTypes.length; ix++) {
       Class<?> parmType = parmTypes[ix];
-      Object parmMock = ComponentProvider.getComponent(parmType);
+      Object parmMock = ApplicationContext.getComponent(parmType);
       parms[ix] = parmMock;
     }
     try {
       return (T) constructor.newInstance(parms);
     } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
         | InvocationTargetException e) {
-      log.error(String.format("Class %s could not be instantiated", clazz), e);
-      throw new ComponentProviderException(e);
+      String msg = String.format("Class %s could not be instantiated", clazz);
+      log.error(msg, e);
+      throw new ConfigurationException(msg, e);
     }
   }
 

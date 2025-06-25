@@ -12,7 +12,7 @@ import jakarta.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -38,17 +38,17 @@ public class MailService {
 
   private Session initialize() {
     Properties props = new Properties();
-    props.put("mail.smtp.host", DatabaseProperties.getProperty("ccnl.mail.host"));
-    props.put("mail.smtp.port", DatabaseProperties.getProperty("ccnl.mail.port"));
+   props.put("mail.smtp.host", ApplicationContext.getPreference("ccnl.mail.host"));
+    props.put("mail.smtp.port", ApplicationContext.getPreference("ccnl.mail.port"));
     props.put("mail.smtp.auth",
-        DatabaseProperties.getProperty("ccnl.mail.properties.mail.smtp.auth", "false"));
+        ApplicationContext.getPreference("ccnl.mail.properties.mail.smtp.auth", "false"));
     props.put("mail.smtp.starttls.enable",
-        DatabaseProperties.getProperty("ccnl.mail.properties.mail.smtp.starttls.enable", "false"));
+        ApplicationContext.getPreference("ccnl.mail.properties.mail.smtp.starttls.enable", "false"));
     Authenticator auth = new Authenticator() {
       @Override
       protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(DatabaseProperties.getProperty("ccnl.mail.from"),
-            DatabaseProperties.getProperty("ccnl.mail.password"));
+        return new PasswordAuthentication(ApplicationContext.getPreference("ccnl.mail.from"),
+            ApplicationContext.getPreference("ccnl.mail.password"));
       }
     };
     return Session.getInstance(props, auth);
@@ -66,7 +66,7 @@ public class MailService {
   public MailMessage sendMail(String to, String subject, String text) throws MessagingException {
     MimeMessage message = new MimeMessage(session);
     try {
-      message.setFrom(DatabaseProperties.getProperty("ccnl.mail.from"));
+      message.setFrom(ApplicationContext.getPreference("ccnl.mail.from"));
       Address[] recipients = {new InternetAddress(to)};
       message.setRecipients(Message.RecipientType.TO, recipients);
       message.setSubject(subject);

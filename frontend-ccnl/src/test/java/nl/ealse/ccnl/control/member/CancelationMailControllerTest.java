@@ -5,7 +5,7 @@ import static org.mockito.Mockito.verify;
 import jakarta.mail.MessagingException;
 import javafx.scene.control.TextArea;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.service.MailService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
@@ -47,7 +47,7 @@ class CancelationMailControllerTest extends FXMLBaseTest {
 
   @BeforeAll
   static void setup() {
-    mailService = ComponentProvider.getComponent(MailService.class);
+    mailService = ApplicationContext.getComponent(MailService.class);
   }
 
   private void setContent() {

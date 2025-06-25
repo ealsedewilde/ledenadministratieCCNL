@@ -17,7 +17,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.excelimport.ImportHandler.ImportSelection;
 import nl.ealse.ccnl.ledenadministratie.excelimport.ImportType;
 import nl.ealse.ccnl.service.excelimport.ImportService;
@@ -69,7 +69,7 @@ public class ExcelImportController {
   private void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
     fileChooser.setInitialDirectory(
-        () -> DatabaseProperties.getProperty("ccnl.directory.excel", "c:/temp"));
+        () -> ApplicationContext.getPreference("ccnl.directory.excel", "c:/temp"));
   }
 
   @FXML

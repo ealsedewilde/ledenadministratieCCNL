@@ -1,10 +1,17 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
 import java.math.BigDecimal;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class AmountToPayTest {
+  
+  @BeforeAll
+  private static void setup() {
+    ApplicationContext.start();
+  }
   
   @Test
   void amountToPayDefault() {

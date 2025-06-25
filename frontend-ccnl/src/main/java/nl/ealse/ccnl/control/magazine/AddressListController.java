@@ -17,7 +17,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
 import nl.ealse.ccnl.service.excelexport.ExportAddressService;
@@ -62,7 +62,7 @@ public class AddressListController {
   void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
     fileChooser.setInitialDirectory(
-        () -> DatabaseProperties.getProperty("ccnl.directory.magazine", "c:/temp"));
+        () -> ApplicationContext.getPreference("ccnl.directory.magazine", "c:/temp"));
   }
 
   @EventListener(menuChoice = MenuChoice.MAGAZINE_ADDRESS_LIST)
@@ -157,7 +157,8 @@ public class AddressListController {
 
     @Override
     protected void executeWork() throws IOException {
-      controller.magazineService.generateMagazineAddressFile(addressFile, controller.passColumn.isSelected());
+      controller.magazineService.generateMagazineAddressFile(addressFile,
+          controller.passColumn.isSelected());
       Setting setting = getSetting();
       setting.setValue(controller.magazineNumber.getText());
       controller.service.save(setting);

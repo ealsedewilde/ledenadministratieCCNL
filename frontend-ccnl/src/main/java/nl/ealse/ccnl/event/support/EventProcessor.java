@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import org.jboss.jandex.AnnotationInstance;
 import org.jboss.jandex.AnnotationValue;
 import org.jboss.jandex.ClassInfo;
@@ -36,8 +36,7 @@ public class EventProcessor {
   @Getter
   private static final EventProcessor instance = new EventProcessor();
 
-  private final Map<MenuChoice, EventContext> menuChoiceMapping = 
-      new EnumMap<>(MenuChoice.class);
+  private final Map<MenuChoice, EventContext> menuChoiceMapping = new EnumMap<>(MenuChoice.class);
   private final Map<ChoiceGroup, EventContext> choiceGroupMapping =
       new EnumMap<>(ChoiceGroup.class);
 
@@ -178,7 +177,7 @@ public class EventProcessor {
     private void initializeTarget(Object event) {
       try {
         Class<?> targetClass = Class.forName(targetClassName);
-        targetObject = ComponentProvider.getComponent(targetClass);
+        targetObject = ApplicationContext.getComponent(targetClass);
         if (getParametersClassName() != null) {
           targetMethod = targetClass.getMethod(targetMethodName, event.getClass());
         } else {
@@ -188,7 +187,7 @@ public class EventProcessor {
         log.error("Unable to instantiate event target", e);
       }
     }
-    
+
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder();
@@ -204,10 +203,10 @@ public class EventProcessor {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("menuChoiceMapping" ).append(menuChoiceMapping.toString());
-    sb.append("\nchoiceGroupMapping" ).append(choiceGroupMapping.toString());
-    sb.append("\ncommandMapping" ).append(commandMapping.toString());
-    sb.append("\neventClassMapping" ).append(eventClassMapping.toString());
+    sb.append("menuChoiceMapping").append(menuChoiceMapping.toString());
+    sb.append("\nchoiceGroupMapping").append(choiceGroupMapping.toString());
+    sb.append("\ncommandMapping").append(commandMapping.toString());
+    sb.append("\neventClassMapping").append(eventClassMapping.toString());
     return sb.toString();
   }
 

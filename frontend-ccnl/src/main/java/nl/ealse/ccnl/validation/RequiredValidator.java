@@ -11,6 +11,7 @@ public class RequiredValidator extends AbstractValidator implements ChangeListen
 
   /**
    * Construct a validator.
+   * 
    * @param theField - field to validate
    * @param errorMessageLabel - label for error message when invalid
    */

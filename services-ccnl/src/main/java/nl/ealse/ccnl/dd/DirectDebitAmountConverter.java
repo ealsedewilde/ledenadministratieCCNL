@@ -3,12 +3,11 @@ package nl.ealse.ccnl.dd;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import lombok.experimental.UtilityClass;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
-import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
-import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
+import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
@@ -34,7 +33,7 @@ public class DirectDebitAmountConverter {
    */
   public void saveFlatProperty(FlatProperty property) {
     if (FlatPropertyKey.DD_AMOUNT == property.getFpk()) {
-      final EntityManager em = EntityManagerProvider.getEntityManager();
+      final EntityManager em = ApplicationContext.getEntityManagerProvider().getEntityManager();
       Setting incassoSetting = em.find(Setting.class, ID);
       incassoSetting.setValue(property.getValue());
       persist(incassoSetting);
@@ -49,7 +48,7 @@ public class DirectDebitAmountConverter {
    */
   public void saveSetting(Setting setting) {
     if (ID.equals(setting.getId())) {
-      DirectDebitConfig config = IncassoProperties.getProperties();
+      DirectDebitConfig config = ApplicationContext.getIncassoProperties();
       DDConfigAmountEntry entry = config.getDirectDebitAmount();
       BigDecimal amount = BigDecimal.valueOf(AmountFormatter.parse(setting.getValue()));
       entry.setValue(amount);
@@ -59,7 +58,7 @@ public class DirectDebitAmountConverter {
   }
   
   private void persist(Object entity) {
-    final EntityManager em = EntityManagerProvider.getEntityManager();
+    final EntityManager em = ApplicationContext.getEntityManagerProvider().getEntityManager();
     TransactionUtil.inTransction(() -> em.merge(entity));
   }
 

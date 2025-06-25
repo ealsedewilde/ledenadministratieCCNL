@@ -11,7 +11,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.excelexport.ExportArchiveService;
 import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.javafx.util.WrappedFileChooser;
@@ -39,7 +39,7 @@ public class ExcelExportCommand {
   private void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
     fileChooser.setInitialDirectory(
-        () -> DatabaseProperties.getProperty("ccnl.directory.excel", "c:/temp"));
+        () -> ApplicationContext.getPreference("ccnl.directory.excel", "c:/temp"));
   }
 
   @EventListener(choiceGroup = ChoiceGroup.REPORTS)

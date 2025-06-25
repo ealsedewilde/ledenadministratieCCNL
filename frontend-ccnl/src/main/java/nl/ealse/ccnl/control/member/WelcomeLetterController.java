@@ -20,9 +20,9 @@ import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.service.DocumentService;
-import nl.ealse.javafx.util.PdfPrintDocument;
-import nl.ealse.javafx.util.PrintException;
-import nl.ealse.javafx.util.PrintUtil;
+import nl.ealse.javafx.print.PdfPrintDocument;
+import nl.ealse.javafx.print.PrintException;
+import nl.ealse.javafx.print.PrinterService;
 
 @Slf4j
 public class WelcomeLetterController extends DocumentTemplateController {
@@ -31,14 +31,19 @@ public class WelcomeLetterController extends DocumentTemplateController {
 
   private final DocumentService documentService;
 
+  private final PrinterService printerService;
+
+
   private Member selectedMember;
 
   private DocumentViewer documentViewer;
 
-  public WelcomeLetterController(PageController pageController, DocumentService documentService) {
+  public WelcomeLetterController(PageController pageController, DocumentService documentService,
+      PrinterService printerService) {
     super(DocumentTemplateContext.WELCOME_LETTER);
     this.pageController = pageController;
     this.documentService = documentService;
+    this.printerService = printerService;
   }
 
   @EventListener(menuChoice = MenuChoice.WELCOME_LETTER)
@@ -95,7 +100,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
     byte[] pdf = documentService.generatePDF(data);
     saveWelcomeLetter(pdf);
     try {
-      Optional<PrintService> ps = PrintUtil.print(new PdfPrintDocument(pdf));
+      Optional<PrintService> ps = printerService.print(new PdfPrintDocument(pdf));
       if (ps.isPresent()) {
         printAttachement(ps);
         pageController.activateLogoPage();
@@ -125,7 +130,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
   @FXML
   void printPDF() {
     try {
-      Optional<PrintService> ps = PrintUtil.print(documentViewer.getDocument());
+      Optional<PrintService> ps = printerService.print(documentViewer.getDocument());
       if (ps.isPresent()) {
         printAttachement(ps);
         documentViewer.close();
@@ -140,7 +145,7 @@ public class WelcomeLetterController extends DocumentTemplateController {
     if (getAddSepa().isSelected() && ps.isPresent()) {
       Optional<Document> attachment = documentService.findSepaAuthorizationForm();
       if (attachment.isPresent()) {
-        PrintUtil.printAttachment(ps.get(), attachment.get().getPdf());
+        printerService.printAttachment(ps.get(), attachment.get().getPdf());
       }
     }
   }

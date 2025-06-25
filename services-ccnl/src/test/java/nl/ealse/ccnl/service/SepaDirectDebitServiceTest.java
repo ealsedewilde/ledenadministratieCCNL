@@ -11,22 +11,22 @@ import jakarta.persistence.EntityTransaction;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
-import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoResult;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
 import nl.ealse.ccnl.service.SepaDirectDebitService.MappingResult;
+import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class SepaDirectDebitServiceTest {
+class SepaDirectDebitServiceTest  extends ApplicationContextAware {
   
   private static DirectDebitConfig config;
   
@@ -149,9 +149,9 @@ class SepaDirectDebitServiceTest {
   
   @BeforeAll
   static void initConfig() {
-    config = IncassoProperties.getProperties();
+    config = ApplicationContext.getIncassoProperties();
     config.getDirectDebitDir().setValue("C:/xtemp");
-    em = EntityManagerProvider.getEntityManager();
+    em = ApplicationContext.getEntityManagerProvider().getEntityManager();
     generator = mock(SepaIncassoGenerator.class);
     sut = new SepaDirectDebitService(generator);
   }

@@ -6,7 +6,7 @@ import nl.ealse.javafx.FXMLLoaderUtil;
 
 public abstract class ExternalRelationFormController<T extends ExternalRelation, C extends ExternalRelationController<T>>
     extends FormController {
-  
+
   private final C controller;
 
   protected ExternalRelationFormController(C controller) {

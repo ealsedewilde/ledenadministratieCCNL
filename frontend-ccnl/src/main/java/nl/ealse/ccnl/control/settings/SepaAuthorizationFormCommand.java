@@ -8,7 +8,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
@@ -22,7 +22,8 @@ public class SepaAuthorizationFormCommand {
 
   private final DocumentService documentService;
 
-  public SepaAuthorizationFormCommand(PageController pageController, DocumentService documentService) {
+  public SepaAuthorizationFormCommand(PageController pageController,
+      DocumentService documentService) {
     this.pageController = pageController;
     this.documentService = documentService;
     setup();
@@ -31,7 +32,7 @@ public class SepaAuthorizationFormCommand {
   void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.PDF);
     fileChooser.setInitialDirectory(
-        () -> DatabaseProperties.getProperty("ccnl.directory.sepa", "c:/temp"));
+        () -> ApplicationContext.getPreference("ccnl.directory.sepa", "c:/temp"));
 
   }
 

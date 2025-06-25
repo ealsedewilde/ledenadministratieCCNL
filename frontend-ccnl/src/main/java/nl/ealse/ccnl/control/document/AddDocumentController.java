@@ -16,7 +16,7 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
@@ -62,8 +62,8 @@ public class AddDocumentController {
 
   private void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.PDF);
-    fileChooser.setInitialDirectory(() ->
-        DatabaseProperties.getProperty("ccnl.directory.sepa", "c:/temp"));
+    fileChooser.setInitialDirectory(
+        () -> ApplicationContext.getPreference("ccnl.directory.sepa", "c:/temp"));
   }
 
 

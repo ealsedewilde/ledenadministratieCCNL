@@ -5,7 +5,7 @@ import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 
 /**
@@ -23,7 +23,7 @@ public abstract class BaseRepository<T> {
   }
 
   protected EntityManager getEntityManager() {
-    return EntityManagerProvider.getEntityManager();
+    return ApplicationContext.getEntityManagerProvider().getEntityManager();
   }
 
   /**

@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.javafx.FXMLLoaderUtil;
 import nl.ealse.javafx.ImagesMap;
 
@@ -20,9 +20,9 @@ public class PrimaryPageStarter {
 
   private static final String MAIN_FXML = "main";
 
-  private String applicationTitle = ApplicationProperties.getProperty("fxml.title");
+  private String applicationTitle = ApplicationContext.getProperty("fxml.title");
 
-  private String applicationIcon = ApplicationProperties.getProperty("fxml.icon");
+  private String applicationIcon = ApplicationContext.getProperty("fxml.icon");
 
   /**
    * initialize the primary scene of the application.

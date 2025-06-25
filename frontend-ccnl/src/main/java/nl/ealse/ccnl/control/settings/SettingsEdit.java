@@ -15,14 +15,14 @@ public class SettingsEdit extends SettingsView {
   private final SettingsController controller;
 
   private Setting selectedSetting;
-  
+
   private Stage editStage;
 
   public SettingsEdit(SettingsController controller) {
     this.controller = controller;
     setup();
   }
-  
+
   private void setup() {
     editStage = new Stage();
     editStage.initModality(Modality.APPLICATION_MODAL);

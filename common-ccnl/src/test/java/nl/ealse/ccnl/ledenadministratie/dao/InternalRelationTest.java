@@ -1,12 +1,19 @@
 package nl.ealse.ccnl.ledenadministratie.dao;
 
 import java.util.Optional;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class InternalRelationTest {
+  
+  @BeforeAll
+  private static void setup() {
+    ApplicationContext.start();
+  }
 
   private InternalRelationRepository repository = new InternalRelationRepository();
 

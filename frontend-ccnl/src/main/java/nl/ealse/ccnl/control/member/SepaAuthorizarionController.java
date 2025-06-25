@@ -13,15 +13,15 @@ import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.event.support.EventPublisher;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
-import nl.ealse.javafx.util.PrintException;
-import nl.ealse.javafx.util.PrintUtil;
+import nl.ealse.javafx.print.PrintException;
+import nl.ealse.javafx.print.PrinterService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 
 /**
@@ -35,6 +35,9 @@ public class SepaAuthorizarionController {
   private final DocumentService documentService;
 
   private final MemberService service;
+
+  private final PrinterService printerService;
+
 
   private DocumentViewer documentViewer;
 
@@ -52,10 +55,12 @@ public class SepaAuthorizarionController {
    * @param documentService
    * @param service
    */
-  public SepaAuthorizarionController(PageController pageController, DocumentService documentService, MemberService service) {
+  public SepaAuthorizarionController(PageController pageController, DocumentService documentService,
+      MemberService service, PrinterService printerService) {
     this.pageController = pageController;
     this.documentService = documentService;
     this.service = service;
+    this.printerService = printerService;
     setup();
   }
 
@@ -66,7 +71,7 @@ public class SepaAuthorizarionController {
 
     fileChooser = new WrappedFileChooser(PDF, PNG);
     fileChooser.setInitialDirectory(
-        () -> DatabaseProperties.getProperty("ccnl.directory.sepa", "c:/temp"));
+        () -> ApplicationContext.getPreference("ccnl.directory.sepa", "c:/temp"));
 
   }
 
@@ -95,7 +100,7 @@ public class SepaAuthorizarionController {
   @FXML
   void printSepaPDF() {
     try {
-      PrintUtil.print(documentViewer.getDocument());
+      printerService.print(documentViewer.getDocument());
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
     }

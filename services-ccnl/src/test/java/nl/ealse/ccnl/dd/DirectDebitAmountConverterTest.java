@@ -5,16 +5,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
-import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
+import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class DirectDebitAmountConverterTest {
+class DirectDebitAmountConverterTest extends ApplicationContextAware {
   
   private static EntityManager em;
   
@@ -38,7 +39,7 @@ class DirectDebitAmountConverterTest {
   
   @BeforeAll
   static void initConfig() {
-    em = EntityManagerProvider.getEntityManager();
+    em = ApplicationContext.getEntityManagerProvider().getEntityManager();
     setting = new Setting();
     setting.setDescription("incassobedrag");
     setting.setSettingsGroup("ccnl.contributie");

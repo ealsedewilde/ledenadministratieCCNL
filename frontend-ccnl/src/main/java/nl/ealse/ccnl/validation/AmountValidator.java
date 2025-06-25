@@ -5,9 +5,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 public class AmountValidator extends AbstractValidator {
-  
+
   private final TextField amount;
-  
+
   public AmountValidator(TextField amount, Label errorMessageLabel) {
     super(errorMessageLabel, true);
     this.amount = amount;
@@ -20,7 +20,7 @@ public class AmountValidator extends AbstractValidator {
     try {
       new BigDecimal(inputString);
       setValid(true);
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       errorMessageLabel.setText("Bedrag niet herkend");
       errorMessageLabel.setVisible(true);
       setValid(false);

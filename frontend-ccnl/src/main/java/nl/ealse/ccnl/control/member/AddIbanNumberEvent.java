@@ -6,7 +6,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Member;
 
 @Getter
 public class AddIbanNumberEvent {
-  
+
   private final Member member;
   private final Supplier<Void> nextAction;
 

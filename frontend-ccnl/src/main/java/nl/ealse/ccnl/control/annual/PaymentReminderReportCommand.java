@@ -9,7 +9,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.excelexport.ExportService;
 import nl.ealse.ccnl.service.excelexport.ExportService.ReportType;
 import nl.ealse.javafx.util.WrappedFileChooser;
@@ -24,7 +24,7 @@ public class PaymentReminderReportCommand {
 
   private WrappedFileChooser fileChooser;
 
-   public PaymentReminderReportCommand(PageController pageController, ExportService exportService) {
+  public PaymentReminderReportCommand(PageController pageController, ExportService exportService) {
     this.pageController = pageController;
     this.exportService = exportService;
     setup();
@@ -32,8 +32,8 @@ public class PaymentReminderReportCommand {
 
   void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.XLSX);
-    fileChooser.setInitialDirectory(() ->
-        DatabaseProperties.getProperty("ccnl.directory.excel", "c:/temp"));
+    fileChooser.setInitialDirectory(
+        () -> ApplicationContext.getPreference("ccnl.directory.excel", "c:/temp"));
   }
 
   @EventListener(menuChoice = MenuChoice.PRODUCE_REMINDER_REPORT)
@@ -45,7 +45,7 @@ public class PaymentReminderReportCommand {
   public void executeCommandForPartlyPaid(MenuChoiceEvent event) {
     executeCommand(event.getMenuChoice());
   }
-  
+
   private void executeCommand(MenuChoice reportType) {
     File reportFile = fileChooser.showSaveDialog();
     if (reportFile != null) {
@@ -59,7 +59,7 @@ public class PaymentReminderReportCommand {
 
     private final ExportService exportService;
     private final File reportFile;
-    private final MenuChoice reportType; 
+    private final MenuChoice reportType;
 
     ReminderTask(PaymentReminderReportCommand command, MenuChoice reportType, File reportFile) {
       this.exportService = command.exportService;

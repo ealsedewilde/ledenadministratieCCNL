@@ -25,7 +25,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
 
@@ -231,17 +231,17 @@ public abstract class BaseDbConfigurator {
 
   private Connection getConnection(String dbLocation) {
     try {
-      Class.forName(ApplicationProperties.getProperty("database.driver", "org.h2.Driver"));
+      Class.forName(ApplicationContext.getProperty("database.driver", "org.h2.Driver"));
       return DriverManager.getConnection(dbLocation,
-          ApplicationProperties.getProperty("database.user", "sa"),
-          ApplicationProperties.getProperty("database.password", ""));
+          ApplicationContext.getProperty("database.user", "sa"),
+          ApplicationContext.getProperty("database.password", ""));
     } catch (ClassNotFoundException | SQLException e) {
       log.error("Failed to initialize connection", e);
       throw new DatabaseException("Failed to initialize connection", e);
     }
   }
-  
-  private void initialLoad(Connection connection)  {
+
+  private void initialLoad(Connection connection) {
     try {
       loadInitSql(connection);
     } catch (SQLException e) {
@@ -249,7 +249,7 @@ public abstract class BaseDbConfigurator {
       throw new DatabaseException("Failed to initialize database", e);
     }
   }
-  
+
   private void loadInitSql(Connection connection) throws SQLException {
     Statement st = null;
     try (BufferedReader reader =
@@ -277,7 +277,7 @@ public abstract class BaseDbConfigurator {
         st.close();
       }
     }
-    
+
   }
 
 }

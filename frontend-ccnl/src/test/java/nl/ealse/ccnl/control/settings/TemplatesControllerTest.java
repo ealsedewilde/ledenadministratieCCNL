@@ -14,7 +14,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
@@ -70,7 +70,7 @@ class TemplatesControllerTest extends FXMLBaseTest {
   @BeforeAll
   static void setup() {
 
-    service = ComponentProvider.getComponent(DocumentService.class);
+    service = ApplicationContext.getComponent(DocumentService.class);
     List<DocumentTemplate> templates = new ArrayList<>();
     template = template();
     templates.add(template);

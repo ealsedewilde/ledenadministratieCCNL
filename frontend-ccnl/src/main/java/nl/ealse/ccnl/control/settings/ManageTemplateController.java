@@ -65,7 +65,7 @@ public class ManageTemplateController {
 
   private Scene mailHelpScene;
 
-   public ManageTemplateController(PageController pageController, DocumentService documentService) {
+  public ManageTemplateController(PageController pageController, DocumentService documentService) {
     this.pageController = pageController;
     this.documentService = documentService;
     setup();

@@ -19,8 +19,8 @@ import nl.ealse.javafx.mapping.Mapping;
 /**
  * Helper to control the a multiple page form.
  * <p>
- * A form consist of a frame page in which the various pages of the form are loaded.
- * The frame also ha a menu to select a page of the form.
+ * A form consist of a frame page in which the various pages of the form are loaded. The frame also
+ * ha a menu to select a page of the form.
  * </p>
  */
 public abstract class FormController {
@@ -113,7 +113,7 @@ public abstract class FormController {
     this.form = FXMLLoaderUtil.getPage("form/form", this);
     initializePages();
     validator.initialize();
-    
+
     // The save button is only enabled when the for m is valid
     validator.setCallback(valid -> saveButton.setDisable(!valid));
   }

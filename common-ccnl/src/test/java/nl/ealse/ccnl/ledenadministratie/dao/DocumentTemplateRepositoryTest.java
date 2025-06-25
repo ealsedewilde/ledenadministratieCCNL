@@ -1,13 +1,20 @@
 package nl.ealse.ccnl.ledenadministratie.dao;
 
 import java.util.List;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateID;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplateType;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class DocumentTemplateRepositoryTest {
+  
+  @BeforeAll
+  private static void setup() {
+    ApplicationContext.start();
+  }
 
   private DocumentTemplateRepository dao = new DocumentTemplateRepository();
 

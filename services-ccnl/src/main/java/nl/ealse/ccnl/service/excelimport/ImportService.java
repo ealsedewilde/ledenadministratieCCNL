@@ -9,6 +9,7 @@ import nl.ealse.ccnl.ledenadministratie.excelimport.ImportHandler.ImportSelectio
 
 @Slf4j
 public class ImportService {
+  {log.info("Service created");}
 
   private final ImportHandler importHandler;
 

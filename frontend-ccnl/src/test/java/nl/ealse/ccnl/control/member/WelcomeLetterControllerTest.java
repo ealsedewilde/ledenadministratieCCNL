@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.ioc.ComponentProvider;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -24,7 +24,6 @@ import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -86,7 +85,7 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
   static void setup() {
     pdf = getBlob("/welkom.pdf");
     docx = getBlob("/welkom.docx");
-    documentService = ComponentProvider.getComponent(DocumentService.class);
+    documentService = ApplicationContext.getComponent(DocumentService.class);
     when(documentService.generatePDF(any(LetterData.class))).thenReturn(pdf);
     when(documentService.generateWordDocument(any(LetterData.class))).thenReturn(docx);
     List<Document> documents = new ArrayList<>();
@@ -101,9 +100,6 @@ class WelcomeLetterControllerTest extends FXMLBaseTest {
       e.printStackTrace();
     }
   }
-
-  @BeforeEach
-  protected void getPDF() {}
 
   private static byte[] getBlob(String name) {
     byte[] b = null;

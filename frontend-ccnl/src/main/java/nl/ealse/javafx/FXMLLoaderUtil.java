@@ -8,8 +8,7 @@ import javafx.scene.control.Label;
 import javafx.util.Callback;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ioc.ComponentProvider;
-import nl.ealse.ccnl.ledenadministratie.config.ApplicationProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 
 /**
  * Utility for loading FXML.
@@ -25,18 +24,18 @@ public class FXMLLoaderUtil {
 
   private final ClassLoader CLASSLOADER = FXMLLoaderUtil.class.getClassLoader();
 
-  private final String FXML_DIRECTORY = ApplicationProperties.getProperty("fxml.dir");
-  
+  private final String FXML_DIRECTORY = ApplicationContext.getProperty("fxml.dir");
+
   private final Callback<Class<?>, Object> CONTROLLER_FACTORY = clazz -> {
-    try { 
-      return ComponentProvider.getComponent(clazz);
+    try {
+      return ApplicationContext.getComponent(clazz);
     } catch (Exception e) {
       String msg = "failed to get controller";
       log.error(msg, e);
       throw new FXMLLoadException(msg, e);
     }
   };
-  
+
 
   /**
    * Lookup an initialized FXML page.
@@ -64,8 +63,9 @@ public class FXMLLoaderUtil {
    * @param loader - for loading fxml
    * @return
    */
-  private Parent loadFXML(String fxmlName,FXMLLoader loader) {
-    String fqFxmlName = new StringBuilder(FXML_DIRECTORY).append(fxmlName).append(FXML_TYPE).toString();
+  private Parent loadFXML(String fxmlName, FXMLLoader loader) {
+    String fqFxmlName =
+        new StringBuilder(FXML_DIRECTORY).append(fxmlName).append(FXML_TYPE).toString();
     try {
       URL fxmlUrl = CLASSLOADER.getResource(fqFxmlName);
       if (fxmlUrl != null) {

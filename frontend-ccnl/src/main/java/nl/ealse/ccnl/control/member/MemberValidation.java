@@ -20,10 +20,11 @@ public class MemberValidation extends AddressValidation {
         controller.getIbanNumber(), controller.getIbanNumberE());
     addValidator(controller.getPaymentMethod(), ddValidator);
     addValidator(controller.getIbanNumber(), ddValidator);
-    
-    AmountValidator amountValidator = new AmountValidator(controller.getAmountPaid(), controller.getAmountPaidE());
+
+    AmountValidator amountValidator =
+        new AmountValidator(controller.getAmountPaid(), controller.getAmountPaidE());
     addValidator(controller.getAmountPaid(), amountValidator);
-    
+
     required(controller.getInitials(), controller.getInitialsE());
     required(controller.getLastName(), controller.getLastNameE());
 

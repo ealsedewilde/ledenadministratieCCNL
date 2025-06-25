@@ -24,8 +24,8 @@ import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
 import nl.ealse.ccnl.view.MemberView;
 import nl.ealse.javafx.mvvm.ViewModel;
-import nl.ealse.javafx.util.PrintException;
-import nl.ealse.javafx.util.PrintUtil;
+import nl.ealse.javafx.print.PrintException;
+import nl.ealse.javafx.print.PrinterService;
 
 public class MemberController extends MemberView {
 
@@ -34,6 +34,8 @@ public class MemberController extends MemberView {
   private final MemberService service;
 
   private final DocumentService documentService;
+
+  private final PrinterService printerService;
 
   private Member model;
 
@@ -51,10 +53,11 @@ public class MemberController extends MemberView {
   private MemberFormController formController;
 
   public MemberController(PageController pageController, MemberService memberService,
-      DocumentService documentService) {
+      DocumentService documentService, PrinterService printerService) {
     this.pageController = pageController;
     this.service = memberService;
     this.documentService = documentService;
+    this.printerService = printerService;
     setup();
   }
 
@@ -70,8 +73,10 @@ public class MemberController extends MemberView {
 
     getIbanNumber().textProperty()
         .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
-    getPaymentMethod().valueProperty().addListener((observable, oldValue, newValue) -> amountPaidVisibility(newValue));
-    getCurrentYearPaid().selectedProperty().addListener((observable, oldValue, newValue) -> setAmountPaid(newValue));
+    getPaymentMethod().valueProperty()
+        .addListener((observable, oldValue, newValue) -> amountPaidVisibility(newValue));
+    getCurrentYearPaid().selectedProperty()
+        .addListener((observable, oldValue, newValue) -> setAmountPaid(newValue));
   }
 
   @FXML
@@ -232,7 +237,7 @@ public class MemberController extends MemberView {
   @FXML
   void printPDF() {
     try {
-      PrintUtil.print(documentViewer.getDocument());
+      printerService.print(documentViewer.getDocument());
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -260,7 +265,7 @@ public class MemberController extends MemberView {
     }
     setIbanControls(ibanNumber);
   }
-  
+
   void setAmountPaid(boolean checked) {
     if (getAmountPaid().isVisible()) {
       if (checked) {
@@ -270,7 +275,7 @@ public class MemberController extends MemberView {
       }
     }
   }
-  
+
   void amountPaidVisibility(Object newValue) {
     if (PaymentMethodMapper.BANK_TRANSFER.equals(newValue)) {
       getAmountPaidL().setVisible(true);
@@ -279,7 +284,7 @@ public class MemberController extends MemberView {
       getAmountPaidL().setVisible(false);
       getAmountPaid().setVisible(false);
     }
-    
+
   }
 
   private void setIbanControls(String ibanNumber) {

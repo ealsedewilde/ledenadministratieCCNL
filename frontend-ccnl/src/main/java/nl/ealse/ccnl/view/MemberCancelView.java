@@ -9,6 +9,7 @@ import nl.ealse.javafx.mapping.Mapping;
 
 /**
  * View for handling the cancelation of a membership.
+ * 
  * @author ealse
  *
  */

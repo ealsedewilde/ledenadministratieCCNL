@@ -1,10 +1,11 @@
 package nl.ealse.ccnl.ledenadministratie.dd;
 
 import nl.ealse.ccnl.ledenadministratie.dd.model.DirectDebitTransactionInformation9;
+import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class DirectDebitTransactionInformationBuilderTest {
+class DirectDebitTransactionInformationBuilderTest extends ApplicationContextAware {
   
   private DirectDebitTransactionInformationBuilder sut;
   

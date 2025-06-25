@@ -2,10 +2,8 @@ package nl.ealse.ccnl.ledenadministratie.dd;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
-import java.util.ServiceLoader;
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 
 /**
@@ -17,19 +15,7 @@ import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 @UtilityClass
 public class IncassoProperties {
   
-  @Getter
-  private final DirectDebitConfig properties;
-  
-  static {
-    ServiceLoader<IncassoPropertiesProvider> serviceLoader =
-        ServiceLoader.load(IncassoPropertiesProvider.class);
-    Optional<IncassoPropertiesProvider> first = serviceLoader.findFirst();
-    if (first.isPresent()) {
-      properties = first.get().getIncassoConfig();
-    } else {
-      properties = new DefaultIncassoPropertiesProvider().getIncassoConfig();
-    }
-  }
+  private final DirectDebitConfig properties = ApplicationContext.getIncassoProperties();
 
   public String getIbanNummer() {
     return properties.getIbanNumber().getValue();

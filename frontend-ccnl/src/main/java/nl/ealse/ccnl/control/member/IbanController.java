@@ -35,11 +35,11 @@ public class IbanController {
   private Member selectedMember;
 
   private Stage ibanNumberStage;
-  
+
   public IbanController() {
     setup();
   }
-  
+
   private Supplier<Void> nextAction;
 
   private void setup() {

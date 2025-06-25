@@ -1,11 +1,18 @@
 package nl.ealse.ccnl.ledenadministratie.dao;
 
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Address;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class CommercialPartnerTest {
+  
+  @BeforeAll
+  private static void setup() {
+    ApplicationContext.start();
+  }
 
   private ExternalRelationPartnerRepository repository = new ExternalRelationPartnerRepository();
 

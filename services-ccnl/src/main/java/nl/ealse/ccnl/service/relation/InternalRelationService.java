@@ -3,19 +3,17 @@ package nl.ealse.ccnl.service.relation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.InternalRelationRepository;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 
 @Slf4j
+@AllArgsConstructor
 public class InternalRelationService {
+  {log.info("Service created");}
 
   private final InternalRelationRepository dao;
-
-   public InternalRelationService(InternalRelationRepository dao) {
-    log.info("Service created");
-    this.dao = dao;
-  }
 
   public List<String> getAllTitles() {
     return dao.getAllTitles();

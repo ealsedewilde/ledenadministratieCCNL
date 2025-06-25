@@ -6,7 +6,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Setting;
 
 @SuppressWarnings("serial")
 public class SettingSelectionEvent extends EventObject {
-  
+
   @Getter
   private final transient Setting selectedSetting;
 

@@ -12,13 +12,13 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EventListener {
-  
+
   Class<?> eventClass() default Object.class;
-  
+
   MenuChoice menuChoice() default MenuChoice.LOGO;
-  
+
   ChoiceGroup choiceGroup() default ChoiceGroup.UNKNOWN;
-  
+
   boolean command() default false;
 
 }

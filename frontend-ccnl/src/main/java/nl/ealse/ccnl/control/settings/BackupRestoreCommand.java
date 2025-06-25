@@ -10,7 +10,7 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
-import nl.ealse.ccnl.ledenadministratie.config.DatabaseProperties;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.BackupRestoreService;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import nl.ealse.javafx.util.WrappedFileChooser.FileExtension;
@@ -29,7 +29,7 @@ public class BackupRestoreCommand {
 
   private WrappedFileChooser fileChooser;
 
-   public BackupRestoreCommand(PageController pageController, BackupRestoreService service) {
+  public BackupRestoreCommand(PageController pageController, BackupRestoreService service) {
     this.pageController = pageController;
     this.service = service;
     setup();
@@ -37,8 +37,8 @@ public class BackupRestoreCommand {
 
   private void setup() {
     fileChooser = new WrappedFileChooser(FileExtension.ZIP);
-    fileChooser
-        .setInitialDirectory(() -> DatabaseProperties.getProperty("ccnl.directory.db", "c:/temp"));
+    fileChooser.setInitialDirectory(
+        () -> ApplicationContext.getPreference("ccnl.directory.db", "c:/temp"));
   }
 
   @EventListener(menuChoice = MenuChoice.MANAGE_BACKUP_DATABASE)

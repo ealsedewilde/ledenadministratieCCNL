@@ -22,9 +22,9 @@ import nl.ealse.ccnl.ledenadministratie.output.LetterData;
 import nl.ealse.ccnl.ledenadministratie.pdf.content.FOContent;
 import nl.ealse.ccnl.service.DocumentService;
 import nl.ealse.ccnl.service.relation.MemberService;
-import nl.ealse.javafx.util.PdfPrintDocument;
-import nl.ealse.javafx.util.PrintException;
-import nl.ealse.javafx.util.PrintUtil;
+import nl.ealse.javafx.print.PdfPrintDocument;
+import nl.ealse.javafx.print.PrintException;
+import nl.ealse.javafx.print.PrinterService;
 
 public class PaymentReminderLettersController extends DocumentTemplateController {
 
@@ -40,22 +40,25 @@ public class PaymentReminderLettersController extends DocumentTemplateController
 
   private DocumentViewer documentViewer;
 
+  private final PrinterService printerService;
+
   @FXML
   private Label showSepa;
 
   @FXML
   private Label headerText;
-  
+
   private MenuChoice currentMenuChoice;
 
   public PaymentReminderLettersController(PageController pageController,
       DocumentService documentService, MemberService memberService,
-      MemberLetterHandler memberLetterHandler) {
+      MemberLetterHandler memberLetterHandler, PrinterService printerService) {
     super(DocumentTemplateContext.PAYMENT_REMINDER);
     this.pageController = pageController;
     this.documentService = documentService;
     this.memberService = memberService;
     this.memberLetterHandler = memberLetterHandler;
+    this.printerService = printerService;
   }
 
   @FXML
@@ -139,7 +142,7 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   @FXML
   void printPDF() {
     try {
-      PrintUtil.print(documentViewer.getDocument());
+      printerService.print(documentViewer.getDocument());
     } catch (PrintException e) {
       pageController.showErrorMessage(e.getMessage());
     }
@@ -208,14 +211,17 @@ public class PaymentReminderLettersController extends DocumentTemplateController
   @Slf4j
   protected static class PdfToPrint extends AsyncGenerator {
 
+    private final PrinterService printerService;
+
     PdfToPrint(PaymentReminderLettersController controller, String template) {
       super(controller, template);
+      this.printerService = controller.printerService;
     }
 
     @Override
     protected String postProcess(byte[] pdf) {
       try {
-        PrintUtil.print(new PdfPrintDocument(pdf));
+        printerService.print(new PdfPrintDocument(pdf));
         return "";
       } catch (PrintException e) {
         log.error("Printen is mislukt", e);

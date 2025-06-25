@@ -11,15 +11,15 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.javafx.FXMLLoaderUtil;
 
-public class DbConfigController extends BaseDbConfigurator{
-  
+public class DbConfigController extends BaseDbConfigurator {
+
   private final PageController pageController;
 
-   public DbConfigController(PageController pageController) {
+  public DbConfigController(PageController pageController) {
     this.pageController = pageController;
     getConfigStage().initOwner(MainStage.getStage());
     getConfigStage().initModality(Modality.APPLICATION_MODAL);
- }
+  }
 
   /**
    * Reconfigure the database location.

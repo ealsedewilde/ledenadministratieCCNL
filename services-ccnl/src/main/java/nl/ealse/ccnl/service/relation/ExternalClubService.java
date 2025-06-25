@@ -8,13 +8,13 @@ import nl.ealse.ccnl.ledenadministratie.util.ClubNumberFactory;
 
 @Slf4j
 public class ExternalClubService extends ExternalRelationService<ExternalRelationClub> {
+  {log.info("Service created");}
 
   private final ExternalRelationClubRepository clubDao;
 
   public ExternalClubService(ExternalRelationClubRepository clubDao,
       ClubNumberFactory numberFactory) {
     super(numberFactory);
-    log.info("Service created");
     this.clubDao = clubDao;
   }
 

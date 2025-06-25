@@ -12,7 +12,7 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther;
 import nl.ealse.ccnl.service.relation.ExternalOtherService;
 
 public class ExternalOtherController extends ExternalRelationController<ExternalRelationOther> {
-  
+
   private final PageController pageController;
 
   @Getter

@@ -33,7 +33,7 @@ public class TemplatesController {
   @FXML
   private TextArea templateText;
 
-   public TemplatesController(PageController pageController, DocumentService documentService) {
+  public TemplatesController(PageController pageController, DocumentService documentService) {
     this.pageController = pageController;
     this.documentService = documentService;
   }

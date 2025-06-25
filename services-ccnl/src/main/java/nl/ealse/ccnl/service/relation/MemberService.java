@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentType;
@@ -13,16 +14,12 @@ import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.util.MemberNumberFactory;
 
 @Slf4j
+@AllArgsConstructor
 public class MemberService {
+  {log.info("Service created");}
 
   private final MemberRepository dao;
   private final MemberNumberFactory numberFactory;
-
-  public MemberService(MemberRepository dao, MemberNumberFactory numberFactory) {
-    log.info("Service created");
-    this.dao = dao;
-    this.numberFactory= numberFactory;
-  }
 
   public Integer getFreeNumber() {
     return numberFactory.getNewNumber();
