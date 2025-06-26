@@ -17,10 +17,9 @@ import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
-import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Test;
 
-class PaymentHandlerTest extends ApplicationContextAware {
+class PaymentHandlerTest {
   
   private static final EnumSet<MembershipStatus> statuses =
       EnumSet.of(MembershipStatus.ACTIVE, MembershipStatus.AFTER_APRIL);

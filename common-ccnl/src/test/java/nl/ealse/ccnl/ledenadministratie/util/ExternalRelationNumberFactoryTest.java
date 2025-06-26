@@ -1,17 +1,10 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
-import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.ExternalRelationOtherRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ExternalRelationNumberFactoryTest {
-  
-  @BeforeAll
-  private static void setup() {
-    ApplicationContext.start();
-  }
 
   @Test
   void newNumberTest() {

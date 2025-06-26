@@ -7,12 +7,13 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.ContextInitializer;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 
 @Slf4j
 public class TestContextInitializerExcel implements ContextInitializer {
   
-  boolean started;
+  public TestContextInitializerExcel() {
+    initialize();
+  };
 
   @Override
   public EntityManagerProvider getEntityManagerProvider() {
@@ -28,27 +29,22 @@ public class TestContextInitializerExcel implements ContextInitializer {
   private Properties properties = new Properties();
 
   @Override
-  public DirectDebitConfig getIncassoProperties() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public <T> T getComponent(Class<T> clazz) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void loadPreferences() {
+  public void reloadPreferences() {
     throw new UnsupportedOperationException();
   }
 
   @Override
   public void start() {
-    if (!started) {
+    throw new UnsupportedOperationException();
+  }
+
+  private void initialize() {
       loadProperties("/excel.properties");
-      started = true;
-    }
-    
   }
   
   private void loadProperties(String location) {

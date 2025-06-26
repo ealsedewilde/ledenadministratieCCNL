@@ -20,13 +20,12 @@ import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.service.excelexport.ExportService.ReportType;
-import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-class ExportServiceTest extends ApplicationContextAware {
+class ExportServiceTest {
 
   private static ExternalRelationPartnerRepository commercialPartnerRepository;
   private static ExternalRelationClubRepository externalRelationClubRepository;

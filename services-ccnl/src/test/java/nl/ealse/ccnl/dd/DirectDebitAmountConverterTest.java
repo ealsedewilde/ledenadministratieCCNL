@@ -11,11 +11,10 @@ import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEn
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatPropertyKey;
-import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class DirectDebitAmountConverterTest extends ApplicationContextAware {
+class DirectDebitAmountConverterTest {
   
   private static EntityManager em;
   

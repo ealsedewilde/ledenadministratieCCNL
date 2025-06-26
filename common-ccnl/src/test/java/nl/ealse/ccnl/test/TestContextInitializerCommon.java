@@ -7,26 +7,22 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.ContextInitializer;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 
 @Slf4j
 public class TestContextInitializerCommon implements ContextInitializer {
-  
-  boolean started;
-  
+
+  public TestContextInitializerCommon() {
+    initialize();
+  };
+
   @Getter
-  private EntityManagerProvider entityManagerProvider; 
-  
+  private EntityManagerProvider entityManagerProvider;
+
   @Getter
   private Properties preferences = new Properties();
-  
+
   @Getter
   private final Properties properties = new Properties();
-
-  @Override
-  public DirectDebitConfig getIncassoProperties() {
-    throw new UnsupportedOperationException();
-  }
 
   @Override
   public <T> T getComponent(Class<T> clazz) {
@@ -34,22 +30,23 @@ public class TestContextInitializerCommon implements ContextInitializer {
   }
 
   @Override
-  public void loadPreferences() {
+  public void reloadPreferences() {
     preferences.put("ccnl.contributie.incasso", "€ 32,50");
     preferences.put("ccnl.contributie.overboeken", "€ 35,00");
   }
 
   @Override
   public void start() {
-    if (!started) {
-      loadProperties("/application.properties");
-      entityManagerProvider = new TestEntityManagerProviderCommon();
-      loadPreferences();
-      started = true;
-    }
+    throw new UnsupportedOperationException();
   }
-  
-  
+
+  private void initialize() {
+    loadProperties("/application.properties");
+    entityManagerProvider = new TestEntityManagerProviderCommon(properties);
+    reloadPreferences();
+  }
+
+
   private void loadProperties(String location) {
     try (InputStream is = TestContextInitializerCommon.class.getResourceAsStream(location)) {
       Properties props = new Properties();

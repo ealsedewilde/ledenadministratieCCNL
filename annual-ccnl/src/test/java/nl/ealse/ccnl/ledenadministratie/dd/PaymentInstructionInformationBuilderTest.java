@@ -3,11 +3,10 @@ package nl.ealse.ccnl.ledenadministratie.dd;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import nl.ealse.ccnl.ledenadministratie.dd.model.PaymentInstructionInformation4;
-import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class PaymentInstructionInformationBuilderTest extends ApplicationContextAware {
+class PaymentInstructionInformationBuilderTest {
   
   private PaymentInstructionInformationBuilder sut;
   

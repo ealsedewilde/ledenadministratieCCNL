@@ -6,8 +6,8 @@ import jakarta.persistence.Persistence;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 import org.hibernate.cfg.JdbcSettings;
@@ -17,8 +17,10 @@ public class TestEntityManagerProviderCommon implements EntityManagerProvider {
   
   private final EntityManagerFactory emf;
   private final EntityManager em;
+  private final Properties applicationProperties;
   
-  public TestEntityManagerProviderCommon() {
+  public TestEntityManagerProviderCommon(Properties applicationProperties) {
+    this.applicationProperties =applicationProperties;
     emf = initialize();
     em = emf.createEntityManager();
   }
@@ -46,9 +48,9 @@ public class TestEntityManagerProviderCommon implements EntityManagerProvider {
       properties.put("jakarta.persistence.schema-generation.database.action", "create");
       properties.put(JdbcSettings.JAKARTA_JDBC_URL, optUrl.get());
       properties.put(JdbcSettings.JAKARTA_JDBC_USER,
-          ApplicationContext.getProperty("database.user"));
+          applicationProperties.getProperty("database.user"));
       properties.put(JdbcSettings.JAKARTA_JDBC_PASSWORD,
-          ApplicationContext.getProperty("database.password", ""));
+          applicationProperties.getProperty("database.password", ""));
       return Persistence.createEntityManagerFactory("nl.ealse.ccnl.leden", properties);
      } else {
       String msg = "No database location provided.";

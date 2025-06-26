@@ -8,12 +8,11 @@ import nl.ealse.ccnl.ledenadministratie.model.ExternalRelation;
 import nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub;
 import nl.ealse.ccnl.ledenadministratie.model.InternalRelation;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
-import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-class AdresbestandTest extends ApplicationContextAware {
+class AdresbestandTest {
   
   @TempDir
   File tempDir;

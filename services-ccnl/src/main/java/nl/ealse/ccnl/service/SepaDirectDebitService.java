@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoResult;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
@@ -43,7 +44,7 @@ public class SepaDirectDebitService {
 
   public List<FlatProperty> getProperties() {
     List<FlatProperty> propertyList = new ArrayList<>();
-    DirectDebitConfig config = ApplicationContext.getIncassoProperties();
+    DirectDebitConfig config = IncassoProperties.getConfig();
     if (config != null) {
       propertyList.add(new FlatProperty(FlatPropertyKey.DD_DIR, config.getDirectDebitDir()));
       propertyList.add(new FlatProperty(FlatPropertyKey.DD_AMOUNT, config.getDirectDebitAmount()));
@@ -62,7 +63,7 @@ public class SepaDirectDebitService {
   }
 
   public MappingResult saveProperty(FlatProperty prop) {
-    final DirectDebitConfig config = ApplicationContext.getIncassoProperties();
+    final DirectDebitConfig config = IncassoProperties.getConfig();
     MappingResult result = new MappingResult();
     switch (prop.fpk) {
       case ACC_NAME:

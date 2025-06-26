@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 import lombok.experimental.UtilityClass;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 
 @UtilityClass
 public class ApplicationContext {
@@ -24,10 +23,6 @@ public class ApplicationContext {
   
   public EntityManagerProvider getEntityManagerProvider() {
     return initializer.getEntityManagerProvider();
-  }
-  
-  public DirectDebitConfig getIncassoProperties() {
-    return initializer.getIncassoProperties();
   }
   
   public String getPreference(String key) {
@@ -51,7 +46,7 @@ public class ApplicationContext {
   }
   
   public void reloadPreferences() {
-    initializer.loadPreferences();
+    initializer.reloadPreferences();
   }
   
   public void start() {

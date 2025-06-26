@@ -77,9 +77,6 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
   private void prepare() {
     sut = getTestSubject(SepaDirectDebitsController.class);
     getPageWithFxController(sut, PageName.DIRECT_DEBITS);
-    DDConfigAmountEntry entry = new DDConfigAmountEntry();
-    entry.setValue(BigDecimal.valueOf(2750, 2));
-    ApplicationContext.getIncassoProperties().setDirectDebitAmount(entry);
     
     Setting incassoSetting = new Setting();
     incassoSetting.setSettingsGroup("ccnl.contributie");

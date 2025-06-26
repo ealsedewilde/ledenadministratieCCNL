@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import lombok.experimental.UtilityClass;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
+import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
@@ -48,7 +49,8 @@ public class DirectDebitAmountConverter {
    */
   public void saveSetting(Setting setting) {
     if (ID.equals(setting.getId())) {
-      DirectDebitConfig config = ApplicationContext.getIncassoProperties();
+     
+      DirectDebitConfig config = IncassoProperties.getConfig();
       DDConfigAmountEntry entry = config.getDirectDebitAmount();
       BigDecimal amount = BigDecimal.valueOf(AmountFormatter.parse(setting.getValue()));
       entry.setValue(amount);

@@ -4,11 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import nl.ealse.ccnl.ledenadministratie.dd.model.Document;
 import nl.ealse.ccnl.ledenadministratie.dd.model.PaymentInstructionInformation4;
-import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class DocumentBuilderTest extends ApplicationContextAware {
+class DocumentBuilderTest {
 
   @Test
   void build() {

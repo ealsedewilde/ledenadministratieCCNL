@@ -1,19 +1,12 @@
 package nl.ealse.ccnl.ledenadministratie.util;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 class MemberNumberFactoryTest {
-  
-  @BeforeAll
-  private static void setup() {
-    ApplicationContext.start();
-  }
   
   @Test
   void newNumberTest() {

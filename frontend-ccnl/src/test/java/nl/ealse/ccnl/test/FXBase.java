@@ -15,7 +15,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
  * All unit tests that need to run in the JavaFx application thread must extend this class
  */
 @Slf4j
-public abstract class FXBase extends ApplicationContextAware {
+public abstract class FXBase {
 
   /**
    * To enhance performance, all JavaFx test should run in the same tookit

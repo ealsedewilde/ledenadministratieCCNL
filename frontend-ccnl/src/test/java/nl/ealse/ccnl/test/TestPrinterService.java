@@ -2,9 +2,9 @@ package nl.ealse.ccnl.test;
 
 import java.util.Optional;
 import javax.print.PrintService;
-import nl.ealse.javafx.print.PrinterService;
 import nl.ealse.javafx.print.PrintDocument;
 import nl.ealse.javafx.print.PrintException;
+import nl.ealse.javafx.print.PrinterService;
 import org.mockito.Mockito;
 
 public class TestPrinterService extends PrinterService {

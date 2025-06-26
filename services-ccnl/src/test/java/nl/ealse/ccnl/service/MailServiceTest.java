@@ -8,11 +8,10 @@ import jakarta.mail.MessagingException;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.mail.support.MailMessage;
-import nl.ealse.ccnl.test.ApplicationContextAware;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class MailServiceTest extends ApplicationContextAware {
+class MailServiceTest {
 
   private static DocumentService documentService;
 
