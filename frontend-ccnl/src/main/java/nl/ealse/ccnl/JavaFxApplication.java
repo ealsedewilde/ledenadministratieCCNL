@@ -37,8 +37,7 @@ public class JavaFxApplication extends Application {
   @Override
   public void stop() throws Exception {
     super.stop();
-    ApplicationContext.getEntityManagerProvider().shutdown();
-    System.exit(0);
+    ApplicationContext.stop();
   }
 
 }

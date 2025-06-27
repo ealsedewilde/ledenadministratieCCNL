@@ -17,5 +17,9 @@ public interface EntityManagerProvider {
    */
   void shutdown();
 
+  /**
+   * Get the EntityManger.
+   * @return EntityManager  for the current thread.
+   */
   EntityManager getEntityManager();
 }

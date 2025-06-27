@@ -15,9 +15,12 @@ import org.hibernate.cfg.JdbcSettings;
  * Utility to access the database.
  */
 @Slf4j
-//@UtilityClass
 public class DefaultEntityManagerProvider implements EntityManagerProvider {
 
+  /**
+   * Holder for the EntityManager of the current thread.
+   * Neede because an EntityManager is not thread safe.
+   */
   private static final ThreadLocal<Optional<EntityManager>> threadLocal =
       ThreadLocal.withInitial(Optional::empty);
   
@@ -27,6 +30,10 @@ public class DefaultEntityManagerProvider implements EntityManagerProvider {
     emf = initialize();
   }
   
+  /**
+   * Connect to the specified database.
+   * @return
+   */
   private EntityManagerFactory initialize() {
     log.info("Start creating EntityManagerFactory");
     DatabaseLocation dbl = new DatabaseLocation();
@@ -57,8 +64,8 @@ public class DefaultEntityManagerProvider implements EntityManagerProvider {
     Optional<EntityManager> holder = threadLocal.get();
     if (holder.isPresent()) {
       holder.get().close();
+      threadLocal.remove();
     }
-    threadLocal.remove();
   }
 
   /**
