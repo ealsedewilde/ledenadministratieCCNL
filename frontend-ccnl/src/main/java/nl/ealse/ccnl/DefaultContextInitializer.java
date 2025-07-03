@@ -82,13 +82,12 @@ public class DefaultContextInitializer implements ContextInitializer {
    */
   @Override
   public void start() {
-    new TaskExecutor().execute(() -> {
+    Executors.newSingleThreadExecutor().execute(() -> {
       loadProperties("/application.properties");
       entityManagerProvider = new DefaultEntityManagerProvider();
       reloadPreferences();
+      loadProperties("/excel.properties");
     });
-    // need a plain Executor because a TaskExecutor cleans up an EntityManager which is not there yet
-    Executors.newSingleThreadExecutor().execute(() -> loadProperties("/excel.properties"));
 
   }
 
