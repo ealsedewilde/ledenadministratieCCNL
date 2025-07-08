@@ -15,9 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
@@ -50,8 +48,7 @@ class ReconciliationControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.RECONCILE_PAYMENTS);
-    sut.onApplicationEvent(event);
+    sut.onApplicationEvent();
     verify(service).allFiles();
 
     Button btn = new Button();

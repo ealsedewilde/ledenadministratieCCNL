@@ -13,7 +13,6 @@ import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.AnnualRolloverService;
@@ -119,7 +118,7 @@ public class AnnualRolloverController {
   }
 
   @EventListener(menuChoice = MenuChoice.ANNUAL_ROLLOVER)
-  public void onApplicationEvent(MenuChoiceEvent event) {
+  public void onApplicationEvent() {
     pageController.setActivePage(PageName.ANNUAL_ROLLOVER);
     backupButton.setDisable(false);
     rolloverButton.setDisable(true);

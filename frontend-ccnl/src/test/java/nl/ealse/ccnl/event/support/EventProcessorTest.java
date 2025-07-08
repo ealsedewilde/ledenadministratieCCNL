@@ -13,7 +13,7 @@ class EventProcessorTest {
     eventProcessor.initialize();
     String result = eventProcessor.toString();
     log.info(result);
-    assertEquals(9700, result.length());
+    assertEquals(10671, result.length());
   }
 
 }

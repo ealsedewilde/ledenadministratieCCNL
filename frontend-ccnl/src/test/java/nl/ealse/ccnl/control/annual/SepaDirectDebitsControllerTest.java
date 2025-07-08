@@ -8,9 +8,7 @@ import jakarta.persistence.EntityManager;
 import java.io.File;
 import java.math.BigDecimal;
 import javafx.scene.control.Label;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
@@ -51,8 +49,7 @@ class SepaDirectDebitsControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    MenuChoiceEvent event = new MenuChoiceEvent(this, MenuChoice.PRODUCE_DIRECT_DEBITS_FILE);
-    sut.onApplicationEvent(event);
+    sut.onApplicationEvent();
 
     sut.selectFile();
 

@@ -15,7 +15,6 @@ import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
@@ -66,7 +65,7 @@ public class AddressListController {
   }
 
   @EventListener(menuChoice = MenuChoice.MAGAZINE_ADDRESS_LIST)
-  public void addressList(MenuChoiceEvent event) {
+  public void addressList() {
     pageController.setActivePage(PageName.MAGAZINE_ADDRESS_LIST);
     Optional<Setting> previousNumber = service.getSetting(Optional.of(SETTING_GROUP), SETTING_KEY);
     if (previousNumber.isPresent()) {
@@ -80,19 +79,19 @@ public class AddressListController {
   }
 
   @EventListener(menuChoice = MenuChoice.CARD_ADDRESS_LIST)
-  public void cardList(MenuChoiceEvent event) {
+  public void cardList() {
     AsyncCardAddressListTask asyncTask = new AsyncCardAddressListTask(magazineService);
     generateFile(String.format(CARD_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }
 
   @EventListener(menuChoice = MenuChoice.MEMBER_LIST_BY_NUMBER)
-  public void memberListByNumber(MenuChoiceEvent event) {
+  public void memberListByNumber() {
     MemberListTask asyncTask = new MemberListTask(magazineService, false);
     generateFile(String.format(MEMBER_FILE_NUMBER, LocalDate.now().getYear()), asyncTask);
   }
 
   @EventListener(menuChoice = MenuChoice.MEMBER_LIST_BY_NAME)
-  public void memberListByName(MenuChoiceEvent event) {
+  public void memberListByName() {
     MemberListTask asyncTask = new MemberListTask(magazineService, true);
     generateFile(String.format(MEMBER_FILE_NAME, LocalDate.now().getYear()), asyncTask);
   }

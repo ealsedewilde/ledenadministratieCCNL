@@ -8,7 +8,6 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.dd.DirectDebitAmountConverter;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
@@ -69,7 +68,7 @@ public class SettingsController extends SettingsView {
   }
 
   @EventListener(menuChoice = MenuChoice.SETTINGS)
-  public void findSettings(MenuChoiceEvent event) {
+  public void findSettings() {
     pageController.setActivePage(PageName.SETTINGS);
     tableView.getItems().clear();
     tableView.getItems().addAll(service.findByOrderBySettingsGroupAscKeyAsc());

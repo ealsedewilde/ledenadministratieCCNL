@@ -7,9 +7,7 @@ import java.io.File;
 import java.net.URL;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import nl.ealse.javafx.util.WrappedFileChooser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -35,8 +33,7 @@ class ExcelImportControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.IMPORT_FROM_EXCEL);
-    sut.onApplicationEvent(event);
+    sut.onApplicationEvent();
 
     sut.selectFile();
 

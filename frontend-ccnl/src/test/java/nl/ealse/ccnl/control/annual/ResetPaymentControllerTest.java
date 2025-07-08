@@ -20,7 +20,7 @@ class ResetPaymentControllerTest extends FXMLBaseTest {
     Assertions.assertTrue(runFX(() -> {
       sut = getTestSubject(ResetPaymentCommand.class);
       clickButton();
-      sut.executeCommand(null);
+      sut.executeCommand();
       verify(getPageController()).showMessage("Alle betaalgegevens zijn gewist");
     }));
   }

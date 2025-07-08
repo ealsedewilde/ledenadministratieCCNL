@@ -8,17 +8,41 @@ import java.lang.annotation.Target;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 
+/**
+ * Event target definition.
+ * Only one of the attributes eventClass, menuChoice, choiceGroup is allowed.
+ * All attributes are optional. The target method event parameter must be present when no
+ * attributes are defined.
+ */
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EventListener {
 
+  /**
+   * The event class to match by the {@link EventProcessor}.
+   * This is only relevant when the target method has no event parameter.
+   * @return
+   */
   Class<?> eventClass() default Object.class;
 
+  /**
+   * The MenuChoice to match by the {@link EventProcessor}.
+   * @return
+   */
   MenuChoice menuChoice() default MenuChoice.LOGO;
 
-  ChoiceGroup choiceGroup() default ChoiceGroup.UNKNOWN;
+  /**
+   * The ChoiceGroup to match by the {@link EventProcessor}.
+   * @return
+   */
+ChoiceGroup choiceGroup() default ChoiceGroup.UNKNOWN;
 
+  /**
+   * Defined at the target method that shows the default (logo) page.
+   * Applicable when the MenuChoice has a target without a fxml page. 
+   * @return
+   */
   boolean command() default false;
 
 }

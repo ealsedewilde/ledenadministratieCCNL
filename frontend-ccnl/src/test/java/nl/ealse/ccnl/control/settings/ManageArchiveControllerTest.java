@@ -2,9 +2,7 @@ package nl.ealse.ccnl.control.settings;
 
 import static org.mockito.Mockito.verify;
 import javafx.scene.control.TextField;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.test.FXMLBaseTest;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.Assertions;
@@ -27,8 +25,7 @@ class ManageArchiveControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_ARCHIVE);
-    sut.onApplicationEvent(event);
+    sut.onApplicationEvent();
 
     sut.delete();
     String y = referenceYear.getText();

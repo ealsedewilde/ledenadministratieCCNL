@@ -25,7 +25,6 @@ import nl.ealse.ccnl.control.button.DeleteButton;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentFile;
 import nl.ealse.ccnl.service.ReconciliationService;
@@ -75,7 +74,7 @@ public class ReconciliationController {
   }
 
   @EventListener(menuChoice = MenuChoice.RECONCILE_PAYMENTS)
-  public void onApplicationEvent(MenuChoiceEvent event) {
+  public void onApplicationEvent() {
     pageController.setActivePage(PageName.RECONCILE_PAYMENTS);
     tableView.getItems().clear();
     tableView.getItems().addAll(service.allFiles());

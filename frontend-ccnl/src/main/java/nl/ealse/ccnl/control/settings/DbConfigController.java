@@ -7,7 +7,6 @@ import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.database.config.BaseDbConfigurator;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.javafx.FXMLLoaderUtil;
 
@@ -27,7 +26,7 @@ public class DbConfigController extends BaseDbConfigurator {
    * @param event
    */
   @EventListener(menuChoice = MenuChoice.DB_CONFIG)
-  public void dbConfig(MenuChoiceEvent event) {
+  public void dbConfig() {
     openDialog();
   }
 

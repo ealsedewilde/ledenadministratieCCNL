@@ -18,7 +18,6 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.dd.DirectDebitAmountConverter;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
@@ -93,7 +92,7 @@ public class SepaDirectDebitsController {
   }
 
   @EventListener(menuChoice = MenuChoice.PRODUCE_DIRECT_DEBITS_FILE)
-  public void onApplicationEvent(MenuChoiceEvent event) {
+  public void onApplicationEvent() {
     pageController.setActivePage(PageName.DIRECT_DEBITS);
     generateButton.setDisable(true);
     selectedFile = null;

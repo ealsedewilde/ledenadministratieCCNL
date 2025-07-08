@@ -10,7 +10,6 @@ import javafx.scene.control.TextArea;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
@@ -39,7 +38,7 @@ public class TemplatesController {
   }
 
   @EventListener(menuChoice = MenuChoice.TEMPLATES_OVERVIEW)
-  public void onApplicationEvent(MenuChoiceEvent event) {
+  public void onApplicationEvent() {
     pageController.setActivePage(PageName.TEMPLATES_OVERVIEW);
     List<DocumentTemplate> templates = documentService.findAllDocumentTemplates();
     tableView.getItems().clear();

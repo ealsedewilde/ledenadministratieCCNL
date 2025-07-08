@@ -15,7 +15,6 @@ import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.excelimport.ImportHandler.ImportSelection;
@@ -128,7 +127,7 @@ public class ExcelImportController {
   }
 
   @EventListener(menuChoice = MenuChoice.IMPORT_FROM_EXCEL)
-  public void onApplicationEvent(MenuChoiceEvent event) {
+  public void onApplicationEvent() {
     pageController.setActivePage(PageName.EXCEL_IMPORT);
     selectedFile = null;
     fileLabel.setText("");

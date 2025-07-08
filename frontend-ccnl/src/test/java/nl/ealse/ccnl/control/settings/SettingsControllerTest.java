@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
@@ -44,8 +42,7 @@ class SettingsControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    MenuChoiceEvent event = new MenuChoiceEvent(this, MenuChoice.SETTINGS);
-    sut.findSettings(event);
+    sut.findSettings();
 
     try (MockedStatic<EventPublisher> context = mockStatic(EventPublisher.class)) {
       sut.editSetting(mouseEvent);

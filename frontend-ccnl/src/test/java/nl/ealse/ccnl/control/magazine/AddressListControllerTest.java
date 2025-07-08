@@ -7,9 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.Optional;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SettingsService;
@@ -43,21 +41,17 @@ class AddressListControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MAGAZINE_ADDRESS_LIST);
-    sut.addressList(event);
+    sut.addressList();
     sut.generateAddressList();
     verify(getPageController()).showMessage("Bestand is aangemaakt");
 
-    event = new MenuChoiceEvent(sut, MenuChoice.CARD_ADDRESS_LIST);
-    sut.cardList(event);
+    sut.cardList();
     verify(getPageController(), times(2)).showMessage("Bestand is aangemaakt");
 
-    event = new MenuChoiceEvent(sut, MenuChoice.MEMBER_LIST_BY_NAME);
-    sut.memberListByName(event);
+    sut.memberListByName();
     verify(getPageController(), times(3)).showMessage("Bestand is aangemaakt");
 
-    event = new MenuChoiceEvent(sut, MenuChoice.MEMBER_LIST_BY_NUMBER);
-    sut.memberListByNumber(event);
+    sut.memberListByNumber();
     verify(getPageController(), times(4)).showMessage("Bestand is aangemaakt");
   }
 

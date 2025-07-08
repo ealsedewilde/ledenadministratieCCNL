@@ -31,7 +31,7 @@ class SepaAuthorizationFormControllerTest extends FXMLBaseTest {
   private void doTest() {
     doInitialize();
     setFileChooser();
-    sut.executeCommand(null);
+    sut.executeCommand();
     verify(getPageController()).showMessage("Formulier is opgeslagen");
   }
 

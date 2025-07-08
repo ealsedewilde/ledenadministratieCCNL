@@ -10,17 +10,15 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.ChoiceGroup;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
+import nl.ealse.ccnl.ledenadministratie.config.ConfigurationException;
 import org.jboss.jandex.AnnotationInstance;
 import org.jboss.jandex.AnnotationValue;
-import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.Index;
 import org.jboss.jandex.IndexReader;
 import org.jboss.jandex.MethodInfo;
@@ -28,7 +26,7 @@ import org.jboss.jandex.MethodParameterInfo;
 import org.jboss.jandex.Type;
 
 /**
- *
+ * Processor that dispatches an event to its target.
  */
 @Slf4j
 public class EventProcessor {
@@ -36,20 +34,32 @@ public class EventProcessor {
   @Getter
   private static final EventProcessor instance = new EventProcessor();
 
-  private final Map<MenuChoice, EventContext> menuChoiceMapping = new EnumMap<>(MenuChoice.class);
-  private final Map<ChoiceGroup, EventContext> choiceGroupMapping =
+  /**
+   * Register of Event targets for a {@link MenuChoice}
+   */
+  private final Map<MenuChoice, TargetDefinition> menuChoiceMapping = new EnumMap<>(MenuChoice.class);
+  
+  /**
+   * Register of Event targets for a {@link ChoiceGroup}
+   */
+  private final Map<ChoiceGroup, TargetDefinition> choiceGroupMapping =
       new EnumMap<>(ChoiceGroup.class);
 
   /**
+   * Register of Event targets for a Class.
    * The key of this Map is the class of the event.
    */
-  private final Map<String, EventContext> eventClassMapping = new HashMap<>();
-  private final List<EventContext> commandMapping = new ArrayList<>();
+  private final Map<String, TargetDefinition> eventClassMapping = new HashMap<>();
+  
+  /**
+   * Register of Event targets that trigger the display of the logo page.
+   */
+  private final List<TargetDefinition> commandMapping = new ArrayList<>();
 
   private EventProcessor() {}
 
   /**
-   *
+   * Build the complete Event target register.
    */
   public void initialize() {
     try (InputStream input = getClass().getResourceAsStream("/META-INF/jandex.idx")) {
@@ -62,79 +72,79 @@ public class EventProcessor {
     }
   }
 
+  /**
+   * Register one Event target.
+   * @param annotation
+   */
   private void processAnnotation(AnnotationInstance annotation) {
-    MethodInfo method = annotation.target().asMethod();
-    ClassInfo classInfo = method.declaringClass();
-    String className = classInfo.name().toString();
-    String methodName = method.name();
-    EventContext eventContext = new EventContext(className, methodName);
+    TargetDefinition tagetDefinition = new TargetDefinition(annotation);
 
-    List<MethodParameterInfo> parms = method.parameters();
-    if (!parms.isEmpty()) {
-      MethodParameterInfo mpi = parms.get(0);
-      Type parmType = mpi.type();
-      String parmName = parmType.name().toString();
-      eventContext.setParametersClassName(parmName);
-    }
-
+    // inspect the atrributes of the EventListener annotation
     List<AnnotationValue> values = annotation.values();
     values.forEach(value -> {
       switch (value.name()) {
         case "command":
-          commandMapping.add(eventContext);
+          commandMapping.add(tagetDefinition);
           break;
         case "eventClass":
           Type eventType = value.asClass();
-          eventClassMapping.put(eventType.name().toString(), eventContext);
+          eventClassMapping.put(eventType.name().toString(), tagetDefinition);
           break;
         case "choiceGroup":
           ChoiceGroup choiceGroup = ChoiceGroup.valueOf(value.asEnum());
-          choiceGroupMapping.put(choiceGroup, eventContext);
+          choiceGroupMapping.put(choiceGroup, tagetDefinition);
           break;
         case "menuChoice":
         default:
           MenuChoice menuChoice = MenuChoice.valueOf(value.asEnum());
-          menuChoiceMapping.put(menuChoice, eventContext);
+          menuChoiceMapping.put(menuChoice, tagetDefinition);
           break;
       }
 
     });
+    // Handle EventListener annotation with no attribute
     if (values.isEmpty()) {
-      eventClassMapping.put(eventContext.getParametersClassName(), eventContext);
+      String parameterClassName = tagetDefinition.getParameterClassName();
+      if (parameterClassName != null) {
+        eventClassMapping.put(parameterClassName, tagetDefinition);
+      } else {
+        throw new ConfigurationException("missing eventClass attribute");
+      }
     }
 
   }
 
+
   /**
-   *
+   * Dispatch an event to its target.
    * @param event
    */
   public void processEvent(Object event) {
     if (event instanceof MenuChoiceEvent mce) {
       MenuChoice choice = mce.getMenuChoice();
       if (choice.isCommand()) {
-        commandMapping.forEach(eventContext -> invokeMethod(event, eventContext));
+        commandMapping.forEach(targetDefinition -> invokeMethod(event, targetDefinition));
       }
       if (mce.hasGroup()) {
-        EventContext eventContext = choiceGroupMapping.get(choice.getGroup());
-        invokeMethod(event, eventContext);
+        TargetDefinition targetDefinition = choiceGroupMapping.get(choice.getGroup());
+        invokeMethod(event, targetDefinition);
       } else {
-        EventContext eventContext = menuChoiceMapping.get(choice);
-        invokeMethod(event, eventContext);
+        TargetDefinition targetDefinition = menuChoiceMapping.get(choice);
+        invokeMethod(event, targetDefinition);
       }
     } else {
       Class<?> eventClass = event.getClass();
-      EventContext eventContext = eventClassMapping.get(eventClass.getName());
-      invokeMethod(event, eventContext);
+      TargetDefinition targetDefinition = eventClassMapping.get(eventClass.getName());
+      invokeMethod(event, targetDefinition);
     }
 
   }
 
-  private void invokeMethod(Object event, EventContext eventContext) {
-    Object target = eventContext.getTargetObject(event);
-    Method method = eventContext.getTargetMethod();
+  private void invokeMethod(Object event, TargetDefinition targetDefinition) {
+    Object target = targetDefinition.getTargetObject(event);
+    Method method = targetDefinition.getTargetMethod();
     try {
-      if (eventContext.getParametersClassName() != null) {
+      if (targetDefinition.isWithParameter()) {
         method.invoke(target, event);
       } else {
         method.invoke(target);
@@ -144,23 +154,29 @@ public class EventProcessor {
     }
   }
 
-  @Getter
-  @Setter
-  private static class EventContext {
+  /**
+   * Definition for event's target location.
+   * It lazily initializes target class and target method.
+   * Only a limited target locations are hit in a average user session.
+   * So initialization will only be done when there is a hit of an incoming event.
+   */
+  private static class TargetDefinition {
 
-    private final String targetClassName;
-    private final String targetMethodName;
-    private String parametersClassName;
+    private final AnnotationInstance annotation;
+    
+    /**
+     * Indication whether the target method has a (event) parameter.
+     */
+    @Getter
+    private boolean withParameter;
 
-    @Setter(AccessLevel.NONE)
     private Object targetObject;
 
-    @Setter(AccessLevel.NONE)
+    @Getter
     private Method targetMethod;
 
-    private EventContext(String targetClassName, String targetMethodName) {
-      this.targetClassName = targetClassName;
-      this.targetMethodName = targetMethodName;
+    private TargetDefinition(AnnotationInstance annotation) {
+      this.annotation = annotation;
     }
 
     public Object getTargetObject(Object event) {
@@ -170,30 +186,44 @@ public class EventProcessor {
       return targetObject;
     }
 
-    public Method getTargetMethod() {
-      return targetMethod;
-    }
-
+    /**
+     * Initialization is executes the first time an event hits this target.
+     * @param event
+     */
     private void initializeTarget(Object event) {
+      MethodInfo method = annotation.target().asMethod();
       try {
-        Class<?> targetClass = Class.forName(targetClassName);
+        Class<?> targetClass = Class.forName(method.declaringClass().name().toString());
         targetObject = ApplicationContext.getComponent(targetClass);
-        if (getParametersClassName() != null) {
-          targetMethod = targetClass.getMethod(targetMethodName, event.getClass());
+        if (!method.parameters().isEmpty()) {
+          targetMethod = targetClass.getMethod(method.name(), event.getClass());
+          withParameter = true;
         } else {
-          targetMethod = targetClass.getMethod(targetMethodName);
+          targetMethod = targetClass.getMethod(method.name());
         }
       } catch (Exception e) {
         log.error("Unable to instantiate event target", e);
       }
     }
+    
+    public String getParameterClassName() {
+      MethodInfo method = annotation.target().asMethod();
+      List<MethodParameterInfo> parms = method.parameters();
+      if (!parms.isEmpty()) {
+        MethodParameterInfo mpi = parms.get(0);
+        Type parmType = mpi.type();
+        return parmType.name().toString();
+      }
+      return null;
+    }
 
     @Override
     public String toString() {
+      MethodInfo method = annotation.target().asMethod();
       StringBuilder sb = new StringBuilder();
-      sb.append("targetClassName: ").append(targetClassName);
-      sb.append(" targetMethodName: ").append(targetMethodName);
-      sb.append(" parametersClassName: ").append(parametersClassName);
+      sb.append("targetClassName: ").append(method.declaringClass().name().toString());
+      sb.append(" targetMethodName: ").append(method.name());
+      sb.append(" targetMethod parameterClassName: ").append(getParameterClassName());
       return sb.toString();
     }
 

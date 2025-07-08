@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ioc.ComponentFactory;
 import nl.ealse.ccnl.ioc.DefaultComponentFactory;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.config.ContextInitializer;
 import nl.ealse.ccnl.ledenadministratie.dao.SettingRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.util.DefaultEntityManagerProvider;

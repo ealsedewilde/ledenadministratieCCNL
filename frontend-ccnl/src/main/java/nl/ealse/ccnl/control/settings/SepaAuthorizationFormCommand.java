@@ -6,7 +6,6 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.DocumentService;
@@ -37,7 +36,7 @@ public class SepaAuthorizationFormCommand {
   }
 
   @EventListener(menuChoice = MenuChoice.UPLOAD_SEPA_FORM)
-  public void executeCommand(MenuChoiceEvent event) {
+  public void executeCommand() {
     File selectedFile = fileChooser.showOpenDialog();
     if (selectedFile != null) {
       handleSelected(selectedFile);

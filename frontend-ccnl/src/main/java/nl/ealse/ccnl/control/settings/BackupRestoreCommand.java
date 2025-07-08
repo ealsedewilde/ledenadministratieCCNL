@@ -8,7 +8,6 @@ import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.BackupRestoreService;
@@ -42,7 +41,7 @@ public class BackupRestoreCommand {
   }
 
   @EventListener(menuChoice = MenuChoice.MANAGE_BACKUP_DATABASE)
-  public void backup(MenuChoiceEvent event) {
+  public void backup() {
     String fileName = String.format(FILE_NAME, formatter.format(LocalDateTime.now()));
     fileChooser.setInitialFileName(fileName);
     File backupFile = fileChooser.showSaveDialog();
@@ -54,7 +53,7 @@ public class BackupRestoreCommand {
   }
 
   @EventListener(menuChoice = MenuChoice.MANAGE_RESTORE_DATABASE)
-  public void restore(MenuChoiceEvent event) {
+  public void restore() {
     fileChooser.setInitialFileName(null);
     File backupFile = fileChooser.showOpenDialog();
     if (backupFile != null) {

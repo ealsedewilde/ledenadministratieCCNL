@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.service.ReconciliationService;
 
@@ -39,7 +38,7 @@ public class ResetPaymentCommand {
   }
 
   @EventListener(menuChoice = MenuChoice.RESET_PAYMENTS)
-  public void executeCommand(MenuChoiceEvent event) {
+  public void executeCommand() {
     Optional<ButtonType> result = confirmation.showAndWait();
     if (result.isPresent()) {
       ButtonType bt = result.get();

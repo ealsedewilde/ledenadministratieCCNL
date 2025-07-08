@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.event.Event;
 import javafx.scene.control.TableRow;
-import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate;
@@ -44,9 +42,8 @@ class TemplatesControllerTest extends FXMLBaseTest {
   }
 
   private void doTest() {
-    MenuChoiceEvent event = new MenuChoiceEvent(this, MenuChoice.TEMPLATES_OVERVIEW);
     try (MockedStatic<EventPublisher> context = mockStatic(EventPublisher.class)) {
-      sut.onApplicationEvent(event);
+      sut.onApplicationEvent();
 
       sut.selectTemplate(ev);
 

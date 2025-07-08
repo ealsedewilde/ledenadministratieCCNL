@@ -4,8 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.File;
-import nl.ealse.ccnl.control.menu.MenuChoice;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.service.BackupRestoreService;
 import nl.ealse.ccnl.test.FXMLBaseTest;
@@ -46,22 +44,19 @@ class BackupRestoreControllerTest extends FXMLBaseTest {
   private void backup() {
     setFileChooser();
 
-    MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_BACKUP_DATABASE);
-    sut.backup(event);
+    sut.backup();
     verify(getPageController()).showMessage("Backup is aangemaakt");
   }
 
   private void restore() {
     setFileChooser();
 
-    MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.MANAGE_RESTORE_DATABASE);
-
     when(service.restoreDatabase(zip)).thenReturn(Boolean.TRUE);
-    sut.restore(event);
+    sut.restore();
     verify(getPageController()).showMessage("Backup is teruggezet");
 
     when(service.restoreDatabase(zip)).thenReturn(Boolean.FALSE);
-    sut.restore(event);
+    sut.restore();
     verify(getPageController()).showErrorMessage("Onjuist bestand; Terugzetten backup is mislukt");
   }
 
