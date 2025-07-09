@@ -1,6 +1,5 @@
 package nl.ealse.ccnl;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -17,7 +16,7 @@ import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
 
 @Slf4j
 public class JavaFxApplication extends Application {
-  
+
   private Future<Boolean> initialized;
 
   @Override
@@ -38,13 +37,9 @@ public class JavaFxApplication extends Application {
 
   @Override
   public void init() throws Exception {
-    super.init();
     // Initialize the EventProcessor
-    Callable<Boolean> c = () -> {
-      EventProcessor.getInstance().initialize();
-      return true;
-      };
-    initialized = Executors.newSingleThreadExecutor().submit(c);
+    initialized = Executors.newSingleThreadExecutor()
+        .submit(() -> EventProcessor.getInstance().initialize(), Boolean.TRUE);
     if (DatabaseLocation.DB_LOCATION_FILE.exists()) {
       // There is a valid database file; so start connecting
       ApplicationContext.start();
@@ -56,19 +51,19 @@ public class JavaFxApplication extends Application {
     super.stop();
     ApplicationContext.stop();
   }
-  
+
   private void publishEvent(Stage primaryStage) {
     try {
-      if (Boolean.TRUE.equals(initialized.get())) {
+      if (initialized.get().booleanValue()) {
         EventPublisher.publishEvent(new StageReadyEvent(primaryStage));
       }
-    } catch (InterruptedException  e) {
+    } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-    } catch (ExecutionException  e) {
+    } catch (ExecutionException e) {
       log.error("Application fails to start", e);
       throw new ConfigurationException("Application fails to start");
     }
-    
+
   }
 
 }
