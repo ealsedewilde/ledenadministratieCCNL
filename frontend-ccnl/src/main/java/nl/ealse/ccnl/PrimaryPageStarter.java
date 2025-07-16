@@ -58,16 +58,18 @@ public class PrimaryPageStarter {
    * @param stage - primary stage
    */
   private void checkScreenSize(final Stage stage) {
-    double x = stage.getY();
+    double x = stage.getX();
     if (x < 0) {
       stage.setX(0d);
-      stage.setWidth(stage.getWidth() + x);
     }
     double y = stage.getY();
     if (y < 0) {
       stage.setY(0d);
-      stage.setHeight(stage.getHeight() + y);
     }
+    if (x < 0 || y < 0) {
+      stage.setResizable(true);
+    }
+    
   }
 
 }

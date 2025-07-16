@@ -14,7 +14,7 @@ import nl.ealse.javafx.ImagesMap;
 /**
  * Controller of the main page of the application.
  * <p>
- * The main page is a GridPane. The content of Center of this pane is replaced frequently as part of
+ * The main page is a BorderPane. The content of Center of this pane is replaced frequently as part of
  * the user dialog. This controller is also capable of displaying messages in the Bottom part of the
  * GridPane.
  * </p>

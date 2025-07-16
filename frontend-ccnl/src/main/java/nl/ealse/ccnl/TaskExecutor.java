@@ -2,7 +2,6 @@ package nl.ealse.ccnl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 
 public class TaskExecutor {
 
@@ -13,10 +12,7 @@ public class TaskExecutor {
    */
   public void execute(Runnable task) {
     ExecutorService service = Executors.newSingleThreadExecutor();
-    service.execute(() -> {
-      task.run();
-      ApplicationContext.getEntityManagerProvider().cleanup();
-    });
+    service.execute(task);
   }
 
 
