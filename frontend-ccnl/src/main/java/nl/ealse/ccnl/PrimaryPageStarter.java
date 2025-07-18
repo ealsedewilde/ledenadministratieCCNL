@@ -40,7 +40,6 @@ public class PrimaryPageStarter {
       stage.setScene(scene);
       stage.centerOnScreen();
       stage.show();
-      checkScreenSize(stage);
     } catch (Exception e) {
       log.error("Start error", e);
     } finally {
@@ -50,26 +49,6 @@ public class PrimaryPageStarter {
         splash.close();
       }
     }
-  }
-
-  /**
-   * Adjust the size when it doesn't fit on the screen.
-   *
-   * @param stage - primary stage
-   */
-  private void checkScreenSize(final Stage stage) {
-    double x = stage.getX();
-    if (x < 0) {
-      stage.setX(0d);
-    }
-    double y = stage.getY();
-    if (y < 0) {
-      stage.setY(0d);
-    }
-    if (x < 0 || y < 0) {
-      stage.setResizable(true);
-    }
-    
   }
 
 }
