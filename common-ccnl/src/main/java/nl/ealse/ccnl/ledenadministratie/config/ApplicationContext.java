@@ -110,7 +110,10 @@ public class ApplicationContext {
    * Close all database connections and stop the application.
    */
   public void stop() {
-    getEntityManagerProvider().shutdown();
+    EntityManagerProvider emp = getEntityManagerProvider();
+    if (emp != null) {
+      emp.shutdown();
+    }
     System.exit(0);
   }
 

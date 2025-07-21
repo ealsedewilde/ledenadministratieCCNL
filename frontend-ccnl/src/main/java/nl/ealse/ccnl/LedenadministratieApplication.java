@@ -13,12 +13,8 @@ public class LedenadministratieApplication {
    * @param args - no args needed
    */
   public static void main(String[] args) {
-    UniqueCheck check = new UniqueCheck();
-    if (check.uniqueProcess()) {
-      Application.launch(JavaFxApplication.class, args);
-    } else {
-      System.exit(0);
-    }
+    StartContext.start();
+    Application.launch(JavaFxApplication.class, args);
 
   }
 

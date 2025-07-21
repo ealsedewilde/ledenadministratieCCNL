@@ -1,21 +1,23 @@
 package nl.ealse.ccnl;
 
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
 /**
  * Check if there is no other instance of this application running. This check will work for the way
  * this application is installed by it's MS installer.
  */
-public class UniqueCheck {
+class UniqueCheck  implements Callable<Boolean> {
 
-  private boolean unique = true;
+  private Boolean unique = Boolean.TRUE;
 
   /**
    * Determine uniqueness of the application.
    *
    * @return true when unique
    */
-  public boolean uniqueProcess() {
+  @Override
+  public Boolean call() {
     ProcessHandle current = ProcessHandle.current();
     String refCommand = getCommand(current);
     long refPid = current.pid();
@@ -29,7 +31,7 @@ public class UniqueCheck {
       // of this application running.
       if (refCommand.equals(getCommand(process)) && refCommand.equals(getParentCommand(process))
           && refPid != process.pid()) {
-        unique = false;
+        unique = Boolean.FALSE;
       }
     });
     return unique;

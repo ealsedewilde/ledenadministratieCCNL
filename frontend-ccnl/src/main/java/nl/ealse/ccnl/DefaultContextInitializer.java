@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutionException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ioc.ComponentFactory;
@@ -35,16 +35,14 @@ public class DefaultContextInitializer implements ContextInitializer {
   private Properties preferences = new Properties();
 
   /**
-   * Simple Inversion of Control implementation.
-   * This IoC works via recursive calls to the single constructor of a component.
-   * At the deepest level these components have a default (no arguments) constructor.
-   * The created components are singletons.
+   * Simple Inversion of Control implementation. This IoC works via recursive calls to the single
+   * constructor of a component. At the deepest level these components have a default (no arguments)
+   * constructor. The created components are singletons.
    */
   private final ComponentFactory componentFactory = new DefaultComponentFactory();
 
   /**
-   * Request a singleton component.
-   * Does not reset the state of a stateful component!
+   * Request a singleton component. Does not reset the state of a stateful component!
    */
   public <T> T getComponent(Class<T> clazz) {
     return componentFactory.getComponent(clazz);
@@ -68,8 +66,8 @@ public class DefaultContextInitializer implements ContextInitializer {
   }
 
   /**
-   * For initial load and reload of the preferences.
-   * Reload is required after a change by the user or a database restore.
+   * For initial load and reload of the preferences. Reload is required after a change by the user
+   * or a database restore.
    */
   @Override
   public void reloadPreferences() {
@@ -83,12 +81,25 @@ public class DefaultContextInitializer implements ContextInitializer {
    */
   @Override
   public void start() {
-    Executors.newSingleThreadExecutor().execute(() -> {
+    try {
+      // load the application.properties in the current Thread
       loadProperties("/application.properties");
-      entityManagerProvider = new DefaultEntityManagerProvider();
-      reloadPreferences();
-      loadProperties("/excel.properties");
-    });
+      
+      // Only try to connect to the database when this is the only instance of this application.
+      if (StartContext.getUnique().get().booleanValue()) {
+        // Setting up a database connection is a heavy operation
+        // It should not block the start of the user interface
+        StartContext.getThreadPool().execute(() -> {
+          entityManagerProvider = new DefaultEntityManagerProvider();
+          reloadPreferences();
+          loadProperties("/excel.properties");
+        });
+      }
+    } catch (InterruptedException | ExecutionException e) {
+      Thread.currentThread().interrupt();
+      log.error("Failed to initialize the application", e);
+      System.exit(0);
+    }
 
   }
 

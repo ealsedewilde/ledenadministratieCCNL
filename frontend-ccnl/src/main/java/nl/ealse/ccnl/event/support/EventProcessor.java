@@ -47,7 +47,7 @@ public class EventProcessor {
 
   /**
    * Register of Event targets for a Class.
-   * The key of this Map is the class of the event.
+   * The key of this Map is the class (as string) of the event.
    */
   private final Map<String, TargetDefinition> eventClassMapping = new HashMap<>();
   
@@ -59,7 +59,7 @@ public class EventProcessor {
   private EventProcessor() {}
 
   /**
-   * Build the complete Event target register.
+   * Build the complete Event target registry.
    */
   public void initialize() {
     try (InputStream input = getClass().getResourceAsStream("/META-INF/jandex.idx")) {
@@ -79,7 +79,7 @@ public class EventProcessor {
   private void processAnnotation(AnnotationInstance annotation) {
     TargetDefinition tagetDefinition = new TargetDefinition(annotation);
 
-    // inspect the atrributes of the EventListener annotation
+    // inspect the attributes of the EventListener annotation
     List<AnnotationValue> values = annotation.values();
     values.forEach(value -> {
       switch (value.name()) {
