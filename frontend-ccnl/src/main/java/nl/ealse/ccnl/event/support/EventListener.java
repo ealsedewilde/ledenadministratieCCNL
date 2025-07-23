@@ -20,20 +20,20 @@ import nl.ealse.ccnl.control.menu.MenuChoice;
 public @interface EventListener {
 
   /**
-   * The event class to match by the {@link EventProcessor}.
+   * The event class to match by the {@link EventPublisher}.
    * This is only relevant when the target method has no event parameter.
    * @return
    */
   Class<?> eventClass() default Object.class;
 
   /**
-   * The MenuChoice to match by the {@link EventProcessor}.
+   * The MenuChoice to match by the {@link EventPublisher}.
    * @return
    */
   MenuChoice menuChoice() default MenuChoice.LOGO;
 
   /**
-   * The ChoiceGroup to match by the {@link EventProcessor}.
+   * The ChoiceGroup to match by the {@link EventPublisher}.
    * @return
    */
 ChoiceGroup choiceGroup() default ChoiceGroup.UNKNOWN;

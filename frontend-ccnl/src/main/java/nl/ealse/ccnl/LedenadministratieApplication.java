@@ -13,9 +13,10 @@ public class LedenadministratieApplication {
    * @param args - no args needed
    */
   public static void main(String[] args) {
-    StartContext.start();
+    StartContext.performUniqueCheck();
+    StartContext.loadEventRegistry();
+    
     Application.launch(JavaFxApplication.class, args);
-
   }
 
 }

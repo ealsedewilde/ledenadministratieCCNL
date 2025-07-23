@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
-class EventProcessorTest {
+class EventPublisherTest {
   
   @Test
   void testInitialize() {
-    EventProcessor eventProcessor = EventProcessor.getInstance();
-    eventProcessor.initialize();
-    String result = eventProcessor.toString();
+    EventPublisher.EventRegistryLoader registry = new EventPublisher.EventRegistryLoader();
+    registry.call();
+    String result = registry.toString();
     log.info(result);
     assertEquals(10671, result.length());
   }

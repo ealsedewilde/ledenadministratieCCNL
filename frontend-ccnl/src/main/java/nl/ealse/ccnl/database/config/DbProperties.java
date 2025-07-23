@@ -34,8 +34,4 @@ public final class DbProperties {
     }
   }
 
-  public static boolean exists() {
-    return DatabaseLocation.DB_LOCATION_FILE.exists();
-  }
-
 }

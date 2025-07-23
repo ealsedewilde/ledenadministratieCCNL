@@ -31,7 +31,8 @@ public class InternalRelation implements AddressOwner {
   @Embedded
   private Address address = new Address();
 
-  public int getId() {
+  //used in search results TableView
+public int getKey() {
     return relationNumber;
   }
 

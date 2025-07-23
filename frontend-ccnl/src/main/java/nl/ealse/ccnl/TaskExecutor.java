@@ -2,8 +2,11 @@ package nl.ealse.ccnl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 
 public class TaskExecutor {
+
+  private static final ExecutorService service = Executors.newSingleThreadExecutor();
 
   /**
    * Execute a task; end with optional closing EntityManager.
@@ -11,8 +14,10 @@ public class TaskExecutor {
    * @param task to execute asynchronously
    */
   public void execute(Runnable task) {
-    ExecutorService service = Executors.newSingleThreadExecutor();
-    service.execute(task);
+    service.execute(() -> {
+      task.run();
+      ApplicationContext.getEntityManagerProvider().cleanup();
+    });
   }
 
 

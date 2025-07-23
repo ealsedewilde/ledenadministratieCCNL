@@ -9,7 +9,7 @@ import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
-import nl.ealse.ccnl.event.support.EventProcessor;
+import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.config.ConfigurationException;
 import nl.ealse.javafx.FXMLLoadException;
@@ -27,7 +27,7 @@ public abstract class FXMLBaseTest extends FXBase {
   private static final String FXML_DIR = "/fxml/";
 
   static {
-    EventProcessor.getInstance().initialize();
+    new EventPublisher.EventRegistryLoader().call();
   }
 
   protected PageController getPageController() {

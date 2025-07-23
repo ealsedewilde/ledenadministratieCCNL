@@ -71,6 +71,11 @@ public class Member extends MemberBase {
     return null;
   }
 
+  //used in search results TableView
+  public int getKey() {
+    return memberNumber;
+  }
+
   @PrePersist
   @PreUpdate
   public void prePersist() {

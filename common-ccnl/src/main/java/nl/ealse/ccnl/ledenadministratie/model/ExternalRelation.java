@@ -41,7 +41,8 @@ public class ExternalRelation implements AddressOwner {
     modificationDate = LocalDate.now();
   }
 
-  public int getId() {
+  //used in search results TableView
+public int getKey() {
     return relationNumber;
   }
   
