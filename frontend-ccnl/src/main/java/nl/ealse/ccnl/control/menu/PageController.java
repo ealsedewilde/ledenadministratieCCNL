@@ -34,10 +34,12 @@ public class PageController {
 
   private Node logoPage;
 
-  private PauseTransition delay;
+  private final PauseTransition delay = new PauseTransition(Duration.seconds(5));
 
   @FXML
   void initialize() {
+    delay.setOnFinished(event -> mainInfo.setText(""));
+
     logo.setImage(ImagesMap.get("CCNLLogo.png"));
     logoPage = mainPage.getCenter();
   }
@@ -65,9 +67,7 @@ public class PageController {
    * </p>
    */
   public void showPermanentMessage(String message) {
-    if (delay != null) {
-      delay.stop();
-    }
+    delay.stop();
     mainInfo.getStyleClass().clear();
     mainInfo.getStyleClass().add("info");
     mainInfo.setText(message);
@@ -80,9 +80,7 @@ public class PageController {
     mainInfo.getStyleClass().clear();
     mainInfo.getStyleClass().add("info");
     mainInfo.setText(message);
-    delay = new PauseTransition(Duration.seconds(5));
-    delay.setOnFinished(event -> mainInfo.setText(""));
-    delay.play();
+    delay.playFromStart();
   }
 
   /**
@@ -92,9 +90,7 @@ public class PageController {
     mainInfo.getStyleClass().clear();
     mainInfo.getStyleClass().add("error");
     mainInfo.setText(message);
-    delay = new PauseTransition(Duration.seconds(5));
-    delay.setOnFinished(event -> mainInfo.setText(""));
-    delay.play();
+    delay.playFromStart();
   }
 
   /**

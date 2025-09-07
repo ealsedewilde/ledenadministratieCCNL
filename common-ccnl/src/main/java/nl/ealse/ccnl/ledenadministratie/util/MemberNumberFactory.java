@@ -10,17 +10,21 @@ import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
  *
  */
 public class MemberNumberFactory extends NumberFactory {
+  
+  private boolean initialized;
 
-  private static final String CCNL_MEMBERS =
-      ApplicationContext.getProperty("ccnl.members");
-
-  public MemberNumberFactory(MemberRepository dao) {
-    super(Integer.valueOf(CCNL_MEMBERS), 0);
-    initialize(dao);
+  public MemberNumberFactory() {
+    super(Integer.valueOf(ApplicationContext.getProperty("ccnl.members")), 0);
   }
-
-  private void initialize(MemberRepository dao) {
-    super.initialize(dao.getAllMemberNumbers());
+  
+  @Override
+  public Integer getNewNumber() {
+    if (!initialized) {
+      MemberRepository dao = ApplicationContext.getComponent(MemberRepository.class);
+      super.initialize(dao.getAllMemberNumbers());
+      initialized = true;
+    }
+    return super.getNewNumber();
   }
 
 }

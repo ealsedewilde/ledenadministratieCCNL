@@ -6,6 +6,7 @@ import java.util.Properties;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.ContextInitializer;
+import nl.ealse.ccnl.ledenadministratie.dao.MemberRepository;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
 
 @Slf4j
@@ -24,8 +25,12 @@ public class TestContextInitializerCommon implements ContextInitializer {
   @Getter
   private final Properties properties = new Properties();
 
+  @SuppressWarnings("unchecked")
   @Override
   public <T> T getComponent(Class<T> clazz) {
+    if(clazz.equals(MemberRepository.class)) {
+      return (T) new MemberRepository();
+    }
     throw new UnsupportedOperationException();
   }
 
