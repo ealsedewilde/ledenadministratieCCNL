@@ -3,9 +3,13 @@ package nl.ealse.ccnl.control.member;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.StringJoiner;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import lombok.Getter;
+import lombok.Setter;
 import nl.ealse.ccnl.control.DocumentViewer;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.menu.MenuChoice;
@@ -39,6 +43,7 @@ public class MemberController extends MemberView {
 
   private Member model;
 
+  @Getter
   private Member selectedMember;
 
   private Document sepaAuthorization;
@@ -47,10 +52,9 @@ public class MemberController extends MemberView {
 
   private DocumentViewer documentViewer;
 
-  // Helper to detect changes in the iban owner
-  private String savedName;
-
   private MemberFormController formController;
+  
+  private final OwnerNameListener listener = new OwnerNameListener(this);
 
   public MemberController(PageController pageController, MemberService memberService,
       DocumentService documentService, PrinterService printerService) {
@@ -71,8 +75,13 @@ public class MemberController extends MemberView {
         .withPrintButton(e -> printPDF()).withCancelButton(e -> closePDF()).build();
     documentViewer.setWindowTitle("SEPA machtiging voor lid: %d (%s)");
 
+    getInitials().textProperty().addListener(listener);
+    getLastNamePrefix().textProperty().addListener(listener);
+    getLastName().textProperty().addListener(listener);
+    getIbanNumber().textProperty().addListener(listener);
+
     getIbanNumber().textProperty()
-        .addListener((observable, oldValue, newValue) -> formatIbanOwnerName(newValue));
+        .addListener((observable, oldValue, newValue) -> setIbanControls(newValue));
     getPaymentMethod().valueProperty()
         .addListener((observable, oldValue, newValue) -> amountPaidVisibility(newValue));
     getCurrentYearPaid().selectedProperty()
@@ -130,7 +139,15 @@ public class MemberController extends MemberView {
     ViewModel.modelToView(this, selectedMember);
     ViewModel.viewToModel(this, model);
     initializeInitialsType();
-    savedName = getIbanOwnerName().getText();
+    
+    if (selectedMember.getIbanNumber() != null) {
+      String name = selectedMember.getIbanOwnerName();
+      getIbanOwnerName().setText(name);
+      listener.setPreviousName(name);
+    } else {
+      getIbanOwnerName().setText(null);
+      listener.setPreviousName(null);
+    }
 
     if (sepaAuthorization == null) {
       getSepaButton().setVisible(false);
@@ -191,22 +208,9 @@ public class MemberController extends MemberView {
   void save() {
     enrich();
     enrichAddress();
-    updateIbanOwnerName();
-    if (savedName == null || savedName.equals(formatMemberName())) {
-      // The iban owner is implicit
-      getIbanOwnerName().setText(null);
-    }
     ViewModel.viewToModel(this, model);
-
-    if (model.getAddress().isAddressInvalid() && !model.getAddress().getStreetAndNumber()
-        .equals(selectedMember.getAddress().getStreetAndNumber())) {
-      // assume that the invalid address is fixed
-      model.getAddress().setAddressInvalid(false);
-    }
-    if (model.getAmountPaid().doubleValue() > 0d && model.getPaymentDate() == null) {
-      int year = LocalDate.now().getYear();
-      model.setPaymentDate(LocalDate.of(year, 1, 31));
-    }
+    
+    preSaveModel();
 
     service.save(model);
     pageController.showMessage("Lidgegevens opgeslagen");
@@ -216,6 +220,26 @@ public class MemberController extends MemberView {
       EventPublisher.publishEvent(new WelcomeletterEvent(this, model));
     } else {
       pageController.activateLogoPage();
+    }
+  }
+
+  private void preSaveModel() {
+    String ibanOwnerName = getIbanOwnerName().getText();
+    String memberName = model.getFullName();
+    if (memberName.equals(ibanOwnerName)) {
+      model.setIbanOwner(null);
+    } else {
+      model.setIbanOwner(ibanOwnerName);
+    }
+
+    if (model.getAddress().isAddressInvalid() && !model.getAddress().getStreetAndNumber()
+        .equals(selectedMember.getAddress().getStreetAndNumber())) {
+      // assume that the invalid address is fixed
+      model.getAddress().setAddressInvalid(false);
+    }
+    if (model.getAmountPaid().doubleValue() > 0d && model.getPaymentDate() == null) {
+      int year = LocalDate.now().getYear();
+      model.setPaymentDate(LocalDate.of(year, 1, 31));
     }
   }
 
@@ -256,16 +280,6 @@ public class MemberController extends MemberView {
     };
   }
 
-  void formatIbanOwnerName(String ibanNumber) {
-    if (hasContent(ibanNumber)) {
-      updateIbanOwnerName();
-    } else {
-      savedName = null;
-      getIbanOwnerName().setText(null);
-    }
-    setIbanControls(ibanNumber);
-  }
-
   void setAmountPaid(boolean checked) {
     if (getAmountPaid().isVisible()) {
       if (checked) {
@@ -289,7 +303,7 @@ public class MemberController extends MemberView {
 
   private void setIbanControls(String ibanNumber) {
     ObservableList<Node> children = formController.getFinancialPage().getChildren();
-    if (hasContent(ibanNumber)) {
+    if (ibanNumber != null && !ibanNumber.isBlank()) {
       if (!children.contains(getIbanOwnerName())) {
         children.addAll(getIbanOwnerNameL(), getIbanOwnerName(), getBicCodeL(), getBicCode());
       }
@@ -297,50 +311,58 @@ public class MemberController extends MemberView {
       children.removeAll(getIbanOwnerNameL(), getIbanOwnerName(), getBicCodeL(), getBicCode());
     }
   }
-
-  private void updateIbanOwnerName() {
-    String ibanName = getIbanOwnerName().getText();
-    String memberName = formatMemberName();
-    if (hasContent(ibanName)) {
-      if (!ibanName.equals(savedName)) {
-        // an explicit iban owner is specified by the user
-        savedName = ibanName;
-      } else if (!ibanName.equals(memberName)) {
-        // the member name is changed an thus the implicit iban owner
-        getIbanOwnerName().setText(memberName);
-        savedName = memberName;
-      }
-    } else {
-      // There is no iban owner yet
-      getIbanOwnerName().setText(memberName);
-      savedName = memberName;
-    }
-  }
-
+  
   /**
-   * Return the full name of the member as filled in the user interface. Return null when nothing is
-   * filled in the user interface
-   *
-   * @return the full name of the member or null
+   * React once any change that might be relevant for the owner name of the IBAN-number.
    */
-  private String formatMemberName() {
-    StringJoiner sj = new StringJoiner(" ");
-    if (getInitials().getText() != null && getLastName().getText() != null) {
-      formatName();
-      sj.add(getInitials().getText());
-      String lastNamePrefix = getLastNamePrefix().getText();
-      if (hasContent(lastNamePrefix) && !"null".equals(lastNamePrefix)) {
-        sj.add(lastNamePrefix);
-      }
-      sj.add(getLastName().getText());
-      return sj.toString();
+  private static class OwnerNameListener implements ChangeListener<String> {
+    
+    private final MemberController view;
+    
+    @Setter
+    private String previousName;
+    
+    public OwnerNameListener(MemberController view) {
+      this.view = view;
     }
-    return null;
-  }
 
-
-  private boolean hasContent(String text) {
-    return text != null && !text.isBlank();
+    @Override
+    public void changed(ObservableValue<? extends String> observable, String oldValue,
+        String newValue) {
+      String ibanNumber = view.getIbanNumber().getText();
+      if (present(ibanNumber)) {
+        String ibanOwnerName = view.getIbanOwnerName().getText();
+        if (!present(ibanOwnerName) || ibanOwnerName.equals(previousName)) {
+          String name = formatMemberName();
+          view.getIbanOwnerName().setText(name);
+          previousName = name;
+        }
+      } else {
+        view.getIbanOwnerName().setText(null);
+        previousName = null;
+      }
+      
+    }
+    private String formatMemberName() {
+      StringJoiner sj = new StringJoiner(" ");
+      if (view.getInitials().getText() != null && view.getLastName().getText() != null) {
+        view.formatName();
+        sj.add(view.getInitials().getText());
+        String lastNamePrefix = view.getLastNamePrefix().getText();
+        if (present(lastNamePrefix) && !"null".equals(lastNamePrefix)) {
+          sj.add(lastNamePrefix);
+        }
+        sj.add(view.getLastName().getText());
+        return sj.toString();
+      }
+      return null;
+    }
+    
+    private boolean present(String value) {
+      return value != null && !value.isBlank();
+    }
+    
+   
   }
 
 }

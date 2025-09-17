@@ -6,7 +6,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.StringJoiner;
@@ -20,15 +19,8 @@ public class Member extends MemberBase {
 
   @Id
   private Integer memberNumber;
-  
-  /**
-   * Value as used in the frontend.
-   * It is either the ibanOwner or the full name of the member.
-   */
-  @Transient
-  private String ibanOwnerName;
 
-  // CascadeType.REMOVE is inefficient, but there at most a just a few documents in the list
+  // CascadeType.REMOVE is inefficient, but there are at most just a few documents in the list
   @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
   private List<Document> documents;
 
@@ -36,17 +28,16 @@ public class Member extends MemberBase {
     return getInitials() != null && getInitials().indexOf('.') == -1;
   }
 
+  /**
+   * The name associated with the IBAN-number.
+   * By default it is the name of the member, but a different name can be provided via the user interface.
+   * @return - the name associated with the IBAN-number
+   */
   public String getIbanOwnerName() {
     if (getIbanOwner() == null) {
-      ibanOwnerName = getFullName();
-    } else {
-      ibanOwnerName = getIbanOwner();
+      return getFullName();
     }
-    return ibanOwnerName;
-  }
-  
-  public void setIbanOwnerName(String ibanOwnerName) {
-    this.ibanOwnerName = ibanOwnerName;
+    return getIbanOwner();
   }
 
   /**
@@ -79,10 +70,6 @@ public class Member extends MemberBase {
   @PrePersist
   @PreUpdate
   public void prePersist() {
-    String memberName = getFullName();
-    if (memberName == null || !memberName.equals(ibanOwnerName)) {
-      setIbanOwner(ibanOwnerName);
-    }
     setModificationDate(LocalDate.now());
   }
 

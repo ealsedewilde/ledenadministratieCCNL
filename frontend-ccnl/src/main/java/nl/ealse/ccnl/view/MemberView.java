@@ -65,6 +65,7 @@ public abstract class MemberView extends AddressView {
   private Label ibanOwnerNameL;
 
   @FXML
+  @Mapping(ignore = true)
   private TextField ibanOwnerName;
 
   @FXML
@@ -143,7 +144,7 @@ public abstract class MemberView extends AddressView {
     }
   }
 
-  protected void formatName() {
+  public void formatName() {
     String id = ((RadioButton) rbGroup.getSelectedToggle()).getId();
     if ("voorletters".equals(id)) {
       ContentUpdate.formatInitials(initials);
