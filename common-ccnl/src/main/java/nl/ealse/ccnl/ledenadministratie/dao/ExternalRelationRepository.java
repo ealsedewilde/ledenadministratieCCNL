@@ -33,7 +33,7 @@ public abstract class ExternalRelationRepository<T extends ExternalRelation>
   
   public List<T> findExternalRelationsByPostalCode(String searchValue) {
     String qlString = String.format(
-        "SELECT M FROM %s M WHERE LOWER(M.address.postalCode) = LOWER(?1)",
+        "SELECT M FROM %s M WHERE LOWER(M.address.postalCode) LIKE LOWER(concat(?1, '%'))",
         getType().getSimpleName());
     return executeQuery(qlString, searchValue);
   }

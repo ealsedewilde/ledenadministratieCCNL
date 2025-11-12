@@ -57,7 +57,7 @@ public class InternalRelationRepository extends BaseRepository<InternalRelation>
 
   public List<InternalRelation> findInternalRelationsByPostalCode(String searchValue) {
     return executeQuery(
-        "SELECT M FROM InternalRelation M WHERE LOWER(M.address.postalCode) = LOWER(?1)",
+        "SELECT M FROM InternalRelation M WHERE LOWER(M.address.postalCode) LIKE LOWER(concat(?1, '%'))",
         searchValue);
   }
 
