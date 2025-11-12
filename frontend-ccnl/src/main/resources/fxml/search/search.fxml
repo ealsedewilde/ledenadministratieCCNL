@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import nl.ealse.ccnl.control.SearchTextField?>
 <?import nl.ealse.ccnl.control.address.AddressPropertyValueFactory?>
 <?import nl.ealse.ccnl.control.button.SearchButton?>
 
@@ -19,7 +20,7 @@
 						<Label text="Zoeken op:" />
 						<ChoiceBox fx:id="searchCriterium" prefHeight="25.0" prefWidth="150.0" onAction="#resetResult"/>
 						<Label text="Zoekgegeven:" />
-						<TextField fx:id="searchField" maxWidth="300" onKeyPressed="#resetResult"/>
+						<SearchTextField fx:id="searchField" maxWidth="300" onKeyPressed="#resetResult"/>
 						<Label fx:id="errorMessage" styleClass="required" alignment="TOP_LEFT" visible="false"
 							minHeight="40" />
 					</children>

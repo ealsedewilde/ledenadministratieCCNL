@@ -13,8 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -45,10 +45,13 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   private Label resultHeader;
 
   @FXML
+  @Getter
   private ChoiceBox<String> searchCriterium;
-
+  
   @FXML
-  private TextField searchField;
+  @Getter
+  @Setter
+  private SearchField searchField;
 
   @FXML
   private Label errorMessage;
@@ -102,8 +105,9 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   @FXML
   public void search() {
     SearchItem searchItem = searchItemValues.get(searchCriterium.getValue());
-    if (validate(searchItem, searchField.getText())) {
-      String searchValue = searchField.getText().trim();
+    String searchText = searchField.getSearchText();
+    if (validate(searchItem, searchText)) {
+      String searchValue = searchText.trim();
       searchValue = formatPostalCode(searchItem, searchValue);
       List<T> searchResult = doSearch(searchItem, searchValue);
       if (searchResult.size() == 1) {
@@ -123,7 +127,7 @@ public abstract class SearchController<T, E extends EntitySelectionEvent<T>> {
   @FXML
   public void reset() {
     searchCriterium.getSelectionModel().selectFirst();
-    searchField.setText(null);
+    searchField.reset();
     resetResult();
   }
 
