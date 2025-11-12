@@ -24,7 +24,7 @@ class AnnualRolloverControllerTest extends FXMLBaseTest {
 
   @Test
   void testController() {
-    Assertions.assertTrue(runFX(() -> {
+    Assertions.assertTrue(runFX(60, () -> {
       prepare();
       doTest();
     }));

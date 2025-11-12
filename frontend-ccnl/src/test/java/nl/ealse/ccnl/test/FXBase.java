@@ -27,12 +27,22 @@ public abstract class FXBase {
     initializeMainStage();
   }
 
+
   /**
    * Controlled run of some work in the JavaFx application thread.
    * @param work
    * @return true when successful
    */
   protected boolean runFX(Runnable work) {
+    return runFX(6, work);
+  }
+  /**
+   * Controlled run of some work in the JavaFx application thread.
+   * @param work
+   * @param maximum elapse time in seconds
+   * @return true when successful
+   */
+  protected boolean runFX(int seconds, Runnable work) {
     FutureTask<Boolean> task = new FutureTask<>(() -> {
       work.run();
       return true;
@@ -40,7 +50,7 @@ public abstract class FXBase {
     Platform.runLater(task);
     try {
       // Safeguard for hanging tests. Such tests time out after 6 seconds.
-      return task.get(6, TimeUnit.SECONDS);
+      return task.get(seconds, TimeUnit.SECONDS);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
       log.error("Exception in Runnable", e);
       return false;
