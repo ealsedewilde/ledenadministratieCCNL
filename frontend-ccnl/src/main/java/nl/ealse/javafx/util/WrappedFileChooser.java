@@ -8,6 +8,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import nl.ealse.ccnl.MainStage;
+import nl.ealse.ccnl.control.menu.PageController;
+import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 
 /**
  * Wrapper around a {@link FileChooser}.
@@ -58,8 +60,12 @@ public class WrappedFileChooser {
       File directory = new File(name);
       fileChooser.setInitialDirectory(directory);
       if (!directory.exists()) {
-        directory.mkdirs();
+        if (!directory.mkdirs()) {
+          handleError(String.format("Bestandslocatie instelling %s is ongeldig", name));
+        }
       }
+    } else {
+      handleError("Geen bestandslocatie ingesteld");
     }
   }
 
@@ -76,7 +82,13 @@ public class WrappedFileChooser {
     configureInitialDirectory();
     return fileChooser.showSaveDialog(fileChooserStage);
   }
-
+  
+  private void handleError(String message) {
+    PageController pc = ApplicationContext.getComponent(PageController.class);
+    pc.showErrorMessage(message);
+    throw new FileChooserException(message);
+   
+  }
   /**
    * All file extensions in use by this application.
    */
