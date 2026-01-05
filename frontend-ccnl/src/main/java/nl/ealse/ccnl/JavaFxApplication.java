@@ -11,7 +11,7 @@ import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
 
 @Slf4j
 public class JavaFxApplication extends Application {
-  
+
   private boolean dbLocationFieExists = DatabaseLocation.DB_LOCATION_FILE.exists();;
 
   @Override
@@ -44,8 +44,8 @@ public class JavaFxApplication extends Application {
 
   private void publishEvent(Stage primaryStage) {
     try {
-      if (StartContext.getUnique().get().booleanValue() &&
-          StartContext.getInitialized().get().booleanValue()) {
+      if (StartContext.getUnique().get().booleanValue()
+          && StartContext.getInitialized().get().booleanValue()) {
         EventPublisher.publishEvent(new StageReadyEvent(primaryStage));
       } else {
         stop();

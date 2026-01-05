@@ -23,7 +23,7 @@ import nl.ealse.ccnl.ledenadministratie.model.Setting;
 public class DefaultContextInitializer implements ContextInitializer {
 
   /**
-   * The immutable properties for the application
+   * The immutable properties for the application.
    */
   @Getter
   private final Properties properties = new Properties();
