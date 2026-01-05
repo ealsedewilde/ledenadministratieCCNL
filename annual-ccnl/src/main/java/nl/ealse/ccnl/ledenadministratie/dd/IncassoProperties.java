@@ -156,7 +156,7 @@ public class IncassoProperties {
       a.setDescription("Contributie bij Automatische Incasso");
   
       DDConfigDateEntry d = new DDConfigDateEntry();
-      d.setValue(LocalDate.now().plusDays(6));
+      d.setValue(LocalDate.now().plusDays(8));
       d.setDescription("Datum waarop de incasso uitgevoerd moet worden");
       config.setDirectDebitDate(d);
   
@@ -175,7 +175,7 @@ public class IncassoProperties {
         em.persist(config);
         em.getTransaction().commit();
       } catch (Exception ex) {
-        log.error("Failed to persist incaaso properties", ex);
+        log.error("Failed to persist incasso properties", ex);
         em.getTransaction().rollback();
         throw new ConfigurationException("Could not initialize configuration", ex);
       }
