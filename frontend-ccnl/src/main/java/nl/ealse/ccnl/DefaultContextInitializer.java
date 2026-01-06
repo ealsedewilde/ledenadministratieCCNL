@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.ioc.ComponentFactory;
 import nl.ealse.ccnl.ioc.DefaultComponentFactory;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
@@ -89,11 +90,7 @@ public class DefaultContextInitializer implements ContextInitializer {
       if (StartContext.getUnique().get().booleanValue()) {
         // Setting up a database connection is a heavy operation
         // It should not block the start of the user interface
-        StartContext.getThreadPool().execute(() -> {
-          entityManagerProvider = new DefaultEntityManagerProvider();
-          reloadPreferences();
-          loadProperties("/excel.properties");
-        });
+        StartContext.getThreadPool().execute(new DatabaseTask());
       }
     } catch (InterruptedException | ExecutionException e) {
       Thread.currentThread().interrupt();
@@ -101,6 +98,18 @@ public class DefaultContextInitializer implements ContextInitializer {
       System.exit(0);
     }
 
+  }
+  
+  private class DatabaseTask extends HandledTask {
+
+    @Override
+    protected String call() throws Exception {
+      entityManagerProvider = new DefaultEntityManagerProvider();
+      reloadPreferences();
+      loadProperties("/excel.properties");
+      return "Database is gestart";
+    }
+    
   }
 
 

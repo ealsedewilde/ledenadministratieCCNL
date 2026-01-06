@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutionException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.database.config.DbConfigurator;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
@@ -12,11 +13,11 @@ import nl.ealse.ccnl.ledenadministratie.config.DatabaseLocation;
 @Slf4j
 public class JavaFxApplication extends Application {
 
-  private boolean dbLocationFieExists = DatabaseLocation.DB_LOCATION_FILE.exists();;
+  private boolean dbLocationFileExists = DatabaseLocation.DB_LOCATION_FILE.exists();
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    if (dbLocationFieExists) {
+    if (dbLocationFileExists) {
       publishEvent(primaryStage);
     } else {
       // There is no location for the database defined.
@@ -32,7 +33,7 @@ public class JavaFxApplication extends Application {
 
   @Override
   public void init() throws Exception {
-    if (dbLocationFieExists) {
+    if (dbLocationFileExists) {
       ApplicationContext.start();
     }
   }
@@ -47,6 +48,8 @@ public class JavaFxApplication extends Application {
       if (StartContext.getUnique().get().booleanValue()
           && StartContext.getInitialized().get().booleanValue()) {
         EventPublisher.publishEvent(new StageReadyEvent(primaryStage));
+        ApplicationContext.getComponent(PageController.class)
+            .showPermanentMessage("Even geduld a.u.b. Database wordt gestart...");
       } else {
         stop();
       }
