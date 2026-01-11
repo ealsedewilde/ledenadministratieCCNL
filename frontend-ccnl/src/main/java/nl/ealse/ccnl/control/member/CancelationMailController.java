@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 import nl.ealse.ccnl.control.DocumentTemplateController;
+import nl.ealse.ccnl.control.HandledTask;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.event.support.EventListener;
@@ -30,8 +31,6 @@ public class CancelationMailController extends DocumentTemplateController {
   private final DocumentService documentService;
 
   private final MailService mailService;
-
-  private String mailSubject = ApplicationContext.getPreference("ccnl.mail.subject");
 
   private Member selectedMember;
 
@@ -83,15 +82,9 @@ public class CancelationMailController extends DocumentTemplateController {
       selectedMember.setEmail(mailAddress);
       memberService.save(selectedMember);
     }
-    String mailContent = generateText();
-    MailMessage mailMessage;
-    try {
-      mailMessage = mailService.sendMail(mailAddress, mailSubject, mailContent);
-      mailService.saveMail(selectedMember, mailMessage);
-      pageController.showMessage("Email is verzonden naar: " + mailAddress);
-    } catch (MessagingException e) {
-      pageController.showErrorMessage("Email is verzending is mislukt: " + e.getMessage());
-    }
+    SendMailTask sendMailTask = new SendMailTask(mailAddress);
+    pageController.showPermanentMessage("Email wordt verzonden naar: " + mailAddress);
+    sendMailTask.executeTask();
     pageController.activateLogoPage();
   }
 
@@ -104,7 +97,7 @@ public class CancelationMailController extends DocumentTemplateController {
   /**
    * Construct the content of the mail.
    *
-   * @return
+   * @return - mail content
    */
   private String generateText() {
     String[] lines = getLetterText().getText().split("\\r?\\n");
@@ -138,6 +131,29 @@ public class CancelationMailController extends DocumentTemplateController {
   @Override
   protected void reInitialize() {
     initializeTemplates();
+  }
+  
+  private class SendMailTask extends HandledTask {
+
+    private final String mailSubject = ApplicationContext.getPreference("ccnl.mail.subject");
+    private final String mailAddress;
+    
+    public SendMailTask(String mailAddress) {
+      this.mailAddress = mailAddress;
+    }
+
+    @Override
+    protected String call() throws Exception {
+      String mailContent = generateText();
+      try {
+        MailMessage mailMessage = mailService.sendMail(mailAddress, mailSubject, mailContent);
+        mailService.saveMail(selectedMember, mailMessage);
+        return "Email is verzonden";
+      } catch (MessagingException e) {
+        return "Email is verzending is mislukt: " + e.getMessage();
+      }
+    }
+    
   }
 
 }
