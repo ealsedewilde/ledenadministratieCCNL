@@ -31,7 +31,7 @@
 									<artifactId>frontend-ccnl</artifactId>
 									<version>8.0.0</version>
 									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/ledenadministratieCCNL/app</outputDirectory>
+									<outputDirectory>${project.build.directory}/ledenadministratieCCNL</outputDirectory>
 									<destFileName>LedenadministratieApp.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
@@ -51,9 +51,33 @@
 									<version>8.0.0</version>
 									<type>zip</type>
 									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/LedenadministratieCCNL/runtime</outputDirectory>
+									<outputDirectory>${project.build.directory}/runtime</outputDirectory>
 								</artifactItem>
 							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<id>copy-resource-one</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/LedenadministratieCCNL</outputDirectory>
+							<resources>
+								<resource>
+									<directory>config/resources</directory>
+									<includes>
+										<include>database.bat</include>
+									</includes>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>

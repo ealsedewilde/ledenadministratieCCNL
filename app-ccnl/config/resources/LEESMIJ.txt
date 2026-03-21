@@ -1,0 +1,11 @@
+Met het starten van database.bat wordt in de browser een console gestart voor het beheer van de database.
+Deze console kan niet tegelijkertijd met de Ledenadministratie applicatie draaien!
+
+De JDBC URL bestaat altijd uit JDBC:H2: en daarna de locatie van de database zoals je die heb gekozen in de Ledenadministratie applicatie
+Dus als je in bestand db.properties hebt staan:
+db.locatie = S:\db\ccnl
+Dan wordt de JDBC-URL: jdbc:h2:s:/db/ccnl (let erop dat je / tekens gebruikt in een URL en geen \ tekens)
+
+Laat de Driver klasse en Gebruikersnaam op de vooringestelde waarde staan.
+
+Beeindig databse.bat met CTRL+C en bevestig met Y.

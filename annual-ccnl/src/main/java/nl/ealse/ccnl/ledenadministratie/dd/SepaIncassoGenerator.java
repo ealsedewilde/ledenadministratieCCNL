@@ -32,7 +32,7 @@ public class SepaIncassoGenerator {
   private final MemberRepository dao;
   private final DocumentRepository documentDao;
 
-   public SepaIncassoGenerator(MemberRepository dao, DocumentRepository documentDao) {
+  public SepaIncassoGenerator(MemberRepository dao, DocumentRepository documentDao) {
     this.dao = dao;
     this.documentDao = documentDao;
   }
@@ -52,7 +52,8 @@ public class SepaIncassoGenerator {
             PaymentMethod.DIRECT_DEBIT, MembershipStatus.ACTIVE, false);
     // Convert result to HashSet as is has the most efficient contains() implementation
     Set<Integer> sepaNumbers = documentDao.findMemberNummbersWithSepa().collect(Collectors.toSet());
-    SepaIncassoContext context = new SepaIncassoContext(new ArrayList<>(), controlExcelFile, members, sepaNumbers);
+    SepaIncassoContext context =
+        new SepaIncassoContext(new ArrayList<>(), controlExcelFile, members, sepaNumbers);
     SepaIncassoDocumentGenerator documentGenerator = new SepaIncassoDocumentGenerator(context);
     TransactionUtil.inTransction(documentGenerator::generateIncassoDocument);
     Document incassoDocument = documentGenerator.getDocument();

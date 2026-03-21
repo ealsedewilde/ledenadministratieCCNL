@@ -49,9 +49,9 @@ public class SepaIncassoDocumentGenerator {
     try (Ledenbestand incassobestand = new Ledenbestand(context.controlExcelFile())) {
       incassobestand.addMemberHeading();
       for (Member member : context.members()) {
-        // when every grant is added convert to a check
-        String info = context.sepaNumbers().contains(member.getMemberNumber()) ? "SEPA Machtiging: Ja"
-            : "SEPA Machtiging: Nee";
+        String info =
+            context.sepaNumbers().contains(member.getMemberNumber()) ? "SEPA Machtiging: Ja"
+                : "SEPA Machtiging: Nee";
         member.setPaymentInfo(info);
         incassobestand.addMember(member);
 
@@ -92,8 +92,8 @@ public class SepaIncassoDocumentGenerator {
   /**
    * Debit kant van een INCASSO aanmaken.
    *
-   * @param lid
-   * @return
+   * @param lid waarvoor een incasso wordt aangemaakt
+   * @return aangemaakte incasso transactie
    */
   private DirectDebitTransactionInformation9 getDebitTransaction(Member member) {
     DirectDebitTransactionInformationBuilder builder =
@@ -105,7 +105,7 @@ public class SepaIncassoDocumentGenerator {
       throw new IllegalArgumentException(msg);
     }
     try {
-      return builder.metDibiteurIBAN(iban.trim(), member.getBicCode())
+      return builder.metDebiteurIBAN(iban.trim(), member.getBicCode())
           .metDibiteurNaam(member.getIbanOwnerName()).metLidnummer(member.getMemberNumber())
           .build();
     } catch (InvalidIbanException e) {

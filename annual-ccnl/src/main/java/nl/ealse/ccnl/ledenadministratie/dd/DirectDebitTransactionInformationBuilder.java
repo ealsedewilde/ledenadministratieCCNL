@@ -60,7 +60,7 @@ public class DirectDebitTransactionInformationBuilder {
    * @return builder
    * @throws InvalidIbanException
    */
-  public DirectDebitTransactionInformationBuilder metDibiteurIBAN(String iban, String bicCode)
+  public DirectDebitTransactionInformationBuilder metDebiteurIBAN(String iban, String bicCode)
       throws InvalidIbanException {
     if (!IBAN_CHECK.isValid(iban)) {
       throw new InvalidIbanException(String.format("IBAN is ongeldig '%s'", iban));

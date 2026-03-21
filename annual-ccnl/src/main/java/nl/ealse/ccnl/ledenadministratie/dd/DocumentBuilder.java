@@ -17,7 +17,7 @@ import nl.ealse.ccnl.ledenadministratie.dd.model.PaymentInstructionInformation4;
 public class DocumentBuilder {
 
   /**
-   * Het op te bouwen object
+   * Het op te bouwen object.
    */
   private Document document = new Document();
 
@@ -26,7 +26,7 @@ public class DocumentBuilder {
   }
 
   /**
-   * Aanmaakdatum vullen
+   * Aanmaakdatum vullen.
    *
    * @param creDtTm - aanmaakdatum
    * @return builder
@@ -48,7 +48,7 @@ public class DocumentBuilder {
   }
 
   /**
-   * MessageId (maximaal 35 tekens)
+   * MessageId (maximaal 35 tekens).
    *
    * @param messageId - incasso referentie
    * @return builder
@@ -59,7 +59,7 @@ public class DocumentBuilder {
   }
 
   /**
-   * Totaal aantal transacties
+   * Totaal aantal transacties.
    *
    * @param nbOfTxs - totaal aantal transacties
    * @return builder
@@ -83,6 +83,7 @@ public class DocumentBuilder {
 
   /**
    * Het gebouwde document opvragen.
+   *
    * @return het gebouwde document
    */
   public Document build() {

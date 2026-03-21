@@ -22,7 +22,7 @@ import nl.ealse.ccnl.ledenadministratie.excel.dd.BicResolver;
 
 
 /**
- * Bouwen crediteur zijde van de INCASSO
+ * Bouwen crediteur zijde van de INCASSO.
  *
  * @author Ealse
  *
@@ -30,7 +30,7 @@ import nl.ealse.ccnl.ledenadministratie.excel.dd.BicResolver;
 public class PaymentInstructionInformationBuilder {
 
   /**
-   * Het op te bouwen object
+   * Het op te bouwen object.
    */
   private PaymentInstructionInformation4 paymentInstructionInformation =
       new PaymentInstructionInformation4();

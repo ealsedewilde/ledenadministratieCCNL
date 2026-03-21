@@ -12,7 +12,7 @@ class DirectDebitTransactionInformationBuilderTest {
   void testBuilder() {
     sut = new DirectDebitTransactionInformationBuilder();
     try {
-      sut.metDibiteurIBAN("NL54ASNB0709093276", null);
+      sut.metDebiteurIBAN("NL54ASNB0709093276", null);
       sut.metDibiteurNaam("Tester");
       sut.metLidnummer(1234);
       DirectDebitTransactionInformation9 result = sut.build();
