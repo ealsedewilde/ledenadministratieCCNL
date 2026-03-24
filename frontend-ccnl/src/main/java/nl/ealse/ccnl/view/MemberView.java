@@ -131,6 +131,10 @@ public abstract class MemberView extends AddressView {
       paymentMethod.setItems(PaymentMethodMapper.getValues());
       paymentMethod.setValue(PaymentMethodMapper.BANK_TRANSFER);
     }
+    getRbGroup().selectedToggleProperty().addListener((ob, o, n) -> {
+      String id = ((RadioButton) n).getId();
+      formatName(id);
+    });
   }
 
   /**
@@ -144,14 +148,20 @@ public abstract class MemberView extends AddressView {
     }
   }
 
+  /**
+   * Format depending the type (initials or first name.
+   */
   public void formatName() {
     String id = ((RadioButton) rbGroup.getSelectedToggle()).getId();
+    formatName(id);
+  }
+
+  private void formatName(String id) {
     if ("voorletters".equals(id)) {
       ContentUpdate.formatInitials(initials);
     } else {
       ContentUpdate.firstCapital(initials);
     }
-    ContentUpdate.firstCapital(lastName);
   }
 
 }
