@@ -133,7 +133,11 @@ public abstract class MemberView extends AddressView {
     }
     getRbGroup().selectedToggleProperty().addListener((ob, o, n) -> {
       String id = ((RadioButton) n).getId();
-      formatName(id);
+      if ("voorletters".equals(id)) {
+        ContentUpdate.formatInitials(initials);
+      } else {
+        initials.setText("");
+      }
     });
   }
 
@@ -153,10 +157,6 @@ public abstract class MemberView extends AddressView {
    */
   public void formatName() {
     String id = ((RadioButton) rbGroup.getSelectedToggle()).getId();
-    formatName(id);
-  }
-
-  private void formatName(String id) {
     if ("voorletters".equals(id)) {
       ContentUpdate.formatInitials(initials);
     } else {
