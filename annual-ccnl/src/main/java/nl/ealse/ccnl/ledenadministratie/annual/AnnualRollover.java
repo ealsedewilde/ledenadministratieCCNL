@@ -30,17 +30,15 @@ public class AnnualRollover {
     this.memberRepository = memberRepository;
     this.archiveRepository = archiveRepository;
   }
+  
   /**
    * Rollover to a new membership year.
-   * <p>
-   * All non renewal members will be archived and removed from members database table.
-   * </p>
-   * <p>
-   * The status is changed to OVERDUE for for all members that haven't paid yet.
-   * </p>
-   * <p>
-   * The member card status is reset for all remaining members.
-   * </p>
+   *
+   * <p>All non renewal members will be archived and removed from members database table.</p>
+   *
+   * <p>The status is changed to OVERDUE for for all members that haven't paid yet.</p>
+   *
+   * <p>The member card status is reset for all remaining members.</p>
    */
   public void rollover() {
     TransactionUtil.inTransction(this::doRollover);

@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.DocumentViewer;
@@ -136,9 +137,9 @@ public class MemberController extends MemberView {
   @FXML
   void reset() {
     // the selectedMember remains unchanged, so we can repeatedly call reset().
+    initializeInitialsType(selectedMember.getInitials());
     ViewModel.modelToView(this, selectedMember);
     ViewModel.viewToModel(this, model);
-    initializeInitialsType();
     
     if (selectedMember.getIbanNumber() != null) {
       String name = selectedMember.getIbanOwnerName();
@@ -170,8 +171,8 @@ public class MemberController extends MemberView {
     setIbanControls(selectedMember.getIbanNumber());
   }
 
-  private void initializeInitialsType() {
-    if (getInitials().getText() == null || getInitials().getText().indexOf(".") > -1) {
+  private void initializeInitialsType(String initials) {
+    if (initials == null || initials.indexOf(".") > -1) {
       // initials
       getRbGroup().selectToggle(getRbGroup().getToggles().get(0));
     } else {
@@ -343,19 +344,21 @@ public class MemberController extends MemberView {
       }
       
     }
+    
     private String formatMemberName() {
       StringJoiner sj = new StringJoiner(" ");
-      if (view.getInitials().getText() != null && view.getLastName().getText() != null) {
-        view.formatName();
+      String last = view.getLastName().getText();
+      if (present(view.getInitials().getText()) && present(last)) {
+        view.formatFirstName();
         sj.add(view.getInitials().getText());
         String lastNamePrefix = view.getLastNamePrefix().getText();
-        if (present(lastNamePrefix) && !"null".equals(lastNamePrefix)) {
+        if (present(lastNamePrefix)) {
           sj.add(lastNamePrefix);
         }
-        sj.add(view.getLastName().getText());
+        sj.add(last);
         return sj.toString();
       }
-      return null;
+      return "";
     }
     
     private boolean present(String value) {

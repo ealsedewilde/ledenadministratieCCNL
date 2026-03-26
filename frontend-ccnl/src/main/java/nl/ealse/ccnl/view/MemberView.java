@@ -145,7 +145,7 @@ public abstract class MemberView extends AddressView {
    * Perform some formatting before processing the form data.
    */
   protected void enrich() {
-    formatName();
+    formatFirstName();
     LocalDate d = memberSince.getValue();
     if (d == null) {
       memberSince.setValue(LocalDate.now());
@@ -155,7 +155,7 @@ public abstract class MemberView extends AddressView {
   /**
    * Format depending the type (initials or first name.
    */
-  public void formatName() {
+  public void formatFirstName() {
     String id = ((RadioButton) rbGroup.getSelectedToggle()).getId();
     if ("voorletters".equals(id)) {
       ContentUpdate.formatInitials(initials);
