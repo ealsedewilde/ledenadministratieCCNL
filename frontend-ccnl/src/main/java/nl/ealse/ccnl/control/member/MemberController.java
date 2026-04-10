@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.member;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 import javafx.beans.value.ChangeListener;
@@ -8,7 +9,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.DocumentViewer;
@@ -21,6 +23,7 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
+import nl.ealse.ccnl.ledenadministratie.model.InitialsType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.util.AmountToPay;
@@ -32,6 +35,9 @@ import nl.ealse.javafx.mvvm.ViewModel;
 import nl.ealse.javafx.print.PrintException;
 import nl.ealse.javafx.print.PrinterService;
 
+/**
+ * Handle the member form.
+ */
 public class MemberController extends MemberView {
 
   private final PageController pageController;
@@ -137,7 +143,7 @@ public class MemberController extends MemberView {
   @FXML
   void reset() {
     // the selectedMember remains unchanged, so we can repeatedly call reset().
-    initializeInitialsType(selectedMember.getInitials());
+    initializeInitialsType(selectedMember);
     ViewModel.modelToView(this, selectedMember);
     ViewModel.viewToModel(this, model);
     
@@ -171,13 +177,27 @@ public class MemberController extends MemberView {
     setIbanControls(selectedMember.getIbanNumber());
   }
 
-  private void initializeInitialsType(String initials) {
-    if (initials == null || initials.indexOf(".") > -1) {
-      // initials
-      getRbGroup().selectToggle(getRbGroup().getToggles().get(0));
-    } else {
-      // firstname
-      getRbGroup().selectToggle(getRbGroup().getToggles().get(1));
+  private void initializeInitialsType(Member member) {
+    Toggle toggle;
+    List<Toggle> toggles = getRbGroup().getToggles();
+    switch (member.getInitialsType()) {
+      case INITIALS:
+        toggle = toggles.get(0);
+        break;
+      case FIRSTNAME:
+        toggle = toggles.get(1);
+        break;
+      default: 
+        // UNKNOWN 
+        String initials = member.getInitials();
+        if (initials == null || initials.indexOf(".") > -1) {
+          // initials
+          toggle = toggles.get(0);
+        } else {
+          // firstname
+          toggle = toggles.get(1);
+        }
+        getRbGroup().selectToggle(toggle);
     }
   }
 
@@ -231,6 +251,13 @@ public class MemberController extends MemberView {
       model.setIbanOwner(null);
     } else {
       model.setIbanOwner(ibanOwnerName);
+    }
+    
+    String id = ((RadioButton) getRbGroup().getSelectedToggle()).getId();
+    if ("voorletters".equals(id)) {
+      model.setInitialsType(InitialsType.INITIALS);
+    } else {
+      model.setInitialsType(InitialsType.FIRSTNAME);
     }
 
     if (model.getAddress().isAddressInvalid() && !model.getAddress().getStreetAndNumber()

@@ -11,12 +11,19 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 
+/**
+ * Superclass for Member and ArchivedMember.
+ */
 @MappedSuperclass
 @Data
 public class MemberBase implements AddressOwner {
 
   @Basic(optional = false)
   private String initials;
+
+  @Basic(optional = false)
+  @Enumerated(EnumType.STRING)
+  private InitialsType initialsType = InitialsType.UNKNOWN;
   private String lastNamePrefix;
   @Basic(optional = false)
   private String lastName;
