@@ -9,10 +9,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.button.SearchButton;
+import nl.ealse.ccnl.ledenadministratie.model.InitialsType;
+import nl.ealse.ccnl.mappers.InitialsTypeMapper;
 import nl.ealse.ccnl.mappers.MembershipStatusMapper;
 import nl.ealse.ccnl.mappers.PaymentMethodMapper;
 import nl.ealse.javafx.mapping.Mapping;
@@ -24,12 +25,13 @@ public abstract class MemberView extends AddressView {
 
   @FXML
   private Label memberNumber;
+  
+  @FXML
+  @Mapping(propertyMapper = InitialsTypeMapper.class)
+  private RadioButton initialsType;
 
   @FXML
   private TextField initials;
-  @FXML
-  @Mapping(ignore = true)
-  private ToggleGroup rbGroup;
   @FXML
   @Mapping(ignore = true)
   private Label initialsE;
@@ -131,14 +133,6 @@ public abstract class MemberView extends AddressView {
       paymentMethod.setItems(PaymentMethodMapper.getValues());
       paymentMethod.setValue(PaymentMethodMapper.BANK_TRANSFER);
     }
-    getRbGroup().selectedToggleProperty().addListener((ob, o, n) -> {
-      String id = ((RadioButton) n).getId();
-      if ("voorletters".equals(id)) {
-        ContentUpdate.formatInitials(initials);
-      } else {
-        initials.setText("");
-      }
-    });
   }
 
   /**
@@ -156,8 +150,9 @@ public abstract class MemberView extends AddressView {
    * Format depending the type (initials or first name.
    */
   public void formatFirstName() {
-    String id = ((RadioButton) rbGroup.getSelectedToggle()).getId();
-    if ("voorletters".equals(id)) {
+    String id = ((RadioButton) initialsType.getToggleGroup().getSelectedToggle()).getId();
+    InitialsType type =  InitialsType.valueOf(id);
+    if (type == InitialsType.INITIALS) {
       ContentUpdate.formatInitials(initials);
     } else {
       ContentUpdate.firstCapital(initials);

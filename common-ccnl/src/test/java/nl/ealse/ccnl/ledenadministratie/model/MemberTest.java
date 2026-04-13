@@ -18,6 +18,7 @@ class MemberTest {
   void initialsTest() {
     Member m = new Member();
     m.setInitials("Ealse");
+    m.setInitialsType(InitialsType.FIRST_NAME);
     Assertions.assertTrue(m.hasFirstName());
   }
 

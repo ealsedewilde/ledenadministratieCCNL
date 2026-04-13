@@ -23,7 +23,7 @@ public class MemberBase implements AddressOwner {
 
   @Basic(optional = false)
   @Enumerated(EnumType.STRING)
-  private InitialsType initialsType = InitialsType.UNKNOWN;
+  private InitialsType initialsType = InitialsType.INITIALS;
   private String lastNamePrefix;
   @Basic(optional = false)
   private String lastName;

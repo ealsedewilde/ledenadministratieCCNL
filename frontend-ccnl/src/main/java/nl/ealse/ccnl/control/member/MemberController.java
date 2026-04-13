@@ -9,8 +9,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.DocumentViewer;
@@ -23,7 +23,6 @@ import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.model.Document;
-import nl.ealse.ccnl.ledenadministratie.model.InitialsType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.PaymentMethod;
 import nl.ealse.ccnl.ledenadministratie.util.AmountToPay;
@@ -143,7 +142,6 @@ public class MemberController extends MemberView {
   @FXML
   void reset() {
     // the selectedMember remains unchanged, so we can repeatedly call reset().
-    initializeInitialsType(selectedMember);
     ViewModel.modelToView(this, selectedMember);
     ViewModel.viewToModel(this, model);
     
@@ -175,30 +173,6 @@ public class MemberController extends MemberView {
     formController.setActiveFormPage(0);
 
     setIbanControls(selectedMember.getIbanNumber());
-  }
-
-  private void initializeInitialsType(Member member) {
-    Toggle toggle;
-    List<Toggle> toggles = getRbGroup().getToggles();
-    switch (member.getInitialsType()) {
-      case INITIALS:
-        toggle = toggles.get(0);
-        break;
-      case FIRSTNAME:
-        toggle = toggles.get(1);
-        break;
-      default: 
-        // UNKNOWN 
-        String initials = member.getInitials();
-        if (initials == null || initials.indexOf(".") > -1) {
-          // initials
-          toggle = toggles.get(0);
-        } else {
-          // firstname
-          toggle = toggles.get(1);
-        }
-        getRbGroup().selectToggle(toggle);
-    }
   }
 
   /**
@@ -251,13 +225,6 @@ public class MemberController extends MemberView {
       model.setIbanOwner(null);
     } else {
       model.setIbanOwner(ibanOwnerName);
-    }
-    
-    String id = ((RadioButton) getRbGroup().getSelectedToggle()).getId();
-    if ("voorletters".equals(id)) {
-      model.setInitialsType(InitialsType.INITIALS);
-    } else {
-      model.setInitialsType(InitialsType.FIRSTNAME);
     }
 
     if (model.getAddress().isAddressInvalid() && !model.getAddress().getStreetAndNumber()

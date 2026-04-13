@@ -25,7 +25,7 @@ public class Member extends MemberBase {
   private List<Document> documents;
 
   public boolean hasFirstName() {
-    return getInitials() != null && getInitials().indexOf('.') == -1;
+    return InitialsType.FIRST_NAME == getInitialsType();
   }
 
   /**
