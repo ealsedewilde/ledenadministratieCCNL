@@ -92,7 +92,6 @@ public class InternalRelationController extends InternalRelationView {
   @FXML
   void reset() {
     ViewModel.modelToView(this, selectedInternalRelation);
-    ViewModel.viewToModel(this, model);
     if (currentMenuChoice == MenuChoice.NEW_INTERNAL_RELATION && !getTitle().getItems().isEmpty()) {
       getTitle().getSelectionModel().selectFirst();
     }

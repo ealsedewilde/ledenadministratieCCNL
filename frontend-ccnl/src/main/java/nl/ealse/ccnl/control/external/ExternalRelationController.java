@@ -48,7 +48,6 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
       selectedExternalRelation.setRelationNumber(externalRelationService.getFreeNumber());
     }
     ViewModel.modelToView(this, selectedExternalRelation);
-    ViewModel.viewToModel(this, model);
     getFormController().setActiveFormPage(0);
 
   }

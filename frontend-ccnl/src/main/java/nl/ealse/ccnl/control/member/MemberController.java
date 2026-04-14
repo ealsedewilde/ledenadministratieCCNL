@@ -143,7 +143,6 @@ public class MemberController extends MemberView {
   void reset() {
     // the selectedMember remains unchanged, so we can repeatedly call reset().
     ViewModel.modelToView(this, selectedMember);
-    ViewModel.viewToModel(this, model);
     
     if (selectedMember.getIbanNumber() != null) {
       String name = selectedMember.getIbanOwnerName();
