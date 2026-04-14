@@ -125,6 +125,9 @@ public abstract class MemberView extends AddressView {
   @FXML
   private DatePicker memberSince;
 
+  /**
+   * Initialize as part of FXML initialization.
+   */
   protected void initializeView() {
     if (memberStatus != null) {
       memberStatus.setItems(MembershipStatusMapper.getStatuses());
@@ -133,6 +136,14 @@ public abstract class MemberView extends AddressView {
       paymentMethod.setItems(PaymentMethodMapper.getValues());
       paymentMethod.setValue(PaymentMethodMapper.BANK_TRANSFER);
     }
+    initialsType.getToggleGroup().selectedToggleProperty().addListener((ob, o, n) -> {
+      String id = ((RadioButton) n).getId();
+      if ("INITIALS".equals(id)) {
+        ContentUpdate.formatInitials(initials);
+      } else {
+        initials.setText("");
+      }
+    });
   }
 
   /**
