@@ -46,7 +46,6 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   private void handlePartner(MenuChoiceEvent event) {
     pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
-    this.model = new ExternalRelationPartner();
     this.currentMenuChoice = event.getMenuChoice();
     formController.getHeaderText().setText(getHeaderTextValue());
     reset();
@@ -63,6 +62,11 @@ public class PartnerController extends ExternalRelationController<ExternalRelati
   @Override
   protected String getSaveText() {
     return "Partnergegevens opgeslagen";
+  }
+
+  @Override
+  protected ExternalRelationPartner getModel() {
+    return new ExternalRelationPartner();
   }
 
 }

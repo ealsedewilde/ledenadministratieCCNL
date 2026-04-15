@@ -20,8 +20,6 @@ public class InternalRelationController extends InternalRelationView {
 
   private final InternalRelationService internalRelationService;
 
-  private InternalRelation model;
-
   private InternalRelation selectedInternalRelation;
 
   private MenuChoice currentMenuChoice;
@@ -59,7 +57,6 @@ public class InternalRelationController extends InternalRelationView {
     pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     formController.getHeaderText().setText(getHeaderTextValue());
-    this.model = new InternalRelation();
     if (event.getMenuChoice() == MenuChoice.NEW_INTERNAL_RELATION) {
       initializeTitles();
     } else {
@@ -101,6 +98,7 @@ public class InternalRelationController extends InternalRelationView {
   @FXML
   void save() {
     enrichAddress();
+    InternalRelation model = new InternalRelation();
     ViewModel.viewToModel(this, model);
     RelationNumberValue rn = RelationNumberValue.fromLabel(model.getTitle());
     model.setRelationNumber(rn.getRelationNumber());

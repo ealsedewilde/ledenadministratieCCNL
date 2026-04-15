@@ -1,7 +1,6 @@
 package nl.ealse.ccnl.control.member;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 import javafx.beans.value.ChangeListener;
@@ -9,8 +8,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.DocumentViewer;
@@ -46,8 +43,6 @@ public class MemberController extends MemberView {
   private final DocumentService documentService;
 
   private final PrinterService printerService;
-
-  private Member model;
 
   @Getter
   private Member selectedMember;
@@ -133,7 +128,6 @@ public class MemberController extends MemberView {
     pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
-    this.model = new Member();
     formController.getHeaderText().setText(getHeaderTextValue());
   }
 
@@ -202,9 +196,10 @@ public class MemberController extends MemberView {
   void save() {
     enrich();
     enrichAddress();
+    Member model = new Member();
     ViewModel.viewToModel(this, model);
     
-    preSaveModel();
+    preSaveModel(model);
 
     service.save(model);
     pageController.showMessage("Lidgegevens opgeslagen");
@@ -217,7 +212,7 @@ public class MemberController extends MemberView {
     }
   }
 
-  private void preSaveModel() {
+  private void preSaveModel(Member model) {
     String ibanOwnerName = getIbanOwnerName().getText();
     String memberName = model.getFullName();
     if (memberName.equals(ibanOwnerName)) {

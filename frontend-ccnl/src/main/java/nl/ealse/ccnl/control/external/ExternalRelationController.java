@@ -22,9 +22,6 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
   private final ExternalRelationService<T> externalRelationService;
 
   @Mapping(ignore = true)
-  protected T model;
-
-  @Mapping(ignore = true)
   protected T selectedExternalRelation;
 
   protected MenuChoice currentMenuChoice;
@@ -56,11 +53,14 @@ public abstract class ExternalRelationController<T extends ExternalRelation>
   public void save() {
     enrich();
     enrichAddress();
+    T model = getModel();
     ViewModel.viewToModel(this, model);
     externalRelationService.save(model);
     pageController.showMessage(getSaveText());
     pageController.activateLogoPage();
   }
+
+  protected abstract T getModel();
 
   protected abstract String getSaveText();
 

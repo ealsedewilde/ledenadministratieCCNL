@@ -47,7 +47,6 @@ public class ExternalOtherController extends ExternalRelationController<External
     pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
-    this.model = new ExternalRelationOther();
     formController.getHeaderText().setText(getHeaderTextValue());
     reset();
   }
@@ -63,6 +62,11 @@ public class ExternalOtherController extends ExternalRelationController<External
   @Override
   protected String getSaveText() {
     return "Externe relatie opgeslagen";
+  }
+
+  @Override
+  protected ExternalRelationOther getModel() {
+    return new ExternalRelationOther();
   }
 
 }

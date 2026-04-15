@@ -13,7 +13,7 @@ import nl.ealse.ccnl.ledenadministratie.util.NumberFactory;
 @Slf4j
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ExternalRelationService<T extends ExternalRelation> {
-  {log.info("Service created");}
+  { log.info("Service created"); }
 
   private final NumberFactory numberFactory;
 

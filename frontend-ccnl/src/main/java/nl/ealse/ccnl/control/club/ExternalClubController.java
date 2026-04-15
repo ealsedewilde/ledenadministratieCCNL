@@ -47,7 +47,6 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
     pageController.setActivePage(formController.getPageReference());
     formController.setActiveFormPage(0);
     this.currentMenuChoice = event.getMenuChoice();
-    this.model = new ExternalRelationClub();
     formController.getHeaderText().setText(getHeaderTextValue());
     reset();
   }
@@ -63,6 +62,11 @@ public class ExternalClubController extends ExternalRelationController<ExternalR
   @Override
   protected String getSaveText() {
     return "Club gegevens zijn opgeslagen";
+  }
+
+  @Override
+  protected ExternalRelationClub getModel() {
+    return new ExternalRelationClub();
   }
 
 }
