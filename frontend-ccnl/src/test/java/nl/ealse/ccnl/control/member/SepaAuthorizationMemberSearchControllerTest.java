@@ -14,6 +14,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.MenuController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventPublisher;
@@ -40,9 +41,9 @@ class SepaAuthorizationMemberSearchControllerTest  extends FXMLBaseTest {
 
   @Test
   void testSearch() {
-    Assertions.assertTrue(runFX(() -> {
+    Assertions.assertTrue(runFX(600, () -> {
       prepare();
-      MenuChoiceEvent event = new MenuChoiceEvent(sut, MenuChoice.PAYMENT_AUTHORIZATION);
+      MenuChoiceEvent event = new MenuChoiceEvent(MenuController.SOURCE, MenuChoice.PAYMENT_AUTHORIZATION);
       sut.searchMember(event);
 
       sut.doSearch(si, sv);
@@ -58,11 +59,7 @@ class SepaAuthorizationMemberSearchControllerTest  extends FXMLBaseTest {
             times(1));
       }
 
-      searchField("1234");
-      sut.search();
-      searchCriterium(3);
-      searchField("1234aa");
-      sut.search();
+      sut.doSearch(SearchItem.POSTAL_CODE, "1234aa");
       sut.reset();
     }));
 

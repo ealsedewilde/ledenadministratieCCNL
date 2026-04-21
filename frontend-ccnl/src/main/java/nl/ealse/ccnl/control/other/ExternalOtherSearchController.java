@@ -2,7 +2,7 @@ package nl.ealse.ccnl.control.other;
 
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
-import nl.ealse.ccnl.control.menu.ChoiceGroup;
+import nl.ealse.ccnl.control.menu.Link;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.ExternalOtherSelectionEvent;
@@ -23,7 +23,7 @@ public class ExternalOtherSearchController
     this.pageController = pageController;
   }
 
-  @EventListener(choiceGroup = ChoiceGroup.SEARCH_EXTERNAL)
+  @EventListener(link = Link.SEARCH_EXTERNAL)
   public void search(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);
@@ -45,7 +45,7 @@ public class ExternalOtherSearchController
   }
 
   @Override
-  protected String headerText(MenuChoice curentContext) {
+  protected String headerText(MenuChoice currentMenuChoice) {
     return "Opzoeken externe relatie";
   }
 

@@ -8,6 +8,11 @@ import javafx.scene.Parent;
 @FunctionalInterface
 public interface PageReference {
 
+  /**
+   * Get the UI component.
+   * 
+   * @return requested UI component
+   */
   public Parent getPage();
 
 }

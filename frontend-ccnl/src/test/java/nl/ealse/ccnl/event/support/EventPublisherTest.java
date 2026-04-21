@@ -13,7 +13,7 @@ class EventPublisherTest {
     registry.call();
     String result = registry.toString();
     log.info(result);
-    assertEquals(10671, result.length());
+    assertEquals(10652, result.length());
   }
 
 }

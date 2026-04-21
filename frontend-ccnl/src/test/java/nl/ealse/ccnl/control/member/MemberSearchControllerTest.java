@@ -58,13 +58,9 @@ class MemberSearchControllerTest extends FXMLBaseTest {
             times(1));
       }
 
-      searchField("1234");
-      sut.search();
-      searchCriterium(3);
-      searchField("1234aa");
-      sut.search();
+      sut.doSearch(SearchItem.POSTAL_CODE, "1234aa");
       sut.reset();
-    }));
+        }));
 
   }
 

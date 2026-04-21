@@ -2,7 +2,7 @@ package nl.ealse.ccnl.control.club;
 
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
-import nl.ealse.ccnl.control.menu.ChoiceGroup;
+import nl.ealse.ccnl.control.menu.Link;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.ExternalClubSelectionEvent;
@@ -22,7 +22,7 @@ public class ExternalClubSearchController
     this.pageController = pageController;
   }
 
-  @EventListener(choiceGroup = ChoiceGroup.SEARCH_CLUB)
+  @EventListener(link = Link.SEARCH_CLUB)
   public void searchClub(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);

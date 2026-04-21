@@ -18,8 +18,4 @@ public class MenuChoiceEvent extends EventObject {
     this.menuChoice = menuChoice;
   }
 
-  public boolean hasGroup() {
-    return menuChoice.getGroup() != null;
-  }
-
 }

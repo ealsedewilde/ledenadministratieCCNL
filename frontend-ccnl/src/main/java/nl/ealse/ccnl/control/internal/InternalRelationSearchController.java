@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import nl.ealse.ccnl.control.SearchController;
 import nl.ealse.ccnl.control.SearchField;
 import nl.ealse.ccnl.control.SearchTextField;
-import nl.ealse.ccnl.control.menu.ChoiceGroup;
+import nl.ealse.ccnl.control.menu.Link;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.InternalRelationSelectionEvent;
@@ -30,7 +30,7 @@ public class InternalRelationSearchController
     this.internalRelationService = internalRelationService;
   }
 
-  @EventListener(choiceGroup = ChoiceGroup.SEARCH_INTERNAL)
+  @EventListener(link = Link.SEARCH_INTERNAL)
   public void searchInternalRelation(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);

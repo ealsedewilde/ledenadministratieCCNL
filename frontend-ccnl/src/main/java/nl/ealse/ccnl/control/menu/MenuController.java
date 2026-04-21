@@ -10,11 +10,12 @@ import nl.ealse.ccnl.event.support.EventPublisher;
  * Controller for all menu bar choices.
  */
 public class MenuController {
+  public static final String SOURCE = "MENU_CONTROLLER";
 
   @FXML
   void action(ActionEvent evt) {
     MenuItem source = (MenuItem) evt.getSource();
-    EventPublisher.publishEvent(new MenuChoiceEvent(this, MenuChoice.valueOf(source.getId())));
+    EventPublisher.publishEvent(new MenuChoiceEvent(SOURCE, MenuChoice.valueOf(source.getId())));
   }
 
 }

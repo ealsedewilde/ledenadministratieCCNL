@@ -24,13 +24,4 @@ public class EntitySelectionEvent<T> extends MenuChoiceEvent {
     this.selectedEntity = selectedEntity;
   }
 
-  /**
-   * This type of event is never a group event.
-   */
-  @Override
-  public boolean hasGroup() {
-    return false;
-  }
-
-
 }

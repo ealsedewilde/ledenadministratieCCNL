@@ -2,7 +2,7 @@ package nl.ealse.ccnl.control.partner;
 
 import java.util.Map;
 import nl.ealse.ccnl.control.external.ExternalRelationSearchController;
-import nl.ealse.ccnl.control.menu.ChoiceGroup;
+import nl.ealse.ccnl.control.menu.Link;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -22,7 +22,7 @@ public class PartnerSearchController
     this.pageController = pageController;
   }
 
-  @EventListener(choiceGroup = ChoiceGroup.SEARCH_PARTNER)
+  @EventListener(link = Link.SEARCH_PARTNER)
   public void searchPartner(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);

@@ -1,12 +1,16 @@
 package nl.ealse.ccnl.control.menu;
 
-import static nl.ealse.ccnl.control.menu.ChoiceGroup.REPORTS;
-import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_CLUB;
-import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_EXTERNAL;
-import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_INTERNAL;
-import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_MEMBER;
-import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_PARTNER;
-import static nl.ealse.ccnl.control.menu.ChoiceGroup.SEARCH_PA_MEMBER;
+import static nl.ealse.ccnl.control.menu.Link.REPORTS;
+import static nl.ealse.ccnl.control.menu.Link.SEARCH_CLUB;
+import static nl.ealse.ccnl.control.menu.Link.SEARCH_EXTERNAL;
+import static nl.ealse.ccnl.control.menu.Link.SEARCH_INTERNAL;
+import static nl.ealse.ccnl.control.menu.Link.SEARCH_MEMBER;
+import static nl.ealse.ccnl.control.menu.Link.SEARCH_PARTNER;
+import static nl.ealse.ccnl.control.menu.Link.SEARCH_PA_MEMBER;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import lombok.Getter;
 
 /**
@@ -15,7 +19,7 @@ import lombok.Getter;
  * @author ealse
  *
  */
-public enum MenuChoice {
+public enum MenuChoice implements Step {
   NEW_MEMBER, WELCOME_LETTER(SEARCH_MEMBER), AMEND_MEMBER(SEARCH_MEMBER), CANCEL_MEMBERSHIP(
       SEARCH_MEMBER), PAYMENT_AUTHORIZATION(SEARCH_PA_MEMBER),
   //
@@ -34,50 +38,42 @@ public enum MenuChoice {
   //
   ADD_DOCUMENT(SEARCH_MEMBER), VIEW_DOCUMENT(SEARCH_MEMBER), DELETE_DOCUMENT(SEARCH_MEMBER),
   //
-  REPORT_ALL_DATA(REPORTS, true), REPORT_NEW_MEMBERS(REPORTS, true), REPORT_OVERDUE_MEMBERS(REPORTS,
-      true), REPORT_CANCELLED_MEMBERS(REPORTS,
-          true), REPORT_AFTER_APRIL(REPORTS, true), REPORT_ARCHIVE(REPORTS, true),
+  REPORT_ALL_DATA(true, REPORTS), REPORT_NEW_MEMBERS(true, REPORTS), REPORT_OVERDUE_MEMBERS(true,
+      REPORTS), REPORT_CANCELLED_MEMBERS(true,
+          REPORTS), REPORT_AFTER_APRIL(true, REPORTS), REPORT_ARCHIVE(true, REPORTS),
   //
   RESET_PAYMENTS(true), ANNUAL_ROLLOVER, PRODUCE_DIRECT_DEBITS_FILE,
   //
-  PRODUCE_REMINDER_REPORT(true), PRODUCE_REMINDER_PARTLY_PAID_REPORT(
-      true), PRODUCE_REMINDER_LETTERS_DD, PRODUCE_REMINDER_LETTERS_BT, PRODUCE_REMINDER_LETTERS_BT_X,
+  PRODUCE_REMINDER_REPORT(true), PRODUCE_REMINDER_PARTLY_PAID_REPORT(true), 
+      PRODUCE_REMINDER_LETTERS_DD, PRODUCE_REMINDER_LETTERS_BT, PRODUCE_REMINDER_LETTERS_BT_X,
   //
   RECONCILE_PAYMENTS, HANDLE_OVERDUE,
   //
   UPLOAD_SEPA_FORM(true), TEMPLATES_OVERVIEW,
-
+  //
   MANAGE_BACKUP_DATABASE(true), MANAGE_RESTORE_DATABASE(true),
-
+  //
   IMPORT_FROM_EXCEL,
-
+  //
   SETTINGS, MANAGE_ARCHIVE,
-
+  //
   DB_CONFIG(true),
-
+  //
   LOGO;
 
   @Getter
-  private ChoiceGroup group;
+  private List<Step> steps = new ArrayList<>();
 
   @Getter
   private boolean command = false;
 
-
-  private MenuChoice() {
-
+  private MenuChoice(Link... chain) {
+    this.steps.addAll(Arrays.asList(chain));
+    this.steps.add(this);
   }
 
-  private MenuChoice(ChoiceGroup group) {
-    this.group = group;
-  }
-
-  private MenuChoice(boolean command) {
-    this.command = command;
-  }
-
-  private MenuChoice(ChoiceGroup group, boolean command) {
-    this.group = group;
+  private MenuChoice(boolean command, Link... chain) {
+    this(chain);
     this.command = command;
   }
 

@@ -13,9 +13,10 @@ import nl.ealse.javafx.ImagesMap;
 
 /**
  * Controller of the main page of the application.
- * <p>
- * The main page is a BorderPane. The content of Center of this pane is replaced frequently as part of
- * the user dialog. This controller is also capable of displaying messages in the Bottom part of the
+ * 
+ * <p>The main page is a BorderPane. The content of Center of this pane is replaced frequently 
+ * as part of the user dialog. 
+ * This controller is also capable of displaying messages in the Bottom part of the
  * GridPane.
  * </p>
  *
@@ -62,8 +63,8 @@ public class PageController {
 
   /**
    * Show a message.
-   * <p>
-   * Use this when starting a async Task. Replace this message when the async Task is finshed.
+   * 
+   * <p>Use this when starting a async Task. Replace this message when the async Task is finshed.
    * </p>
    */
   public void showPermanentMessage(String message) {
@@ -95,8 +96,8 @@ public class PageController {
 
   /**
    * Set the logo page.
-   * <p>
-   * When menu choice process with a fxml page is fully executed, the logo page will be shown.
+   * 
+   * <p>When menu choice process with a fxml page is fully executed, the logo page will be shown.
    * However when this is not the case when the process is aborted. In that case the last fxml page
    * keeps showing. Ìf you then choose a menu choice process without a fxml page, the fxml page must
    * be replaced by the logo. This must be done before handling the command, hence the @Order.

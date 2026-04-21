@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +13,10 @@ import java.util.concurrent.Callable;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import nl.ealse.ccnl.control.menu.ChoiceGroup;
+import nl.ealse.ccnl.control.menu.Link;
 import nl.ealse.ccnl.control.menu.MenuChoice;
+import nl.ealse.ccnl.control.menu.MenuController;
+import nl.ealse.ccnl.control.menu.Step;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.config.ConfigurationException;
@@ -35,21 +36,17 @@ import org.jboss.jandex.Type;
 public class EventPublisher {
 
   /**
-   * Register of Event targets for a {@link MenuChoice}
+   * Register of Event targets for a {@link MenuChoice}.
    */
-  private final Map<MenuChoice, TargetDefinition> menuChoiceMapping = new EnumMap<>(MenuChoice.class);
-  
-  /**
-   * Register of Event targets for a {@link ChoiceGroup}
-   */
-  private final Map<ChoiceGroup, TargetDefinition> choiceGroupMapping =
-      new EnumMap<>(ChoiceGroup.class);
+  private final Map<Step, TargetDefinition> menuChoiceMapping = new HashMap<>();
 
   /**
    * Register of Event targets for a Class.
    * The key of this Map is the class (as string) of the event.
    */
   private final Map<String, TargetDefinition> eventClassMapping = new HashMap<>();
+  
+  private final Map<MenuChoice, Integer> stepIx = new HashMap<>();
   
   /**
    * Register of Event targets that trigger the display of the logo page.
@@ -58,21 +55,25 @@ public class EventPublisher {
 
   /**
    * Dispatch an event to its target.
-   * @param event
+   * 
+   * @param event that will be dispatched to its target
    */
   public void publishEvent(Object event) {
     if (event instanceof MenuChoiceEvent mce) {
       MenuChoice choice = mce.getMenuChoice();
+      int ix = 0;
+      if (choice.getSteps().size() > 1) {
+        if (MenuController.SOURCE != mce.getSource()) {
+          ix = stepIx.get(choice).intValue() + 1;
+        }
+        stepIx.put(choice, ix);
+      }
+      Step step = choice.getSteps().get(ix);
       if (choice.isCommand()) {
         commandMapping.forEach(targetDefinition -> invokeMethod(event, targetDefinition));
       }
-      if (mce.hasGroup()) {
-        TargetDefinition targetDefinition = choiceGroupMapping.get(choice.getGroup());
-        invokeMethod(event, targetDefinition);
-      } else {
-        TargetDefinition targetDefinition = menuChoiceMapping.get(choice);
-        invokeMethod(event, targetDefinition);
-      }
+      TargetDefinition targetDefinition = menuChoiceMapping.get(step);
+      invokeMethod(event, targetDefinition);
     } else {
       Class<?> eventClass = event.getClass();
       TargetDefinition targetDefinition = eventClassMapping.get(eventClass.getName());
@@ -95,6 +96,9 @@ public class EventPublisher {
     }
   }
   
+  /**
+   * Build the registry of Event targets as defined via {@link EventListener}s.
+   */
   public static class EventRegistryLoader implements Callable<Boolean> {
 
     @Override
@@ -113,7 +117,8 @@ public class EventPublisher {
 
     /**
      * Register one Event target.
-     * @param annotation
+     * 
+     * @param annotation {@link EventListener}
      */
     private void processAnnotation(AnnotationInstance annotation) {
       TargetDefinition tagetDefinition = new TargetDefinition(annotation);
@@ -129,9 +134,9 @@ public class EventPublisher {
             Type eventType = value.asClass();
             eventClassMapping.put(eventType.name().toString(), tagetDefinition);
             break;
-          case "choiceGroup":
-            ChoiceGroup choiceGroup = ChoiceGroup.valueOf(value.asEnum());
-            choiceGroupMapping.put(choiceGroup, tagetDefinition);
+          case "link":
+            Link link = Link.valueOf(value.asEnum());
+            menuChoiceMapping.put(link, tagetDefinition);
             break;
           case "menuChoice":
           default:
@@ -157,7 +162,6 @@ public class EventPublisher {
     public String toString() {
       StringBuilder sb = new StringBuilder();
       sb.append("menuChoiceMapping").append(menuChoiceMapping.toString());
-      sb.append("\nchoiceGroupMapping").append(choiceGroupMapping.toString());
       sb.append("\ncommandMapping").append(commandMapping.toString());
       sb.append("\neventClassMapping").append(eventClassMapping.toString());
       return sb.toString();
@@ -199,7 +203,8 @@ public class EventPublisher {
 
     /**
      * Initialization is executes the first time an event hits this target.
-     * @param event
+     * 
+     * @param event that will be dispatched to its target
      */
     private void initializeTarget(Object event) {
       MethodInfo method = annotation.target().asMethod();

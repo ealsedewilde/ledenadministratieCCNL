@@ -6,7 +6,7 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.AsyncTaskException;
 import nl.ealse.ccnl.control.HandledTask;
-import nl.ealse.ccnl.control.menu.ChoiceGroup;
+import nl.ealse.ccnl.control.menu.Link;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -42,17 +42,18 @@ public class ExcelExportCommand {
         () -> ApplicationContext.getPreference("ccnl.directory.excel", "c:/temp"));
   }
 
-  @EventListener(choiceGroup = ChoiceGroup.REPORTS)
+  @EventListener(link = Link.REPORTS)
   public void executeCommand(MenuChoiceEvent event) {
+    MenuChoice menuChoice = event.getMenuChoice();
     File exportFile = fileChooser.showSaveDialog();
     if (exportFile != null) {
       pageController.showPermanentMessage("MS Excel-werkblad wordt aangemaakt; even geduld a.u.b.");
-      if (event.getMenuChoice() == REPORT_ARCHIVE) {
+      if (menuChoice == REPORT_ARCHIVE) {
         AsyncArchiveTask asyncArchiveTask = new AsyncArchiveTask(this, exportFile);
         asyncArchiveTask.executeTask();
       } else {
         AsyncExportTask asyncExportTask =
-            new AsyncExportTask(this, event.getMenuChoice(), exportFile);
+            new AsyncExportTask(this, menuChoice, exportFile);
         asyncExportTask.executeTask();
       }
     }

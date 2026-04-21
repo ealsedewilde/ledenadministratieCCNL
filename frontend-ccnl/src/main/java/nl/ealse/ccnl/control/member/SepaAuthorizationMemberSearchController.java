@@ -1,7 +1,7 @@
 package nl.ealse.ccnl.control.member;
 
 import java.util.List;
-import nl.ealse.ccnl.control.menu.ChoiceGroup;
+import nl.ealse.ccnl.control.menu.Link;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MenuChoiceEvent;
@@ -18,7 +18,7 @@ public class SepaAuthorizationMemberSearchController extends MemberSearchControl
   }
 
   @Override
-  @EventListener(choiceGroup = ChoiceGroup.SEARCH_PA_MEMBER)
+  @EventListener(link = Link.SEARCH_PA_MEMBER)
   public void searchMember(MenuChoiceEvent event) {
     super.searchMember(event);
   }

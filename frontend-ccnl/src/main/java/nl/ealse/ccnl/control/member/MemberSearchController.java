@@ -3,7 +3,7 @@ package nl.ealse.ccnl.control.member;
 import java.util.List;
 import java.util.Map;
 import nl.ealse.ccnl.control.SearchController;
-import nl.ealse.ccnl.control.menu.ChoiceGroup;
+import nl.ealse.ccnl.control.menu.Link;
 import nl.ealse.ccnl.control.menu.MenuChoice;
 import nl.ealse.ccnl.control.menu.PageController;
 import nl.ealse.ccnl.event.MemberSeLectionEvent;
@@ -23,7 +23,7 @@ public class MemberSearchController extends SearchController<Member, MemberSeLec
     this.service = service;
   }
 
-  @EventListener(choiceGroup = ChoiceGroup.SEARCH_MEMBER)
+  @EventListener(link = Link.SEARCH_MEMBER)
   public void searchMember(MenuChoiceEvent event) {
     pageController.setActivePage(getPageReference());
     prepareSearch(event);
