@@ -20,10 +20,10 @@
 		<Label fx:id="memberNumber" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
 		<VBox GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="2">
-			<RadioButton id="INITIALS" mnemonicParsing="false" selected="true">
+			<RadioButton id="FIRST_NAME" mnemonicParsing="false" selected="true">
 				<graphic>
 					<HBox>
-						<Label text="Voorletters" />
+						<Label text="Voornaam" />
 						<Label style="-fx-text-fill: red;" text=" *" />
 					</HBox>
 				</graphic>
@@ -31,10 +31,10 @@
 					<ToggleGroup fx:id="rbGroup" />
 				</toggleGroup>
 			</RadioButton>
-			<RadioButton fx:id="initialsType" id="FIRST_NAME" mnemonicParsing="false" toggleGroup="$rbGroup">
+			<RadioButton fx:id="initialsType" id="INITIALS" mnemonicParsing="false" toggleGroup="$rbGroup">
 				<graphic>
 					<HBox>
-						<Label text="Voornaam" />
+						<Label text="Vooletters" />
 						<Label style="-fx-text-fill: red;" text=" *" />
 					</HBox>
 				</graphic>
