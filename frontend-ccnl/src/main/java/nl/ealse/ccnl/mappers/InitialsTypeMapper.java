@@ -31,8 +31,12 @@ public class InitialsTypeMapper implements PropertyMapper<RadioButton, InitialsT
    */
   @Override
   public void mapPropertyToJavaFx(InitialsType modelProperty, RadioButton button) {
-    InitialsType buttonType = InitialsType.valueOf(button.getId());
-    button.setSelected(buttonType == modelProperty);
+    for (Toggle t : button.getToggleGroup().getToggles()) {
+      RadioButton b = (RadioButton) t;
+      InitialsType buttonType = InitialsType.valueOf(b.getId());
+      b.setSelected(buttonType == modelProperty);
+    }
+
   }
 
 }

@@ -31,7 +31,7 @@ public class ContentUpdate {
    * 
    * @param initials - to format
    */
-  public void formatInitials(TextField initials) {
+  public String formatInitials(TextField initials) {
     StringBuilder sb = new StringBuilder();
     String text = initials.getText();
     for (char ch : text.toCharArray()) {
@@ -40,7 +40,7 @@ public class ContentUpdate {
         sb.append('.');
       }
     }
-    initials.setText(sb.toString().toUpperCase());
+    return sb.toString().toUpperCase();
   }
 
   /**

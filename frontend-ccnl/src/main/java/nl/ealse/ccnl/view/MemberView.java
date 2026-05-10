@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 import nl.ealse.ccnl.control.button.SearchButton;
-import nl.ealse.ccnl.ledenadministratie.model.InitialsType;
 import nl.ealse.ccnl.mappers.InitialsTypeMapper;
 import nl.ealse.ccnl.mappers.MembershipStatusMapper;
 import nl.ealse.ccnl.mappers.PaymentMethodMapper;
@@ -136,11 +135,11 @@ public abstract class MemberView extends AddressView {
       paymentMethod.setItems(PaymentMethodMapper.getValues());
       paymentMethod.setValue(PaymentMethodMapper.BANK_TRANSFER);
     }
-    initialsType.getToggleGroup().selectedToggleProperty().addListener((ob, o, n) -> {
-      String id = ((RadioButton) n).getId();
-      if ("INITIALS".equals(id)) {
-        ContentUpdate.formatInitials(initials);
-      } else {
+    initialsType.selectedProperty().addListener((ob, o, n) -> {
+      String asInitials = ContentUpdate.formatInitials(initials);
+      if (n.booleanValue()) {
+        initials.setText(asInitials);
+      } else if (initials.getText().equals(asInitials)){
         initials.setText("");
       }
     });
@@ -161,9 +160,7 @@ public abstract class MemberView extends AddressView {
    * Format depending the type (initials or first name.
    */
   public void formatFirstName() {
-    String id = ((RadioButton) initialsType.getToggleGroup().getSelectedToggle()).getId();
-    InitialsType type =  InitialsType.valueOf(id);
-    if (type == InitialsType.INITIALS) {
+    if (initialsType.selectedProperty().getValue().booleanValue()) {
       ContentUpdate.formatInitials(initials);
     } else {
       ContentUpdate.firstCapital(initials);
