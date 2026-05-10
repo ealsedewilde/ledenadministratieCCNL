@@ -27,8 +27,8 @@ class ContentUpdateTest extends FXBase {
   private void formatInitialsTest() {
     TextField tf = new TextField();
     tf.setText("erw");
-    ContentUpdate.formatInitials(tf);
-    Assertions.assertEquals("E.R.W.", tf.getText());
+    String result = ContentUpdate.formatInitials(tf);
+    Assertions.assertEquals("E.R.W.", result);
   }
 
   private void formatPostalCodeTest() {
