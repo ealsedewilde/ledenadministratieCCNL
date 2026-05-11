@@ -31,7 +31,7 @@ public class ContentUpdate {
    * 
    * @param initials - to format
    */
-  public String formatInitials(TextField initials) {
+  public String asInitials(TextField initials) {
     StringBuilder sb = new StringBuilder();
     String text = initials.getText();
     for (char ch : text.toCharArray()) {
@@ -41,6 +41,15 @@ public class ContentUpdate {
       }
     }
     return sb.toString().toUpperCase();
+  }
+  
+  /**
+   * Place dots between each letter.
+   * 
+   * @param initials - to format
+   */
+  public void formatInitials(TextField initials) {
+    initials.setText(asInitials(initials));
   }
 
   /**

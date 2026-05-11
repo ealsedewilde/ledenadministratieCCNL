@@ -136,7 +136,7 @@ public abstract class MemberView extends AddressView {
       paymentMethod.setValue(PaymentMethodMapper.BANK_TRANSFER);
     }
     initialsType.selectedProperty().addListener((ob, o, n) -> {
-      String asInitials = ContentUpdate.formatInitials(initials);
+      String asInitials = ContentUpdate.asInitials(initials);
       if (n.booleanValue()) {
         initials.setText(asInitials);
       } else if (initials.getText().equals(asInitials)){
