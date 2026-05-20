@@ -3,6 +3,19 @@
 	xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
 	version="3.0">
 	<persistence-unit name="nl.ealse.ccnl.leden">
+	
+		<class>nl.ealse.ccnl.ledenadministratie.model.ArchivedMember</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.Document</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.DocumentTemplate</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.ExternalRelation</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.ExternalRelationClub</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.ExternalRelationOther</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.ExternalRelationPartner</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.InternalRelation</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.Member</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.PaymentFile</class>
+		<class>nl.ealse.ccnl.ledenadministratie.model.Setting</class>
 
 		<properties>
 			<property name="jakarta.persistence.schema-generation.database.action" value="none" />
