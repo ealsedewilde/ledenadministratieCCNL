@@ -137,7 +137,9 @@ public class MemberController extends MemberView {
   @FXML
   void reset() {
     // the selectedMember remains unchanged, so we can repeatedly call reset().
+    listener.setActive(false);
     ViewModel.modelToView(this, selectedMember);
+    listener.setActive(true);
     
     if (selectedMember.getIbanNumber() != null) {
       String name = selectedMember.getIbanOwnerName();
@@ -323,6 +325,9 @@ public class MemberController extends MemberView {
     @Setter
     private String previousName;
     
+    @Setter
+    private boolean active;
+    
     public OwnerNameListener(MemberController view) {
       this.view = view;
     }
@@ -330,17 +335,19 @@ public class MemberController extends MemberView {
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue,
         String newValue) {
-      String ibanNumber = view.getIbanNumber().getText();
-      if (present(ibanNumber)) {
-        String ibanOwnerName = view.getIbanOwnerName().getText();
-        if (!present(ibanOwnerName) || ibanOwnerName.equals(previousName)) {
-          String name = formatMemberName();
-          view.getIbanOwnerName().setText(name);
-          previousName = name;
+      if (active) {
+        String ibanNumber = view.getIbanNumber().getText();
+        if (present(ibanNumber)) {
+          String ibanOwnerName = view.getIbanOwnerName().getText();
+          if (!present(ibanOwnerName) || ibanOwnerName.equals(previousName)) {
+            String name = formatMemberName();
+            view.getIbanOwnerName().setText(name);
+            previousName = name;
+          }
+        } else {
+          view.getIbanOwnerName().setText(null);
+          previousName = null;
         }
-      } else {
-        view.getIbanOwnerName().setText(null);
-        previousName = null;
       }
       
     }

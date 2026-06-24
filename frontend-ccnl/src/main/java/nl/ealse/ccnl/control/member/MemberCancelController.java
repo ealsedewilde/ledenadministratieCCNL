@@ -10,6 +10,7 @@ import nl.ealse.ccnl.event.MemberSeLectionEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.ccnl.event.support.EventPublisher;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
+import nl.ealse.ccnl.ledenadministratie.model.InitialsType;
 import nl.ealse.ccnl.ledenadministratie.model.Member;
 import nl.ealse.ccnl.ledenadministratie.model.MembershipStatus;
 import nl.ealse.ccnl.mappers.MembershipStatusMapper;
@@ -79,11 +80,9 @@ public class MemberCancelController extends MemberCancelView {
   }
 
   private void initializeInitialsType() {
-    if (getInitials().getText() == null || getInitials().getText().indexOf(".") > -1) {
-      // initials
+    if (selectedMember.getInitialsType() == InitialsType.INITIALS) {
       initialsLabel.setText("Voorletters");
     } else {
-      // surname
       initialsLabel.setText("Voornaam");
     }
   }
