@@ -135,14 +135,6 @@ public abstract class MemberView extends AddressView {
       paymentMethod.setItems(PaymentMethodMapper.getValues());
       paymentMethod.setValue(PaymentMethodMapper.BANK_TRANSFER);
     }
-    initialsType.selectedProperty().addListener((ob, o, n) -> {
-      String asInitials = ContentUpdate.asInitials(initials);
-      if (n.booleanValue()) {
-        initials.setText(asInitials);
-      } else if (initials.getText().equals(asInitials)){
-        initials.setText("");
-      }
-    });
   }
 
   /**

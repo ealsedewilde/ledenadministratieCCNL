@@ -11,6 +11,7 @@ import org.hibernate.engine.jdbc.connections.internal.DatabaseConnectionInfoImpl
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.jdbc.connections.spi.DatabaseConnectionInfo;
 import org.hibernate.engine.jdbc.env.spi.ExtractedDatabaseMetaData;
+import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 import org.hibernate.service.UnknownUnwrapTypeException;
 import org.hibernate.service.spi.Configurable;
 import org.hibernate.service.spi.Stoppable;
@@ -66,6 +67,10 @@ public class JdbcConnectionPoolProvider implements ConnectionProvider, Configura
     String user = (String) configuration.get(JdbcSettings.JAKARTA_JDBC_USER);
     String password = (String) configuration.get(JdbcSettings.JAKARTA_JDBC_PASSWORD);
     cp = JdbcConnectionPool.create(jdbcUrl, user, password);
+    String poolSize = (String) configuration.get(JdbcSettings.POOL_SIZE);
+    if (poolSize != null) {
+      cp.setMaxConnections(Integer.parseInt(poolSize));
+    }
   }
 
   @Override
@@ -76,23 +81,37 @@ public class JdbcConnectionPoolProvider implements ConnectionProvider, Configura
   @Override
   public DatabaseConnectionInfo getDatabaseConnectionInfo(Dialect dialect,
       ExtractedDatabaseMetaData metaData) {
-    Map<String, Object> settings = new HashMap<>();
-    settings.put(JdbcSettings.JAKARTA_JDBC_DRIVER, metaData.getDriver());
-    settings.put(JdbcSettings.JAKARTA_JDBC_URL, metaData.getUrl());
-    String tl = metaData.getTransactionIsolation() == Connection.TRANSACTION_READ_COMMITTED
+    JdbcEnvironment env = metaData.getJdbcEnvironment();
+    String isolationLevel = metaData.getTransactionIsolation() == Connection.TRANSACTION_READ_COMMITTED
         ? "TRANSACTION_READ_COMMITTED"
-        : null;
-    settings.put(JdbcSettings.ISOLATION, tl);
-
+        : "Unknown";
+    return new DatabaseConnectionInfoImpl(
+        getClass(),
+        metaData.getUrl(),
+        metaData.getDriver(),
+        dialect.getClass(),
+        dialect.getVersion(),
+        true,
+        true,
+        env.getCurrentCatalog().getText(),
+        env.getCurrentSchema().getText(),
+        getAutoCommitMode(),
+        isolationLevel,
+        0,
+        cp.getMaxConnections(),
+        metaData.getDefaultFetchSize()
+        );
+  }
+  
+  private String getAutoCommitMode() {
     try {
       Connection conn = getConnection();
-      settings.put(JdbcSettings.AUTOCOMMIT, conn.getAutoCommit());
+      boolean acm = conn.getAutoCommit();
       conn.close();
+      return Boolean.toString(acm);
     } catch (SQLException e) {
-      // No action required
+      return "unKnown";
     }
-    settings.put(JdbcSettings.POOL_SIZE, cp.getMaxConnections());
-    return new DatabaseConnectionInfoImpl(settings, dialect);
   }
 
   @Override

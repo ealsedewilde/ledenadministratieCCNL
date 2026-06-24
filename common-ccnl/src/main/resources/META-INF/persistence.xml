@@ -25,6 +25,7 @@
 			<property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver" />
 			<property name="hibernate.connection.provider_class"
 				value="nl.ealse.ccnl.ledenadministratie.h2.JdbcConnectionPoolProvider" />
+			<property name="hibernate.connection.pool_size"	value="5"/>
 			<!-- <property name="jakarta.persistence.schema-generation.scripts.action" value="drop-and-create" 
 				/> <property name="jakarta.persistence.schema-generation.scripts.create-target" value="./create.sql" 
 				/> -->

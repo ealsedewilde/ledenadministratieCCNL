@@ -30,6 +30,7 @@ import nl.ealse.ccnl.view.MemberView;
 import nl.ealse.javafx.mvvm.ViewModel;
 import nl.ealse.javafx.print.PrintException;
 import nl.ealse.javafx.print.PrinterService;
+import nl.ealse.javafx.util.ContentUpdate;
 
 /**
  * Handle the member form.
@@ -259,6 +260,17 @@ public class MemberController extends MemberView {
   @FXML
   void closePDF() {
     documentViewer.close();
+  }
+
+  @FXML
+  void firstNameType() {
+    getInitials().setText("");
+  }
+
+  @FXML
+  void initialsType() {
+    String asInitials = ContentUpdate.asInitials(getInitials());
+    getInitials().setText(asInitials);;
   }
 
   private String getHeaderTextValue() {
