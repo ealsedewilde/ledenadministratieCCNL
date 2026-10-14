@@ -37,7 +37,7 @@ class ControllerProviderTest extends FXBase {
         log.error("Unable to initialize", e);
       }
     }));
-    assertEquals(42, componentMap.size());
+    assertEquals(43, componentMap.size());
  }
 
   private void processAnnotation(AnnotationInstance annotation) {

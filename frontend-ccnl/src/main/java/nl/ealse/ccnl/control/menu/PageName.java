@@ -23,7 +23,7 @@ public enum PageName implements PageReference {
   ADD_DOCUMENT("document/addDocument"), VIEW_DOCUMENTS("document/viewDocuments"),
 
   MAGAZINE_ADDRESS_LIST("magazine/magazineAddressList"), MAGAZINE_INVALID_ADDRESS(
-      "magazine/magazineInvalidAddress"),
+      "magazine/magazineInvalidAddress"), MAGAZINE_INVALID_ADDRESS_TABLE("magazine/invalidAddressTable"),
 
   DIRECT_DEBITS("annual/directDebits"), RECONCILE_PAYMENTS(
       "annual/reconcilePayments"), PAYMENT_REMINDER_LETTERS(

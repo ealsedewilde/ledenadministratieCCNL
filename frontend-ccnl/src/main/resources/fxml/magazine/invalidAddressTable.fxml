@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import nl.ealse.ccnl.control.button.*?>
+
+<VBox spacing="20" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="995.0" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="nl.ealse.ccnl.control.magazine.InvalidAdressTable">
+  <children>
+    <Label text="Overzicht ongeldige adressen" styleClass="header" />
+    <TableView fx:id="tableView" maxWidth="605" prefHeight="550.0">
+      <placeholder>
+        <Label text="Geen adressen gevonden" />
+      </placeholder>
+      <columns>
+        <TableColumn minWidth="40" text="Lidnummer">
+          <cellValueFactory>
+            <PropertyValueFactory property="memberNumber" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn minWidth="300" text="Ongeldig adres">
+          <cellValueFactory>
+            <PropertyValueFactory property="invalidAddress" />
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn minWidth="200" text="Reden">
+          <cellValueFactory>
+            <PropertyValueFactory property="reason" />
+          </cellValueFactory>
+        </TableColumn>
+       </columns>
+    </TableView>
+  </children>
+</VBox>    

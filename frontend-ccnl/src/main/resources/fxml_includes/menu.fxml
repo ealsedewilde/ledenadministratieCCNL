@@ -56,6 +56,8 @@
           text="Adressen lidmaatschapskaart" />
        <MenuItem onAction="#action" id="MAGAZINE_INVALID_ADDRESS" mnemonicParsing="false"
           text="Retouren registreren" />
+       <MenuItem onAction="#action" id="MAGAZINE_INVALID_ADDRESS_TABLE" mnemonicParsing="false"
+          text="Overzicht ongelidige adressen" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Ledenlijst">

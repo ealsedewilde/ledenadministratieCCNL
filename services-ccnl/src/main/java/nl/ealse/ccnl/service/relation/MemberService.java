@@ -24,6 +24,10 @@ public class MemberService {
   public Integer getFreeNumber() {
     return numberFactory.getNewNumber();
   }
+  
+  public List<Member> findMembersWithInvalidAddress() {
+    return dao.findMembersWithInvalidAddress();
+  }
 
   public List<Member> searchMemberWithoutSepa(SearchItem searchItem, String searchValue) {
     List<Member> members = searchMember(searchItem, searchValue);
@@ -78,7 +82,7 @@ public class MemberService {
   public List<Member> findMembersCurrentYearPartlyPaid() {
     return findMembers(null);
   }
-
+  
   /**
    * Find not paying members with valid address.
    *

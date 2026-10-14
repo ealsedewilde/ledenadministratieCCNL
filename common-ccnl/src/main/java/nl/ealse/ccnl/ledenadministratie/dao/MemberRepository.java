@@ -108,6 +108,11 @@ public class MemberRepository extends BaseRepository<Member> {
         "SELECT M FROM Member M WHERE LOWER(M.address.postalCode) LIKE LOWER(concat(?1, '%'))",
         searchValue);
   }
+  
+  public List<Member> findMembersWithInvalidAddress() {
+    return executeQuery(
+        "SELECT M FROM Member M WHERE M.address.addressInvalid = TRUE ORDER BY M.memberNumber");
+  }
 
   @Override
   protected Object getPrimaryKey(Member entity) {
