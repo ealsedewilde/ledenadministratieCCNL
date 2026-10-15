@@ -12,7 +12,7 @@
   fx:controller="nl.ealse.ccnl.control.magazine.InvalidAdressTable">
   <children>
     <Label text="Overzicht ongeldige adressen" styleClass="header" />
-    <TableView fx:id="tableView" maxWidth="605" prefHeight="550.0">
+    <TableView fx:id="tableView" maxWidth="670" prefHeight="550.0">
       <placeholder>
         <Label text="Geen adressen gevonden" />
       </placeholder>
@@ -32,6 +32,7 @@
             <PropertyValueFactory property="reason" />
           </cellValueFactory>
         </TableColumn>
+        <TableColumn fx:id="buttonColumn"  text="Herstel" minWidth="25" />
        </columns>
     </TableView>
   </children>
