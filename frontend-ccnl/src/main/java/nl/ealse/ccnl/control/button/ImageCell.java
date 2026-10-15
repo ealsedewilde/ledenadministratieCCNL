@@ -1,6 +1,7 @@
 package nl.ealse.ccnl.control.button;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -13,6 +14,7 @@ public class ImageCell<T> extends TableCell<T, Void> {
   public ImageCell(String imageName, EventHandler<MouseEvent> eventHandler) {
     this.view = new ImageView(ImagesMap.get(imageName));
     this.setOnMouseClicked(eventHandler);
+    this.setAlignment(Pos.CENTER);
   }
 
   @Override

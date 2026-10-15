@@ -6,11 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import nl.ealse.ccnl.MainStage;
@@ -45,7 +44,7 @@ public class InvalidAdressTable {
   @FXML
   void initialize() {
     buttonColumn.setCellFactory(
-        param -> new ImageCell<InvalidAddressData>("approve.png", this::resetInvalidAddress));
+        param -> new ImageCell<InvalidAddressData>("undo_small.png", this::resetInvalidAddress));
   }
 
   @EventListener(menuChoice = MenuChoice.MAGAZINE_INVALID_ADDRESS_TABLE)
@@ -56,17 +55,7 @@ public class InvalidAdressTable {
 
   private void resetInvalidAddress(MouseEvent event) {
     event.consume(); // stop further propagation to handleSelected()
-    Alert alert = new Alert(AlertType.CONFIRMATION);
-    Stage cs = (Stage) alert.getDialogPane().getScene().getWindow();
-    cs.getIcons().add(MainStage.getIcon());
-    alert.setTitle("Bevestigen");
-    alert.setHeaderText("Is huidige adres correct?");
-    ImageView image = new ImageView(ImagesMap.get("approve.png"));
-    Button b = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-    b.setText("Adres is correct");
-    b = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
-    b.setText("Annuleren");
-    alert.setGraphic(image);
+    Alert alert = buildAlert();
     alert.showAndWait().filter(response -> response == ButtonType.OK)
         .ifPresent(response -> resetInvalidity(event));
   }
@@ -86,5 +75,19 @@ public class InvalidAdressTable {
         members.stream().map(e -> new InvalidAddressData(e)).collect(Collectors.toList());
     tableView.getItems().addAll(invalidAddressData);
   }
-
+  
+  private Alert buildAlert() {
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    Stage cs = (Stage) alert.getDialogPane().getScene().getWindow();
+    cs.getIcons().add(MainStage.getIcon());
+    alert.setTitle("Bevestigen");
+    alert.setHeaderText("Is huidige adres correct?");
+    Button b = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+    b.setText("Adres is correct");
+    b = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
+    b.setText("Annuleren");
+    alert.setGraphic(new ImageView(ImagesMap.get("approve.png")));
+    return alert;
+  }
+ 
 }

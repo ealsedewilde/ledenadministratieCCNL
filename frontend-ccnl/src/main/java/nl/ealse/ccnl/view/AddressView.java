@@ -1,11 +1,19 @@
 package nl.ealse.ccnl.view;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
+import nl.ealse.ccnl.MainStage;
 import nl.ealse.ccnl.mappers.InvalidAddressMapper;
+import nl.ealse.javafx.ImagesMap;
 import nl.ealse.javafx.mapping.Mapping;
 import nl.ealse.javafx.util.ContentUpdate;
 
@@ -66,6 +74,20 @@ public abstract class AddressView {
       ContentUpdate.firstCapital(getCountry());
     }
 
+  }
+  
+  public void validateAddress() {
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    Stage cs = (Stage) alert.getDialogPane().getScene().getWindow();
+    cs.getIcons().add(MainStage.getIcon());
+    alert.setTitle("Is huidige adres correct?");
+    alert.setHeaderText("Bevestig huidige adres met 'Opslaan' knop");
+    ImageView image = new ImageView(ImagesMap.get("approve.png"));
+    alert.setGraphic(image);
+    Button b = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
+    b.setText("Annuleren");
+    alert.showAndWait().filter(response -> response == ButtonType.OK)
+    .ifPresent(response -> addressInvalid.setText(""));
   }
 
 }

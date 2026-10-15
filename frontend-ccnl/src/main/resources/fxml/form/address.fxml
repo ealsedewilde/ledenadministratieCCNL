@@ -14,7 +14,8 @@
   <HBox spacing="30" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2">
     <children>
       <Label text="Adresgegevens" underline="true" styleClass="subHeader"/>
-      <Label fx:id="addressInvalid" underline="true" styleClass="subHeader" style="-fx-text-fill: red;"/>
+      <Label fx:id="addressInvalid" underline="true" styleClass="subHeader" style="-fx-text-fill: red;"
+      onMouseClicked="#validateAddress"/>
     </children>
   </HBox>  
 
