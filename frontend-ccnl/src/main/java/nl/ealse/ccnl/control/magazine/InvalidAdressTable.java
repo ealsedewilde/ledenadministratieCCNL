@@ -32,6 +32,8 @@ public class InvalidAdressTable {
   private TableView<InvalidAddressData> tableView;
 
   private List<Member> members;
+  
+  private Alert confirmation;
 
   @FXML
   private TableColumn<InvalidAddressData, Void> buttonColumn;
@@ -45,6 +47,7 @@ public class InvalidAdressTable {
   void initialize() {
     buttonColumn.setCellFactory(
         param -> new ImageCell<InvalidAddressData>("undo_small.png", this::resetInvalidAddress));
+    confirmation = buildAlert();
   }
 
   @EventListener(menuChoice = MenuChoice.MAGAZINE_INVALID_ADDRESS_TABLE)
@@ -55,8 +58,7 @@ public class InvalidAdressTable {
 
   private void resetInvalidAddress(MouseEvent event) {
     event.consume(); // stop further propagation to handleSelected()
-    Alert alert = buildAlert();
-    alert.showAndWait().filter(response -> response == ButtonType.OK)
+    confirmation.showAndWait().filter(response -> response == ButtonType.OK)
         .ifPresent(response -> resetInvalidity(event));
   }
 
