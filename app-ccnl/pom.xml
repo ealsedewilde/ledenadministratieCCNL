@@ -88,17 +88,32 @@
 				<version>3.5.0</version>
 				<executions>
 					<execution>
+						<id>installer</id>
 						<phase>package</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
+						<configuration>
+							<executable>${jpackage.exe}</executable><!-- configure in settings.xml -->
+							<!-- produce the installer msi -->
+							<commandlineArgs>@../config/jpackage.cfg</commandlineArgs>
+							<workingDirectory>${project.build.directory}</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>signing</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${signtool}</executable><!-- configure in settings.xml -->
+							<!-- Sign the installer msi with an existing self signed codeSigning certificate (pfx) -->
+							<commandlineArgs>sign /f ../config/cert/myeku.pfx /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /d "Ledenadministratie CCNL" installer\LedenadministratieCCNL-8.5.msi</commandlineArgs>
+							<workingDirectory>${project.build.directory}</workingDirectory>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<executable>${jpackage.exe}</executable><!-- configure in settings.xml -->
-					<commandlineArgs>@../config/jpackage.cfg</commandlineArgs>
-					<workingDirectory>${project.build.directory}</workingDirectory>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
