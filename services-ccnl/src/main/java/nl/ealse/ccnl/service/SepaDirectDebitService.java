@@ -18,11 +18,11 @@ import nl.ealse.ccnl.ledenadministratie.dd.IncassoException;
 import nl.ealse.ccnl.ledenadministratie.dd.IncassoProperties;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoGenerator;
 import nl.ealse.ccnl.ledenadministratie.dd.SepaIncassoResult;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigAmountEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigBooleanEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigDateEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigStringEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigBooleanEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigDateEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEntry;
 import nl.ealse.ccnl.ledenadministratie.util.AmountFormatter;
 
 @Slf4j

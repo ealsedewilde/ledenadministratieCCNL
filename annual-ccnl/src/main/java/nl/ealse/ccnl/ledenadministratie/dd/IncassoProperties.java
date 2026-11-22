@@ -8,11 +8,11 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.config.ConfigurationException;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigAmountEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigBooleanEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigDateEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigStringEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigBooleanEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigDateEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEntry;
 
 /**
  * Properties needed for generation a DirectDebit file.

@@ -11,7 +11,7 @@ import javafx.scene.control.Label;
 import nl.ealse.ccnl.control.menu.PageName;
 import nl.ealse.ccnl.ledenadministratie.config.ApplicationContext;
 import nl.ealse.ccnl.ledenadministratie.dao.util.TransactionUtil;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigAmountEntry;
 import nl.ealse.ccnl.ledenadministratie.model.Setting;
 import nl.ealse.ccnl.service.SepaDirectDebitService;
 import nl.ealse.ccnl.service.SepaDirectDebitService.FlatProperty;

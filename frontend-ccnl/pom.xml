@@ -27,7 +27,6 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.6.2</version>
 				<executions>
 					<execution>
 						<id>shade-my-jar</id>
@@ -90,13 +89,12 @@
 		<dependency>
 			<groupId>nl.ealse.javafx.viewmodel</groupId>
 			<artifactId>javafx-viewmodel</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${viewmodel.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
 			<artifactId>spotbugs-annotations</artifactId>
-			<version>4.9.8</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

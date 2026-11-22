@@ -2,12 +2,9 @@ package nl.ealse.ccnl.ledenadministratie.model;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -77,45 +74,5 @@ public class DirectDebitConfig {
   @AttributeOverride(name = "value", column = @Column(name = "DD_DIR_VALUE"))
   @AttributeOverride(name = "description", column = @Column(name = "DD_DIR_DESCRIPTION"))
   private DDConfigStringEntry directDebitDir;
-
-  @Embeddable
-  @Data
-  public static class DDConfigStringEntry {
-
-    String value;
-
-    String description;
-
-  }
-
-  @Embeddable
-  @Data
-  public static class DDConfigDateEntry {
-
-    private LocalDate value;
-
-    private String description;
-
-  }
-
-  @Embeddable
-  @Data
-  public static class DDConfigBooleanEntry {
-
-    private boolean value;
-
-    private String description;
-
-  }
-
-  @Embeddable
-  @Data
-  public static class DDConfigAmountEntry {
-
-    private BigDecimal value;
-
-    private String description;
-
-  }
 
 }

@@ -14,9 +14,7 @@
 		<finalName>LedenadministratieCCNL</finalName>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.6.1</version>
 				<executions>
 					<execution>
 						<id>copy</id>
@@ -29,7 +27,7 @@
 								<artifactItem>
 									<groupId>nl.ealse.ccnl</groupId>
 									<artifactId>frontend-ccnl</artifactId>
-									<version>8.5.0</version>
+									<version>${project.version}</version>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/ledenadministratieCCNL</outputDirectory>
 									<destFileName>LedenadministratieApp.jar</destFileName>
@@ -48,7 +46,7 @@
 								<artifactItem>
 									<groupId>nl.ealse.ccnl</groupId>
 									<artifactId>minimal-jre</artifactId>
-									<version>8.5.0</version>
+									<version>${project.version}</version>
 									<type>zip</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/runtime</outputDirectory>
@@ -60,7 +58,6 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.5.0</version>
 				<executions>
 					<execution>
 						<id>copy-resource-one</id>
@@ -85,7 +82,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.5.0</version>
 				<executions>
 					<execution>
 						<id>installer</id>

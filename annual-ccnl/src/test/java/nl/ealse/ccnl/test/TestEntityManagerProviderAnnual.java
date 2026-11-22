@@ -7,11 +7,11 @@ import jakarta.persistence.EntityTransaction;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import nl.ealse.ccnl.ledenadministratie.dao.util.EntityManagerProvider;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigAmountEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigBooleanEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigDateEntry;
+import nl.ealse.ccnl.ledenadministratie.model.DDConfigStringEntry;
 import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigAmountEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigBooleanEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigDateEntry;
-import nl.ealse.ccnl.ledenadministratie.model.DirectDebitConfig.DDConfigStringEntry;
 
 public class TestEntityManagerProviderAnnual implements EntityManagerProvider {
   

@@ -101,7 +101,7 @@ When an already running process is detected, the additional start up is aborted 
 ## Maven Build
 I'm currently using Maven version 3.9.5. 
 
-In the Maven user settings.xml you need to set the property `jpackage.exe` and point it to the `bin\jpackage.exe` in the Java 21 JDK. 
+In the Maven user settings.xml you need to set the property `jpackage.exe` and point it to the `bin\jpackage.exe` in the Java 25 JDK. 
 
 A Maven package build will build the application and the MicroSoft Installer. 
 
