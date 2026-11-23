@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
-import nl.ealse.ccnl.event.MenuChoiceEvent;
 import nl.ealse.ccnl.event.support.EventListener;
 import nl.ealse.javafx.ImagesMap;
 
@@ -39,7 +38,7 @@ public class PageController {
 
   @FXML
   void initialize() {
-    delay.setOnFinished(event -> mainInfo.setText(""));
+    delay.setOnFinished(_ -> mainInfo.setText(""));
 
     logo.setImage(ImagesMap.get("CCNLLogo.png"));
     logoPage = mainPage.getCenter();
@@ -104,7 +103,7 @@ public class PageController {
    * </p>
    */
   @EventListener(command = true)
-  public void onApplicationEvent(MenuChoiceEvent event) {
+  public void onApplicationEvent() {
     activateLogoPage();
   }
 

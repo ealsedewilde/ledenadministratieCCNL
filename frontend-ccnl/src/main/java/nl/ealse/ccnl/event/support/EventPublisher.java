@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import nl.ealse.ccnl.control.menu.Link;
@@ -61,39 +60,30 @@ public class EventPublisher {
   public void publishEvent(Object event) {
     if (event instanceof MenuChoiceEvent mce) {
       MenuChoice choice = mce.getMenuChoice();
-      int ix = 0;
-      if (choice.getSteps().size() > 1) {
-        if (MenuController.SOURCE != mce.getSource()) {
-          ix = stepIx.get(choice).intValue() + 1;
-        }
-        stepIx.put(choice, ix);
-      }
-      Step step = choice.getSteps().get(ix);
       if (choice.isCommand()) {
-        commandMapping.forEach(targetDefinition -> invokeMethod(event, targetDefinition));
+        commandMapping.forEach(targetDefinition -> targetDefinition.invokeMethod(event));
       }
-      TargetDefinition targetDefinition = menuChoiceMapping.get(step);
-      invokeMethod(event, targetDefinition);
+      TargetDefinition targetDefinition = menuChoiceMapping.get(getStep(mce));
+      targetDefinition.invokeMethod(event);
     } else {
       Class<?> eventClass = event.getClass();
       TargetDefinition targetDefinition = eventClassMapping.get(eventClass.getName());
-      invokeMethod(event, targetDefinition);
+      targetDefinition.invokeMethod(event);
     }
 
   }
-
-  private void invokeMethod(Object event, TargetDefinition targetDefinition) {
-    Object target = targetDefinition.getTargetObject(event);
-    Method method = targetDefinition.getTargetMethod();
-    try {
-      if (targetDefinition.isWithParameter()) {
-        method.invoke(target, event);
-      } else {
-        method.invoke(target);
+  
+  private Step getStep(MenuChoiceEvent mce) {
+    MenuChoice choice = mce.getMenuChoice();
+    int ix = 0;
+    if (choice.getSteps().size() > 1) {
+      if (MenuController.SOURCE != mce.getSource()) {
+        ix = stepIx.get(choice).intValue() + 1;
       }
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      log.error("Unable to invoke targetMethod for event", e);
+      stepIx.put(choice, ix);
     }
+    return choice.getSteps().get(ix);
+
   }
   
   /**
@@ -178,27 +168,29 @@ public class EventPublisher {
   private static class TargetDefinition {
 
     private final AnnotationInstance annotation;
-    
-    /**
-     * Indication whether the target method has a (event) parameter.
-     */
-    @Getter
     private boolean withParameter;
 
     private Object targetObject;
 
-    @Getter
     private Method targetMethod;
 
     private TargetDefinition(AnnotationInstance annotation) {
       this.annotation = annotation;
     }
-
-    public Object getTargetObject(Object event) {
+    
+    public void invokeMethod(Object event) {
       if (targetObject == null) {
         initializeTarget(event);
       }
-      return targetObject;
+      try {
+        if (withParameter) {
+          targetMethod.invoke(targetObject, event);
+        } else {
+          targetMethod.invoke(targetObject);
+        }
+      } catch (IllegalAccessException | InvocationTargetException e) {
+        log.error("Unable to invoke targetMethod for event", e);
+      }
     }
 
     /**
@@ -222,7 +214,7 @@ public class EventPublisher {
       }
     }
     
-    public String getParameterClassName() {
+    private String getParameterClassName() {
       MethodInfo method = annotation.target().asMethod();
       List<MethodParameterInfo> parms = method.parameters();
       if (!parms.isEmpty()) {
@@ -242,7 +234,6 @@ public class EventPublisher {
       sb.append(" targetMethod parameterClassName: ").append(getParameterClassName());
       return sb.toString();
     }
-
 
   }
 
